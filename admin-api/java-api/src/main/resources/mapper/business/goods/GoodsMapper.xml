@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.service.module.business.goods.GoodsDao">
+
+    <!-- 查询1个商品 -->
+    <select id="selectOne"
+            resultType="net.lab1024.smartadmin.service.module.business.goods.domain.GoodsEntity">
+        SELECT * FROM t_goods
+        <where>
+            <if test="goodsName != null">
+                AND goods_name = #{goodsName}
+            </if>
+            <if test="goodsType != null">
+                AND goods_type = #{goodsType}
+            </if>
+            <if test="categoryId != null">
+                AND category_id = #{categoryId}
+            </if>
+            <if test="deletedFlag != null">
+                AND deleted_flag = #{deletedFlag}
+            </if>
+        </where>
+        LIMIT 1
+    </select>
+
+    <!-- 分页 查询商品 -->
+    <select id="query" resultType="net.lab1024.smartadmin.service.module.business.goods.domain.GoodsAdminVO">
+        SELECT * FROM t_goods
+        <where>
+            <if test="query.searchWord != null and query.searchWord !=''">
+                INSTR(goods_name,#{query.searchWord})
+            </if>
+            <if test="query.goodsType != null">
+                AND goods_type = #{query.goodsType}
+            </if>
+            <if test="query.categoryId != null">
+                AND category_id = #{query.categoryId}
+            </if>
+            <if test="query.shelvesFlag != null">
+                AND shelves_flag = #{query.shelvesFlag}
+            </if>
+            <if test="query.deletedFlag != null">
+                AND deleted_flag = #{query.deletedFlag}
+            </if>
+        </where>
+        <if test="query.sortItemList == null or query.sortItemList.size == 0">
+            ORDER BY goods_id DESC
+        </if>
+    </select>
+
+</mapper>

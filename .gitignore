@@ -29,3 +29,15 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/admin-api/java-api/target/
+
+
+/admin-web/typescript-ant-design-vue/node_modules/
+
+
+
+
+
+
+

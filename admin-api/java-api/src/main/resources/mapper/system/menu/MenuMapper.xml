@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.service.module.system.menu.MenuDao">
+
+    <sql id="menuVo">
+        select m.menu_id,
+               m.menu_name,
+               m.menu_type,
+               m.parent_id,
+               m.sort,
+               m.path,
+               m.component,
+               m.frame_flag,
+               m.cache_flag,
+               m.visible_flag,
+               m.disabled_flag,
+               m.perms,
+               m.icon,
+               m.context_menu_id,
+               m.create_user_id,
+               m.create_time,
+               m.update_user_id,
+               m.update_time
+        from t_menu m
+    </sql>
+    <delete id="deleteByMenuIdList">
+        <if test="menuIdList != null and menuIdList.size > 0">
+            <foreach collection="menuIdList" item="item" separator=";">
+                update t_menu
+                set delete_flag = #{deleteFlag},
+                update_user_id = #{updateUserId}
+                where menu_id = #{item}
+            </foreach>
+        </if>
+    </delete>
+
+    <select id="getByMenuName"
+            resultType="net.lab1024.smartadmin.service.module.system.menu.domain.MenuEntity">
+        <include refid="menuVo"/>
+        where menu_name=#{menuName} and parent_id = #{parentId} and delete_flag = #{deleteFlag} limit 1
+    </select>
+    <select id="queryMenuList" resultType="net.lab1024.smartadmin.service.module.system.menu.domain.MenuVO">
+        <include refid="menuVo"/>
+        where delete_flag = #{deleteFlag}
+        <if test="disabledFlag != null">
+            and disabled_flag = #{disabledFlag}
+        </if>
+        <if test="menuTypeList != null and menuTypeList.size > 0">
+            and menu_type in
+            <foreach collection="menuTypeList" open="(" close=")" item="item" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by parent_id desc,sort asc
+    </select>
+    <select id="getPointListByMenuId"
+            resultType="net.lab1024.smartadmin.service.module.system.menu.domain.MenuEntity">
+        <include refid="menuVo"/>
+        where parent_id = #{menuId} and delete_flag = #{deleteFlag} and menu_type = #{menuType}
+    </select>
+
+    <select id="queryMenuByEmployeeId"
+            resultType="net.lab1024.smartadmin.service.module.system.menu.domain.MenuVO">
+        <include refid="menuVo"/>
+        left join t_role_menu rm on rm.menu_id = m.menu_id
+        left join t_role_employee re on re.role_id = rm.role_id
+        where m.disabled_flag = #{disabledFlag} and m.delete_flag = #{deleteFlag}
+        <if test="employeeId != null">
+            and re.employee_id = #{employeeId}
+        </if>
+    </select>
+    <select id="queryAllPoint" resultType="net.lab1024.smartadmin.service.module.system.menu.domain.MenuEntity">
+        <include refid="menuVo"/>
+        where disabled_flag = #{disabledFlag} and delete_flag = #{deleteFlag} and menu_type = #{menuType}
+    </select>
+</mapper>

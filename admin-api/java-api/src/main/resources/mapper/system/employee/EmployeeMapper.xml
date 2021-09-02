@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.service.module.system.employee.EmployeeDao">
+
+    <select id="queryEmployee" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+        SELECT
+        e.*,
+        d.name AS departmentName
+        FROM t_employee e
+        LEFT JOIN t_department d ON d.id = e.department_id
+        <where>
+            <if test="queryDTO.keyword != null and queryDTO.keyword != ''">
+                AND (
+                   INSTR(e.actual_name,#{queryDTO.keyword})
+                OR INSTR(e.phone,#{queryDTO.keyword})
+                )
+            </if>
+            <if test="queryDTO.departmentId != null">
+                AND e.department_id = #{queryDTO.departmentId}
+            </if>
+            <if test="queryDTO.disabledFlag != null">
+                AND e.disabled_flag = #{queryDTO.disabledFlag}
+            </if>
+            <if test="queryDTO.deletedFlag != null">
+                AND e.deleted_flag = #{queryDTO.deletedFlag}
+            </if>
+            <if test="queryDTO.employeeIdList != null and queryDTO.employeeIdList.size > 0">
+                AND e.id IN
+                <foreach collection="queryDTO.employeeIdList" open="(" close= ")" item="item" separator=","  >
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        <if test="queryDTO.sortItemList == null or queryDTO.sortItemList.size == 0">
+            ORDER BY e.id DESC
+        </if>
+    </select>
+
+    <update id="batchUpdateDisableFlag">
+        UPDATE t_employee
+        SET disabled_flag = #{disabledFlag}
+        WHERE id in
+        <foreach collection="employeeIdList" item="item" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+    </update>
+
+    <update id="updateDisableFlag">
+        UPDATE t_employee
+        SET disabled_flag = #{disabledFlag}
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectByLoginNameAndPwd" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+        SELECT *
+        FROM t_employee
+        WHERE login_name = #{loginName}
+        AND login_pwd = #{loginPwd}
+        AND deleted_flag = #{deletedFlag}
+        LIMIT 1
+    </select>
+
+
+    <select id="getByLoginName" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
+        SELECT * FROM t_employee
+        WHERE login_name = #{loginName} and disabled_flag = #{disabledFlag} and deleted_flag = #{deletedFlag}
+    </select>
+
+
+    <select id="getByPhone" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
+        SELECT * FROM t_employee
+        WHERE phone = #{phone} AND disabled_flag = #{disabledFlag}
+    </select>
+
+
+    <select id="listAll" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
+        SELECT * FROM t_employee
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="countByDepartmentId" resultType="integer">
+        SELECT count(1) FROM t_employee
+        WHERE
+        department_id = #{departmentId}
+        <if test="deletedFlag != null">
+            AND deleted_flag = #{deletedFlag}
+        </if>
+    </select>
+
+
+    <select id="selectByDepartmentId" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+        SELECT * FROM t_employee
+        WHERE
+        disabled_flag = #{disabledFlag}
+        AND deleted_flag = #{deletedFlag}
+        AND department_id = #{departmentId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getEmployeeIdByDepartmentIdList" resultType="java.lang.Long">
+        SELECT id
+        FROM t_employee
+        WHERE
+        disabled_flag = #{disabledFlag}
+        AND deleted_flag = #{deletedFlag}
+        AND department_id IN
+        <foreach collection="departmentIds" item="item" open="("  close=")" separator=",">
+            #{item}
+        </foreach>
+        ORDER BY create_time DESC
+    </select>
+
+
+    <select id="getEmployeeId" resultType="java.lang.Long">
+            SELECT id
+            FROM t_employee
+            WHERE
+            disabled_flag = #{disabledFlag}
+            AND deleted_flag = #{deletedFlag}
+    </select>
+
+    <select id="getEmployeeIdByDepartmentId" resultType="java.lang.Long">
+        SELECT id
+        FROM t_employee
+        WHERE
+        disabled_flag = #{disabledFlag}
+        and deleted_flag = #{deletedFlag}
+        and department_id = #{departmentId}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="getEmployeeByIds" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
+        SELECT * FROM t_employee
+        where id IN
+        <foreach collection="ids" item="item" open="("  close=")"  separator=",">
+            #{item}
+        </foreach>
+        ORDER BY create_time DESC
+    </select>
+
+
+    <select id="getEmployeeById" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
+        SELECT
+        e.*,
+        d.name AS departmentName
+        FROM t_employee e
+        LEFT JOIN t_department d ON d.id = e.department_id
+        where e.id = #{id}
+    </select>
+
+    <update id="updatePassword">
+        UPDATE t_employee
+        SET login_pwd = #{password}
+        WHERE id = #{employeeId}
+    </update>
+
+
+</mapper>
