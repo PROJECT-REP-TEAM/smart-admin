@@ -2,7 +2,6 @@ package net.lab1024.smartadmin.service.module.support.repeatsubmit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import net.lab1024.smartadmin.service.common.anno.NoRepeatSubmit;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -54,7 +53,7 @@ public class SmartRepeatSubmitAspect {
      * @return
      * @throws Throwable
      */
-    @Around("@annotation(net.lab1024.smartadmin.service.common.anno.NoRepeatSubmit)")
+    @Around("@annotation(net.lab1024.smartadmin.service.module.support.repeatsubmit.NoRepeatSubmit)")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 

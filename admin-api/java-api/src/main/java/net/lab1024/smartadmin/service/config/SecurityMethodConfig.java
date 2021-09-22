@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.config;
 
 import net.lab1024.smartadmin.service.common.security.SmartSecurityMetadataSource;
-import net.lab1024.smartadmin.service.common.security.SmartSecurityNoLoginUrl;
+import net.lab1024.smartadmin.service.common.security.SmartSecurityUrlMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory;
@@ -25,11 +25,11 @@ public class SecurityMethodConfig extends GlobalMethodSecurityConfiguration {
      * 无需登录的url
      */
     @Autowired
-    private SmartSecurityNoLoginUrl smartSecurityNoLoginUrl;
+    private SmartSecurityUrlMatchers smartSecurityUrlMatchers;
 
     @Override
     public MethodSecurityMetadataSource customMethodSecurityMetadataSource(){
         ExpressionBasedAnnotationAttributeFactory attributeFactory = new ExpressionBasedAnnotationAttributeFactory(this.getExpressionHandler());
-        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityNoLoginUrl.getNoLoginUrlList(),projectModule);
+        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityUrlMatchers.getNoValidUrlList(),projectModule);
     }
 }

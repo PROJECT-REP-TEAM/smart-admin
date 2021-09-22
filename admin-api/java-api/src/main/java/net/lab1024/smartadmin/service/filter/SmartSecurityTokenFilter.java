@@ -1,17 +1,12 @@
-package net.lab1024.smartadmin.service.filters;
+package net.lab1024.smartadmin.service.filter;
 
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.module.system.login.EmployeeLoginTokenService;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginBO;
-import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -21,14 +16,23 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * token过滤器
+ * [  ]
+ * 注意此处不能 加入@Component
+ * 否则对应ignoreUrl的相关请求 将会进入此Filter，并会覆盖CorsFilter
+ *
+ * @author 罗伊
+ * @date
  */
-@Component
-public class SmartTokenFilter extends OncePerRequestFilter {
+
+public class SmartSecurityTokenFilter extends OncePerRequestFilter {
+
     private static final String TOKEN_NAME = "x-access-token";
 
-    @Autowired
     private EmployeeLoginTokenService loginTokenService;
+
+    public SmartSecurityTokenFilter(EmployeeLoginTokenService loginTokenService) {
+        this.loginTokenService = loginTokenService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -38,28 +42,17 @@ public class SmartTokenFilter extends OncePerRequestFilter {
         String xRequestToken = request.getParameter(TOKEN_NAME);
         String xAccessToken = null != xHeaderToken ? xHeaderToken : xRequestToken;
         if (StringUtils.isBlank(xAccessToken)) {
-            // 若未给予spring security上下文用户授权 则会授权失败 进入AuthenticationEntryPointImpl
             chain.doFilter(request, response);
             return;
         }
-
-        // 先清理spring security上下文
+        //清理spring security
         SecurityContextHolder.clearContext();
-
-        // 判断请求分组
-        String requestURI = request.getRequestURI();
-        if (StringUtils.startsWithIgnoreCase(requestURI, CommonConst.ApiUrl.API_PREFIX_ADMIN)) {
-            // 后管 获取用户信息
-            EmployeeLoginBO loginBO = loginTokenService.getEmployeeLoginBO(xAccessToken);
-            // 若获取到了登陆信息 则把用户信息设置到上下文中
-            if (null != loginBO) {
-                SmartEmployeeTokenUtil.setUser(SmartBeanUtil.copy(loginBO, EmployeeLoginInfoDTO.class));
-                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginBO, null, loginBO.getAuthorities());
-                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-            }
+        EmployeeLoginBO loginBO = loginTokenService.getEmployeeLoginBO(xAccessToken);
+        if (null != loginBO) {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginBO, null, loginBO.getAuthorities());
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
-
         // 若未给予spring security上下文用户授权 则会授权失败 进入AuthenticationEntryPointImpl
         chain.doFilter(request, response);
     }

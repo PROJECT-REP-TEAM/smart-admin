@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.common.anno;
+package net.lab1024.smartadmin.service.module.support.repeatsubmit;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

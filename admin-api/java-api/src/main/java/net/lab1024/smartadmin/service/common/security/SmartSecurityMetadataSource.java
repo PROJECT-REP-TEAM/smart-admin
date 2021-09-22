@@ -1,7 +1,6 @@
 package net.lab1024.smartadmin.service.common.security;
 
 import net.lab1024.smartadmin.service.common.anno.NoValidPrivilege;
-import net.lab1024.smartadmin.service.util.SmartSecurityUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.prepost.*;
@@ -35,13 +34,13 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
 
     private String projectModule;
 
-    private List<String> ignoreUrlList;
+    private List<String> noValidUrlList;
 
-    public SmartSecurityMetadataSource(PrePostInvocationAttributeFactory attributeFactory, List<String> ignoreUrlList, String projectModule) {
+    public SmartSecurityMetadataSource(PrePostInvocationAttributeFactory attributeFactory, List<String> noValidUrlList, String projectModule) {
         super(attributeFactory);
         this.attributeFactory = attributeFactory;
         this.projectModule = projectModule;
-        this.ignoreUrlList = ignoreUrlList;
+        this.noValidUrlList = noValidUrlList;
     }
 
 
@@ -77,10 +76,10 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
             return super.getAttributes(method, targetClass);
         }
         //获取注解值
-        String uriPrefix = SmartSecurityUtil.getUriPrefix(method);
-        List<String> annotationValueList = SmartSecurityUtil.getAnnotationValueList(method, uriPrefix);
+        String uriPrefix = SmartSecurityUrl.getUriPrefix(method);
+        List<String> annotationValueList = SmartSecurityUrl.getAnnotationValueList(method, uriPrefix);
         //判断是否被忽略
-        if (this.contain(ignoreUrlList, annotationValueList)) {
+        if (this.contain(noValidUrlList, annotationValueList)) {
             return super.getAttributes(method, targetClass);
         }
         ArrayList<ConfigAttribute> configAttributes = new ArrayList(1);

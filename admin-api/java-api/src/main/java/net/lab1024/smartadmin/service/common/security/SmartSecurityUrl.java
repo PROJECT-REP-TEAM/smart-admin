@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.util;
+package net.lab1024.smartadmin.service.common.security;
 
 import com.google.common.collect.Lists;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +14,7 @@ import java.util.List;
  * @author 罗伊
  * @date 2021/8/31 11:30
  */
-public class SmartSecurityUtil {
+public class SmartSecurityUrl {
 
     /**
      * 获取指定方法的uri 前缀
