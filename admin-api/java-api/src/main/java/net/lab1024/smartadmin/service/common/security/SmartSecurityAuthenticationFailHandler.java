@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.handler;
+package net.lab1024.smartadmin.service.common.security;
 
 import com.alibaba.fastjson.JSONObject;
 import net.lab1024.smartadmin.service.common.codeconst.LoginResponseCodeConst;
@@ -15,8 +15,7 @@ import java.io.IOException;
 /**
  * 认证失败处理
  */
-@Component
-public class AuthenticationFailHandler implements AuthenticationEntryPoint {
+public class SmartSecurityAuthenticationFailHandler implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
