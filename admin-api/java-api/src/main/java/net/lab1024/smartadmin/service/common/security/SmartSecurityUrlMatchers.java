@@ -2,6 +2,7 @@ package net.lab1024.smartadmin.service.common.security;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.anno.NoNeedLogin;
+import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.TypeAnnotationsScanner;
@@ -23,7 +24,7 @@ public class SmartSecurityUrlMatchers {
     /**
      * 匿名访问URL
      */
-    private List<String> PERMIT_URL;
+    private List<String> ANONYMOUS_URL;
 
     /**
      * 忽略的URL(注意，加入忽略的URL，无法进入Security filter)
@@ -41,6 +42,7 @@ public class SmartSecurityUrlMatchers {
         IGNORE_URL.add("/swagger-resources/**");
         IGNORE_URL.add("/webjars/**");
         IGNORE_URL.add("/*/api-docs");
+        IGNORE_URL.add(CommonConst.ApiUrl.API_PREFIX_SUPPORT +"/**");
 
         AUTHENTICATED_URL = new ArrayList<>();
         AUTHENTICATED_URL.add("/admin/**");
@@ -51,7 +53,7 @@ public class SmartSecurityUrlMatchers {
      * @param scanPath 需要扫描的类路径
      */
     public SmartSecurityUrlMatchers(String scanPath){
-        this.PERMIT_URL = this.initAnonymousUrlList(scanPath);
+        this.ANONYMOUS_URL = this.initAnonymousUrlList(scanPath);
     }
 
     /**
@@ -63,7 +65,7 @@ public class SmartSecurityUrlMatchers {
     }
 
     public List<String> getPermitUrlList() {
-        return PERMIT_URL;
+        return ANONYMOUS_URL;
     }
 
     public List<String> getAuthenticatedUrlList() {
@@ -77,7 +79,7 @@ public class SmartSecurityUrlMatchers {
     public List<String> getNoValidUrlList() {
         List<String> noValidUrl = Lists.newArrayList();
         noValidUrl.addAll(IGNORE_URL);
-        noValidUrl.addAll(PERMIT_URL);
+        noValidUrl.addAll(ANONYMOUS_URL);
         return noValidUrl;
     }
 
@@ -86,8 +88,8 @@ public class SmartSecurityUrlMatchers {
         return ignoreUrlArray;
     }
 
-    public String [] getPermitUrlArray() {
-        String [] anonymousUrlArray = PERMIT_URL.toArray(new String[PERMIT_URL.size()]);
+    public String [] getAnonymousUrlArray() {
+        String [] anonymousUrlArray = ANONYMOUS_URL.toArray(new String[ANONYMOUS_URL.size()]);
         return anonymousUrlArray;
     }
 
