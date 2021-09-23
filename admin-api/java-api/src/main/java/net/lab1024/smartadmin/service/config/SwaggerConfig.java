@@ -8,6 +8,9 @@ import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.SwaggerTagConst;
+import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerApiModelPropertyEnumPlugin;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
@@ -16,9 +19,10 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.EnvironmentAware;
-import org.springframework.context.annotation.Conditional;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.RequestHandler;
@@ -28,8 +32,10 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger.common.SwaggerPluginSupport;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.lang.reflect.Field;
@@ -39,16 +45,24 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * [ 根据SwaggerTagConst内部类动态生成Swagger ]
+ * [ 根据SwaggerTagConst内部类动态生成Swagger group ]
  *
- * @author 罗伊
- * @date 2020/8/25 11:57
+ * @author zhuoda
  */
 @Slf4j
 @EnableSwagger2
 @Configuration
-@Conditional(SmartSystemEnvNotProdCondition.class)
-public class SmartSwaggerDynamicGroupConfig implements EnvironmentAware, BeanDefinitionRegistryPostProcessor {
+@Profile({
+        SystemEnvironmentEnum.SystemEnvironmentNameConst.DEV,
+        SystemEnvironmentEnum.SystemEnvironmentNameConst.SIT,
+        SystemEnvironmentEnum.SystemEnvironmentNameConst.PRE
+})
+public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPostProcessor {
+
+    /**
+     * 分组名称
+     */
+    private String apiGroupName;
 
     /**
      * 文档标题
@@ -80,28 +94,30 @@ public class SmartSwaggerDynamicGroupConfig implements EnvironmentAware, BeanDef
      */
     private String host;
 
-    /**
-     * 接口Tag类
-     */
-    private String swaggerTagClass;
-
     private int groupIndex = 0;
 
     private String groupName = "default";
 
-    private final List<String> groupList = Lists.newArrayList();
+    private List<String> groupList = Lists.newArrayList();
 
-    private final Map<String, List<String>> groupMap = Maps.newHashMap();
+    private Map<String, List<String>> groupMap = Maps.newHashMap();
+
+
+    @Bean
+    @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1)
+    public SwaggerApiModelPropertyEnumPlugin swaggerEnum() {
+        return new SwaggerApiModelPropertyEnumPlugin();
+    }
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.title = environment.getProperty("swagger.title" );
-        this.description = environment.getProperty("swagger.description" );
-        this.version = environment.getProperty("swagger.version" );
-        this.serviceUrl = environment.getProperty("swagger.serviceUrl" );
-        this.packAge = environment.getProperty("swagger.packAge" );
-        this.host = environment.getProperty("swagger.host" );
-        this.swaggerTagClass = environment.getProperty("swagger.tagClass" );
+        this.apiGroupName = environment.getProperty("swagger.apiGroupName");
+        this.title = environment.getProperty("swagger.title");
+        this.description = environment.getProperty("swagger.description");
+        this.version = environment.getProperty("swagger.version");
+        this.serviceUrl = environment.getProperty("swagger.serviceUrl");
+        this.packAge = environment.getProperty("swagger.packAge");
+        this.host = environment.getProperty("swagger.host");
     }
 
     @Override
@@ -116,15 +132,8 @@ public class SmartSwaggerDynamicGroupConfig implements EnvironmentAware, BeanDef
     }
 
     private void groupBuild() {
-        Class clazz = null;
-        try {
-            clazz = Class.forName(swaggerTagClass);
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            log.error("swaggerTagClass unfounded :{}", swaggerTagClass);
-            return;
-        }
-        Class[] innerClazz = clazz.getClasses();
+        Class clazz = SwaggerTagConst.class;
+        Class[] innerClazz = clazz.getDeclaredClasses();
         for (Class cls : innerClazz) {
             String group = cls.getSimpleName();
             List<String> apiTags = Lists.newArrayList();
@@ -145,33 +154,31 @@ public class SmartSwaggerDynamicGroupConfig implements EnvironmentAware, BeanDef
     }
 
     private Docket baseDocket() {
-        // 配置全局参数 token header
-        ParameterBuilder tokenPar = new ParameterBuilder();
-        tokenPar.name(CommonConst.Token.OUTER_TOKEN_NAME)
-                .description("token" )
-                .modelRef(new ModelRef("string" ))
-                .parameterType("header" ).defaultValue("1" )
-                .required(false)
-                .build();
 
-        // 此行必须放在配置前面执行 因为要初始化groupName
-        Predicate<RequestHandler> controllerPredicate = this.getControllerPredicate();
-        // swagger配置
+        // 配置全局参数
+        List<Parameter> parameterList = this.generateParameter();
+
+        // 请求类型过滤规则
+        Predicate<RequestHandler> controllerPredicate = getControllerPredicate();
+        // controller 包路径
+        Predicate<RequestHandler> controllerPackage = RequestHandlerSelectors.basePackage(packAge);
+
         Docket docket = new Docket(DocumentationType.SWAGGER_2)
                 .groupName(groupName)
                 .forCodeGeneration(true)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage(packAge))
+                .apis(controllerPackage)
                 .apis(controllerPredicate)
                 .paths(PathSelectors.any())
                 .build().apiInfo(this.serviceApiInfo())
-                .globalOperationParameters(Lists.newArrayList(tokenPar.build()));
+                .globalOperationParameters(parameterList);
 
         if (StringUtils.isNotBlank(host)) {
             docket = docket.host(host);
         }
 
         return docket;
+
     }
 
     private Predicate<RequestHandler> getControllerPredicate() {
@@ -184,18 +191,71 @@ public class SmartSwaggerDynamicGroupConfig implements EnvironmentAware, BeanDef
                 api = apiOptional.get();
             }
             List<String> tags = Arrays.asList(api.tags());
-            return apiTags.containsAll(tags);
+            if (apiTags.containsAll(tags)) {
+                return true;
+            }
+            return false;
         };
         groupIndex++;
         return Predicates.and(RequestHandlerSelectors.withClassAnnotation(RestController.class), methodPredicate);
     }
 
     private ApiInfo serviceApiInfo() {
-        return new ApiInfoBuilder().title(title).description(description).version(version).termsOfServiceUrl(serviceUrl).build();
+        return new ApiInfoBuilder()
+                .title(title)
+                .description(description)
+                .version(version)
+                .termsOfServiceUrl(serviceUrl)
+                .build();
     }
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory configurableListableBeanFactory) throws BeansException {
 
+    }
+
+    /**
+     * 生成共用请求参数
+     *
+     * @return
+     */
+    private List<Parameter> generateParameter() {
+        // 配置全局参数 token
+        Parameter token = new ParameterBuilder().name(CommonConst.RequestHeader.TOKEN)
+                .description("token")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header").defaultValue("1")
+                .required(false)
+                .build();
+
+        Parameter agent = new ParameterBuilder().name(CommonConst.RequestHeader.USER_AGENT)
+                .description("agent")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header").defaultValue("")
+                .required(false)
+                .build();
+
+        Parameter identity = new ParameterBuilder().name(CommonConst.RequestHeader.USER_IDENTITY)
+                .description("用户唯一标识")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header").defaultValue("")
+                .required(false)
+                .build();
+
+        Parameter geo = new ParameterBuilder().name(CommonConst.RequestHeader.USER_GEO)
+                .description("定位")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header").defaultValue("")
+                .required(false)
+                .build();
+
+        Parameter location = new ParameterBuilder().name(CommonConst.RequestHeader.USER_LOCATION)
+                .description("位置")
+                .modelRef(new ModelRef("string"))
+                .parameterType("header").defaultValue("")
+                .required(false)
+                .build();
+
+        return Lists.newArrayList(token, agent, identity, geo, location);
     }
 }

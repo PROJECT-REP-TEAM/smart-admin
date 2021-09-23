@@ -29,11 +29,10 @@ import java.util.concurrent.TimeUnit;
 /**
  * [  ]
  *
- * @author 罗伊
- * @date 2020/8/25 11:57
+ * @author zhuoda
  */
 @Configuration
-public class SmartRestTemplateConfig {
+public class RestTemplateConfig {
 
     @Value("${http.pool.max-total}")
     private Integer maxTotal;
@@ -55,8 +54,8 @@ public class SmartRestTemplateConfig {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.setRequestFactory(this.clientHttpRequestFactory());
         List<HttpMessageConverter<?>> messageConverterList = restTemplate.getMessageConverters();
-        messageConverterList.add(0,  new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        messageConverterList.addAll(converters());
+        messageConverterList.add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8));
+        messageConverterList.addAll(this.converters());
         return restTemplate;
     }
 
@@ -75,16 +74,17 @@ public class SmartRestTemplateConfig {
 
 
     public OkHttp3ClientHttpRequestFactory clientHttpRequestFactory() {
-        return new OkHttp3ClientHttpRequestFactory(httpClientBuilder());
+        OkHttp3ClientHttpRequestFactory okHttp3ClientHttpRequestFactory = new OkHttp3ClientHttpRequestFactory(httpClientBuilder());
+        return okHttp3ClientHttpRequestFactory;
     }
 
     public OkHttpClient httpClientBuilder() {
         return new OkHttpClient.Builder()
-                .retryOnConnectionFailure(false)
+                .retryOnConnectionFailure(true)
                 .connectionPool(this.pool())
                 .connectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
-                .readTimeout(readTimeout,TimeUnit.MILLISECONDS)
-                .writeTimeout(writeTimeout,TimeUnit.MILLISECONDS)
+                .readTimeout(readTimeout, TimeUnit.MILLISECONDS)
+                .writeTimeout(writeTimeout, TimeUnit.MILLISECONDS)
                 .build();
     }
 
@@ -99,9 +99,11 @@ public class SmartRestTemplateConfig {
             @Override
             public void checkClientTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
             }
+
             @Override
             public void checkServerTrusted(X509Certificate[] x509Certificates, String s) throws CertificateException {
             }
+
             @Override
             public X509Certificate[] getAcceptedIssuers() {
                 return new X509Certificate[0];
@@ -116,11 +118,12 @@ public class SmartRestTemplateConfig {
             SSLContext sslContext = SSLContext.getInstance("TLS");
             sslContext.init(null, new TrustManager[]{x509TrustManager()}, new SecureRandom());
             return sslContext.getSocketFactory();
-        } catch (NoSuchAlgorithmException | KeyManagementException e) {
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
             e.printStackTrace();
         }
         return null;
     }
-
 
 }

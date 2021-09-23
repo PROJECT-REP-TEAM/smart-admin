@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.common.json;
+package net.lab1024.smartadmin.service.common.serializer;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;

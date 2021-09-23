@@ -1,7 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.file.domain.dto;
 
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.validator.CheckEnum;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -23,7 +22,6 @@ import javax.validation.constraints.NotNull;
 public class FileUrlUploadDTO {
 
     @ApiModelPropertyEnum(FileFolderTypeEnum.class)
-    @CheckEnum(enumClazz = FileFolderTypeEnum.class, required = true, message = "文件夹类型错误")
     private Integer folder;
 
     @ApiModelProperty("文件url")

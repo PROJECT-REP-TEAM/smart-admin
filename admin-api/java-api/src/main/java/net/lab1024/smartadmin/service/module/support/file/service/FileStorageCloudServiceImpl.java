@@ -9,7 +9,6 @@ import net.lab1024.smartadmin.service.common.codeconst.FileResponseCodeConst;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.config.SmartStorageCloudConfig;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;

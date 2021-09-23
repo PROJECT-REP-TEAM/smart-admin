@@ -12,22 +12,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * @author 卓大
+ * @author zhuoda
  * @Date 2020/5/22
  */
 @Slf4j
 @Configuration
-public class SmartSchedulingConfig implements SchedulingConfigurer {
+public class ScheduleConfig implements SchedulingConfigurer {
 
     private ScheduledTaskRegistrar taskRegistrar;
 
-    public ScheduledTaskRegistrar getTaskRegistrar() {
-        return taskRegistrar;
+    @Override
+    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
+        this.taskRegistrar = taskRegistrar;
     }
 
-    /**
-     * 结束定时任务
-     */
     public void destroy() {
         List<Task> taskList = new ArrayList<>();
         taskList.addAll(taskRegistrar.getCronTaskList());
@@ -41,11 +39,5 @@ public class SmartSchedulingConfig implements SchedulingConfigurer {
 
         log.warn("已结束定时任务:\n{}", Strings.join(taskName, '\n'));
     }
-
-    @Override
-    public void configureTasks(ScheduledTaskRegistrar taskRegistrar) {
-        this.taskRegistrar = taskRegistrar;
-    }
-
 
 }

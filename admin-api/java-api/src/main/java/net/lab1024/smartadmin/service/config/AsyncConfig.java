@@ -14,31 +14,31 @@ import java.util.Arrays;
 /**
  * 异步调用线程配置
  *
- * @author 胡克
- * @date 2019/12/26 11:54
+ * @author zhuoda
  */
 @Slf4j
 @Configuration
-public class SmartAsyncConfig {
+public class AsyncConfig {
 
     /**
      * 线程池 配置bean名称
      */
-    public static final String ASYNC_EXECUTOR = "asyncExecutor";
+    public static final String ASYNC_EXECUTOR_THREAD_NAME = "smart-admin-async-executor";
 
     /**
      * 配置线程池
      *
      * @return
      */
-    @Bean(name = ASYNC_EXECUTOR)
+    @Bean(name = ASYNC_EXECUTOR_THREAD_NAME)
     public AsyncTaskExecutor executor() {
+        int processors = Runtime.getRuntime().availableProcessors();
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
         // 核心线程数量
-        taskExecutor.setCorePoolSize(Runtime.getRuntime().availableProcessors());
+        taskExecutor.setCorePoolSize(processors);
         // 最大线程数量
-        taskExecutor.setMaxPoolSize(Runtime.getRuntime().availableProcessors());
-        taskExecutor.setThreadNamePrefix(ASYNC_EXECUTOR);
+        taskExecutor.setMaxPoolSize(processors);
+        taskExecutor.setThreadNamePrefix(ASYNC_EXECUTOR_THREAD_NAME);
         taskExecutor.initialize();
         return taskExecutor;
     }

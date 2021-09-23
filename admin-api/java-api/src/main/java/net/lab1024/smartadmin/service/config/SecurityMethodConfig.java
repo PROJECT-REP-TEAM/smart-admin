@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 /**
  * 此类用于注入自己的 method校验
  * SmartSecurityMetadataSource
- * @author 罗伊
+ * @author zhuoda
  * @date 2021-08-31 0:01
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true)

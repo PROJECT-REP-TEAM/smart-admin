@@ -8,15 +8,13 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * MybatisPlus 配置
+ * description
  *
- * @author listen
- * @date 2021/06/06 19:30
+ * @author zhuoda
  */
-@Configuration
 @EnableTransactionManagement
-public class SmartMybatisPlusConfig {
-
+@Configuration
+public class MybatisPlusConfig {
     /**
      * 分页插件
      */

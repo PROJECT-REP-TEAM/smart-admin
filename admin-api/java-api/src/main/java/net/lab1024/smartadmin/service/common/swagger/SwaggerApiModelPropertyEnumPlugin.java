@@ -25,7 +25,7 @@ import static springfox.documentation.schema.Annotations.findPropertyAnnotation;
  */
 @Component
 @Order(SwaggerPluginSupport.SWAGGER_PLUGIN_ORDER + 1)
-public class ApiModelPropertyEnumPlugin implements ModelPropertyBuilderPlugin {
+public class SwaggerApiModelPropertyEnumPlugin implements ModelPropertyBuilderPlugin {
 
     @Override
     public void apply(ModelPropertyContext context) {

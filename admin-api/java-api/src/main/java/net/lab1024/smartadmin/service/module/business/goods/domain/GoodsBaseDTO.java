@@ -3,9 +3,8 @@ package net.lab1024.smartadmin.service.module.business.goods.domain;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.json.FileKeySerializer;
+import net.lab1024.smartadmin.service.common.serializer.FileKeySerializer;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.validator.CheckEnum;
 import net.lab1024.smartadmin.service.module.business.goods.constant.GoodsTypeEnum;
 import org.hibernate.validator.constraints.Length;
 
@@ -24,7 +23,6 @@ import java.math.BigDecimal;
 public class GoodsBaseDTO {
 
     @ApiModelPropertyEnum(desc = "商品类型", value = GoodsTypeEnum.class)
-    @CheckEnum(enumClazz = GoodsTypeEnum.class, message = "商品类型错误")
     private Integer goodsType;
 
     @ApiModelProperty("商品分类")

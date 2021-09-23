@@ -3,7 +3,6 @@ package net.lab1024.smartadmin.service.module.system.menu.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.validator.CheckEnum;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
 import org.hibernate.validator.constraints.Length;
 
@@ -26,7 +25,6 @@ public class MenuBasicDTO {
     private String menuName;
 
     @ApiModelPropertyEnum(value = MenuTypeEnum.class, desc = "类型")
-    @CheckEnum(enumClazz = MenuTypeEnum.class, message = "类型错误")
     private Integer menuType;
 
     @ApiModelProperty("父菜单ID 无上级可传0")

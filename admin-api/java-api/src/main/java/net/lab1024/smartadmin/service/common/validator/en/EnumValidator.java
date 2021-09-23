@@ -1,4 +1,5 @@
-package net.lab1024.smartadmin.service.common.validator;
+package net.lab1024.smartadmin.service.common.validator.en;
+
 
 import net.lab1024.smartadmin.service.common.constant.BaseEnum;
 
@@ -13,9 +14,8 @@ import java.util.stream.Stream;
  *
  * @author listen
  * @date 2017/11/11 15:34
- * @update 2021年1月20日 15:32:16
  */
-public class CheckEnumValidator implements ConstraintValidator<CheckEnum, Object> {
+public class EnumValidator implements ConstraintValidator<CheckEnum, Object> {
 
     /**
      * 枚举类实例集合
@@ -31,7 +31,7 @@ public class CheckEnumValidator implements ConstraintValidator<CheckEnum, Object
     public void initialize(CheckEnum constraintAnnotation) {
         // 获取注解传入的枚举类对象
         required = constraintAnnotation.required();
-        Class<? extends BaseEnum> enumClass = constraintAnnotation.enumClazz();
+        Class<? extends BaseEnum> enumClass = constraintAnnotation.value();
         enumValList = Stream.of(enumClass.getEnumConstants()).map(BaseEnum::getValue).collect(Collectors.toList());
     }
 

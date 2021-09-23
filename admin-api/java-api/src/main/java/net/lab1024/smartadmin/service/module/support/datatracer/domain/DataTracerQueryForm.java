@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.domain.PageBaseDTO;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.validator.CheckEnum;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerBusinessTypeEnum;
 
 import javax.validation.constraints.NotNull;
@@ -19,7 +18,6 @@ import javax.validation.constraints.NotNull;
 public class DataTracerQueryForm extends PageBaseDTO {
 
     @ApiModelPropertyEnum(DataTracerBusinessTypeEnum.class)
-    @CheckEnum(enumClazz = DataTracerBusinessTypeEnum.class, required = true, message = "业务类型错误")
     private Integer businessType;
 
     @ApiModelProperty("业务id")

@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.constant.GenderEnum;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.validator.CheckEnum;
 import net.lab1024.smartadmin.service.util.SmartVerificationUtil;
 import org.hibernate.validator.constraints.Length;
 
@@ -32,7 +31,6 @@ public class EmployeeAddDTO {
     private String loginName;
 
     @ApiModelPropertyEnum(GenderEnum.class)
-    @CheckEnum(enumClazz = GenderEnum.class, message = "性别错误")
     private Integer gender;
 
     @ApiModelProperty("部门id")

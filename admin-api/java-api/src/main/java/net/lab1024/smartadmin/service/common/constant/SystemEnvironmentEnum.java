@@ -1,41 +1,41 @@
 package net.lab1024.smartadmin.service.common.constant;
 
+
 /**
  * 系统环境枚举类
  *
- * @author listen
- * @date 2019年4月11日 17:34:59
+ * @author zhuoda
  */
 public enum SystemEnvironmentEnum implements BaseEnum {
-
     /**
      * dev
      */
-    DEV("dev", "开发环境"),
+    DEV(SystemEnvironmentNameConst.DEV, "开发环境"),
 
     /**
      * sit
      */
-    SIT("sit", "测试环境"),
+    SIT(SystemEnvironmentNameConst.SIT, "测试环境"),
 
     /**
      * pre
      */
-    PRE("pre", "预发布环境"),
+    PRE(SystemEnvironmentNameConst.PRE, "预发布环境"),
 
     /**
      * prod
      */
-    PROD("prod", "生产环境");
+    PROD(SystemEnvironmentNameConst.PROD, "生产环境");
 
-    private final String value;
+    private String value;
 
-    private final String desc;
+    private String desc;
 
     SystemEnvironmentEnum(String value, String desc) {
         this.value = value;
         this.desc = desc;
     }
+
     /**
      * 获取定义枚举value值
      *
@@ -54,6 +54,13 @@ public enum SystemEnvironmentEnum implements BaseEnum {
     @Override
     public String getDesc() {
         return desc;
+    }
+
+    public static final class SystemEnvironmentNameConst {
+        public static final String DEV = "dev";
+        public static final String SIT = "sit";
+        public static final String PRE = "pre";
+        public static final String PROD = "prod";
     }
 
 }

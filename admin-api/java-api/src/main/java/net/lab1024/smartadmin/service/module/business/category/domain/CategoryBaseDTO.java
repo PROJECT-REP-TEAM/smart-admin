@@ -3,10 +3,10 @@ package net.lab1024.smartadmin.service.module.business.category.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.validator.CheckEnum;
 import net.lab1024.smartadmin.service.module.business.category.constant.CategoryTypeEnum;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.DecimalMax;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
@@ -25,7 +25,6 @@ public class CategoryBaseDTO {
     private String categoryName;
 
     @ApiModelPropertyEnum(desc = "分类类型", value = CategoryTypeEnum.class)
-    @CheckEnum(enumClazz = CategoryTypeEnum.class, required = true, message = "分类类型错误")
     private Integer categoryType;
 
     @ApiModelProperty("父级类目id|可选")

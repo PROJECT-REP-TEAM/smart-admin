@@ -10,13 +10,13 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.service.module.system.datascope.MyBatisPlugin;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.JdkRegexpMethodPointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -33,59 +33,55 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * [  ]
+ * [ 数据源配置 ]
  *
- * @author 罗伊
- * @date 2020/8/25 11:57
+ * @author zhuoda
  */
 @Slf4j
 @Configuration
-public class SmartDruidDataSourceConfig {
+public class DataSourceConfig {
 
     @Value("${spring.datasource.driver-class-name}")
-    private String driver;
+    String driver;
 
     @Value("${spring.datasource.url}")
-    private String url;
+    String url;
 
     @Value("${spring.datasource.username}")
-    private String username;
+    String username;
 
     @Value("${spring.datasource.password}")
-    private String password;
+    String password;
 
     @Value("${spring.datasource.initial-size}")
-    private int initialSize;
+    int initialSize;
 
     @Value("${spring.datasource.min-idle}")
-    private int minIdle;
+    int minIdle;
 
     @Value("${spring.datasource.max-active}")
-    private int maxActive;
+    int maxActive;
 
     @Value("${spring.datasource.max-wait}")
-    private long maxWait;
+    long maxWait;
 
     @Value("${spring.datasource.time-between-eviction-runs-millis}")
-    private long timeBetweenEvictionRunsMillis;
+    long timeBetweenEvictionRunsMillis;
 
     @Value("${spring.datasource.min-evictable-idle-time-millis}")
-    private long minEvictableIdleTimeMillis;
+    long minEvictableIdleTimeMillis;
 
     @Value("${spring.datasource.filters}")
-    private String filters;
+    String filters;
 
     @Value("${spring.datasource.druid.username}")
-    private String druidUserName;
+    String druidUserName;
 
     @Value("${spring.datasource.druid.password}")
-    private String druidPassword;
+    String druidPassword;
 
     @Value("${spring.datasource.druid.login.enabled}")
-    private boolean druidLoginEnable;
-
-    @Value("${spring.datasource.druid.service.scanner}")
-    private String serviceScanner;
+    boolean druidLoginEnable;
 
     @Autowired
     private StatFilter logSlowSql;
@@ -94,7 +90,10 @@ public class SmartDruidDataSourceConfig {
     private DruidStatInterceptor druidStatInterceptor;
 
     @Autowired
-    private MybatisPlusInterceptor mybatisPlusInterceptor;
+    private MybatisPlusInterceptor paginationInterceptor;
+
+    @Autowired
+    private MyBatisPlugin myBatisPlugin;
 
     @Bean
     @Primary
@@ -130,29 +129,29 @@ public class SmartDruidDataSourceConfig {
         MybatisSqlSessionFactoryBean factoryBean = new MybatisSqlSessionFactoryBean();
         factoryBean.setDataSource(druidDataSource());
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
-        Resource[] resources = resolver.getResources("classpath*:/mapper/**/*.xml");
+        Resource[] resources = resolver.getResources("classpath:/mapper/**/*.xml");
         factoryBean.setMapperLocations(resources);
 
-        // 设置 MyBatis-Plus 分页插件
-        Interceptor[] plugins = {mybatisPlusInterceptor};
+        // 设置 MyBatis-Plus 分页插件 注意此处myBatisPlugin一定要放在后面
+        Interceptor[] plugins = {paginationInterceptor,myBatisPlugin};
         factoryBean.setPlugins(plugins);
 
         return factoryBean.getObject();
     }
 
     /**
-     * 非正式环境 加载
+     * 非正式环境 才加载
      *
      * @return
      */
+    @Conditional(SystemEnvironmentConfig.class)
     @Bean
-    @Conditional(SmartSystemEnvNotProdCondition.class)
     public ServletRegistrationBean<StatViewServlet> druidServlet() {
-        ServletRegistrationBean<StatViewServlet> servletRegistrationBean = new ServletRegistrationBean<StatViewServlet>();
+        ServletRegistrationBean<StatViewServlet> servletRegistrationBean = new ServletRegistrationBean<>();
         servletRegistrationBean.setServlet(new StatViewServlet());
         servletRegistrationBean.addUrlMappings("/druid/*");
         Map<String, String> initParameters = new HashMap<String, String>();
-        // 不设置用户名密码可以直接通过druid/index.html访问
+        //不设置用户名密码可以直接通过druid/index.html访问
         if (druidLoginEnable) {
             initParameters.put("loginUsername", druidUserName);
             initParameters.put("loginPassword", druidPassword);
@@ -182,13 +181,14 @@ public class SmartDruidDataSourceConfig {
 
     @Bean(name = "druid-stat-interceptor")
     public DruidStatInterceptor druidStatInterceptor() {
-        return new DruidStatInterceptor();
+        DruidStatInterceptor dsInterceptor = new DruidStatInterceptor();
+        return dsInterceptor;
     }
 
     @Bean
     public JdkRegexpMethodPointcut jdkRegexpMethodPointcut() {
         JdkRegexpMethodPointcut jdkRegexpMethodPointcut = new JdkRegexpMethodPointcut();
-        jdkRegexpMethodPointcut.setPatterns(serviceScanner);
+        jdkRegexpMethodPointcut.setPatterns("com.renminyixue.core.service.module..*Service.*");
         return jdkRegexpMethodPointcut;
     }
 

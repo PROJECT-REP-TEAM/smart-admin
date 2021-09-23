@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.common.validator;
+package net.lab1024.smartadmin.service.common.validator.list;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;

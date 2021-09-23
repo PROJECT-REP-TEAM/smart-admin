@@ -47,7 +47,6 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-
   // 设置tagNav
   useUserStore().setTagNav(to, from);
 

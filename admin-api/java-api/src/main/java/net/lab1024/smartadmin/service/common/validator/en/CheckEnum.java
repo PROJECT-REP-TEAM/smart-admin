@@ -1,4 +1,5 @@
-package net.lab1024.smartadmin.service.common.validator;
+package net.lab1024.smartadmin.service.common.validator.en;
+
 
 import net.lab1024.smartadmin.service.common.constant.BaseEnum;
 
@@ -18,7 +19,7 @@ import java.lang.annotation.Target;
  */
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = CheckEnumValidator.class)// 自定义验证的处理类
+@Constraint(validatedBy = EnumValidator.class)// 自定义验证的处理类
 public @interface CheckEnum {
 
     /**
@@ -33,7 +34,7 @@ public @interface CheckEnum {
      *
      * @return
      */
-    Class<? extends BaseEnum> enumClazz();
+    Class<? extends BaseEnum> value();
 
     /**
      * 是否必须
