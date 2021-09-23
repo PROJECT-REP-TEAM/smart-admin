@@ -64,10 +64,18 @@ public class SmartSecurityUrlMatchers {
         return IGNORE_URL;
     }
 
-    public List<String> getPermitUrlList() {
+    /**
+     * 获取需要匿名访问的url集合
+     * @return
+     */
+    public List<String> getAnonymousUrlList() {
         return ANONYMOUS_URL;
     }
 
+    /**
+     * 获取需要认证的url集合
+     * @return
+     */
     public List<String> getAuthenticatedUrlList() {
         return AUTHENTICATED_URL;
     }
@@ -83,16 +91,28 @@ public class SmartSecurityUrlMatchers {
         return noValidUrl;
     }
 
+    /**
+     * 获取需要忽略的url集合
+     * @return
+     */
     public String [] getIgnoreUrlArray() {
         String [] ignoreUrlArray = IGNORE_URL.toArray(new String[IGNORE_URL.size()]);
         return ignoreUrlArray;
     }
 
+    /**
+     * 获取需要匿名访问的url集合
+     * @return
+     */
     public String [] getAnonymousUrlArray() {
         String [] anonymousUrlArray = ANONYMOUS_URL.toArray(new String[ANONYMOUS_URL.size()]);
         return anonymousUrlArray;
     }
 
+    /**
+     * 获取需要认证的url集合
+     * @return
+     */
     public String [] getAuthenticatedUrlArray() {
         String [] anonymousUrlArray = AUTHENTICATED_URL.toArray(new String[AUTHENTICATED_URL.size()]);
         return anonymousUrlArray;
