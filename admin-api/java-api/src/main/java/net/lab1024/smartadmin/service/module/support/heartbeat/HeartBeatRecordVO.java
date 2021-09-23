@@ -3,7 +3,6 @@ package net.lab1024.smartadmin.service.module.support.heartbeat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -14,11 +13,11 @@ import java.util.Date;
  * @date  
  */
 @Data
-public class HeartBeatRecordVO implements Serializable {
+public class HeartBeatRecordVO {
 
     private Integer id;
 
-    @ApiModelProperty("项目名字")
+    @ApiModelProperty("项目路径")
     private String projectPath;
 
     @ApiModelProperty("服务器ip")

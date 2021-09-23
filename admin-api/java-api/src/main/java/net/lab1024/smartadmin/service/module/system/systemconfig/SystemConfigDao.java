@@ -1,9 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.systemconfig;
+package net.lab1024.smartadmin.service.module.system.systemconfig;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.module.support.systemconfig.domain.SystemConfigEntity;
-import net.lab1024.smartadmin.service.module.support.systemconfig.domain.SystemConfigQueryDTO;
+import net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigEntity;
+import net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigQueryDTO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

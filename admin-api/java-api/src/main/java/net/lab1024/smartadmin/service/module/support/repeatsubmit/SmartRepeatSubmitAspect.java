@@ -33,16 +33,16 @@ public class SmartRepeatSubmitAspect {
      */
     private static Cache<Object, Object> cache = Caffeine.newBuilder()
             .maximumSize(5000)
-            .expireAfterWrite(NoRepeatSubmit.MAX_INTERVAL, TimeUnit.MILLISECONDS).build();
+            .expireAfterWrite(RepeatSubmit.MAX_INTERVAL, TimeUnit.MILLISECONDS).build();
 
-    private Function<HttpServletRequest, SmartRepeatSubmitUserDTO> userFunction;
+    private Function<HttpServletRequest, RepeatSubmitTicket> userFunction;
 
     /**
      * 获取用户信息
      *
      * @param userFunction
      */
-    public SmartRepeatSubmitAspect(Function<HttpServletRequest, SmartRepeatSubmitUserDTO> userFunction) {
+    public SmartRepeatSubmitAspect(Function<HttpServletRequest, RepeatSubmitTicket> userFunction) {
         this.userFunction = userFunction;
     }
 
@@ -53,11 +53,11 @@ public class SmartRepeatSubmitAspect {
      * @return
      * @throws Throwable
      */
-    @Around("@annotation(net.lab1024.smartadmin.service.module.support.repeatsubmit.NoRepeatSubmit)")
+    @Around("@annotation(net.lab1024.smartadmin.service.module.support.repeatsubmit.RepeatSubmit)")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
 
-        SmartRepeatSubmitUserDTO user = this.userFunction.apply(request);
+        RepeatSubmitTicket user = this.userFunction.apply(request);
         if (user == null) {
             return point.proceed();
         }
@@ -68,8 +68,8 @@ public class SmartRepeatSubmitAspect {
         Object value = cache.getIfPresent(key);
         if (value != null) {
             Method method = ((MethodSignature) point.getSignature()).getMethod();
-            NoRepeatSubmit annotation = method.getAnnotation(NoRepeatSubmit.class);
-            int interval = Math.min(annotation.value(), NoRepeatSubmit.MAX_INTERVAL);
+            RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
+            int interval = Math.min(annotation.value(), RepeatSubmit.MAX_INTERVAL);
             if (System.currentTimeMillis() < (long) value + interval) {
                 // 提交频繁
                 return ResponseDTO.wrap(ResponseCodeConst.REPEAT_SUBMIT);

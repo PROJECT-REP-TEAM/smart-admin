@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.systemconfig;
+package net.lab1024.smartadmin.service.module.system.systemconfig;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.systemconfig.domain;
+package net.lab1024.smartadmin.service.module.system.systemconfig.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

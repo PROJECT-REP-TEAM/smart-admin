@@ -1,8 +1,5 @@
 package net.lab1024.smartadmin.service.module.support.heartbeat.core;
 
-import net.lab1024.smartadmin.service.util.SmartIPUtil;
-import net.lab1024.smartadmin.service.util.SmartThreadFactory;
-
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -12,6 +9,10 @@ import java.util.concurrent.TimeUnit;
  * @author 罗伊
  */
 public class HeartBeatManager {
+
+    private static final String THREAD_NAME_PREFIX = "smart-admin-heart-beat";
+    private static final int THREAD_COUNT = 1;
+    private static final long INITIAL_DELAY = 60*1000L;
 
     private ScheduledThreadPoolExecutor threadPoolExecutor;
 
@@ -23,46 +24,32 @@ public class HeartBeatManager {
     /**
      * 调度配置信息
      */
-    private HeartBeatConfig config;
+    private long intervalMilliseconds;
 
     /**
-     * 服务信息
+     * @param intervalMilliseconds     间隔执行时间(毫秒)
      */
-    private HeartBeatServer server;
-
-    /**
-     * @param delayHandlerTime 延迟执行时间
-     * @param intervalTime     间隔执行时间
-     */
-    public HeartBeatManager(Long delayHandlerTime,
-                            Long intervalTime,
+    public HeartBeatManager(Long intervalMilliseconds,
                             IHeartBeatRecordHandler heartBeatRecordHandler) {
-        this.config = HeartBeatConfig.builder().delayHandlerTime(delayHandlerTime).intervalTime(intervalTime).build();
+        this.intervalMilliseconds =    intervalMilliseconds;
         this.heartBeatRecordHandler = heartBeatRecordHandler;
-        this.server = handlerHeartServer();
-        this.threadPoolExecutor = new ScheduledThreadPoolExecutor(1, new HeartBeatThreadFactory());
-        this.heartBeatScheduler();
+        //使用守护线程去处理
+        this.threadPoolExecutor = new ScheduledThreadPoolExecutor(THREAD_COUNT, r -> {
+            Thread t = new Thread(r, THREAD_NAME_PREFIX);
+            if (!t.isDaemon()) {
+                t.setDaemon(true);
+            }
+            return t;
+        });
+        // 开始心跳
+        this.beginHeartBeat();
     }
 
     /**
-     * 调度监控服务状态
+     * 开启心跳
      */
-    private void heartBeatScheduler() {
-        HeartBeatRunnable heartBeatRunnable = new HeartBeatRunnable(heartBeatRecordHandler,server);
-        threadPoolExecutor.scheduleWithFixedDelay(heartBeatRunnable, config.getDelayHandlerTime(), config.getIntervalTime(), TimeUnit.MILLISECONDS);
+    private void beginHeartBeat() {
+        HeartBeatRunnable heartBeatRunnable = new HeartBeatRunnable(heartBeatRecordHandler);
+        threadPoolExecutor.scheduleWithFixedDelay(heartBeatRunnable, INITIAL_DELAY, intervalMilliseconds, TimeUnit.MILLISECONDS);
     }
-
-    /**
-     * 服务信息
-     * @return
-     */
-    private HeartBeatServer handlerHeartServer(){
-        HeartBeatServer server = new HeartBeatServer();
-        server.setProjectPath(HeatBeatRecordHelper.getProjectPath());
-        server.setServerIps(SmartIPUtil.getLocalHostIPList());
-        server.setProcessNo(HeatBeatRecordHelper.getProcessID());
-        server.setProcessStartTime(HeatBeatRecordHelper.getStartTime());
-        return server;
-    }
-
 }

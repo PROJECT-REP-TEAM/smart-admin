@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.module.system.menu;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigKeyEnum;
-import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigService;
+import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
+import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;

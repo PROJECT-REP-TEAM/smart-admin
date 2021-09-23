@@ -13,14 +13,14 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface NoRepeatSubmit {
+public @interface RepeatSubmit {
 
     /**
      * 重复提交间隔时间/毫秒
      *
      * @return
      */
-    int value() default 1200;
+    int value();
 
     /**
      * 最长间隔30s

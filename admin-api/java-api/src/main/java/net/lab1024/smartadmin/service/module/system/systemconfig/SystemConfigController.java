@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.systemconfig;
+package net.lab1024.smartadmin.service.module.system.systemconfig;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.common.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.systemconfig.domain.*;
+import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import net.lab1024.smartadmin.service.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigDao">
+<mapper namespace="net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigDao">
     <!-- 分页查询系统配置 -->
-    <select id="queryByPage" resultType="net.lab1024.smartadmin.service.module.support.systemconfig.domain.SystemConfigEntity">
+    <select id="queryByPage" resultType="net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigEntity">
         SELECT *
         FROM t_system_config
         <where>
@@ -13,7 +13,7 @@
     </select>
 
     <!-- 根据key查询获取数据 -->
-    <select id="selectByKey" resultType="net.lab1024.smartadmin.service.module.support.systemconfig.domain.SystemConfigEntity">
+    <select id="selectByKey" resultType="net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigEntity">
         SELECT *
         FROM t_system_config
         WHERE config_key = #{key}

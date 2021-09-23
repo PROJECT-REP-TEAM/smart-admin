@@ -4,13 +4,12 @@ import lombok.Data;
 
 /**
  * 
- * [  ]
+ *  重复提交的ticket
  * 
- * @author 罗伊
- * @date
+ * @author zhuoda
  */
 @Data
-public class SmartRepeatSubmitUserDTO {
+public class RepeatSubmitTicket {
 
     /**
      * 用户id

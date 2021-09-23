@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.support.heartbeat.core;
 
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
 * @Description: 心跳记录日志
@@ -27,11 +27,11 @@ public class HeartBeatRecord {
     /**
      * 进程开启时间
      */
-    private Date processStartTime;
+    private LocalDateTime processStartTime;
     /**
      * 心跳当前时间
      */
-    private Date heartBeatTime;
+    private LocalDateTime heartBeatTime;
 
 
 }

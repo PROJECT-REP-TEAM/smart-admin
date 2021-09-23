@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.systemconfig;
+package net.lab1024.smartadmin.service.module.system.systemconfig;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.systemconfig.domain.*;
+import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import net.lab1024.smartadmin.service.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.util.SmartPageUtil;
