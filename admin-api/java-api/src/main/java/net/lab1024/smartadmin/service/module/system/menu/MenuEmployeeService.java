@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.menu;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigConst;
+import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigKeyEnum;
 import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigService;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
@@ -102,7 +102,7 @@ public class MenuEmployeeService {
      * @return
      */
     public Boolean isSuperman(Long employeeId) {
-        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigConst.Key.EMPLOYEE_SUPERMAN);
+        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigKeyEnum.EMPLOYEE_SUPERMAN);
         List<Long> superManIdsList = SmartStringUtil.splitConverToLongList(systemConfigValue, ",");
         return superManIdsList.contains(employeeId);
     }

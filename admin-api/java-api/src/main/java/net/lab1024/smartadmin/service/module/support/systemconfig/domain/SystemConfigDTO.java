@@ -6,11 +6,8 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * [  ]
- *
  * @author 罗伊
  * @version 1.0
- *
  * @date
  * @since JDK1.8
  */
@@ -28,12 +25,6 @@ public class SystemConfigDTO {
 
     @ApiModelProperty("参数名称")
     private String configName;
-
-    @ApiModelProperty("参数类别")
-    private String configGroup;
-
-    @ApiModelProperty("是否禁用")
-    private Boolean disabledFlag;
 
     @ApiModelProperty("备注")
     private String remark;

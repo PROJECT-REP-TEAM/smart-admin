@@ -24,8 +24,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 系统配置业务类
  *
- * @author 1024lab
- * @date 2017-12-23 15:09
+ * @author huke
+ * @date 2021年9月23日 20:49:13
  */
 @Slf4j
 @Service
@@ -54,7 +54,7 @@ public class SystemConfigService {
     }
 
     /**
-     * 初始化系统设置缓存
+     * 刷新系统设置缓存
      */
     private void refreshConfigCache(Long configId) {
         Optional<SystemConfigEntity> optional = this.CONFIG_CACHE.values().stream().filter(e -> Objects.equals(configId, e.getConfigId())).findFirst();
@@ -88,7 +88,7 @@ public class SystemConfigService {
      * @param configKey
      * @return
      */
-    public SystemConfigDTO getConfig(SystemConfigConst.Key configKey) {
+    public SystemConfigDTO getConfig(SystemConfigKeyEnum configKey) {
         return this.getConfig(configKey.getValue());
     }
 
@@ -99,12 +99,11 @@ public class SystemConfigService {
      * @return
      */
     public SystemConfigDTO getConfig(String configKey) {
-        boolean check = SmartBaseEnumUtil.checkEnum(configKey, SystemConfigConst.Key.class);
+        boolean check = SmartBaseEnumUtil.checkEnum(configKey, SystemConfigKeyEnum.class);
         Assert.isTrue(check, "config key error");
 
         SystemConfigEntity entity = this.CONFIG_CACHE.get(configKey);
         Assert.notNull(entity, "缺少系统配置[" + configKey + "]");
-        Assert.isTrue(!entity.getDisabledFlag(), "系统配置[" + configKey + "]已被禁用");
 
         return SmartBeanUtil.copy(entity, SystemConfigDTO.class);
     }
@@ -115,19 +114,19 @@ public class SystemConfigService {
      * @param configKey
      * @return
      */
-    public String getConfigValue(SystemConfigConst.Key configKey) {
+    public String getConfigValue(SystemConfigKeyEnum configKey) {
         return this.getConfig(configKey).getConfigValue();
     }
 
     /**
-     * 根据参数key获得一条数据 并转换为 对象
+     * 根据参数key查询 并转换为对象
      *
      * @param configKey
      * @param clazz
      * @param <T>
      * @return
      */
-    public <T> T getConfigValue2Obj(SystemConfigConst.Key configKey, Class<T> clazz) {
+    public <T> T getConfigValue2Obj(SystemConfigKeyEnum configKey, Class<T> clazz) {
         String configValue = this.getConfigValue(configKey);
         return JSON.parseObject(configValue, clazz);
     }
@@ -140,11 +139,10 @@ public class SystemConfigService {
      */
     public ResponseDTO<String> add(SystemConfigAddDTO configAddDTO) {
         SystemConfigEntity entity = systemConfigDao.selectByKey(configAddDTO.getConfigKey());
-        if (entity != null) {
+        if (null != entity) {
             return ResponseDTO.wrap(ResponseCodeConst.ALREADY_EXIST);
         }
         entity = SmartBeanUtil.copy(configAddDTO, SystemConfigEntity.class);
-        entity.setDisabledFlag(true);
         systemConfigDao.insert(entity);
 
         // 刷新缓存
@@ -185,7 +183,7 @@ public class SystemConfigService {
      * @param value
      * @return
      */
-    public ResponseDTO<String> updateValueByKey(SystemConfigConst.Key key, String value) {
+    public ResponseDTO<String> updateValueByKey(SystemConfigKeyEnum key, String value) {
         SystemConfigDTO config = this.getConfig(key);
         if (null == config) {
             return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);

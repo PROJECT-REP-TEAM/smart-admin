@@ -36,16 +36,6 @@ public class SystemConfigEntity {
     private String configName;
 
     /**
-     * 参数类别
-     */
-    private String configGroup;
-
-    /**
-     * 是否禁用
-     */
-    private Boolean disabledFlag;
-
-    /**
      * 备注
      */
     private String remark;

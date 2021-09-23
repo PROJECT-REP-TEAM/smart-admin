@@ -26,43 +26,13 @@ import java.time.format.DateTimeParseException;
 public class DateConfig {
 
     @Bean
-    public LocalDateTimeSerializer localDateTimeSerializer() {
-        return new LocalDateTimeSerializer(SmartDateFormatterEnum.YMD_HMS.getFormatter());
-    }
-
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer localDateTimeSerializerCustomizer() {
-        return builder -> builder.serializerByType(LocalDateTime.class, localDateTimeSerializer());
-    }
-
-    @Bean
-    public LocalDateTimeDeserializer localDateTimeDeserializer() {
-        return new LocalDateTimeDeserializer(SmartDateFormatterEnum.YMD_HMS.getFormatter());
-    }
-
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer localDateTimeDeserializerCustomizer() {
-        return builder -> builder.deserializerByType(LocalDateTime.class, localDateTimeDeserializer());
-    }
-
-    @Bean
-    public LocalDateSerializer localDateSerializer() {
-        return new LocalDateSerializer(SmartDateFormatterEnum.YMD.getFormatter());
-    }
-
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer localDateSerializerCustomizer() {
-        return builder -> builder.serializerByType(LocalDate.class, localDateSerializer());
-    }
-
-    @Bean
-    public LocalDateDeserializer localDateDeserializer() {
-        return new LocalDateDeserializer(SmartDateFormatterEnum.YMD.getFormatter());
-    }
-
-    @Bean
-    public Jackson2ObjectMapperBuilderCustomizer localDateDeserializerCustomizer() {
-        return builder -> builder.deserializerByType(LocalDate.class, localDateDeserializer());
+    public Jackson2ObjectMapperBuilderCustomizer customizer() {
+        return builder -> {
+            builder.deserializers(new LocalDateDeserializer(SmartDateFormatterEnum.YMD.getFormatter()));
+            builder.deserializers(new LocalDateTimeDeserializer(SmartDateFormatterEnum.YMD_HMS.getFormatter()));
+            builder.serializers(new LocalDateSerializer(SmartDateFormatterEnum.YMD.getFormatter()));
+            builder.serializers(new LocalDateTimeSerializer(SmartDateFormatterEnum.YMD_HMS.getFormatter()));
+        };
     }
 
     /**

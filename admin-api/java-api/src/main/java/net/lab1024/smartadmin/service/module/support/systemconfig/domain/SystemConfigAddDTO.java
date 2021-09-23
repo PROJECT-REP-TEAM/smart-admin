@@ -33,11 +33,6 @@ public class SystemConfigAddDTO {
     @Length(max = 255, message = "参数名称最多255个字符")
     private String configName;
 
-    @ApiModelProperty("参数类别")
-    @NotBlank(message = "参数类别不能为空")
-    @Length(max = 255, message = "参数类别最多255个字符")
-    private String configGroup;
-
     @ApiModelProperty("备注")
     @Length(max = 255, message = "备注最多255个字符")
     private String remark;

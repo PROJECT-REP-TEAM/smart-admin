@@ -11,14 +11,7 @@ import net.lab1024.smartadmin.service.common.constant.CommonConst;
  */
 public enum FileFolderTypeEnum implements BaseEnum {
 
-    COMMON(1, CommonConst.FileFolderConst.FOLDER_PUBLIC + "/common/", "通用"),
-
-    /**
-     * folder 后续添加斜杠
-     */
-    ERP_STOCK(301, CommonConst.FileFolderConst.FOLDER_PUBLIC + "/help/", "erp货物"),
-
-    ERP_CUSTOMER(302, CommonConst.FileFolderConst.FOLDER_PUBLIC + "/news/", "erp客商"),
+    COMMON(1, CommonConst.FileServiceConst.FOLDER_PUBLIC + "/common/", "通用"),
 
     ;
 

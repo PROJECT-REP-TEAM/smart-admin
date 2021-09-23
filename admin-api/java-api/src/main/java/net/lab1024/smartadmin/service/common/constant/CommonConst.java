@@ -111,12 +111,12 @@ public class CommonConst {
         /**
          * 公用读取文件夹 public
          */
-        public static final String FOLDER_PUBLIC = "xmf-crm/pu";
+        public static final String FOLDER_PUBLIC = "pu";
 
         /**
          * 私有读取文件夹 private
          */
-        public static final String FOLDER_PRIVATE = "xmf-crm/pr";
+        public static final String FOLDER_PRIVATE = "pr";
 
         /**
          * 文件夹格式

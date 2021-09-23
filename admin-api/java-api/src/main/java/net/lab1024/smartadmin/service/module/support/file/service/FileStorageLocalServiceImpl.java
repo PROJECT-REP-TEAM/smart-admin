@@ -5,7 +5,7 @@ import net.lab1024.smartadmin.service.common.codeconst.FileResponseCodeConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
-import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigConst;
+import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigKeyEnum;
 import net.lab1024.smartadmin.service.module.support.systemconfig.SystemConfigService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,7 +82,7 @@ public class FileStorageLocalServiceImpl implements IFileStorageService {
      * @return
      */
     public String generateFileUrl(String fileKey) {
-        String configValue = systemConfigService.getConfigValue(SystemConfigConst.Key.LOCAL_UPLOAD_URL_PREFIX);
+        String configValue = systemConfigService.getConfigValue(SystemConfigKeyEnum.LOCAL_UPLOAD_URL_PREFIX);
         String fileUrl = configValue + fileKey;
         return fileUrl;
     }
