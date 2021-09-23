@@ -79,7 +79,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 过滤请求
                 .authorizeRequests();
         //可以匿名登录的URL
-        String [] anonymousUrlArray = smartSecurityUrlMatchers.getPermitUrlArray();
+        String [] anonymousUrlArray = smartSecurityUrlMatchers.getAnonymousUrlArray();
         interceptUrlRegistry.antMatchers(anonymousUrlArray).permitAll();
 
         //登录的URL

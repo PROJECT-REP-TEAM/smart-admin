@@ -10,7 +10,7 @@ public interface IHeartBeatRecordHandler {
     /**
      * 心跳日志处理方法
      *
-     * @param recordDTO
+     * @param heartBeatRecord
      */
-    void handler(HeartBeatRecordDTO recordDTO);
+    void handler(HeartBeatRecord heartBeatRecord);
 }
