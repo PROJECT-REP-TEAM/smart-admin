@@ -4074,6 +4074,17 @@ CREATE TABLE IF NOT EXISTS `t_system_config` (
   PRIMARY KEY (`config_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+DROP TABLE IF EXISTS `t_heart_beat_record`;
+CREATE TABLE `t_heart_beat_record` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '自增id',
+  `project_path` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '项目名称',
+  `server_ip` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '服务器ip',
+  `process_no` int NOT NULL COMMENT '进程号',
+  `process_start_time` datetime NOT NULL COMMENT '进程开启时间',
+  `heart_beat_time` datetime NOT NULL COMMENT '心跳时间',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='公用服务 - 服务心跳';
+
 -- 正在导出表  smart_admin_v2.t_system_config 的数据：~0 rows (大约)
 DELETE FROM `t_system_config`;
 /*!40000 ALTER TABLE `t_system_config` DISABLE KEYS */;
