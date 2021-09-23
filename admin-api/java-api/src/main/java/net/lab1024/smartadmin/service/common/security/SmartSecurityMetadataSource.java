@@ -4,6 +4,7 @@ import net.lab1024.smartadmin.service.common.anno.NoValidPrivilege;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.prepost.*;
+import org.springframework.util.AntPathMatcher;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -79,7 +80,10 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
         String uriPrefix = SmartSecurityUrl.getUriPrefix(method);
         List<String> annotationValueList = SmartSecurityUrl.getAnnotationValueList(method, uriPrefix);
         //判断是否被忽略
-        if (this.contain(noValidUrlList, annotationValueList)) {
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        antPathMatcher.setCaseSensitive(false);
+        antPathMatcher.setTrimTokens(true);
+        if (this.contain(antPathMatcher, noValidUrlList, annotationValueList)) {
             return super.getAttributes(method, targetClass);
         }
         ArrayList<ConfigAttribute> configAttributes = new ArrayList(1);
@@ -96,13 +100,13 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
         return configAttributes;
     }
 
-    public Boolean contain(List<String> ignores, List<String> valueList) {
+    public Boolean contain(AntPathMatcher antPathMatcher, List<String> ignores, List<String> valueList) {
         if (CollectionUtils.isEmpty(ignores)) {
             return false;
         }
         for (String ignoreUrl : ignores) {
             for (String uri : valueList) {
-                if (uri.contains(ignoreUrl)) {
+                if (antPathMatcher.match(ignoreUrl, uri)) {
                     return true;
                 }
             }

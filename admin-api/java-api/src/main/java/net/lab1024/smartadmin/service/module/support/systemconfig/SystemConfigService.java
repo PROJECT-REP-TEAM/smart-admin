@@ -104,6 +104,8 @@ public class SystemConfigService {
 
         SystemConfigEntity entity = this.CONFIG_CACHE.get(configKey);
         Assert.notNull(entity, "缺少系统配置[" + configKey + "]");
+        Assert.isTrue(!entity.getDisabledFlag(), "系统配置[" + configKey + "]已被禁用");
+
         return SmartBeanUtil.copy(entity, SystemConfigDTO.class);
     }
 

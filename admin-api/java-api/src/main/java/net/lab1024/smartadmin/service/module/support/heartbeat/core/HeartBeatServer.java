@@ -3,23 +3,25 @@ package net.lab1024.smartadmin.service.module.support.heartbeat.core;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
-* @Description: 心跳记录日志
-* @Author: 1024lab
-* @Date: 2018/7/9 11:11
-*/
+ * [  ]
+ *
+ * @author 罗伊
+ * @date 2021/9/23 19:39
+ */
 @Data
-public class HeartBeatRecordDTO {
+public class HeartBeatServer {
 
     /**
-     * 项目名字
+     * 项目路径
      */
     private String projectPath;
     /**
-     * 服务器ip
+     * 服务器ip（多网卡）
      */
-    private String serverIp;
+    private List<String> serverIps;
     /**
      * 进程号
      */
@@ -28,10 +30,4 @@ public class HeartBeatRecordDTO {
      * 进程开启时间
      */
     private Date processStartTime;
-    /**
-     * 心跳当前时间
-     */
-    private Date heartBeatTime;
-
-
 }

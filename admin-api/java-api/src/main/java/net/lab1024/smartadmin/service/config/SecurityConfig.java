@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.config;
 
 import net.lab1024.smartadmin.service.common.security.SmartSecurityUrlMatchers;
 import net.lab1024.smartadmin.service.filter.SmartSecurityTokenFilter;
-import net.lab1024.smartadmin.service.handler.AuthenticationFailHandler;
+import net.lab1024.smartadmin.service.common.security.SmartSecurityAuthenticationFailHandler;
 import net.lab1024.smartadmin.service.module.system.login.EmployeeLoginTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -31,11 +31,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${access-control-allow-origin}")
     private String accessControlAllowOrigin;
-    /**
-     * 认证失败处理类
-     */
-    @Autowired
-    private AuthenticationFailHandler authenticationFailHandler;
     /**
      * url
      */
@@ -74,12 +69,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
                 // 认证失败处理类
-                .exceptionHandling().authenticationEntryPoint(authenticationFailHandler).and()
+                .exceptionHandling().authenticationEntryPoint(new SmartSecurityAuthenticationFailHandler()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求
                 .authorizeRequests();
         //可以匿名登录的URL
-        String [] anonymousUrlArray = smartSecurityUrlMatchers.getPermitUrlArray();
+        String [] anonymousUrlArray = smartSecurityUrlMatchers.getAnonymousUrlArray();
         interceptUrlRegistry.antMatchers(anonymousUrlArray).permitAll();
 
         //登录的URL
