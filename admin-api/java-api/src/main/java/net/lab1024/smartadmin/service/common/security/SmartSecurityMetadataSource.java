@@ -33,24 +33,25 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
 
     private final PrePostInvocationAttributeFactory attributeFactory;
 
-    private String projectModule;
-
     private List<String> noValidUrlList;
 
-    public SmartSecurityMetadataSource(PrePostInvocationAttributeFactory attributeFactory, List<String> noValidUrlList, String projectModule) {
+    public SmartSecurityMetadataSource(PrePostInvocationAttributeFactory attributeFactory, List<String> noValidUrlList) {
         super(attributeFactory);
         this.attributeFactory = attributeFactory;
-        this.projectModule = projectModule;
         this.noValidUrlList = noValidUrlList;
     }
 
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Method method, Class<?> targetClass) {
-        //只对固定的包的所有接口进行控制
-        if (!targetClass.getName().startsWith(projectModule)) {
+        //自己的控制
+        GetMapping getMapping = method.getAnnotation(GetMapping.class);
+        PostMapping postMapping = method.getAnnotation(PostMapping.class);
+        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
+        if (getMapping == null && postMapping == null && requestMapping == null) {
             return super.getAttributes(method, targetClass);
         }
+
         //是否需要权限
         NoValidPrivilege methodNoValidPrivilege = method.getAnnotation(NoValidPrivilege.class);
         if (methodNoValidPrivilege != null) {
@@ -67,13 +68,6 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
         }
         PostAuthorize postAuthorize = method.getAnnotation(PostAuthorize.class);
         if (postAuthorize != null) {
-            return super.getAttributes(method, targetClass);
-        }
-        //自己的控制
-        GetMapping getMapping = method.getAnnotation(GetMapping.class);
-        PostMapping postMapping = method.getAnnotation(PostMapping.class);
-        RequestMapping requestMapping = method.getAnnotation(RequestMapping.class);
-        if (getMapping == null && postMapping == null && requestMapping == null) {
             return super.getAttributes(method, targetClass);
         }
         //获取注解值

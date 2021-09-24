@@ -16,16 +16,6 @@ import java.util.Map;
 @Configuration
 public class AdminWebAppConfig implements WebMvcConfigurer {
 
-    @Autowired
-    private Map<String, HandlerInterceptor> interceptorMap;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        for(Map.Entry<String, HandlerInterceptor> entry : interceptorMap.entrySet()){
-            registry.addInterceptor(entry.getValue()).addPathPatterns(entry.getKey() + "/**");
-        }
-    }
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/druidMonitor").setViewName("redirect:druid/index.html");

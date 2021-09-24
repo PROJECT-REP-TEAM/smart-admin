@@ -14,11 +14,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SecurityUrlConfig {
 
-    @Value("${project.module}")
-    private String projectModule;
-
     @Bean
     public SmartSecurityUrlMatchers securityUrl() {
-        return new SmartSecurityUrlMatchers(projectModule);
+        return new SmartSecurityUrlMatchers();
     }
 }

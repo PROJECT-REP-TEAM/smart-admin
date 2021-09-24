@@ -42,6 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     @Autowired
     private EmployeeLoginTokenService loginTokenService;
+
     /**
      * 跨域配置
      *

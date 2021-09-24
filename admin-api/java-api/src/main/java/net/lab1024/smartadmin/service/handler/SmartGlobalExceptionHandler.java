@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.domain.SystemEnvironmentBO;
 import net.lab1024.smartadmin.service.common.exception.SmartBusinessException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 public class SmartGlobalExceptionHandler {
 
     @Autowired
-    private SystemEnvironmentEnum systemEnvironmentEnum;
+    private SystemEnvironmentBO systemEnvironmentBO;
 
     /**
      * 添加全局异常处理流程
@@ -95,7 +96,8 @@ public class SmartGlobalExceptionHandler {
         log.error("捕获全局异常,URL:{}", uri, e);
 
         // 正式环境 不返回错误信息
-        if (SystemEnvironmentEnum.PROD == systemEnvironmentEnum) {
+        SystemEnvironmentEnum currentEnvironment = systemEnvironmentBO.getCurrentEnvironment();
+        if (SystemEnvironmentEnum.PROD == currentEnvironment) {
             return ResponseDTO.wrap(ResponseCodeConst.SYSTEM_ERROR);
         }
 

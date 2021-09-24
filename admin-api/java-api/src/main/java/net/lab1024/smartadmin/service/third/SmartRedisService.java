@@ -3,8 +3,6 @@ package net.lab1024.smartadmin.service.third;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.module.support.redismq.RedisMqTopicEnum;
-import net.lab1024.smartadmin.service.module.support.redismq.RedisMsgDTO;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.*;
@@ -707,15 +705,4 @@ public class SmartRedisService {
         }
     }
 
-    /**
-     * 发送redis消息
-     *
-     * @param topicEnum
-     * @param msgType
-     * @param jsonData
-     */
-    public void sendMsg(RedisMqTopicEnum topicEnum, Integer msgType, String jsonData) {
-        RedisMsgDTO redisMsgDTO = new RedisMsgDTO(msgType, jsonData);
-        stringRedisTemplate.convertAndSend(topicEnum.getValue(), JSONObject.toJSONString(redisMsgDTO));
-    }
 }

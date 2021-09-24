@@ -24,7 +24,6 @@ import java.util.function.Function;
  * @date
  */
 @Aspect
-@Order(1)
 public class SmartRepeatSubmitAspect {
 
     /**

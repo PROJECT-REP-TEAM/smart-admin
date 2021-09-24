@@ -18,9 +18,6 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityMethodConfig extends GlobalMethodSecurityConfiguration {
 
-    @Value("${project.module}")
-    private String projectModule;
-
     /**
      * 无需登录的url
      */
@@ -30,6 +27,6 @@ public class SecurityMethodConfig extends GlobalMethodSecurityConfiguration {
     @Override
     public MethodSecurityMetadataSource customMethodSecurityMetadataSource(){
         ExpressionBasedAnnotationAttributeFactory attributeFactory = new ExpressionBasedAnnotationAttributeFactory(this.getExpressionHandler());
-        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityUrlMatchers.getNoValidUrlList(),projectModule);
+        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityUrlMatchers.getNoValidUrlList());
     }
 }
