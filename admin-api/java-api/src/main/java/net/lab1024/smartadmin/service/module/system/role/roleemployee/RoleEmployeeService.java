@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.role.roleemployee;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleBaseConst;
+import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
@@ -149,7 +149,7 @@ public class RoleEmployeeService {
      * @param employeeId
      */
     public void clearCacheByEmployeeId(Long employeeId) {
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
+        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
         beanCache.remove(roleCacheKey);
     }
 }

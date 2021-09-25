@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.system.datascope;
+package net.lab1024.smartadmin.service.module.system.datascope.anno;
 
 
 import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;

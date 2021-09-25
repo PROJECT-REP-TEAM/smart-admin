@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.module.support.reload.core.anno.SmartReload;
 import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import net.lab1024.smartadmin.service.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.util.SmartBeanUtil;
@@ -38,6 +39,11 @@ public class SystemConfigService {
 
     @Autowired
     private SystemConfigDao systemConfigDao;
+
+    @SmartReload("system_config")
+    public void configReload(String param) {
+        this.initConfigCache();
+    }
 
     /**
      * 初始化系统设置缓存

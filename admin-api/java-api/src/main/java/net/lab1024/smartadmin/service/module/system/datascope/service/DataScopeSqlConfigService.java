@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.datascope.service;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.module.system.datascope.DataScope;
+import net.lab1024.smartadmin.service.module.system.datascope.anno.DataScope;
 import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
 import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum;
 import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeWhereInTypeEnum;
@@ -40,7 +40,7 @@ public class DataScopeSqlConfigService {
     @Autowired
     private DataScopeViewService dataScopeViewService;
 
-    @Value("${swagger.packAge}")
+    @Value("${project.module}")
     private String scanPackage;
 
     /**

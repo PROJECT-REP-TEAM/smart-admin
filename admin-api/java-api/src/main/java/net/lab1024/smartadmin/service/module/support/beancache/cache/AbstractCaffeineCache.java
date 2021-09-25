@@ -6,14 +6,13 @@ import com.github.benmanes.caffeine.cache.LoadingCache;
 import net.lab1024.smartadmin.service.module.support.beancache.domain.CacheData;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKeyBuilder;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoadMethod;
+import net.lab1024.smartadmin.service.module.support.beancache.domain.CacheLoadMethod;
 import net.lab1024.smartadmin.service.third.SmartApplicationContext;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
 
 import java.lang.reflect.Method;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
@@ -32,6 +31,13 @@ public abstract class AbstractCaffeineCache implements IBeanCache {
      */
     @Override
     public abstract LoadingCache<String, CacheData> getCache();
+
+    /**
+     * 缓存加载方法
+     * @return
+     */
+    @Override
+    public abstract CacheLoadMethodRegister methodRegister();
 
     /**
      * 移除某个缓存
@@ -176,9 +182,8 @@ public abstract class AbstractCaffeineCache implements IBeanCache {
      * @param scanPath
      * @return
      */
-    public LoadingCache<String, CacheData> initCache(Integer expireDays, Integer maximumSize, String scanPath) {
-        //加载缓存方法
-        Map<String, CacheLoadMethod> methodMap = cacheLoadFunction(scanPath);
+    public LoadingCache<String, CacheData> initCache(Integer expireDays, Integer maximumSize) {
+
         //构建缓存对象
         Caffeine<Object, Object> builder = Caffeine.newBuilder();
         if(maximumSize != null){
@@ -190,7 +195,9 @@ public abstract class AbstractCaffeineCache implements IBeanCache {
         return builder.recordStats()
                 .build(key -> {
                     String cacheModule = CacheKey.getCacheModeByCacheKey(key);
-                    CacheLoadMethod loadMethod = methodMap.get(cacheModule);
+
+                    CacheLoadMethodRegister methodRegister = this.methodRegister();
+                    CacheLoadMethod loadMethod = methodRegister.getCacheLoadMethod(cacheModule);
                     if (loadMethod == null) {
                         return null;
                     }

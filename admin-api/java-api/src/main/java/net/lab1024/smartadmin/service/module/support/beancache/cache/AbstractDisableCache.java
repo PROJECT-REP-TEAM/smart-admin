@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoadMethod;
+import net.lab1024.smartadmin.service.module.support.beancache.domain.CacheLoadMethod;
 import net.lab1024.smartadmin.service.third.SmartApplicationContext;
 
 import java.lang.reflect.Method;
@@ -18,24 +18,21 @@ import java.util.Set;
  * @date 2021/4/14 15:27
  */
 @Slf4j
-public class AbstractDisableCache implements IBeanCache {
-
-    private Map<String, CacheLoadMethod> methodMap;
+public abstract class AbstractDisableCache implements IBeanCache {
 
     /**
-     * 构造函数
-     * @param scanPath
+     * 缓存加载方法
+     * @return
      */
-    public AbstractDisableCache(String scanPath) {
-        //加载缓存方法
-        this.methodMap = cacheLoadFunction(scanPath);
-    }
+    @Override
+    public abstract CacheLoadMethodRegister methodRegister();
 
     @Override
     public Map<String, Object> getCache() {
         log.warn("Cache is disable!");
         return Maps.newHashMap();
     }
+
 
     @Override
     public void remove(String key) {
@@ -54,7 +51,9 @@ public class AbstractDisableCache implements IBeanCache {
         log.warn("Cache is disable!");
 
         String cacheModule = CacheKey.getCacheModeByCacheKey(key);
-        CacheLoadMethod loadMethod = methodMap.get(cacheModule);
+
+        CacheLoadMethodRegister methodRegister = this.methodRegister();
+        CacheLoadMethod loadMethod = methodRegister.getCacheLoadMethod(cacheModule);
         if (loadMethod == null) {
             throw null;
         }

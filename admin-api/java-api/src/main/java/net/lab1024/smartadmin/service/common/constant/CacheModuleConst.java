@@ -4,7 +4,7 @@ package net.lab1024.smartadmin.service.common.constant;
  * @author 罗伊
  * @date 2021-01-31 0:00
  */
-public class CacheModuleBaseConst {
+public class CacheModuleConst {
 
     public static class Employee {
         /**

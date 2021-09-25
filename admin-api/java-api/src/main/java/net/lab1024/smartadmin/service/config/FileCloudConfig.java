@@ -20,7 +20,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConditionalOnProperty(prefix = "file.storage", name = {"mode"}, havingValue = "cloud")
-public class SmartStorageCloudConfig {
+public class FileCloudConfig {
 
     @Value("${file.storage.cloud.region}")
     private String region;

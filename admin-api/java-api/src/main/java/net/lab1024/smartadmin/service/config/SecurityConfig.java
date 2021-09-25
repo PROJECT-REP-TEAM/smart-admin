@@ -90,7 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         // 忽略url
         WebSecurity.IgnoredRequestConfigurer ignoring = web.ignoring();
-        List<String> ignoreUrlListList = smartSecurityUrlMatchers.getIgnoreUrlList();
+        List<String> ignoreUrlListList = smartSecurityUrlMatchers.getIgnoreUrl();
         for (String url : ignoreUrlListList) {
             ignoring.antMatchers(url);
         }

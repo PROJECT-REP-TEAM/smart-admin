@@ -1,9 +1,9 @@
 package net.lab1024.smartadmin.service.module.system.employee;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleBaseConst;
+import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoad;
+import net.lab1024.smartadmin.service.module.support.beancache.anno.CacheLoad;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.RoleEmployeeDao;
 import org.apache.commons.collections4.CollectionUtils;
@@ -34,7 +34,7 @@ public class EmployeeCacheService {
      * @param cacheKey
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Employee.DEPARTMENT_EMPLOYEE_CACHE)
+    @CacheLoad(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE)
     public List<EmployeeEntity> departmentEmployeeCache(String cacheKey) {
         String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
         Long departmentId = Long.valueOf(businessId);
@@ -48,7 +48,7 @@ public class EmployeeCacheService {
      * @param cacheKey
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_CACHE)
+    @CacheLoad(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE)
     public EmployeeEntity singleEmployeeCache(String cacheKey) {
         String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
         Long employeeId = Long.valueOf(businessId);
@@ -68,7 +68,7 @@ public class EmployeeCacheService {
      * @param cacheKey
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE)
+    @CacheLoad(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE)
     public List<Long> singleEmployeeRoleCache(String cacheKey) {
         String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
         Long employeeId = Long.valueOf(businessId);

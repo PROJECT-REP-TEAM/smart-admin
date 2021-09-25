@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.category;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleBaseConst;
+import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategorySimpleDTO;
@@ -10,7 +10,7 @@ import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTr
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeVO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoad;
+import net.lab1024.smartadmin.service.module.support.beancache.anno.CacheLoad;
 import net.lab1024.smartadmin.service.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.util.SmartStringUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -44,7 +44,7 @@ public class CategoryQueryService {
      * @param cacheKey
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Category.CATEGORY)
+    @CacheLoad(CacheModuleConst.Category.CATEGORY)
     public CategoryEntity queryCategory(String cacheKey) {
         String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
         return categoryDao.selectById(businessId);
@@ -56,7 +56,7 @@ public class CategoryQueryService {
      * @param cacheKey
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Category.CATEGORY_SUB)
+    @CacheLoad(CacheModuleConst.Category.CATEGORY_SUB)
     public List<CategoryEntity> querySubCategory(String cacheKey) {
         /**
          * 下划线 分隔 key
@@ -87,7 +87,7 @@ public class CategoryQueryService {
      */
     public Map<Long, List<CategoryEntity>> querySubCategoryFromCache(List<Long> categoryIdList) {
         return categoryIdList.stream().collect(Collectors.toMap(Function.identity(), e -> {
-            String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY_SUB, e.toString());
+            String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY_SUB, e.toString());
             return cache.get(cacheKey);
         }));
     }
@@ -102,7 +102,7 @@ public class CategoryQueryService {
         if (null == categoryId) {
             return Optional.empty();
         }
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY, categoryId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY, categoryId.toString());
         CategoryEntity entity = cache.get(cacheKey);
         if (null == entity || entity.getDeletedFlag()) {
             return Optional.empty();
@@ -120,7 +120,7 @@ public class CategoryQueryService {
         if (null == categoryId) {
             return CommonConst.EMPTY_LIST;
         }
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY_SUB, getCacheId(categoryId, categoryType));
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY_SUB, getCacheId(categoryId, categoryType));
         return cache.get(cacheKey);
     }
 
@@ -137,7 +137,7 @@ public class CategoryQueryService {
         categoryIdList = categoryIdList.stream().distinct().collect(Collectors.toList());
 
         return categoryIdList.stream().collect(Collectors.toMap(Function.identity(), e -> {
-            String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY, e.toString());
+            String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY, e.toString());
             return cache.get(cacheKey);
         }));
     }
@@ -146,10 +146,10 @@ public class CategoryQueryService {
      * 根据类目id 移除缓存
      */
     public void removeCache() {
-        cache.removeByModule(CacheModuleBaseConst.Category.CATEGORY);
-        cache.removeByModule(CacheModuleBaseConst.Category.CATEGORY_SUB);
+        cache.removeByModule(CacheModuleConst.Category.CATEGORY);
+        cache.removeByModule(CacheModuleConst.Category.CATEGORY_SUB);
         // 移除整个类目树缓存
-        cache.removeByModule(CacheModuleBaseConst.Category.CATEGORY_TREE);
+        cache.removeByModule(CacheModuleConst.Category.CATEGORY_TREE);
     }
 
     /**
@@ -198,7 +198,7 @@ public class CategoryQueryService {
         // 查询缓存
         Long parentId = queryDTO.getParentId();
         Integer categoryType = queryDTO.getCategoryType();
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY_TREE, getCacheId(parentId, categoryType));
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY_TREE, getCacheId(parentId, categoryType));
         List<CategoryTreeVO> treeList = cache.get(cacheKey);
         if (null != treeList) {
             return treeList;
@@ -251,7 +251,7 @@ public class CategoryQueryService {
      * @return
      */
     public CategorySimpleDTO queryCategoryInfo(Long categoryId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY, categoryId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY, categoryId.toString());
         CategoryEntity categoryEntity = cache.get(cacheKey);
         if (null == categoryEntity || categoryEntity.getDeletedFlag()) {
             return null;
@@ -279,7 +279,7 @@ public class CategoryQueryService {
      */
     public List<CategoryEntity> queryCategoryAndParent(Long categoryId) {
         List<CategoryEntity> parentCategoryList = Lists.newArrayList();
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY, categoryId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY, categoryId.toString());
         CategoryEntity categoryEntity = cache.get(cacheKey);
         if (null == categoryEntity || categoryEntity.getDeletedFlag()) {
             return parentCategoryList;
@@ -322,7 +322,7 @@ public class CategoryQueryService {
      * @return
      */
     public String queryCategoryName(Long categoryId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Category.CATEGORY, categoryId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY, categoryId.toString());
         CategoryEntity categoryEntity = cache.get(cacheKey);
         if (null == categoryEntity || categoryEntity.getDeletedFlag()) {
             return null;

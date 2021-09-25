@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.beancache.load;
+package net.lab1024.smartadmin.service.module.support.beancache.domain;
 
 import lombok.Data;
 

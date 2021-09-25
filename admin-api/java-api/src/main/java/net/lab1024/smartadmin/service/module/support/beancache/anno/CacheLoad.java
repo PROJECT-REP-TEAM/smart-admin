@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.beancache.load;
+package net.lab1024.smartadmin.service.module.support.beancache.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

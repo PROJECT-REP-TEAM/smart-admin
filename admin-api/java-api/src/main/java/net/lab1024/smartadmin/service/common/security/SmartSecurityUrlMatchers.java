@@ -1,20 +1,18 @@
 package net.lab1024.smartadmin.service.common.security;
 
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.anno.NoNeedLogin;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import org.apache.commons.collections4.CollectionUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.scanners.TypeAnnotationsScanner;
+import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.core.annotation.AnnotationUtils;
-import org.springframework.util.ReflectionUtils;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -24,67 +22,85 @@ import java.util.Set;
  * @author 罗伊
  * @date 2021/8/31 10:20
  */
-public class SmartSecurityUrlMatchers implements BeanPostProcessor {
+@Slf4j
+@Component
+public class SmartSecurityUrlMatchers {
+
+    @Value("${project.module}")
+    private String scanPackage;
 
     /**
      * 匿名访问URL
      */
-    private List<String> ANONYMOUS_URL;
-
+    private List<String> anonymousUrl = Lists.newArrayList();
     /**
      * 忽略的URL(注意，加入忽略的URL，无法进入Security filter)
      */
-    private static List<String> IGNORE_URL;
+    private List<String> ignoreUrl = Lists.newArrayList();
 
     /**
      * 需要登录的
      */
-    private static List<String> AUTHENTICATED_URL;
-
-    static {
-        IGNORE_URL = new ArrayList<>();
-        IGNORE_URL.add("/swagger-ui.html");
-        IGNORE_URL.add("/swagger-resources/**");
-        IGNORE_URL.add("/webjars/**");
-        IGNORE_URL.add("/*/api-docs");
-        IGNORE_URL.add(CommonConst.ApiUrl.API_PREFIX_SUPPORT + "/**");
-
-        AUTHENTICATED_URL = new ArrayList<>();
-        AUTHENTICATED_URL.add("/admin/**");
-    }
-
-    /**
-     * 构造函数
-     *
-     */
-    public SmartSecurityUrlMatchers() {
-    }
+    private List<String> authenticatedUrl = Lists.newArrayList();
 
     /**
      * 获取忽略的URL集合
      *
      * @return
      */
-    public List<String> getIgnoreUrlList() {
-        return IGNORE_URL;
+    public List<String> getIgnoreUrl() {
+        if (CollectionUtils.isNotEmpty(ignoreUrl)) {
+            return ignoreUrl;
+        }
+        ignoreUrl.add("/swagger-ui.html");
+        ignoreUrl.add("/swagger-resources/**");
+        ignoreUrl.add("/webjars/**");
+        ignoreUrl.add("/*/api-docs");
+        ignoreUrl.add(CommonConst.ApiUrl.API_PREFIX_SUPPORT + "/**");
+        log.info("忽略URL：{}",ignoreUrl);
+        return ignoreUrl;
     }
 
     /**
-     * 获取需要匿名访问的url集合
-     *
-     * @return
-     */
-    public List<String> getAnonymousUrlList() {
-        return ANONYMOUS_URL;
-    }
-
-    /**
-     * 获取需要认证的url集合
+     * 需要登录认证的URL集合
      *
      * @return
      */
     public List<String> getAuthenticatedUrlList() {
-        return AUTHENTICATED_URL;
+        if (CollectionUtils.isNotEmpty(authenticatedUrl)) {
+            return authenticatedUrl;
+        }
+        authenticatedUrl.add("/admin/**");
+        log.info("认证URL：{}",authenticatedUrl);
+        return authenticatedUrl;
+    }
+
+    /**
+     * 获取无需登录可以匿名访问的url信息
+     *
+     * @return
+     */
+    private List<String> getAnonymousUrl() {
+        if (CollectionUtils.isNotEmpty(anonymousUrl)) {
+            return anonymousUrl;
+        }
+        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(new MethodAnnotationsScanner()));
+        Set<Method> methodSet = reflections.getMethodsAnnotatedWith(NoNeedLogin.class);
+        for (Method method : methodSet) {
+            String uriPrefix = SmartSecurityUrl.getUriPrefix(method);
+            List<String> valueList = SmartSecurityUrl.getAnnotationValueList(method, uriPrefix);
+            anonymousUrl.addAll(valueList);
+        }
+        log.info("匿名URL：{}",anonymousUrl);
+        return anonymousUrl;
+    }
+
+    /**
+     * 获取需要校验的包路径
+     * @return
+     */
+    public String getValidPackage() {
+        return scanPackage;
     }
 
     /**
@@ -92,10 +108,10 @@ public class SmartSecurityUrlMatchers implements BeanPostProcessor {
      *
      * @return
      */
-    public List<String> getNoValidUrlList() {
+    public List<String> getNoValidUrl() {
         List<String> noValidUrl = Lists.newArrayList();
-        noValidUrl.addAll(IGNORE_URL);
-        noValidUrl.addAll(ANONYMOUS_URL);
+        noValidUrl.addAll(this.getIgnoreUrl());
+        noValidUrl.addAll(this.getAnonymousUrl());
         return noValidUrl;
     }
 
@@ -105,7 +121,8 @@ public class SmartSecurityUrlMatchers implements BeanPostProcessor {
      * @return
      */
     public String[] getIgnoreUrlArray() {
-        String[] ignoreUrlArray = IGNORE_URL.toArray(new String[IGNORE_URL.size()]);
+        List<String> ignoreUrl = this.getIgnoreUrl();
+        String[] ignoreUrlArray = ignoreUrl.toArray(new String[ignoreUrl.size()]);
         return ignoreUrlArray;
     }
 
@@ -115,7 +132,8 @@ public class SmartSecurityUrlMatchers implements BeanPostProcessor {
      * @return
      */
     public String[] getAnonymousUrlArray() {
-        String[] anonymousUrlArray = ANONYMOUS_URL.toArray(new String[ANONYMOUS_URL.size()]);
+        List<String> anonymousUrl = this.getAnonymousUrl();
+        String[] anonymousUrlArray = anonymousUrl.toArray(new String[anonymousUrl.size()]);
         return anonymousUrlArray;
     }
 
@@ -125,28 +143,9 @@ public class SmartSecurityUrlMatchers implements BeanPostProcessor {
      * @return
      */
     public String[] getAuthenticatedUrlArray() {
-        String[] anonymousUrlArray = AUTHENTICATED_URL.toArray(new String[AUTHENTICATED_URL.size()]);
-        return anonymousUrlArray;
-    }
-
-
-    @Override
-    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        Method[] methods = ReflectionUtils.getAllDeclaredMethods(bean.getClass());
-        if (methods == null) {
-            return bean;
-        }
-        //方法级别无需登录
-        for (Method method : methods) {
-            NoNeedLogin noNeedLogin = method.getAnnotation(NoNeedLogin.class);
-            if(noNeedLogin != null){
-                String uriPrefix = SmartSecurityUrl.getUriPrefix(method);
-                List<String> valueList = SmartSecurityUrl.getAnnotationValueList(method, uriPrefix);
-                this.ANONYMOUS_URL.addAll(valueList);
-            }
-        }
-        return bean;
-
+        List<String> authenticatedUrl = this.getAuthenticatedUrlList();
+        String[] authenticatedUrlArray = authenticatedUrl.toArray(new String[authenticatedUrl.size()]);
+        return authenticatedUrlArray;
     }
 
 }

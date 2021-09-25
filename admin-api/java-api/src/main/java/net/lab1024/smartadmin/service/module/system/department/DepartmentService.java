@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.department;
 
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleBaseConst;
+import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
@@ -54,7 +54,7 @@ public class DepartmentService {
      * @return
      */
     public ResponseDTO<List<DepartmentTreeVO>> departmentTree() {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_TREE_CACHE);
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE);
         List<DepartmentTreeVO> treeVOList = beanCache.get(cacheKey);
         return ResponseDTO.succData(treeVOList);
     }
@@ -66,7 +66,7 @@ public class DepartmentService {
      * @return
      */
     public List<Long> selfAndChildrenIdList(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_TREE_ID_CACHE, departmentId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_TREE_ID_CACHE, departmentId.toString());
         return beanCache.get(cacheKey);
     }
 
@@ -76,7 +76,7 @@ public class DepartmentService {
      * @return
      */
     public ResponseDTO<List<DepartmentEmployeeTreeVO>> departmentEmployeeTree() {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_TREE_CACHE);
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE);
         List<DepartmentTreeVO> treeVOList = beanCache.get(cacheKey);
         if (CollectionUtils.isEmpty(treeVOList)) {
             return ResponseDTO.succData(Lists.newArrayList());
@@ -385,14 +385,14 @@ public class DepartmentService {
      * 清除自身以及下级的id列表缓存
      */
     private void clearSelfAndChildrenIdCache() {
-        beanCache.removeByModule(CacheModuleBaseConst.Department.DEPARTMENT_TREE_ID_CACHE);
+        beanCache.removeByModule(CacheModuleConst.Department.DEPARTMENT_TREE_ID_CACHE);
     }
 
     /**
      * 清除树结构缓存
      */
     private void clearTreeCache() {
-        String treeCacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_TREE_CACHE);
+        String treeCacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE);
         beanCache.remove(treeCacheKey);
     }
 
@@ -436,7 +436,7 @@ public class DepartmentService {
      * @return
      */
     public String getParentNameTreeByDepartmentId(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_CACHE);
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_CACHE);
         List<DepartmentVO> departmentList = beanCache.get(cacheKey);
         //递归寻找上级直到校区(第二级)
         List<String> departmentNameList = Lists.newArrayList();
@@ -468,7 +468,7 @@ public class DepartmentService {
      * @return
      */
     public Long getSchoolIdByEmployeeId(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
         EmployeeEntity employeeEntity = beanCache.get(cacheKey);
         Long departmentId = employeeEntity.getDepartmentId();
         DepartmentVO schoolIdByDepartment = this.getSchoolIdByDepartment(departmentId);
@@ -485,7 +485,7 @@ public class DepartmentService {
      * @return
      */
     public DepartmentVO getSchoolIdByDepartment(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_CACHE);
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_CACHE);
         List<DepartmentVO> departmentList = beanCache.get(cacheKey);
         //递归寻找校区(第二级)
         return this.recursionFindSchoolDepartmentId(departmentList, departmentId);

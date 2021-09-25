@@ -1,9 +1,9 @@
 package net.lab1024.smartadmin.service.module.system.department;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleBaseConst;
+import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoad;
+import net.lab1024.smartadmin.service.module.support.beancache.anno.CacheLoad;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +32,7 @@ public class DepartmentCacheService {
      *
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Department.DEPARTMENT_CACHE)
+    @CacheLoad(CacheModuleConst.Department.DEPARTMENT_CACHE)
     public List<DepartmentVO> departmentCache() {
         List<DepartmentVO> departmentVOList = departmentDao.listAll();
         return departmentVOList;
@@ -45,7 +45,7 @@ public class DepartmentCacheService {
      *
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Department.DEPARTMENT_TREE_CACHE)
+    @CacheLoad(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE)
     public List<DepartmentTreeVO> departmentTreeCache() {
         List<DepartmentVO> departmentVOList = departmentDao.listAll();
         List<DepartmentTreeVO> treeList = departmentTreeService.buildTree(departmentVOList);
@@ -60,7 +60,7 @@ public class DepartmentCacheService {
      * @param cacheKey
      * @return
      */
-    @CacheLoad(CacheModuleBaseConst.Department.DEPARTMENT_TREE_ID_CACHE)
+    @CacheLoad(CacheModuleConst.Department.DEPARTMENT_TREE_ID_CACHE)
     public List<Long> departmentTreeCache(String cacheKey) {
         String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
         Long departmentId = Long.valueOf(businessId);

@@ -5,11 +5,13 @@ import com.google.common.collect.Multimap;
 import io.swagger.models.Operation;
 import io.swagger.models.Path;
 import net.lab1024.smartadmin.service.config.SystemEnvironmentConfig;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 import springfox.documentation.service.ApiDescription;
 import springfox.documentation.service.ApiListing;
+import springfox.documentation.swagger2.mappers.ModelMapper;
 import springfox.documentation.swagger2.mappers.ServiceModelToSwagger2MapperImpl;
 
 import java.lang.reflect.Field;
@@ -24,7 +26,7 @@ import static springfox.documentation.builders.BuilderDefaults.nullToEmptyList;
  * @author Turbolisten
  * @date 2021/8/11 16:05
  */
-@Conditional(SystemEnvironmentConfig.class)
+@ConditionalOnBean(ModelMapper.class)
 @Component
 @Primary
 public class Swagger2MapperImplExtension extends ServiceModelToSwagger2MapperImpl {

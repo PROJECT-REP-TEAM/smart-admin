@@ -1,14 +1,5 @@
 package net.lab1024.smartadmin.service.module.support.beancache.cache;
 
-import com.google.common.collect.Maps;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoad;
-import net.lab1024.smartadmin.service.module.support.beancache.load.CacheLoadMethod;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.util.ConfigurationBuilder;
-
-import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -19,6 +10,7 @@ import java.util.Set;
  */
 public interface IBeanCache {
 
+    CacheLoadMethodRegister methodRegister();
     /**
      * 获取缓存
      *
@@ -63,6 +55,7 @@ public interface IBeanCache {
 
     /**
      * 待过期时间get
+     *
      * @param key
      * @param obj
      * @param expireSecond
@@ -99,30 +92,4 @@ public interface IBeanCache {
      */
     void removeByModuleAndGroup(String module, String group);
 
-
-    /**
-     * 加载 CacheLoad注解的方法
-     * @param scanPath
-     * @return
-     */
-    default Map<String, CacheLoadMethod> cacheLoadFunction(String scanPath) {
-        Reflections reflections = new Reflections(new ConfigurationBuilder()
-                .forPackages(scanPath)
-                .addScanners(new MethodAnnotationsScanner())
-        );
-        Map<String, CacheLoadMethod> methodMap = Maps.newHashMap();
-        Set<Method> methods = reflections.getMethodsAnnotatedWith(CacheLoad.class);
-        for (Method method : methods) {
-            CacheLoad cacheLoad = method.getAnnotation(CacheLoad.class);
-            if (cacheLoad != null) {
-                String cacheModule = cacheLoad.value();
-                CacheLoadMethod cacheLoadMethod = new CacheLoadMethod();
-                cacheLoadMethod.setCacheModule(cacheModule);
-                cacheLoadMethod.setExpireSecond(cacheLoad.expireSecond());
-                cacheLoadMethod.setLoadMethod(method);
-                methodMap.put(cacheModule, cacheLoadMethod);
-            }
-        }
-        return methodMap;
-    }
 }

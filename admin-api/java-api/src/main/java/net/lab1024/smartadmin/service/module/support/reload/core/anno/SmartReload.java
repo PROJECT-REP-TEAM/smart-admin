@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.reload.annotation;
+package net.lab1024.smartadmin.service.module.support.reload.core.anno;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

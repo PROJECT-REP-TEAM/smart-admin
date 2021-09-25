@@ -4,6 +4,7 @@ import net.lab1024.smartadmin.service.common.security.SmartSecurityMetadataSourc
 import net.lab1024.smartadmin.service.common.security.SmartSecurityUrlMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory;
 import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -18,15 +19,12 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityMethodConfig extends GlobalMethodSecurityConfiguration {
 
-    /**
-     * 无需登录的url
-     */
     @Autowired
     private SmartSecurityUrlMatchers smartSecurityUrlMatchers;
 
     @Override
     public MethodSecurityMetadataSource customMethodSecurityMetadataSource(){
         ExpressionBasedAnnotationAttributeFactory attributeFactory = new ExpressionBasedAnnotationAttributeFactory(this.getExpressionHandler());
-        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityUrlMatchers.getNoValidUrlList());
+        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityUrlMatchers);
     }
 }

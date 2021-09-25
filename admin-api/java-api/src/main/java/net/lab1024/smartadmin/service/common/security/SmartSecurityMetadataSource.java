@@ -33,17 +33,22 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
 
     private final PrePostInvocationAttributeFactory attributeFactory;
 
-    private List<String> noValidUrlList;
+    private SmartSecurityUrlMatchers smartSecurityUrlMatchers;
 
-    public SmartSecurityMetadataSource(PrePostInvocationAttributeFactory attributeFactory, List<String> noValidUrlList) {
+    public SmartSecurityMetadataSource(PrePostInvocationAttributeFactory attributeFactory, SmartSecurityUrlMatchers smartSecurityUrlMatchers) {
         super(attributeFactory);
         this.attributeFactory = attributeFactory;
-        this.noValidUrlList = noValidUrlList;
+        this.smartSecurityUrlMatchers = smartSecurityUrlMatchers;
     }
 
 
     @Override
     public Collection<ConfigAttribute> getAttributes(Method method, Class<?> targetClass) {
+
+        //只对固定的包的所有接口进行控制
+        if (!targetClass.getName().startsWith(smartSecurityUrlMatchers.getValidPackage())) {
+            return super.getAttributes(method, targetClass);
+        }
         //自己的控制
         GetMapping getMapping = method.getAnnotation(GetMapping.class);
         PostMapping postMapping = method.getAnnotation(PostMapping.class);
@@ -77,6 +82,8 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         antPathMatcher.setCaseSensitive(false);
         antPathMatcher.setTrimTokens(true);
+        //无需验证的URL集合
+        List<String> noValidUrlList = smartSecurityUrlMatchers.getNoValidUrl();
         if (this.contain(antPathMatcher, noValidUrlList, annotationValueList)) {
             return super.getAttributes(method, targetClass);
         }

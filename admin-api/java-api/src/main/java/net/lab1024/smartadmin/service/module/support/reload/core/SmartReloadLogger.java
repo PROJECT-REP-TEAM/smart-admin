@@ -1,9 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.reload.interfaces;
+package net.lab1024.smartadmin.service.module.support.reload.core;
 
 /**
  * SmartReloadThreadLogger 日志类
  */
-public interface SmartReloadThreadLogger {
+public interface SmartReloadLogger {
 
     void error(String string);
 

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.system.employee;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleBaseConst;
+import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -67,10 +67,10 @@ public class EmployeeService {
      * @return
      */
     public EmployeeLoginInfoDTO getById(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
         EmployeeEntity employeeEntity = beanCache.get(cacheKey);
         //获取员工角色缓存
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
+        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
         List<Long> roleIdList = beanCache.get(roleCacheKey);
         if (employeeEntity != null) {
             Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
@@ -90,10 +90,10 @@ public class EmployeeService {
      * @return
      */
     public EmployeeLoginBO getBoById(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
         EmployeeEntity employeeEntity = beanCache.get(cacheKey);
         //获取员工角色缓存
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
+        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
         List<Long> roleIdList = beanCache.get(roleCacheKey);
         if (employeeEntity != null) {
             Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
@@ -399,7 +399,7 @@ public class EmployeeService {
      * @return
      */
     public ResponseDTO<List<EmployeeVO>> getEmployeeByDeptId(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
         List<EmployeeEntity> employeeEntityList = beanCache.get(cacheKey);
         if (CollectionUtils.isEmpty(employeeEntityList)) {
             return ResponseDTO.succData(CommonConst.EMPTY_LIST);
@@ -416,7 +416,7 @@ public class EmployeeService {
      */
     public ResponseDTO<List<EmployeeVO>> getEmployeeBySchoolId(Long departmentId) {
         // 查询部门下所有部门包含子部门
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Department.DEPARTMENT_CACHE);
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_CACHE);
         List<DepartmentVO> departmentList = beanCache.get(cacheKey);
         // 先查询本部门的员工
         ResponseDTO<List<EmployeeVO>> employeeByDeptId = getEmployeeByDeptId(departmentId);
@@ -465,9 +465,9 @@ public class EmployeeService {
      * @param employeeId
      */
     public void clearCacheByEmployeeId(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
         beanCache.remove(cacheKey);
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
+        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
         beanCache.remove(roleCacheKey);
     }
 
@@ -477,7 +477,7 @@ public class EmployeeService {
      * @param departmentId
      */
     private void clearCacheByDepartmentId(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleBaseConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
+        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
         beanCache.remove(cacheKey);
     }
 
