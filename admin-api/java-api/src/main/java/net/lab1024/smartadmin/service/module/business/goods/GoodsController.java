@@ -2,10 +2,10 @@ package net.lab1024.smartadmin.service.module.business.goods;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.business.goods.domain.*;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
 import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;

@@ -131,7 +131,7 @@ public class GoodsService {
      */
     public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(GoodsQueryDTO queryDTO) {
         queryDTO.setDeletedFlag(false);
-        Page page = SmartPageUtil.convert2PageQuery(queryDTO);
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<GoodsAdminVO> list = goodsDao.query(page, queryDTO);
         PageResultDTO<GoodsAdminVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         if (pageResult.getEmptyFlag()) {

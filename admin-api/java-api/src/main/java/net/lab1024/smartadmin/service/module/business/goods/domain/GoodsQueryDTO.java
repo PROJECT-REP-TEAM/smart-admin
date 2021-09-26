@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.module.business.goods.constant.GoodsTypeEn
 import org.hibernate.validator.constraints.Length;
 
 /**
- * 商品 添加 DTO
+ * 商品 分页查询 DTO
  *
  * @author 胡克
  * @date 2021/8/5 14:42

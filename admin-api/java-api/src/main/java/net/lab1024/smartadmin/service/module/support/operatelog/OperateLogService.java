@@ -3,8 +3,8 @@ package net.lab1024.smartadmin.service.module.support.operatelog;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
+import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryDTO;
 import net.lab1024.smartadmin.service.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.util.SmartPageUtil;
@@ -32,10 +32,8 @@ public class OperateLogService {
      */
     public ResponseDTO<PageResultDTO<OperateLogDTO>> queryByPage(OperateLogQueryDTO queryDTO) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
-        List<OperateLogEntity> entities = operateLogDao.queryByPage(page, queryDTO);
-        List<OperateLogDTO> dtoList = SmartBeanUtil.copyList(entities, OperateLogDTO.class);
-        page.setRecords(dtoList);
-        PageResultDTO<OperateLogDTO> pageResultDTO = SmartPageUtil.convert2PageResult(page);
+        List<OperateLogEntity> logEntityList = operateLogDao.queryByPage(page, queryDTO);
+        PageResultDTO<OperateLogDTO> pageResultDTO = SmartPageUtil.convert2PageResult(page, logEntityList, OperateLogDTO.class);
         return ResponseDTO.succData(pageResultDTO);
     }
 

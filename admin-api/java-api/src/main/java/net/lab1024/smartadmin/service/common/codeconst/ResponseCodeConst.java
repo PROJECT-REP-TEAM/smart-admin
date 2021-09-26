@@ -29,7 +29,7 @@ public class ResponseCodeConst {
 
     public static final ResponseCodeConst REQUEST_METHOD_ERROR = new ResponseCodeConst(114, "请求方式错误");
 
-    public static final ResponseCodeConst JSON_FORMAT_ERROR = new ResponseCodeConst(115, "请求前端参数格式错误");
+    public static final ResponseCodeConst JSON_FORMAT_ERROR = new ResponseCodeConst(115, "前端请求参数格式错误");
 
     public static final ResponseCodeConst PERMISSION_DENIED = new ResponseCodeConst(116, "您没有权限修改数据");
 
