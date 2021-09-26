@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.login.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.constant.GenderEnum;
+import net.lab1024.smartadmin.service.common.enumconst.GenderEnum;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
 
 import java.util.List;

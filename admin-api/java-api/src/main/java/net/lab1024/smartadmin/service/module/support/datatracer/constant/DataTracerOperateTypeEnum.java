@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.datatracer.constant;
 
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
  * [  ]

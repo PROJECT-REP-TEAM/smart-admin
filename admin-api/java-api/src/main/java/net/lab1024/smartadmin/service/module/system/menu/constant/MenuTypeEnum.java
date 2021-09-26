@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.menu.constant;
 
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
  * 菜单类型枚举

@@ -4,7 +4,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.domain.SystemEnvironmentBO;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginBO;

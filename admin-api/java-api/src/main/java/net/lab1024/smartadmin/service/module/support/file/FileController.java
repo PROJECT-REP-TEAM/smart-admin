@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.file;
 
-import net.lab1024.smartadmin.service.common.constant.SwaggerTagConst;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;

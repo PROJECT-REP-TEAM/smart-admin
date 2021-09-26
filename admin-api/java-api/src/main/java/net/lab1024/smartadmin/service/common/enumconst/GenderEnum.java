@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.common.constant;
+package net.lab1024.smartadmin.service.common.enumconst;
 
 /**
  * 性别枚举类

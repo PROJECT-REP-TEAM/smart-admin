@@ -10,6 +10,7 @@ import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.config.FileCloudConfig;
+import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
@@ -121,7 +122,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
         if (StringUtils.isBlank(fileKey)) {
             return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM);
         }
-        if (!fileKey.startsWith(CommonConst.FileServiceConst.FOLDER_PRIVATE)) {
+        if (!fileKey.startsWith(FileFolderTypeEnum.FOLDER_PRIVATE)) {
             // 不是私有的 都公共读
             return ResponseDTO.succData(cloudConfig.getPublicUrl() + fileKey);
         }
@@ -183,7 +184,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
      */
     private CannedAccessControlList getACL(String fileKey) {
         // 公用读
-        if (fileKey.contains(CommonConst.FileServiceConst.FOLDER_PUBLIC)) {
+        if (fileKey.contains(FileFolderTypeEnum.FOLDER_PUBLIC)) {
             return CannedAccessControlList.PublicRead;
         }
         // 其他默认私有读写
@@ -204,5 +205,10 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
         return ResponseDTO.succ();
     }
 
+
+    @Override
+    public Long cacheExpireSecond(){
+        return cloudConfig.getUrlExpire() - 1800;
+    }
 
 }

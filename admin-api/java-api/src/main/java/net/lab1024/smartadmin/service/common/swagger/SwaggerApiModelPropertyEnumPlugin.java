@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.common.swagger;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.Order;

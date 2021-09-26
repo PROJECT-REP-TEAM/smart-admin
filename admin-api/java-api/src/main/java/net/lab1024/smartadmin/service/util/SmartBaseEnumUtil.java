@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.util;
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 import java.util.List;
 import java.util.Objects;

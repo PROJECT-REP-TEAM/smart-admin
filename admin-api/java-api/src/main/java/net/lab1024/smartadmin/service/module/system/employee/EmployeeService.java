@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.SystemConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
@@ -488,8 +489,8 @@ public class EmployeeService {
      * @return
      */
     public static String getEncryptPwd(String pwd) {
-        pwd = StringUtils.isBlank(pwd) ? CommonConst.Password.DEFAULT : pwd;
-        return DigestUtils.md5Hex(String.format(CommonConst.Password.SALT_FORMAT, pwd));
+        pwd = StringUtils.isBlank(pwd) ? SystemConst.Password.DEFAULT : pwd;
+        return DigestUtils.md5Hex(String.format(SystemConst.Password.SALT_FORMAT, pwd));
     }
 
     public static void main(String[] args) {

@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.common.validator.en;
 
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

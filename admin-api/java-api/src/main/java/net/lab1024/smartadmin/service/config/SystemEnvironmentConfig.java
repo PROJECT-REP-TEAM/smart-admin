@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.config;
 
-import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.domain.SystemEnvironmentBO;
 import net.lab1024.smartadmin.service.util.SmartBaseEnumUtil;
 import org.apache.commons.lang3.StringUtils;

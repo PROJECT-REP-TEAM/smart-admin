@@ -57,6 +57,15 @@ public interface IFileStorageService {
 
 
     /**
+     * 缓存过期秒数
+     * @return
+     */
+   default Long cacheExpireSecond(){
+       return 3600L;
+   }
+
+
+    /**
      * 不带后缀名的文件名
      *
      * @param file

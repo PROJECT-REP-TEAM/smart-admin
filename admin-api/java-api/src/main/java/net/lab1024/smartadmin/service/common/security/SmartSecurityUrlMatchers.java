@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.service.common.security;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.anno.NoNeedLogin;
+import net.lab1024.smartadmin.service.common.constant.ApiUrlPrefixConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
@@ -69,7 +70,7 @@ public class SmartSecurityUrlMatchers {
         ignoreUrl.add("/swagger-resources/**");
         ignoreUrl.add("/webjars/**");
         ignoreUrl.add("/*/api-docs");
-        ignoreUrl.add(CommonConst.ApiUrl.API_PREFIX_SUPPORT + "/**");
+        ignoreUrl.add(ApiUrlPrefixConst.API_PREFIX_SUPPORT + "/**");
         log.info("忽略URL：{}", ignoreUrl);
         return ignoreUrl;
     }

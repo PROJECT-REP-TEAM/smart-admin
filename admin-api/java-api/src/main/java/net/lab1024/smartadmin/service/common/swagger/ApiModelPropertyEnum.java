@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.common.swagger;
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

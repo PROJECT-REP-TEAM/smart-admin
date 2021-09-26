@@ -58,8 +58,8 @@ public class RequestUrlService {
                 }
             }
             //获取url的Set集合，一个方法可能对应多个url
-            Set<String> patterns = info.getPatternsCondition().getPatterns();
-            if (CollectionUtils.isEmpty(patterns)) {
+            Set<String> urlSet = info.getPatternsCondition().getPatterns();
+            if (CollectionUtils.isEmpty(urlSet)) {
                 return;
             }
             String className = handlerMethod.getMethod().getDeclaringClass().getName();
@@ -80,7 +80,6 @@ public class RequestUrlService {
                     methodComment = handlerMethod.getMethod().getName();
                 }
             }
-            Set<String> urlSet = this.getUrlSet(patterns);
             for (String url : urlSet) {
                 RequestUrlVO requestUrlVO = new RequestUrlVO();
                 requestUrlVO.setUrl(url);
@@ -91,21 +90,6 @@ public class RequestUrlService {
 
         });
     }
-
-    private Set<String> getUrlSet(Set<String> patterns) {
-        Set<String> urlSet = Sets.newHashSet();
-        for (String url : patterns) {
-            for (String ignoreUrl : CommonConst.CommonCollection.IGNORE_URL) {
-                if (url.startsWith(ignoreUrl)) {
-                    urlSet.add(url.substring(ignoreUrl.length() - 1));
-                } else {
-                    urlSet.add(url);
-                }
-            }
-        }
-        return urlSet;
-    }
-
     public List<RequestUrlVO> getPrivilegeList() {
         return this.requestUrlVOS;
     }

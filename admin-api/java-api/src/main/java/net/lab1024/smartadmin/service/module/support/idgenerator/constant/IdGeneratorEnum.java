@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.constant;
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
  * @author Administrator

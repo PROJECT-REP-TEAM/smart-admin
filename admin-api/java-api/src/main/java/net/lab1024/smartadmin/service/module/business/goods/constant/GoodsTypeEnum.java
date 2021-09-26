@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.business.goods.constant;
 
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
  * 商品类型 枚举

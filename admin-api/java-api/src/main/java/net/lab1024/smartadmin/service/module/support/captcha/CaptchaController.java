@@ -4,7 +4,7 @@ package net.lab1024.smartadmin.service.module.support.captcha;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.anno.NoNeedLogin;
-import net.lab1024.smartadmin.service.common.constant.SwaggerTagConst;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;

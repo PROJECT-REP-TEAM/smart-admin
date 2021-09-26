@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.codeconst.FileResponseCodeConst;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.NumberLimitConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -98,7 +99,7 @@ public class FileService {
         }
         // 校验文件名称
         String originalFilename = file.getOriginalFilename();
-        if (StringUtils.isBlank(originalFilename) || originalFilename.length() > CommonConst.NumberLimit.FILE_NAME) {
+        if (StringUtils.isBlank(originalFilename) || originalFilename.length() > NumberLimitConst.FILE_NAME) {
             return ResponseDTO.wrap(FileResponseCodeConst.FILE_NAME_ERROR);
         }
         // 校验文件大小
@@ -126,11 +127,11 @@ public class FileService {
             uploadVO.setFileId(fileEntity.getId());
             //添加缓存
             String redisKey = RedisKeyConst.Base.FILE_URL + uploadVO.getFileKey();
-            redisService.set(redisKey, uploadVO.getFileUrl(), CommonConst.System.FILE_URL_EXPIRE_SECOND);
+            redisService.set(redisKey, uploadVO.getFileUrl(), fileStorageService.cacheExpireSecond());
 
             String fileRedisKey = RedisKeyConst.Base.FILE_VO + uploadVO.getFileKey();
             FileVO fileVO = SmartBeanUtil.copy(fileEntity, FileVO.class);
-            redisService.set(fileRedisKey, fileVO, CommonConst.System.FILE_VO_EXPIRE_SECOND);
+            redisService.set(fileRedisKey, fileVO, fileStorageService.cacheExpireSecond());
         }
 
         return response;
@@ -156,7 +157,7 @@ public class FileService {
         if (fileVO == null) {
             fileVO = fileDao.getByFileKey(fileKey);
             if (fileVO != null) {
-                redisService.set(redisKey, fileVO, CommonConst.System.FILE_VO_EXPIRE_SECOND);
+                redisService.set(redisKey, fileVO, fileStorageService.cacheExpireSecond());
             }
         }
 
@@ -194,7 +195,7 @@ public class FileService {
             return null;
         }
         fileUrl = responseDTO.getData();
-        redisService.set(redisKey, fileUrl, CommonConst.System.FILE_URL_EXPIRE_SECOND);
+        redisService.set(redisKey, fileUrl, fileStorageService.cacheExpireSecond());
         return fileUrl;
     }
 

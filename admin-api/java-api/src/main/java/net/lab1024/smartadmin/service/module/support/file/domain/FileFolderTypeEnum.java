@@ -1,7 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.file.domain;
 
-import net.lab1024.smartadmin.service.common.constant.BaseEnum;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
  * 文件服务 文件夹位置类型枚举类
@@ -11,11 +10,26 @@ import net.lab1024.smartadmin.service.common.constant.CommonConst;
  */
 public enum FileFolderTypeEnum implements BaseEnum {
 
-    COMMON(1, CommonConst.FileServiceConst.FOLDER_PUBLIC + "/common/", "通用"),
+    COMMON(1, FileFolderTypeEnum.FOLDER_PUBLIC + "/common/", "通用"),
 
     ;
 
-    public static final String INFO = "201:erp货物";
+    /**
+     * 公用读取文件夹 public
+     */
+    public static final String FOLDER_PUBLIC = "pu";
+
+    /**
+     * 私有读取文件夹 private
+     */
+    public static final String FOLDER_PRIVATE = "pr";
+
+    /**
+     * 文件夹格式
+     */
+    public static final String FOLDER_FORMAT = "folder";
+
+    public static final String INFO = "1:通用";
 
     private Integer value;
 

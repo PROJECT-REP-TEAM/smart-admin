@@ -7,9 +7,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
-import net.lab1024.smartadmin.service.common.constant.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.constant.RequestHeaderConst;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
+import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerApiModelPropertyEnumPlugin;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;
@@ -221,35 +221,35 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
      */
     private List<Parameter> generateParameter() {
         // 配置全局参数 token
-        Parameter token = new ParameterBuilder().name(CommonConst.RequestHeader.TOKEN)
+        Parameter token = new ParameterBuilder().name(RequestHeaderConst.TOKEN)
                 .description("token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header").defaultValue("1")
                 .required(false)
                 .build();
 
-        Parameter agent = new ParameterBuilder().name(CommonConst.RequestHeader.USER_AGENT)
+        Parameter agent = new ParameterBuilder().name(RequestHeaderConst.USER_AGENT)
                 .description("agent")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header").defaultValue("")
                 .required(false)
                 .build();
 
-        Parameter identity = new ParameterBuilder().name(CommonConst.RequestHeader.USER_IDENTITY)
+        Parameter identity = new ParameterBuilder().name(RequestHeaderConst.USER_IDENTITY)
                 .description("用户唯一标识")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header").defaultValue("")
                 .required(false)
                 .build();
 
-        Parameter geo = new ParameterBuilder().name(CommonConst.RequestHeader.USER_GEO)
+        Parameter geo = new ParameterBuilder().name(RequestHeaderConst.USER_GEO)
                 .description("定位")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header").defaultValue("")
                 .required(false)
                 .build();
 
-        Parameter location = new ParameterBuilder().name(CommonConst.RequestHeader.USER_LOCATION)
+        Parameter location = new ParameterBuilder().name(RequestHeaderConst.USER_LOCATION)
                 .description("位置")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header").defaultValue("")

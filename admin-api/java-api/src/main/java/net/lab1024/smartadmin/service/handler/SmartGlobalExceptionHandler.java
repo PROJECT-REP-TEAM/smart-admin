@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
-import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.domain.SystemEnvironmentBO;
 import net.lab1024.smartadmin.service.common.exception.SmartBusinessException;

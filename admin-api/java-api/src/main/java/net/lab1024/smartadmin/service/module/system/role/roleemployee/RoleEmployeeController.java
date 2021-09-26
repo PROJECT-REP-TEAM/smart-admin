@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.constant.SwaggerTagConst;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;

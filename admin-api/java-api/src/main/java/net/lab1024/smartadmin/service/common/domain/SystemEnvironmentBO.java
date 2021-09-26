@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.common.domain;
 
 
-import net.lab1024.smartadmin.service.common.constant.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
 
 /**
  *
