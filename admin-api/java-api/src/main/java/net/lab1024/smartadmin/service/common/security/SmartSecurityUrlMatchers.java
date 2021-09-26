@@ -5,15 +5,20 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.anno.NoNeedLogin;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import org.apache.commons.collections4.CollectionUtils;
-import org.reflections.Reflections;
-import org.reflections.scanners.MethodAnnotationsScanner;
-import org.reflections.util.ClasspathHelper;
-import org.reflections.util.ConfigurationBuilder;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 /**
@@ -28,6 +33,9 @@ public class SmartSecurityUrlMatchers {
 
     @Value("${project.module}")
     private String scanPackage;
+
+    @Autowired
+    private WebApplicationContext applicationContext;
 
     /**
      * 匿名访问URL
@@ -44,11 +52,16 @@ public class SmartSecurityUrlMatchers {
     private List<String> authenticatedUrl = Lists.newArrayList();
 
     /**
+     * 方法的请求路径
+     */
+    private Map<Method, Set<String>> methodUrlMap = new HashMap<>();
+
+    /**
      * 获取忽略的URL集合
      *
      * @return
      */
-    public List<String> getIgnoreUrl() {
+    public synchronized List<String> getIgnoreUrl() {
         if (CollectionUtils.isNotEmpty(ignoreUrl)) {
             return ignoreUrl;
         }
@@ -57,7 +70,7 @@ public class SmartSecurityUrlMatchers {
         ignoreUrl.add("/webjars/**");
         ignoreUrl.add("/*/api-docs");
         ignoreUrl.add(CommonConst.ApiUrl.API_PREFIX_SUPPORT + "/**");
-        log.info("忽略URL：{}",ignoreUrl);
+        log.info("忽略URL：{}", ignoreUrl);
         return ignoreUrl;
     }
 
@@ -66,12 +79,12 @@ public class SmartSecurityUrlMatchers {
      *
      * @return
      */
-    public List<String> getAuthenticatedUrlList() {
+    public synchronized List<String> getAuthenticatedUrlList() {
         if (CollectionUtils.isNotEmpty(authenticatedUrl)) {
             return authenticatedUrl;
         }
         authenticatedUrl.add("/admin/**");
-        log.info("认证URL：{}",authenticatedUrl);
+        log.info("认证URL：{}", authenticatedUrl);
         return authenticatedUrl;
     }
 
@@ -80,23 +93,54 @@ public class SmartSecurityUrlMatchers {
      *
      * @return
      */
-    private List<String> getAnonymousUrl() {
+    private synchronized List<String> getAnonymousUrl() {
         if (CollectionUtils.isNotEmpty(anonymousUrl)) {
             return anonymousUrl;
         }
-        Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(new MethodAnnotationsScanner()));
-        Set<Method> methodSet = reflections.getMethodsAnnotatedWith(NoNeedLogin.class);
-        for (Method method : methodSet) {
-            String uriPrefix = SmartSecurityUrl.getUriPrefix(method);
-            List<String> valueList = SmartSecurityUrl.getAnnotationValueList(method, uriPrefix);
-            anonymousUrl.addAll(valueList);
+        Map<Method, Set<String>> methodSetMap = this.getMethodUrlMap();
+        for (Entry<Method, Set<String>> entry : methodSetMap.entrySet()) {
+            Method method = entry.getKey();
+            NoNeedLogin noNeedLogin = method.getAnnotation(NoNeedLogin.class);
+            if (null == noNeedLogin) {
+                continue;
+            }
+            anonymousUrl.addAll(entry.getValue());
         }
-        log.info("匿名URL：{}",anonymousUrl);
+        log.info("匿名URL：{}", anonymousUrl);
         return anonymousUrl;
     }
 
     /**
+     * 获取每个方法的请求路径
+     *
+     * @return
+     */
+    private synchronized Map<Method, Set<String>> getMethodUrlMap() {
+        if (MapUtils.isNotEmpty(methodUrlMap)) {
+            return methodUrlMap;
+        }
+        RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
+        //获取url与类和方法的对应信息
+        Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
+        for (Entry<RequestMappingInfo, HandlerMethod> entry : map.entrySet()) {
+            RequestMappingInfo requestMappingInfo = entry.getKey();
+            Set<String> urls = requestMappingInfo.getPatternsCondition().getPatterns();
+            if (CollectionUtils.isEmpty(urls)) {
+                continue;
+            }
+            HandlerMethod handlerMethod = entry.getValue();
+            methodUrlMap.put(handlerMethod.getMethod(), urls);
+        }
+        return methodUrlMap;
+    }
+
+    public Set<String> getMethodUrl(Method method) {
+        return methodUrlMap.get(method);
+    }
+
+    /**
      * 获取需要校验的包路径
+     *
      * @return
      */
     public String getValidPackage() {

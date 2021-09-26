@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * 此类用于默认给所有接口添加权限 @privilegeCheck.checkPermission('%s')
@@ -75,16 +72,15 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
         if (postAuthorize != null) {
             return super.getAttributes(method, targetClass);
         }
-        //获取注解值
-        String uriPrefix = SmartSecurityUrl.getUriPrefix(method);
-        List<String> annotationValueList = SmartSecurityUrl.getAnnotationValueList(method, uriPrefix);
-        //判断是否被忽略
+        //URL匹配
         AntPathMatcher antPathMatcher = new AntPathMatcher();
         antPathMatcher.setCaseSensitive(false);
         antPathMatcher.setTrimTokens(true);
         //无需验证的URL集合
         List<String> noValidUrlList = smartSecurityUrlMatchers.getNoValidUrl();
-        if (this.contain(antPathMatcher, noValidUrlList, annotationValueList)) {
+        //获取方法的请求路径
+        Set<String> methodUrl = smartSecurityUrlMatchers.getMethodUrl(method);
+        if (this.contain(antPathMatcher, noValidUrlList, methodUrl)) {
             return super.getAttributes(method, targetClass);
         }
         ArrayList<ConfigAttribute> configAttributes = new ArrayList(1);
@@ -101,13 +97,13 @@ public class SmartSecurityMetadataSource extends PrePostAnnotationSecurityMetada
         return configAttributes;
     }
 
-    public Boolean contain(AntPathMatcher antPathMatcher, List<String> ignores, List<String> valueList) {
+    public Boolean contain(AntPathMatcher antPathMatcher, List<String> ignores, Set<String> urls) {
         if (CollectionUtils.isEmpty(ignores)) {
             return false;
         }
         for (String ignoreUrl : ignores) {
-            for (String uri : valueList) {
-                if (antPathMatcher.match(ignoreUrl, uri)) {
+            for (String url : urls) {
+                if (antPathMatcher.match(ignoreUrl, url)) {
                     return true;
                 }
             }
