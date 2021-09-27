@@ -1,6 +1,8 @@
 package net.lab1024.smartadmin.service.module.business.category.constant;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
@@ -9,6 +11,8 @@ import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
  * @author listen
  * @date 2021/08/05 15:26
  */
+@AllArgsConstructor
+@Getter
 public enum CategoryTypeEnum implements BaseEnum {
 
     /**
@@ -23,32 +27,7 @@ public enum CategoryTypeEnum implements BaseEnum {
 
     ;
 
-    private final Integer type;
+    private final Integer value;
 
     private final String desc;
-
-    CategoryTypeEnum(Integer type, String desc) {
-        this.type = type;
-        this.desc = desc;
-    }
-
-    /**
-     * 获取枚举类的值
-     *
-     * @return Integer
-     */
-    @Override
-    public Integer getValue() {
-        return type;
-    }
-
-    /**
-     * 获取枚举类的说明
-     *
-     * @return String
-     */
-    @Override
-    public String getDesc() {
-        return desc;
-    }
 }

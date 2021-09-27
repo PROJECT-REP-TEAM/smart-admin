@@ -1,6 +1,8 @@
 package net.lab1024.smartadmin.service.module.system.datascope.constant;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
@@ -8,6 +10,8 @@ import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
  *
  * @author 罗伊
  */
+@AllArgsConstructor
+@Getter
 public enum DataScopeViewTypeEnum implements BaseEnum {
 
     ME(0, 0, "本人"),
@@ -18,29 +22,9 @@ public enum DataScopeViewTypeEnum implements BaseEnum {
 
     ALL(3, 15, "全部");
 
-    private Integer value;
-    private Integer level;
-    private String desc;
+    private final Integer value;
 
-    DataScopeViewTypeEnum(Integer value, Integer level, String desc) {
-        this.value = value;
-        this.level = level;
-        this.desc = desc;
-    }
+    private final Integer level;
 
-    @Override
-    public Integer getValue() {
-        return value;
-    }
-
-    public Integer getLevel() {
-        return level;
-    }
-
-    @Override
-    public String getDesc() {
-        return desc;
-    }
-
-
+    private final String desc;
 }

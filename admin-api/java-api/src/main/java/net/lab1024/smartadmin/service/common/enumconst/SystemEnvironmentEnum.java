@@ -1,11 +1,16 @@
 package net.lab1024.smartadmin.service.common.enumconst;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 系统环境枚举类
  *
  * @author zhuoda
  */
+@AllArgsConstructor
+@Getter
 public enum SystemEnvironmentEnum implements BaseEnum {
     /**
      * dev
@@ -27,34 +32,9 @@ public enum SystemEnvironmentEnum implements BaseEnum {
      */
     PROD(SystemEnvironmentNameConst.PROD, "生产环境");
 
-    private String value;
+    private final String value;
 
-    private String desc;
-
-    SystemEnvironmentEnum(String value, String desc) {
-        this.value = value;
-        this.desc = desc;
-    }
-
-    /**
-     * 获取定义枚举value值
-     *
-     * @return Integer
-     */
-    @Override
-    public String getValue() {
-        return value;
-    }
-
-    /**
-     * 获取枚举类的说明
-     *
-     * @return String
-     */
-    @Override
-    public String getDesc() {
-        return desc;
-    }
+    private final String desc;
 
     public static final class SystemEnvironmentNameConst {
         public static final String DEV = "dev";

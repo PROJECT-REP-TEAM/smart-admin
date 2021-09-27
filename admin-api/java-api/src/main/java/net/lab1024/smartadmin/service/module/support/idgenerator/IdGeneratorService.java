@@ -58,7 +58,7 @@ public class IdGeneratorService {
      * @return
      */
     public ResponseDTO<String> generate(IdGeneratorEnum idGeneratorEnum) {
-        int generatorId = idGeneratorEnum.getId();
+        int generatorId = idGeneratorEnum.getValue();
         IdGeneratorEntity idGeneratorEntity = this.idGeneratorMap.get(generatorId);
         if (null == idGeneratorEntity) {
             return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "IdGenerator， 生成器 不存在" + generatorId);
@@ -69,7 +69,7 @@ public class IdGeneratorService {
         int monthValue = now.getMonthValue();
         int dayOfMonth = now.getDayOfMonth();
 
-        String lockKey = RedisKeyConst.Base.ID_GENERATOR + idGeneratorEnum.getKeyName();
+        String lockKey = RedisKeyConst.Base.ID_GENERATOR + idGeneratorEnum.getDesc();
 
         try {
             boolean lock = false;
@@ -107,7 +107,7 @@ public class IdGeneratorService {
 
             Long lastNumber = generatorRecordDTO.getLastNumber();
             IdGeneratorRuleTypeEnum ruleTypeEnum = this.getIdGeneratorRuleTypeEnum(idGeneratorEntity.getRuleType());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ruleTypeEnum.getExt());
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ruleTypeEnum.getValue());
             String nowFormat = now.format(formatter);
             if (IdGeneratorRuleTypeEnum.YEAR_CYCLE == ruleTypeEnum || IdGeneratorRuleTypeEnum.MONTH_CYCLE == ruleTypeEnum || IdGeneratorRuleTypeEnum.DAY_CYCLE == ruleTypeEnum) {
                 if (!Objects.equals(generatorRecordDTO.getUpdateTime().format(formatter), nowFormat)) {

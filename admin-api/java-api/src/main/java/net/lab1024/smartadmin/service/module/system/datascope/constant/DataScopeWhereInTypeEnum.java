@@ -1,6 +1,8 @@
 package net.lab1024.smartadmin.service.module.system.datascope.constant;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
@@ -8,6 +10,8 @@ import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
  *
  * @author 罗伊
  */
+@AllArgsConstructor
+@Getter
 public enum DataScopeWhereInTypeEnum implements BaseEnum {
 
     EMPLOYEE(0, "以员工IN"),
@@ -16,23 +20,7 @@ public enum DataScopeWhereInTypeEnum implements BaseEnum {
 
     CUSTOM_STRATEGY(2, "自定义策略");
 
-    private Integer value;
-    private String desc;
+    private final Integer value;
 
-    DataScopeWhereInTypeEnum(Integer value, String desc) {
-        this.value = value;
-        this.desc = desc;
-    }
-
-    @Override
-    public Integer getValue() {
-        return value;
-    }
-
-    @Override
-    public String getDesc() {
-        return desc;
-    }
-
-
+    private final String desc;
 }

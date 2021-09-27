@@ -1,11 +1,16 @@
 package net.lab1024.smartadmin.service.common.enumconst;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 性别枚举类
  *
  * @author listen
  * @date 2019/09/24 16:50
  */
+@AllArgsConstructor
+@Getter
 public enum GenderEnum implements BaseEnum {
 
     /**
@@ -23,30 +28,7 @@ public enum GenderEnum implements BaseEnum {
      */
     WOMAN(2, "女");
 
-    private final Integer gender;
+    private final Integer value;
 
     private final String desc;
-
-    GenderEnum(Integer gender, String desc) {
-        this.gender = gender;
-        this.desc = desc;
-    }
-    /**
-     * 获取枚举类的值
-     *
-     * @return Integer
-     */
-    @Override
-    public Integer getValue() {
-        return gender;
-    }
-    /**
-     * 获取枚举类的说明
-     *
-     * @return String
-     */
-    @Override
-    public String getDesc() {
-        return desc;
-    }
 }

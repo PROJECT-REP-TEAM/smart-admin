@@ -1,45 +1,27 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
 
 /**
+ * id生成枚举类
+ *
  * @author Administrator
  */
-
+@AllArgsConstructor
+@Getter
 public enum IdGeneratorEnum implements BaseEnum {
 
 
     ;
 
-    private Integer id;
+    private final Integer value;
 
-    private String keyName;
-
-    IdGeneratorEnum(int id, String keyName) {
-        this.id = id;
-        this.keyName = keyName;
-    }
+    private final String desc;
 
     @Override
     public String toString() {
-        return "IdGeneratorEnum{" + "id=" + id + ", keyName='" + keyName + '\'' + '}';
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public String getKeyName() {
-        return keyName;
-    }
-
-    @Override
-    public Integer getValue() {
-        return id;
-    }
-
-    @Override
-    public String getDesc() {
-        return null;
+        return "IdGeneratorEnum{" + "id=" + value + ", keyName='" + desc + '\'' + '}';
     }
 }
