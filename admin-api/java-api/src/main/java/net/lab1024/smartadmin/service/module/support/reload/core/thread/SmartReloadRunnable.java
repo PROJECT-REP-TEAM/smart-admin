@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.reload.core.thread;
 
+import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.module.support.reload.core.AbstractSmartReloadCommand;
-import net.lab1024.smartadmin.service.module.support.reload.core.SmartReloadLogger;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadItem;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadObject;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadResult;
@@ -12,16 +12,20 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
-
+/**
+ * 
+ * [ reload thread ]
+ * 
+ * @author
+ * @date
+ */
+@Slf4j
 public class SmartReloadRunnable implements Runnable {
 
     private AbstractSmartReloadCommand abstractSmartReloadCommand;
 
-    private SmartReloadLogger logger;
-
-    public SmartReloadRunnable(AbstractSmartReloadCommand abstractSmartReloadCommand, SmartReloadLogger logger) {
+    public SmartReloadRunnable(AbstractSmartReloadCommand abstractSmartReloadCommand) {
         this.abstractSmartReloadCommand = abstractSmartReloadCommand;
-        this.logger = logger;
     }
 
     @Override
@@ -29,7 +33,7 @@ public class SmartReloadRunnable implements Runnable {
         try {
             this.doTask();
         } catch (Throwable e) {
-            logger.error("", e);
+            log.error("", e);
         }
     }
 
@@ -55,6 +59,7 @@ public class SmartReloadRunnable implements Runnable {
 
     /**
      * 方法调用
+     *
      * @param reloadItem
      * @return
      */

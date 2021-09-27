@@ -1,9 +1,10 @@
 package net.lab1024.smartadmin.service.module.support.reload.core;
 
 
+import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.module.support.reload.core.anno.SmartReload;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadObject;
-import net.lab1024.smartadmin.service.module.support.reload.core.thread.SmartReloadScheduler;
+import net.lab1024.smartadmin.service.module.support.reload.core.thread.SmartReloadRunnable;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.util.ReflectionUtils;
@@ -11,6 +12,8 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * SmartReloadManager 管理器
@@ -19,28 +22,25 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @author zhuoda
  */
+@Slf4j
 public class SmartReloadManager implements BeanPostProcessor {
+
+    private static final String THREAD_NAME_PREFIX = "smart-admin-reload";
+    private static final int THREAD_COUNT = 1;
 
     private Map<String, ReloadObject> reloadObjectMap = new ConcurrentHashMap<>();
 
-    private SmartReloadScheduler reloadScheduler;
+    private ScheduledThreadPoolExecutor threadPoolExecutor;
 
-    private SmartReloadLogger logger;
-
-
-    public SmartReloadManager(SmartReloadLogger logger,
-                              AbstractSmartReloadCommand reloadCommand,
-                              int threadCount) {
-
-        if (logger == null) {
-            throw new ExceptionInInitializerError("SmartReloadLoggerImp cannot be null");
-        }
-        if (threadCount < 1) {
-            throw new ExceptionInInitializerError("threadCount must be greater than 1");
-        }
-        this.logger = logger;
-        this.reloadScheduler = new SmartReloadScheduler(this.logger, threadCount);
-        this.reloadScheduler.addCommand(reloadCommand);
+    public SmartReloadManager(AbstractSmartReloadCommand reloadCommand) {
+        this.threadPoolExecutor = new ScheduledThreadPoolExecutor(THREAD_COUNT, r -> {
+            Thread t = new Thread(r, THREAD_NAME_PREFIX);
+            if (!t.isDaemon()) {
+                t.setDaemon(true);
+            }
+            return t;
+        });
+        this.threadPoolExecutor.scheduleWithFixedDelay(new SmartReloadRunnable(reloadCommand), 10, 20, TimeUnit.SECONDS);
         reloadCommand.setReloadManager(this);
     }
 
@@ -58,7 +58,7 @@ public class SmartReloadManager implements BeanPostProcessor {
             }
             int paramCount = method.getParameterCount();
             if (paramCount > 1) {
-                logger.error("<<SmartReloadManager>> register tag reload : " + smartReload.value() + " , param count cannot greater than one !");
+                log.error("<<SmartReloadManager>> register tag reload : " + smartReload.value() + " , param count cannot greater than one !");
                 continue;
             }
             String reloadTag = smartReload.value();
@@ -75,13 +75,14 @@ public class SmartReloadManager implements BeanPostProcessor {
      */
     private void register(String tag, ReloadObject reloadObject) {
         if (reloadObjectMap.containsKey(tag)) {
-            logger.error("<<SmartReloadManager>> register duplicated tag reload : " + tag + " , and it will be cover!");
+            log.error("<<SmartReloadManager>> register duplicated tag reload : " + tag + " , and it will be cover!");
         }
         reloadObjectMap.put(tag, reloadObject);
     }
 
     /**
      * 获取重载对象
+     *
      * @return
      */
     public Map<String, ReloadObject> reloadObjectMap() {
