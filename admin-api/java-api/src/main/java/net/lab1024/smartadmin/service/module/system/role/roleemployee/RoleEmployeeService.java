@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.role.roleemployee;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -65,13 +65,13 @@ public class RoleEmployeeService {
             employeeDTO.setDepartmentName(departmentEntity.getName());
         });
         PageResultDTO<EmployeeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, employeeDTOS, EmployeeVO.class);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     public ResponseDTO<List<EmployeeVO>> getAllEmployeeByRoleId(Long roleId) {
         List<EmployeeDTO> employeeDTOS = roleEmployeeDao.selectEmployeeByRoleId(roleId);
         List<EmployeeVO> list = SmartBeanUtil.copyList(employeeDTOS, EmployeeVO.class);
-        return ResponseDTO.succData(list);
+        return ResponseDTO.ok(list);
     }
 
     /**
@@ -84,11 +84,11 @@ public class RoleEmployeeService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> removeEmployeeRole(Long employeeId, Long roleId) {
         if (null == employeeId || null == roleId) {
-            return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         roleEmployeeDao.deleteByEmployeeIdRoleId(employeeId, roleId);
         this.clearCacheByEmployeeId(employeeId);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -102,7 +102,7 @@ public class RoleEmployeeService {
         for (Long employeeId : removeDTO.getEmployeeIdList()) {
             this.clearCacheByEmployeeId(employeeId);
         }
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -126,7 +126,7 @@ public class RoleEmployeeService {
         for (Long employeeId : employeeIdList) {
             this.clearCacheByEmployeeId(employeeId);
         }
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -140,7 +140,7 @@ public class RoleEmployeeService {
         List<RoleEntity> roleList = roleDao.selectList(null);
         List<RoleSelectedVO> result = SmartBeanUtil.copyList(roleList, RoleSelectedVO.class);
         result.stream().forEach(item -> item.setSelected(roleIds.contains(item.getId())));
-        return ResponseDTO.succData(result);
+        return ResponseDTO.ok(result);
     }
 
     /**

@@ -33,7 +33,7 @@ public class FileKeySerializer extends JsonSerializer<String> {
             return;
         }
         ResponseDTO<String> responseDTO = fileService.getFileUrl(value);
-        if(responseDTO.isSuccess()){
+        if(responseDTO.getOk()){
             jsonGenerator.writeString(responseDTO.getData());
             return;
         }

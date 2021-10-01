@@ -1,12 +1,11 @@
 package net.lab1024.smartadmin.service.common.security;
 
 import com.alibaba.fastjson.JSONObject;
-import net.lab1024.smartadmin.service.common.codeconst.LoginResponseCodeConst;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.ErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,18 +22,18 @@ public class SmartSecurityAuthenticationFailHandler implements AuthenticationEnt
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) throws IOException {
-        this.outputResult(response, LoginResponseCodeConst.LOGIN_ERROR);
+        this.outputResult(response, UserErrorCode.LOGIN_STATE_INVALID);
     }
 
     /**
      * 输出
      *
      * @param response
-     * @param respCode
+     * @param errorCode
      * @throws IOException
      */
-    private void outputResult(HttpServletResponse response, ResponseCodeConst respCode) throws IOException {
-        String msg = JSONObject.toJSONString(ResponseDTO.wrap(respCode));
+    private void outputResult(HttpServletResponse response, ErrorCode errorCode) throws IOException {
+        String msg = JSONObject.toJSONString(ResponseDTO.error(errorCode));
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(msg);
         response.flushBuffer();

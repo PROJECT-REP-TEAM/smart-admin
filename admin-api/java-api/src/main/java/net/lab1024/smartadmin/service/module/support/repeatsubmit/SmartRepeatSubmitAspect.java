@@ -2,13 +2,12 @@ package net.lab1024.smartadmin.service.module.support.repeatsubmit;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.core.annotation.Order;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -71,7 +70,7 @@ public class SmartRepeatSubmitAspect {
             int interval = Math.min(annotation.value(), RepeatSubmit.MAX_INTERVAL);
             if (System.currentTimeMillis() < (long) value + interval) {
                 // 提交频繁
-                return ResponseDTO.wrap(ResponseCodeConst.REPEAT_SUBMIT);
+                return ResponseDTO.error(UserErrorCode.REPEAT_SUBMIT);
             }
         }
         cache.put(key, System.currentTimeMillis());

@@ -111,6 +111,6 @@ public class DataTracerService {
         Page page = SmartPageUtil.convert2PageQuery(queryForm);
         List<DataTracerVO> list = dataTracerDao.query(page, queryForm);
         PageResultDTO<DataTracerVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
-        return ResponseDTO.succData(pageResult);
+        return ResponseDTO.ok(pageResult);
     }
 }

@@ -48,7 +48,7 @@ public class MenuController extends AdminBaseController {
     @ApiOperation(value = "查询菜单列表")
     @GetMapping("/menu/query")
     public ResponseDTO<List<MenuVO>> queryMenuList() {
-        return ResponseDTO.succData(menuService.queryMenuList(null));
+        return ResponseDTO.ok(menuService.queryMenuList(null));
     }
 
     @ApiOperation(value = "查询菜单详情")

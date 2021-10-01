@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.module.support.captcha;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.codeconst.EmployeeResponseCodeConst;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -51,7 +51,7 @@ public class CaptchaService {
             base64Code = Base64Utils.encodeToString(os.toByteArray());
         } catch (Exception e) {
             log.error("verificationCode exception:", e);
-            return ResponseDTO.wrapMsg(ResponseCodeConst.SYSTEM_ERROR, "generate captcha error" );
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "generate captcha error" );
         }
         // uuid 唯一标识
         String uuid = UUID.randomUUID().toString().replace("-", CommonConst.EMPTY_STR);
@@ -65,7 +65,7 @@ public class CaptchaService {
         captchaVO.setCaptchaId(uuid);
         captchaVO.setCaptchaImg("data:image/png;base64," + base64Code);
         redisService.set(buildCaptchaRedisKey(uuid), captchaText, 80L);
-        return ResponseDTO.succData(captchaVO);
+        return ResponseDTO.ok(captchaVO);
     }
 
     /**
@@ -77,19 +77,19 @@ public class CaptchaService {
      */
     public ResponseDTO<String> checkCaptcha(String captchaId, String captcha) {
         if (StringUtils.isBlank(captchaId) || StringUtils.isBlank(captcha)) {
-            return ResponseDTO.wrapMsg(EmployeeResponseCodeConst.ERROR_PARAM, "请输入正确验证码" );
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请输入正确验证码" );
         }
         String redisKey = buildCaptchaRedisKey(captchaId);
         String redisCode = redisService.get(redisKey);
         if (StringUtils.isBlank(redisCode)) {
-            return ResponseDTO.wrapMsg(EmployeeResponseCodeConst.VERIFICATION_CODE_INVALID, "验证码错误或已过期，请刷新重试" );
+            return ResponseDTO.error(UserErrorCode.VERIFICATION_CODE_INVALID, "验证码错误或已过期，请刷新重试" );
         }
         if (!Objects.equals(redisCode, captcha)) {
-            return ResponseDTO.wrapMsg(EmployeeResponseCodeConst.VERIFICATION_CODE_INVALID, "验证码错误或已过期，请刷新重试" );
+            return ResponseDTO.error(UserErrorCode.VERIFICATION_CODE_INVALID, "验证码错误或已过期，请刷新重试" );
         }
         // 校验通过 移除
         redisService.del(redisKey);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     private String buildCaptchaRedisKey(String codeId) {

@@ -1,7 +1,8 @@
 package net.lab1024.smartadmin.service.module.support.file.service;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.codeconst.FileResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
@@ -32,13 +33,14 @@ public class FileStorageLocalServiceImpl implements IFileStorageService {
 
     @Value("${file.storage.local.path}")
     private String localPath;
+
     @Autowired
     private SystemConfigService systemConfigService;
 
     @Override
     public ResponseDTO<FileUploadVO> fileUpload(MultipartFile multipartFile, String path) {
         if (null == multipartFile) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_EMPTY);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "上传文件不能为空");
         }
         String filePath = localPath + path;
         File directory = new File(filePath);
@@ -70,9 +72,9 @@ public class FileStorageLocalServiceImpl implements IFileStorageService {
                 fileTemp.delete();
             }
             log.error("", e);
-            return ResponseDTO.wrap(FileResponseCodeConst.UPLOAD_ERROR);
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "上传失败");
         }
-        return ResponseDTO.succData(fileUploadVO);
+        return ResponseDTO.ok(fileUploadVO);
     }
 
     /**
@@ -89,17 +91,19 @@ public class FileStorageLocalServiceImpl implements IFileStorageService {
 
     /**
      * 获取文件Url
+     *
      * @param fileKey
      * @return
      */
     @Override
     public ResponseDTO<String> getFileUrl(String fileKey) {
         String fileUrl = this.generateFileUrl(fileKey);
-        return ResponseDTO.succData(fileUrl);
+        return ResponseDTO.ok(fileUrl);
     }
 
     /**
      * 文件下载
+     *
      * @param fileKey
      * @return
      */
@@ -114,10 +118,10 @@ public class FileStorageLocalServiceImpl implements IFileStorageService {
             byte[] buffer = FileCopyUtils.copyToByteArray(in);
             FileDownloadDTO fileDownloadDTO = new FileDownloadDTO();
             fileDownloadDTO.setData(buffer);
-            return ResponseDTO.succData(fileDownloadDTO);
+            return ResponseDTO.ok(fileDownloadDTO);
         } catch (IOException e) {
             log.error("文件下载-发生异常：", e);
-            return ResponseDTO.wrap(FileResponseCodeConst.DOWNLOAD_ERROR);
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "文件下载失败");
         } finally {
             try {
                 // 关闭输入流
@@ -139,6 +143,6 @@ public class FileStorageLocalServiceImpl implements IFileStorageService {
         } catch (IOException e) {
             log.error("删除本地文件失败：{}", e);
         }
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 }

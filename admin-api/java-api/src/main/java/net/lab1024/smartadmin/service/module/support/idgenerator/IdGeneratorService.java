@@ -1,6 +1,8 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator;
 
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.service.common.code.UnexpectedErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
@@ -9,7 +11,6 @@ import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGenera
 import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorRecordDTO;
 import net.lab1024.smartadmin.service.third.SmartRedisService;
 import net.lab1024.smartadmin.service.util.SmartRandomUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -61,7 +62,7 @@ public class IdGeneratorService {
         int generatorId = idGeneratorEnum.getValue();
         IdGeneratorEntity idGeneratorEntity = this.idGeneratorMap.get(generatorId);
         if (null == idGeneratorEntity) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "IdGenerator， 生成器 不存在" + generatorId);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "IdGenerator， 生成器 不存在" + generatorId);
         }
 
         LocalDateTime now = LocalDateTime.now();
@@ -88,7 +89,7 @@ public class IdGeneratorService {
             }
 
             if (!lock) {
-                return ResponseDTO.wrap(ResponseCodeConst.BUSINESS_HANDING);
+                return ResponseDTO.error(UnexpectedErrorCode.BUSINESS_HANDING);
             }
 
             long beginTime = System.currentTimeMillis();
@@ -127,7 +128,7 @@ public class IdGeneratorService {
             String prefix = StringUtils.isBlank(idGeneratorEntity.getPrefix()) ? StringUtils.EMPTY : idGeneratorEntity.getPrefix();
 
             lastSleepMilliSeconds = System.currentTimeMillis() - beginTime + 100;
-            return ResponseDTO.succData(prefix + nowFormat + finalId);
+            return ResponseDTO.ok(prefix + nowFormat + finalId);
         } catch (Throwable e) {
             log.error(e.getMessage(), e);
             throw e;

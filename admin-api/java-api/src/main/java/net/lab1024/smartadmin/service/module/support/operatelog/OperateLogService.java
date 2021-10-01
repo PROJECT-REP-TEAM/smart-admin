@@ -34,7 +34,7 @@ public class OperateLogService {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<OperateLogEntity> logEntityList = operateLogDao.queryByPage(page, queryDTO);
         PageResultDTO<OperateLogDTO> pageResultDTO = SmartPageUtil.convert2PageResult(page, logEntityList, OperateLogDTO.class);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -45,7 +45,7 @@ public class OperateLogService {
     public ResponseDTO<String> add(OperateLogDTO addDTO) {
         OperateLogEntity entity = SmartBeanUtil.copy(addDTO, OperateLogEntity.class);
         operateLogDao.insert(entity);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -57,7 +57,7 @@ public class OperateLogService {
     public ResponseDTO<String> update(OperateLogDTO updateDTO) {
         OperateLogEntity entity = SmartBeanUtil.copy(updateDTO, OperateLogEntity.class);
         operateLogDao.updateById(entity);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -68,7 +68,7 @@ public class OperateLogService {
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> delete(Long id) {
         operateLogDao.deleteById(id);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -79,6 +79,6 @@ public class OperateLogService {
     public ResponseDTO<OperateLogDTO> detail(Long id) {
         OperateLogEntity entity = operateLogDao.selectById(id);
         OperateLogDTO dto = SmartBeanUtil.copy(entity, OperateLogDTO.class);
-        return ResponseDTO.succData(dto);
+        return ResponseDTO.ok(dto);
     }
 }

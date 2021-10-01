@@ -1,150 +1,82 @@
 package net.lab1024.smartadmin.service.common.domain;
 
 
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import lombok.Data;
+import net.lab1024.smartadmin.service.common.code.ErrorCode;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * 返回类
  *
- * @param <T>
  * @author 1024lab
  */
+@Data
 public class ResponseDTO<T> {
 
-    protected Integer code;
+    public static final int OK_CODE = 0;
 
-    protected String msg;
+    public static final String OK_MSG = "success";
 
-    protected Boolean success;
+    private Integer code;
 
-    protected T data;
+    private String level;
 
-    public ResponseDTO() {
-    }
+    private String msg;
 
-    public ResponseDTO(ResponseCodeConst responseCodeConst, String msg) {
-        this.code = responseCodeConst.getCode();
-        this.msg = msg;
-        this.success = responseCodeConst.issucc();
-    }
+    private Boolean ok;
 
-    public ResponseDTO(ResponseCodeConst responseCodeConst, T data) {
-        super();
-        this.code = responseCodeConst.getCode();
-        this.msg = responseCodeConst.getMsg();
-        this.data = data;
-        this.success = responseCodeConst.issucc();
-    }
+    private T data;
 
-    public ResponseDTO(ResponseCodeConst responseCodeConst, T data, String msg) {
-        super();
-        this.code = responseCodeConst.getCode();
-        this.msg = msg;
-        this.data = data;
-        this.success = responseCodeConst.issucc();
-    }
-
-    private ResponseDTO(ResponseCodeConst responseCodeConst) {
-        this.code = responseCodeConst.getCode();
-        this.msg = responseCodeConst.getMsg();
-        this.success = responseCodeConst.issucc();
-    }
-
-    public ResponseDTO(ResponseDTO responseDTO) {
-        this.code = responseDTO.getCode();
-        this.msg = responseDTO.getMsg();
-        this.success = responseDTO.isSuccess();
-    }
-
-    public ResponseDTO(ResponseCodeConst codeConst, boolean isSuccess) {
-        this.code = codeConst.getCode();
-        this.msg = codeConst.getMsg();
-        this.success = isSuccess;
-    }
-
-    public ResponseDTO(int code, String msg, boolean isSuccess) {
+    public ResponseDTO(Integer code, String level, boolean ok, String msg, T data) {
         this.code = code;
+        this.level = level;
+        this.ok = ok;
         this.msg = msg;
-        this.success = isSuccess;
-    }
-
-    public static <T> ResponseDTO<T> succ() {
-        return new ResponseDTO(ResponseCodeConst.SUCCESS);
-    }
-
-    public static <T> ResponseDTO<T> succData(T data, String msg) {
-        return new ResponseDTO(ResponseCodeConst.SUCCESS, data, msg);
-    }
-
-    public static <T> ResponseDTO<T> succData(T data) {
-        return new ResponseDTO(ResponseCodeConst.SUCCESS, data);
-    }
-
-    public static ResponseDTO succMsg(String msg) {
-        return new ResponseDTO(ResponseCodeConst.SUCCESS, msg);
-    }
-
-    public static <T> ResponseDTO<T> wrap(ResponseCodeConst codeConst) {
-        return new ResponseDTO<>(codeConst);
-    }
-
-    public static <T> ResponseDTO<T> wrap(ResponseCodeConst codeConst, boolean isSuccess) {
-        return new ResponseDTO<>(codeConst, isSuccess);
-    }
-
-    public static ResponseDTO wrap(ResponseDTO responseDTO) {
-        return new ResponseDTO<>(responseDTO.getCode(), responseDTO.getMsg(), responseDTO.isSuccess());
-    }
-
-    public static <T> ResponseDTO<T> wrapData(ResponseCodeConst codeConst, T t) {
-        return new ResponseDTO<T>(codeConst, t);
-    }
-
-    public static <T> ResponseDTO<T> wrapMsg(ResponseCodeConst codeConst, String msg) {
-        return new ResponseDTO<T>(codeConst, msg);
-    }
-
-    public static <T> ResponseDTO<T> wrapDataMsg(ResponseCodeConst codeConst, T t, String msg) {
-        return new ResponseDTO<T>(codeConst, t, msg);
-    }
-
-    public String getMsg() {
-        return msg;
-    }
-
-    public ResponseDTO setMsg(String msg) {
-        this.msg = msg;
-        return this;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public ResponseDTO setCode(Integer code) {
-        this.code = code;
-        return this;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public ResponseDTO setData(T data) {
         this.data = data;
-        return this;
     }
 
-    public boolean isSuccess() {
-        return success;
+    public ResponseDTO(ErrorCode errorCode, boolean ok, String msg, T data) {
+        this.code = errorCode.getCode();
+        this.level = errorCode.getLevel();
+        this.ok = ok;
+        if (StringUtils.isNotBlank(msg)) {
+            this.msg = msg;
+        } else {
+            this.msg = errorCode.getMsg();
+        }
+        this.data = data;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public static <T> ResponseDTO<T> ok() {
+        return new ResponseDTO<>(OK_CODE, null, true, OK_MSG, null);
     }
 
-    @Override
-    public String toString() {
-        return "ResponseDTO{" + "code=" + code + ", msg='" + msg + '\'' + ", success=" + success + ", data=" + data + '}';
+    public static <T> ResponseDTO<T> ok(T data) {
+        return new ResponseDTO<>(OK_CODE, null, true, OK_MSG, data);
     }
+
+    public static <T> ResponseDTO<T> okMsg(String msg) {
+        return new ResponseDTO<>(OK_CODE, null, true, msg, null);
+    }
+
+    public static <T> ResponseDTO<T> error(ErrorCode errorCode) {
+        return new ResponseDTO<>(errorCode, false, null, null);
+    }
+
+    public static <T> ResponseDTO<T> error(ErrorCode errorCode, boolean ok) {
+        return new ResponseDTO<>(errorCode, ok, null, null);
+    }
+
+    public static ResponseDTO error(ResponseDTO responseDTO) {
+        return new ResponseDTO<>(responseDTO.getCode(), responseDTO.getLevel(), responseDTO.getOk(), responseDTO.getMsg(), responseDTO.getData());
+    }
+
+    public static <T> ResponseDTO<T> error(ErrorCode errorCode, String msg) {
+        return new ResponseDTO<>(errorCode, false, msg, null);
+    }
+
+    public static <T> ResponseDTO<T> errorData(ErrorCode errorCode, T data) {
+        return new ResponseDTO<>(errorCode, false, null, data);
+    }
+
 }

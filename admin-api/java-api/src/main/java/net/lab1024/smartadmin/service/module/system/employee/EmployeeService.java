@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.employee;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.constant.SystemConst;
@@ -119,7 +119,7 @@ public class EmployeeService {
         List<EmployeeVO> employeeList = employeeDao.queryEmployee(pageParam, queryDTO);
         if (CollectionUtils.isEmpty(employeeList)) {
             PageResultDTO<EmployeeVO> pageResultDTO = SmartPageUtil.convert2PageResult(pageParam, employeeList);
-            return ResponseDTO.succData(pageResultDTO);
+            return ResponseDTO.ok(pageResultDTO);
         }
         // 查询员工角色
         List<Long> employeeIdList = employeeList.stream().map(EmployeeVO::getId).collect(Collectors.toList());
@@ -130,7 +130,7 @@ public class EmployeeService {
             e.setRoleIdList(employeeRoleIdListMap.getOrDefault(e.getId(), Lists.newArrayList()));
         });
         PageResultDTO<EmployeeVO> pageResultDTO = SmartPageUtil.convert2PageResult(pageParam, employeeList);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -143,18 +143,18 @@ public class EmployeeService {
         // 校验名称是否重复
         EmployeeDTO employeeDTO = employeeDao.getByLoginName(addDTO.getLoginName(), false, false);
         if (null != employeeDTO) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "员工名称重复");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "员工名称重复");
         }
         // 校验电话是否存在
         employeeDTO = employeeDao.getByPhone(addDTO.getPhone(), false);
         if (null != employeeDTO) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "手机号已存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "手机号已存在");
         }
         // 部门是否存在
         Long departmentId = addDTO.getDepartmentId();
         DepartmentEntity department = departmentDao.selectById(departmentId);
         if (department == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "部门不存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "部门不存在");
         }
 
         EmployeeEntity entity = SmartBeanUtil.copy(addDTO, EmployeeEntity.class);
@@ -166,7 +166,7 @@ public class EmployeeService {
 
         this.clearCacheByDepartmentId(departmentId);
 
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -179,20 +179,20 @@ public class EmployeeService {
         Long employeeId = updateDTO.getId();
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         if (null == employeeEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         Long departmentId = updateDTO.getDepartmentId();
         DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
         if (departmentEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         EmployeeDTO employeeDTO = employeeDao.getByLoginName(updateDTO.getLoginName(), false, false);
         if (null != employeeDTO && !Objects.equals(employeeDTO.getId(), employeeId)) {
-            return ResponseDTO.wrap(ResponseCodeConst.ALREADY_EXIST);
+            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST);
         }
         employeeDTO = employeeDao.getByPhone(updateDTO.getLoginName(), false);
         if (null != employeeDTO && !Objects.equals(employeeDTO.getId(), employeeId)) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         // 不更新密码
@@ -206,7 +206,7 @@ public class EmployeeService {
         this.clearCacheByEmployeeId(employeeId);
         this.clearCacheByDepartmentId(departmentId);
 
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -217,18 +217,18 @@ public class EmployeeService {
      */
     public ResponseDTO<String> updateDisableFlag(Long employeeId) {
         if (null == employeeId) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         if (null == employeeEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         employeeDao.updateDisableFlag(employeeId, !employeeEntity.getDisabledFlag());
 
         this.clearCacheByEmployeeId(employeeId);
         this.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -241,7 +241,7 @@ public class EmployeeService {
         List<Long> employeeIdList = batchUpdateStatusDTO.getEmployeeIdList();
         List<EmployeeEntity> employeeEntityList = employeeDao.selectBatchIds(employeeIdList);
         if (employeeIdList.size() != employeeEntityList.size()) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         employeeDao.batchUpdateDisableFlag(employeeIdList, batchUpdateStatusDTO.getDisabledFlag());
@@ -251,7 +251,7 @@ public class EmployeeService {
             this.clearCacheByEmployeeId(e.getId());
             this.clearCacheByDepartmentId(e.getDepartmentId());
         });
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -262,11 +262,11 @@ public class EmployeeService {
      */
     public ResponseDTO<String> batchUpdateDeleteFlag(List<Long> employeeIdList) {
         if (CollectionUtils.isEmpty(employeeIdList)) {
-            return ResponseDTO.succ();
+            return ResponseDTO.ok();
         }
         List<EmployeeEntity> employeeEntityList = employeeManager.listByIds(employeeIdList);
         if (CollectionUtils.isEmpty(employeeEntityList)) {
-            return ResponseDTO.succ();
+            return ResponseDTO.ok();
         }
         List<EmployeeEntity> deleteList = employeeIdList.stream().map(e -> {
             // 更新删除
@@ -282,7 +282,7 @@ public class EmployeeService {
             this.clearCacheByEmployeeId(e.getId());
             this.clearCacheByDepartmentId(e.getDepartmentId());
         });
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -294,7 +294,7 @@ public class EmployeeService {
     public ResponseDTO<String> deleteEmployeeById(Long employeeId) {
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         if (null == employeeEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         // 更新删除
         EmployeeEntity updateEmployee = new EmployeeEntity();
@@ -304,7 +304,7 @@ public class EmployeeService {
 
         this.clearCacheByEmployeeId(employeeId);
         this.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -317,7 +317,7 @@ public class EmployeeService {
         List<Long> employeeIdList = updateDto.getEmployeeIdList();
         List<EmployeeEntity> employeeEntityList = employeeDao.selectBatchIds(employeeIdList);
         if (employeeIdList.size() != employeeEntityList.size()) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         List<EmployeeEntity> updateList = employeeIdList.stream().map(e -> {
@@ -334,7 +334,7 @@ public class EmployeeService {
             this.clearCacheByEmployeeId(e.getId());
             this.clearCacheByDepartmentId(e.getDepartmentId());
         });
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -357,7 +357,7 @@ public class EmployeeService {
 
         // 更新数据
         employeeManager.updateEmployeeRole(employeeId, roleEmployeeList);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -370,18 +370,18 @@ public class EmployeeService {
         Long employeeId = updatePwdDTO.getEmployeeId();
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         if (employeeEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         // 校验原始密码
         String encryptPwd = getEncryptPwd(updatePwdDTO.getOldPwd());
         if (!Objects.equals(encryptPwd, employeeEntity.getLoginPwd())) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         // 新旧密码相同
         String newPwd = updatePwdDTO.getPwd();
         if (Objects.equals(updatePwdDTO.getOldPwd(), newPwd)) {
-            return ResponseDTO.succ();
+            return ResponseDTO.ok();
         }
 
         // 更新密码
@@ -390,7 +390,7 @@ public class EmployeeService {
         updateEntity.setLoginPwd(getEncryptPwd(newPwd));
         employeeDao.updateById(updateEntity);
 
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -403,10 +403,10 @@ public class EmployeeService {
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
         List<EmployeeEntity> employeeEntityList = beanCache.get(cacheKey);
         if (CollectionUtils.isEmpty(employeeEntityList)) {
-            return ResponseDTO.succData(CommonConst.EMPTY_LIST);
+            return ResponseDTO.ok(CommonConst.EMPTY_LIST);
         }
         List<EmployeeVO> voList = SmartBeanUtil.copyList(employeeEntityList, EmployeeVO.class);
-        return ResponseDTO.succData(voList);
+        return ResponseDTO.ok(voList);
     }
 
     /**
@@ -425,7 +425,7 @@ public class EmployeeService {
         // 进入递归
         List<EmployeeVO> employeeList = Lists.newArrayList(schoolEmployeeList);
         recursionFindEmployee(employeeList, departmentList, departmentId);
-        return ResponseDTO.succData(employeeList);
+        return ResponseDTO.ok(employeeList);
     }
 
     /**
@@ -457,7 +457,7 @@ public class EmployeeService {
     public ResponseDTO<String> resetPassword(Integer employeeId) {
         String md5Password = getEncryptPwd(null);
         employeeDao.updatePassword(employeeId, md5Password);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -510,6 +510,6 @@ public class EmployeeService {
             queryDTO.setDisabledFlag(disabledFlag);
         }
         List<EmployeeVO> employeeList = employeeDao.queryEmployee(queryDTO);
-        return ResponseDTO.succData(employeeList);
+        return ResponseDTO.ok(employeeList);
     }
 }

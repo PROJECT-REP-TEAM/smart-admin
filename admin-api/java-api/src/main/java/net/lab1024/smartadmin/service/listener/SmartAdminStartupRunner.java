@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeRegister;
+import net.lab1024.smartadmin.service.common.code.ErrorCodeRegister;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +22,7 @@ public class SmartAdminStartupRunner implements CommandLineRunner {
         log.info("###################### init start ######################");
 
         // 初始化状态码
-        ResponseCodeRegister.init();
+        ErrorCodeRegister.init();
 
         log.info("###################### init complete ######################");
     }

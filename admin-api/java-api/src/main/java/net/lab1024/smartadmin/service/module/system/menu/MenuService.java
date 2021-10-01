@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.menu;
 
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
@@ -47,7 +47,7 @@ public class MenuService {
     public ResponseDTO<String> addMenu(MenuAddForm menuAddForm) {
         // 校验菜单名称
         if (this.validateMenuName(menuAddForm)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "菜单名称已存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "菜单名称已存在");
         }
         MenuEntity menuEntity = SmartBeanUtil.copy(menuAddForm, MenuEntity.class);
         // 处理接口权限
@@ -62,17 +62,17 @@ public class MenuService {
             menuDao.insert(menuEntity);
             // 更新角色权限缓存
             menuEmployeeService.initRoleMenuListMap();
-            return ResponseDTO.succ();
+            return ResponseDTO.ok();
         }
         // 若功能点列表不为空
         ResponseDTO<List<MenuEntity>> responseDTO = this.validateBuildPointList(menuAddForm.getMenuType(), pointList);
-        if (!responseDTO.isSuccess()) {
-            return ResponseDTO.wrap(responseDTO);
+        if (!responseDTO.getOk()) {
+            return ResponseDTO.error(responseDTO);
         }
         menuManager.addMenu(menuEntity, responseDTO.getData());
         // 更新角色权限缓存
         menuEmployeeService.initRoleMenuListMap();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -85,17 +85,17 @@ public class MenuService {
         //校验菜单是否存在
         MenuEntity selectMenu = menuDao.selectById(menuUpdateForm.getMenuId());
         if (selectMenu == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "菜单不存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "菜单不存在");
         }
         if (selectMenu.getDeleteFlag()) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "菜单已被删除");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "菜单已被删除");
         }
         //校验菜单名称
         if (this.validateMenuName(menuUpdateForm)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "菜单名称已存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "菜单名称已存在");
         }
         if (menuUpdateForm.getMenuId().equals(menuUpdateForm.getParentId())) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "上级菜单不能为自己");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "上级菜单不能为自己");
         }
         MenuEntity menuEntity = SmartBeanUtil.copy(menuUpdateForm, MenuEntity.class);
         // 处理接口权限
@@ -110,12 +110,12 @@ public class MenuService {
             menuDao.updateById(menuEntity);
             // 更新角色权限缓存
             menuEmployeeService.initRoleMenuListMap();
-            return ResponseDTO.succ();
+            return ResponseDTO.ok();
         }
         //若功能点列表不为空
         ResponseDTO<List<MenuEntity>> validateBuildPointList = this.validateBuildPointList(menuUpdateForm.getMenuType(), pointList);
-        if (!validateBuildPointList.isSuccess()) {
-            return ResponseDTO.wrap(validateBuildPointList);
+        if (!validateBuildPointList.getOk()) {
+            return ResponseDTO.error(validateBuildPointList);
         }
         List<MenuEntity> pointEntityList = validateBuildPointList.getData();
         //查询当前菜单下的功能点列表
@@ -151,7 +151,7 @@ public class MenuService {
         menuManager.updateMenu(menuEntity, savePointList, deletePointList, updatePointList);
         // 更新角色权限缓存
         menuEmployeeService.initRoleMenuListMap();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -164,7 +164,7 @@ public class MenuService {
     private ResponseDTO<List<MenuEntity>> validateBuildPointList(Integer menuType, List<MenuPointsOperateForm> pointList) {
         //判断 目录/功能点不能添加功能点
         if (!MenuTypeEnum.MENU.equalsValue(menuType)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "目录/功能点不能添加子功能点");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "目录/功能点不能添加子功能点");
         }
         //构建功能点对象
         List<MenuEntity> pointEntityList = pointList.stream().map(e -> {
@@ -181,9 +181,9 @@ public class MenuService {
         Map<String, Long> nameGroupBy = pointEntityList.stream().collect(Collectors.groupingBy(MenuEntity::getMenuName, Collectors.counting()));
         List<String> repeatName = nameGroupBy.entrySet().stream().filter(e -> e.getValue() > 1).map(e -> e.getKey()).collect(Collectors.toList());
         if (!CollectionUtils.isEmpty(repeatName)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "功能点：" + String.join("、", repeatName) + "，名称重复");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "功能点：" + String.join("、", repeatName) + "，名称重复");
         }
-        return ResponseDTO.succData(pointEntityList);
+        return ResponseDTO.ok(pointEntityList);
     }
 
     /**
@@ -195,12 +195,12 @@ public class MenuService {
      */
     public ResponseDTO<String> batchDeleteMenu(List<Long> menuIdList, Long employeeId) {
         if (CollectionUtils.isEmpty(menuIdList)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "所选菜单不能为空");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "所选菜单不能为空");
         }
         menuDao.deleteByMenuIdList(menuIdList, employeeId, Boolean.TRUE);
         // 更新角色权限缓存
         menuEmployeeService.initRoleMenuListMap();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -276,7 +276,7 @@ public class MenuService {
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
         List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
-        return ResponseDTO.succData(menuTreeVOList);
+        return ResponseDTO.ok(menuTreeVOList);
     }
 
     /**
@@ -311,10 +311,10 @@ public class MenuService {
         //校验菜单是否存在
         MenuEntity selectMenu = menuDao.selectById(menuId);
         if (selectMenu == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.SYSTEM_ERROR, "菜单不存在");
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "菜单不存在");
         }
         if (selectMenu.getDeleteFlag()) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.SYSTEM_ERROR, "菜单已被删除");
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "菜单已被删除");
         }
         MenuVO menuVO = SmartBeanUtil.copy(selectMenu, MenuVO.class);
         //处理接口权限
@@ -323,7 +323,7 @@ public class MenuService {
             List<String> permsList = Lists.newArrayList(StringUtils.split(perms, ","));
             menuVO.setPermsList(permsList);
         }
-        return ResponseDTO.succData(menuVO);
+        return ResponseDTO.ok(menuVO);
     }
 
     /**
@@ -333,6 +333,6 @@ public class MenuService {
      */
     public ResponseDTO<List<RequestUrlVO>> getPrivilegeUrlDTOList() {
         List<RequestUrlVO> privilegeUrlList = requestUrlService.getPrivilegeList();
-        return ResponseDTO.succData(privilegeUrlList);
+        return ResponseDTO.ok(privilegeUrlList);
     }
 }

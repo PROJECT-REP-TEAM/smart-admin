@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.common.exception;
 
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.ErrorCode;
 
 /**
  * [ 业务逻辑异常,全局异常拦截后统一返回ResponseCodeConst.SYSTEM_ERROR ]
@@ -13,8 +13,8 @@ public class SmartBusinessException extends RuntimeException {
     public SmartBusinessException() {
     }
 
-    public SmartBusinessException(ResponseCodeConst responseCodeConst) {
-        super(responseCodeConst.getMsg());
+    public SmartBusinessException(ErrorCode errorCode) {
+        super(errorCode.getMsg());
     }
 
     public SmartBusinessException(String message) {

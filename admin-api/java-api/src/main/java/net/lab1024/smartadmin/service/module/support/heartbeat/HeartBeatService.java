@@ -28,6 +28,6 @@ public class HeartBeatService {
         Page pageQueryInfo = SmartPageUtil.convert2PageQuery(pageBaseDTO);
         List<HeartBeatRecordVO> recordVOList = heartBeatRecordDao.pageQuery(pageQueryInfo);
         PageResultDTO<HeartBeatRecordVO> pageResultDTO = SmartPageUtil.convert2PageResult(pageQueryInfo, recordVOList);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 }

@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.login;
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.codeconst.EmployeeResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
@@ -63,19 +63,19 @@ public class EmployeeLoginService {
         CaptchaDTO captcha = loginDTO.getCaptcha();
         if (null != captcha) {
             ResponseDTO<String> res = captchaService.checkCaptcha(captcha.getCaptchaId(), captcha.getCaptcha());
-            if (!res.isSuccess()) {
-                return ResponseDTO.wrap(res);
+            if (!res.getOk()) {
+                return ResponseDTO.error(res);
             }
         }
 
         String loginPwd = EmployeeService.getEncryptPwd(loginDTO.getLoginPwd());
         EmployeeEntity employeeEntity = employeeDao.selectByLoginNameAndPwd(loginDTO.getLoginName(), loginPwd, false);
         if (null == employeeEntity) {
-            return ResponseDTO.wrap(EmployeeResponseCodeConst.LOGIN_FAILED);
+            return ResponseDTO.error(UserErrorCode.LOGIN_FAILED);
         }
 
         if (employeeEntity.getDisabledFlag()) {
-            return ResponseDTO.wrap(EmployeeResponseCodeConst.STATUS_ERROR);
+            return ResponseDTO.error(UserErrorCode.USER_STATUS_ERROR);
         }
 
         // 生成 登录token
@@ -107,7 +107,7 @@ public class EmployeeLoginService {
             loginResultDTO.setSchoolId(schoolIdByDepartment.getId());
             loginResultDTO.setSchoolName(schoolIdByDepartment.getName());
         }
-        return ResponseDTO.succData(loginResultDTO);
+        return ResponseDTO.ok(loginResultDTO);
     }
 
     /**
@@ -118,7 +118,7 @@ public class EmployeeLoginService {
      */
     public ResponseDTO<String> logoutByToken(Long employeeId) {
         employeeService.clearCacheByEmployeeId(employeeId);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**

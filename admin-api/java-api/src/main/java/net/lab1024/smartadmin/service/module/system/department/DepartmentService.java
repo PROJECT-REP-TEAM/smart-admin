@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.module.system.department;
 
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -56,7 +56,7 @@ public class DepartmentService {
     public ResponseDTO<List<DepartmentTreeVO>> departmentTree() {
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE);
         List<DepartmentTreeVO> treeVOList = beanCache.get(cacheKey);
-        return ResponseDTO.succData(treeVOList);
+        return ResponseDTO.ok(treeVOList);
     }
 
     /**
@@ -79,18 +79,18 @@ public class DepartmentService {
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE);
         List<DepartmentTreeVO> treeVOList = beanCache.get(cacheKey);
         if (CollectionUtils.isEmpty(treeVOList)) {
-            return ResponseDTO.succData(Lists.newArrayList());
+            return ResponseDTO.ok(Lists.newArrayList());
         }
         // 获取全部员工列表
         List<EmployeeDTO> employeeList = employeeDao.listAll();
         if (CollectionUtils.isEmpty(employeeList)) {
-            return ResponseDTO.succData(SmartBeanUtil.copyList(treeVOList, DepartmentEmployeeTreeVO.class));
+            return ResponseDTO.ok(SmartBeanUtil.copyList(treeVOList, DepartmentEmployeeTreeVO.class));
         }
         Map<Long, List<EmployeeDTO>> employeeMap = employeeList.stream().collect(Collectors.groupingBy(EmployeeDTO::getDepartmentId));
         //构建各部门的员工信息
         List<DepartmentEmployeeTreeVO> departmentEmployeeTreeVOList = this.buildTreeEmployee(treeVOList, employeeMap);
 
-        return ResponseDTO.succData(departmentEmployeeTreeVOList);
+        return ResponseDTO.ok(departmentEmployeeTreeVOList);
     }
 
     /**
@@ -130,7 +130,7 @@ public class DepartmentService {
             departmentVOList = this.filterDepartment(departmentVOList, departmentName);
         }
         List<DepartmentTreeVO> result = departmentTreeService.buildTree(departmentVOList);
-        return ResponseDTO.succData(result);
+        return ResponseDTO.ok(result);
     }
 
     /**
@@ -194,7 +194,7 @@ public class DepartmentService {
         departmentService.addDepartmentHandle(departmentEntity);
         this.clearTreeCache();
         this.clearSelfAndChildrenIdCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -219,17 +219,17 @@ public class DepartmentService {
      */
     public ResponseDTO<String> updateDepartment(DepartmentUpdateDTO updateDTO) {
         if (updateDTO.getParentId() == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "父级部门id不能为空");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "父级部门id不能为空");
         }
         DepartmentEntity entity = departmentDao.selectById(updateDTO.getId());
         if (entity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         DepartmentEntity departmentEntity = SmartBeanUtil.copy(updateDTO, DepartmentEntity.class);
         departmentEntity.setSort(entity.getSort());
         departmentDao.updateById(departmentEntity);
         this.clearTreeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -243,24 +243,24 @@ public class DepartmentService {
     public ResponseDTO<String> delDepartment(Long deptId) {
         DepartmentEntity departmentEntity = departmentDao.selectById(deptId);
         if (null == departmentEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         // 是否有子级部门
         int subDepartmentNum = departmentDao.countSubDepartment(deptId);
         if (subDepartmentNum > 0) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "请先删除子级部门");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请先删除子级部门");
         }
 
         // 是否有未删除员工
         int employeeNum = employeeDao.countByDepartmentId(deptId, false);
         if (employeeNum > 0) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "请先删除部门员工");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请先删除部门员工");
         }
         departmentDao.deleteById(deptId);
         // 清除缓存
         this.clearTreeCache();
         this.clearSelfAndChildrenIdCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -272,10 +272,10 @@ public class DepartmentService {
     public ResponseDTO<DepartmentVO> getDepartmentById(Long departmentId) {
         DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
         if (departmentEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         DepartmentVO departmentVO = SmartBeanUtil.copy(departmentEntity, DepartmentVO.class);
-        return ResponseDTO.succData(departmentVO);
+        return ResponseDTO.ok(departmentVO);
     }
 
     /**
@@ -285,7 +285,7 @@ public class DepartmentService {
      */
     public ResponseDTO<List<DepartmentVO>> listAll() {
         List<DepartmentVO> departmentVOList = departmentDao.listAll();
-        return ResponseDTO.succData(departmentVOList);
+        return ResponseDTO.ok(departmentVOList);
     }
 
     /**
@@ -298,11 +298,11 @@ public class DepartmentService {
     public ResponseDTO<String> upOrDown(Long departmentId, Long swapId) {
         DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
         if (departmentEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         DepartmentEntity swapEntity = departmentDao.selectById(swapId);
         if (swapEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         DepartmentEntity updateEntity = new DepartmentEntity();
         updateEntity.setId(departmentId);
@@ -315,7 +315,7 @@ public class DepartmentService {
         departmentService.upOrDownUpdate(updateEntity, swapEntity);
         //清除缓存
         this.clearTreeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -339,10 +339,10 @@ public class DepartmentService {
     public ResponseDTO<String> upgrade(Long departmentId) {
         DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
         if (departmentEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         if (departmentEntity.getParentId() == null || departmentEntity.getParentId().equals(CommonConst.DEFAULT_PARENT_ID)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "此部门已经是根节点无法移动");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此部门已经是根节点无法移动");
         }
         DepartmentEntity parentEntity = departmentDao.selectById(departmentEntity.getParentId());
 
@@ -352,7 +352,7 @@ public class DepartmentService {
         departmentDao.updateById(updateEntity);
         //清除缓存
         this.clearTreeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -365,11 +365,11 @@ public class DepartmentService {
     public ResponseDTO<String> downgrade(Long departmentId, Long preId) {
         DepartmentEntity departmentEntity = departmentDao.selectById(departmentId);
         if (departmentEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         DepartmentEntity preEntity = departmentDao.selectById(preId);
         if (preEntity == null) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         DepartmentEntity updateEntity = new DepartmentEntity();
         updateEntity.setId(departmentId);
@@ -377,7 +377,7 @@ public class DepartmentService {
         departmentDao.updateById(updateEntity);
         //清除缓存
         this.clearTreeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
 
@@ -414,8 +414,8 @@ public class DepartmentService {
      */
     public ResponseDTO<List<DepartmentVO>> querySchoolList() {
         ResponseDTO<List<DepartmentTreeVO>> res = departmentTree();
-        if (!res.isSuccess()) {
-            return ResponseDTO.wrap(res);
+        if (!res.getOk()) {
+            return ResponseDTO.error(res);
         }
         List<DepartmentTreeVO> data = res.getData();
         // 拿到第二级部门列表
@@ -426,7 +426,7 @@ public class DepartmentService {
                 resList.addAll(SmartBeanUtil.copyList(children, DepartmentVO.class));
             }
         }
-        return ResponseDTO.succData(resList);
+        return ResponseDTO.ok(resList);
     }
 
     /**

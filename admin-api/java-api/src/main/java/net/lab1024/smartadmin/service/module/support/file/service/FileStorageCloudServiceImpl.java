@@ -5,9 +5,8 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.S3Object;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.codeconst.FileResponseCodeConst;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.config.FileCloudConfig;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
@@ -74,7 +73,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
             urlEncoderFilename = URLEncoder.encode(originalFilename, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException e) {
             log.error("阿里云文件上传服务URL ENCODE-发生异常：", e);
-            return ResponseDTO.wrap(FileResponseCodeConst.UPLOAD_ERROR);
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR,"上传失败");
         }
         ObjectMetadata meta = new ObjectMetadata();
         meta.setContentEncoding(StandardCharsets.UTF_8.name());
@@ -90,7 +89,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
             amazonS3.putObject(cloudConfig.getBucketName(), fileKey, file.getInputStream(), meta);
         } catch (IOException e) {
             log.error("文件上传-发生异常：", e);
-            return ResponseDTO.wrap(FileResponseCodeConst.UPLOAD_ERROR);
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR,"上传失败");
         }
         // 根据文件路径获取并设置访问权限
         CannedAccessControlList acl = this.getACL(path);
@@ -108,7 +107,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
         uploadVO.setFileUrl(url);
         uploadVO.setFileKey(fileKey);
         uploadVO.setFileSize(file.getSize());
-        return ResponseDTO.succData(uploadVO);
+        return ResponseDTO.ok(uploadVO);
     }
 
     /**
@@ -120,16 +119,16 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
     @Override
     public ResponseDTO<String> getFileUrl(String fileKey) {
         if (StringUtils.isBlank(fileKey)) {
-            return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         if (!fileKey.startsWith(FileFolderTypeEnum.FOLDER_PRIVATE)) {
             // 不是私有的 都公共读
-            return ResponseDTO.succData(cloudConfig.getPublicUrl() + fileKey);
+            return ResponseDTO.ok(cloudConfig.getPublicUrl() + fileKey);
         }
         Date expiration = new Date(System.currentTimeMillis() + cloudConfig.getUrlExpire());
         URL url = amazonS3.generatePresignedUrl(cloudConfig.getBucketName(), fileKey, expiration);
         String urlStr = url.toString().replace("http://", "https://");
-        return ResponseDTO.succData(urlStr);
+        return ResponseDTO.ok(urlStr);
     }
 
     /**
@@ -161,10 +160,10 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
             FileDownloadDTO fileDownloadDTO = new FileDownloadDTO();
             fileDownloadDTO.setData(buffer);
             fileDownloadDTO.setMetadata(metadataDTO);
-            return ResponseDTO.succData(fileDownloadDTO);
+            return ResponseDTO.ok(fileDownloadDTO);
         } catch (IOException e) {
             log.error("文件下载-发生异常：", e);
-            return ResponseDTO.wrap(FileResponseCodeConst.DOWNLOAD_ERROR);
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR,"下载失败");
         } finally {
             try {
                 // 关闭输入流
@@ -202,7 +201,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
     @Override
     public ResponseDTO<String> delete(String fileKey) {
         amazonS3.deleteObject(cloudConfig.getBucketName(), fileKey);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
 

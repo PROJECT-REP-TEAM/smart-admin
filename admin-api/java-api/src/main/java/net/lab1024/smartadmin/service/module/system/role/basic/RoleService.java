@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.module.system.role.basic;
 
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleAddDTO;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleUpdateDTO;
@@ -43,11 +43,11 @@ public class RoleService {
     public ResponseDTO addRole(RoleAddDTO roleAddDTO) {
         RoleEntity employeeRoleEntity = roleDao.getByRoleName(roleAddDTO.getRoleName());
         if (null != employeeRoleEntity) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ALREADY_EXIST, "角色名称重复");
+            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "角色名称重复");
         }
         RoleEntity roleEntity = SmartBeanUtil.copy(roleAddDTO, RoleEntity.class);
         roleDao.insert(roleEntity);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -60,12 +60,12 @@ public class RoleService {
     public ResponseDTO deleteRole(Long roleId) {
         RoleEntity roleEntity = roleDao.selectById(roleId);
         if (null == roleEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         roleDao.deleteById(roleId);
         roleMenuDao.deleteByRoleId(roleId);
         roleEmployeeDao.deleteByRoleId(roleId);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -78,15 +78,15 @@ public class RoleService {
     public ResponseDTO<String> updateRole(RoleUpdateDTO roleUpdateDTO) {
         Long roleId = roleUpdateDTO.getId();
         if (null == roleDao.selectById(roleId)) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         RoleEntity employeeRoleEntity = roleDao.getByRoleName(roleUpdateDTO.getRoleName());
         if (null != employeeRoleEntity && !Objects.equals(employeeRoleEntity.getId(), roleId)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ALREADY_EXIST, "角色名称重复");
+            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "角色名称重复");
         }
         RoleEntity roleEntity = SmartBeanUtil.copy(roleUpdateDTO, RoleEntity.class);
         roleDao.updateById(roleEntity);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -98,10 +98,10 @@ public class RoleService {
     public ResponseDTO<RoleVO> getRoleById(Long roleId) {
         RoleEntity roleEntity = roleDao.selectById(roleId);
         if (null == roleEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         RoleVO role = SmartBeanUtil.copy(roleEntity, RoleVO.class);
-        return ResponseDTO.succData(role);
+        return ResponseDTO.ok(role);
     }
 
     /**
@@ -112,6 +112,6 @@ public class RoleService {
     public ResponseDTO<List<RoleVO>> getAllRole() {
         List<RoleEntity> roleEntityList = roleDao.selectList(null);
         List<RoleVO> roleList = SmartBeanUtil.copyList(roleEntityList, RoleVO.class);
-        return ResponseDTO.succData(roleList);
+        return ResponseDTO.ok(roleList);
     }
 }

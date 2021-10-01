@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.system.systemconfig;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.reload.core.anno.SmartReload;
@@ -85,7 +85,7 @@ public class SystemConfigService {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<SystemConfigEntity> entityList = systemConfigDao.queryByPage(page, queryDTO);
         PageResultDTO<SystemConfigVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, entityList, SystemConfigVO.class);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -146,14 +146,14 @@ public class SystemConfigService {
     public ResponseDTO<String> add(SystemConfigAddDTO configAddDTO) {
         SystemConfigEntity entity = systemConfigDao.selectByKey(configAddDTO.getConfigKey());
         if (null != entity) {
-            return ResponseDTO.wrap(ResponseCodeConst.ALREADY_EXIST);
+            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST);
         }
         entity = SmartBeanUtil.copy(configAddDTO, SystemConfigEntity.class);
         systemConfigDao.insert(entity);
 
         // 刷新缓存
         this.refreshConfigCache(entity.getConfigId());
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -166,11 +166,11 @@ public class SystemConfigService {
         Long configId = updateDTO.getConfigId();
         SystemConfigEntity entity = systemConfigDao.selectById(configId);
         if (null == entity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         SystemConfigEntity alreadyEntity = systemConfigDao.selectByKey(updateDTO.getConfigKey());
         if (null != alreadyEntity && !Objects.equals(configId, alreadyEntity.getConfigId())) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ALREADY_EXIST, "config key 已存在");
+            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "config key 已存在");
         }
 
         // 更新数据
@@ -179,7 +179,7 @@ public class SystemConfigService {
 
         // 刷新缓存
         this.refreshConfigCache(configId);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -192,7 +192,7 @@ public class SystemConfigService {
     public ResponseDTO<String> updateValueByKey(SystemConfigKeyEnum key, String value) {
         SystemConfigDTO config = this.getConfig(key);
         if (null == config) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         // 更新数据
@@ -204,6 +204,6 @@ public class SystemConfigService {
 
         // 刷新缓存
         this.refreshConfigCache(configId);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 }

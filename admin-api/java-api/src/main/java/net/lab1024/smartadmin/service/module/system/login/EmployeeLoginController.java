@@ -42,7 +42,7 @@ public class EmployeeLoginController extends AdminBaseController {
     @ApiOperation("获取登录信息")
     public ResponseDTO<EmployeeLoginVO> getSession() {
         EmployeeLoginInfoDTO requestEmployee = SmartEmployeeTokenUtil.getRequestEmployee();
-        return ResponseDTO.succData(employeeLoginService.getSession(requestEmployee));
+        return ResponseDTO.ok(employeeLoginService.getSession(requestEmployee));
     }
 
     @GetMapping("/logout")

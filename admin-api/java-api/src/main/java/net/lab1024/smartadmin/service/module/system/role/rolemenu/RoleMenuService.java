@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.role.rolemenu;
 
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.menu.MenuDao;
@@ -52,7 +52,7 @@ public class RoleMenuService {
         Long roleId = updateDTO.getRoleId();
         RoleEntity roleEntity = roleDao.selectById(roleId);
         if (null == roleEntity) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         List<RoleMenuEntity> roleMenuEntityList = Lists.newArrayList();
         RoleMenuEntity roleMenuEntity;
@@ -65,7 +65,7 @@ public class RoleMenuService {
         roleMenuManager.updateRoleMenu(updateDTO.getRoleId(), roleMenuEntityList);
         // 更新角色权限缓存
         menuEmployeeService.initRoleMenuListMap();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -85,7 +85,7 @@ public class RoleMenuService {
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
         List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
         res.setMenuTreeList(menuTreeList);
-        return ResponseDTO.succData(res);
+        return ResponseDTO.ok(res);
     }
 
     /**

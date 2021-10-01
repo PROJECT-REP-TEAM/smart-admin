@@ -51,7 +51,7 @@ public class SystemConfigController extends SupportBaseController {
     public ResponseDTO<SystemConfigVO> queryByKey(@RequestParam String configKey) {
         SystemConfigDTO configDTO = systemConfigService.getConfig(configKey);
         SystemConfigVO configVO = SmartBeanUtil.copy(configDTO, SystemConfigVO.class);
-        return ResponseDTO.succData(configVO);
+        return ResponseDTO.ok(configVO);
     }
 
 }

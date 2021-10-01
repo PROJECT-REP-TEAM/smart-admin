@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.business.category;
 
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.category.domain.*;
@@ -39,7 +39,7 @@ public class CategoryService {
         // 校验类目
         CategoryEntity categoryEntity = SmartBeanUtil.copy(addDTO, CategoryEntity.class);
         ResponseDTO<String> res = this.checkCategory(categoryEntity, false);
-        if (!res.isSuccess()) {
+        if (!res.getOk()) {
             return res;
         }
         // 没有父类则使用默认父类
@@ -53,7 +53,7 @@ public class CategoryService {
 
         // 更新缓存
         categoryQueryService.removeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -68,7 +68,7 @@ public class CategoryService {
         Long categoryId = updateDTO.getCategoryId();
         Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
         if (!optional.isPresent()) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         CategoryEntity categoryEntity = SmartBeanUtil.copy(updateDTO, CategoryEntity.class);
 
@@ -81,14 +81,14 @@ public class CategoryService {
         categoryEntity.setParentId(optional.get().getParentId());
 
         ResponseDTO<String> responseDTO = this.checkCategory(categoryEntity, true);
-        if (!responseDTO.isSuccess()) {
+        if (!responseDTO.getOk()) {
             return responseDTO;
         }
         categoryDao.updateById(categoryEntity);
 
         // 更新缓存
         categoryQueryService.removeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -104,17 +104,17 @@ public class CategoryService {
         Integer categoryType = categoryEntity.getCategoryType();
         if (null != parentId) {
             if (Objects.equals(categoryEntity.getCategoryId(), parentId)) {
-                return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "父级类目怎么和自己相同了");
+                return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "父级类目怎么和自己相同了");
             }
             if (!Objects.equals(parentId, CommonConst.DEFAULT_PARENT_ID)) {
                 Optional<CategoryEntity> optional = categoryQueryService.queryCategory(parentId);
                 if (!optional.isPresent()) {
-                    return ResponseDTO.wrapMsg(ResponseCodeConst.NOT_EXISTS, "父级类目不存在~");
+                    return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "父级类目不存在~");
                 }
 
                 CategoryEntity parent = optional.get();
                 if (!Objects.equals(categoryType, parent.getCategoryType())) {
-                    return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "与父级类目类型不一致");
+                    return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "与父级类目类型不一致");
                 }
             }
 
@@ -133,13 +133,13 @@ public class CategoryService {
         if (null != queryEntity) {
             if (isUpdate) {
                 if (!Objects.equals(queryEntity.getCategoryId(), categoryEntity.getCategoryId())) {
-                    return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "同级下已存在相同类目~");
+                    return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "同级下已存在相同类目~");
                 }
             } else {
-                return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "同级下已存在相同类目~");
+                return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "同级下已存在相同类目~");
             }
         }
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -151,10 +151,10 @@ public class CategoryService {
     public ResponseDTO<CategoryVO> queryDetail(Long categoryId) {
         Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
         if (!optional.isPresent()) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         CategoryVO adminVO = SmartBeanUtil.copy(optional.get(), CategoryVO.class);
-        return ResponseDTO.succData(adminVO);
+        return ResponseDTO.ok(adminVO);
     }
 
     /**
@@ -167,12 +167,12 @@ public class CategoryService {
     public ResponseDTO<List<CategoryTreeVO>> queryTree(CategoryTreeQueryDTO queryDTO) {
         if (null == queryDTO.getParentId()) {
             if (null == queryDTO.getCategoryType()) {
-                return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "类目类型不能为空");
+                return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "类目类型不能为空");
             }
             queryDTO.setParentId(CommonConst.DEFAULT_PARENT_ID);
         }
         List<CategoryTreeVO> treeList = categoryQueryService.queryCategoryTree(queryDTO);
-        return ResponseDTO.succData(treeList);
+        return ResponseDTO.ok(treeList);
     }
 
     /**
@@ -185,12 +185,12 @@ public class CategoryService {
     public ResponseDTO<String> delete(Long categoryId) {
         Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
         if (!optional.isPresent()) {
-            return ResponseDTO.wrap(ResponseCodeConst.NOT_EXISTS);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         List<Long> categorySubId = categoryQueryService.queryCategorySubId(Lists.newArrayList(categoryId));
         if (CollectionUtils.isNotEmpty(categorySubId)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "请先删除子级类目");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请先删除子级类目");
         }
 
         // 更新数据
@@ -201,7 +201,7 @@ public class CategoryService {
 
         // 更新缓存
         categoryQueryService.removeCache();
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
 }

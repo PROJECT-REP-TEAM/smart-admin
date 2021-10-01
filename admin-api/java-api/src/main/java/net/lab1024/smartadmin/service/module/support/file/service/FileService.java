@@ -3,8 +3,8 @@ package net.lab1024.smartadmin.service.module.support.file.service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.codeconst.FileResponseCodeConst;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.constant.NumberLimitConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
@@ -78,7 +78,7 @@ public class FileService {
             MockMultipartFile file = new MockMultipartFile(fileKey, fileKey, contentType, urlConnection.getInputStream());
             return this.fileUpload(file, urlUploadDTO.getFolder(), urlUploadDTO.getUserId(), urlUploadDTO.getUserName());
         } catch (IOException e) {
-            return ResponseDTO.wrap(FileResponseCodeConst.UPLOAD_ERROR);
+            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "上传失败");
         }
     }
 
@@ -92,26 +92,26 @@ public class FileService {
     public ResponseDTO<FileUploadVO> fileUpload(MultipartFile file, Integer folderType, Long userId, String userName) {
         FileFolderTypeEnum folderTypeEnum = SmartBaseEnumUtil.getEnumByValue(folderType, FileFolderTypeEnum.class);
         if (null == folderTypeEnum) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_MODULE_ERROR);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "文件夹错误");
         }
         if (null == file || file.getSize() == 0) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_EMPTY);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "上传文件不能为空");
         }
         // 校验文件名称
         String originalFilename = file.getOriginalFilename();
         if (StringUtils.isBlank(originalFilename) || originalFilename.length() > NumberLimitConst.FILE_NAME) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_NAME_ERROR);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "上传文件名称不能为空");
         }
         // 校验文件大小
         String maxSizeStr = maxFileSize.toLowerCase().replace("mb", "");
         long maxSize = Integer.parseInt(maxSizeStr) * 1024 * 1024L;
         if (file.getSize() > maxSize) {
-            return ResponseDTO.wrapMsg(FileResponseCodeConst.FILE_SIZE_ERROR, String.format(FileResponseCodeConst.FILE_SIZE_ERROR.getMsg(), maxSize));
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "上传文件最大:" + maxSize);
         }
         // 获取文件服务
         ResponseDTO<FileUploadVO> response = fileStorageService.fileUpload(file, folderTypeEnum.getFolder());
 
-        if (response.isSuccess()) {
+        if (response.getOk()) {
             // 上传成功 保存记录数据库
             FileUploadVO uploadVO = response.getData();
 
@@ -174,13 +174,13 @@ public class FileService {
      */
     public ResponseDTO<String> getFileUrl(String fileKey) {
         if (StringUtils.isBlank(fileKey)) {
-            return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         // 处理逗号分隔的字符串
         List<String> stringList = Arrays.asList(fileKey.split(CommonConst.SEPARATOR));
         stringList = stringList.stream().map(e -> this.getCacheUrl(e)).collect(Collectors.toList());
         String result = StringUtils.join(stringList, CommonConst.SEPARATOR_CHAR);
-        return ResponseDTO.succData(result);
+        return ResponseDTO.ok(result);
     }
 
 
@@ -191,7 +191,7 @@ public class FileService {
             return fileUrl;
         }
         ResponseDTO<String> responseDTO = fileStorageService.getFileUrl(fileKey);
-        if (!responseDTO.isSuccess()) {
+        if (!responseDTO.getOk()) {
             return null;
         }
         fileUrl = responseDTO.getData();
@@ -218,7 +218,7 @@ public class FileService {
             return new FileUrlResultDTO(fileKey, result);
         }).collect(Collectors.toList());
 
-        return ResponseDTO.succData(resultDTOList);
+        return ResponseDTO.ok(resultDTOList);
     }
 
     /**
@@ -237,7 +237,7 @@ public class FileService {
             });
         }
         PageResultDTO<FileVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, fileList);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -250,7 +250,7 @@ public class FileService {
     public ResponseEntity<Object> downloadByFileKey(String fileKey, String userAgent) {
         // 根据文件服务类 获取对应文件服务 查询 url
         ResponseDTO<FileDownloadDTO> responseDTO = fileStorageService.fileDownload(fileKey);
-        if (!responseDTO.isSuccess()) {
+        if (!responseDTO.getOk()) {
             HttpHeaders heads = new HttpHeaders();
             heads.add(HttpHeaders.CONTENT_TYPE, "text/html;charset=UTF-8");
             return new ResponseEntity<>(responseDTO.getMsg() + "：" + fileKey, heads, HttpStatus.OK);
@@ -295,13 +295,13 @@ public class FileService {
      */
     public ResponseDTO<String> deleteByFileKey(String fileKey) {
         if (StringUtils.isBlank(fileKey)) {
-            return ResponseDTO.wrap(ResponseCodeConst.ERROR_PARAM);
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         FileEntity fileEntity = new FileEntity();
         fileEntity.setFileKey(fileKey);
         fileEntity = fileDao.selectOne(new QueryWrapper<>(fileEntity));
         if (null == fileEntity) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_NOT_EXIST);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         // 根据文件服务类 获取对应文件服务 删除文件
         return fileStorageService.delete(fileKey);
@@ -315,14 +315,14 @@ public class FileService {
      */
     public ResponseDTO<FileMetadataDTO> queryFileMetadata(String fileKey) {
         if (StringUtils.isBlank(fileKey)) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_NOT_EXIST);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         // 查询数据库文件记录
         FileEntity fileEntity = new FileEntity();
         fileEntity.setFileKey(fileKey);
         fileEntity = fileDao.selectOne(new QueryWrapper<>(fileEntity));
         if (null == fileEntity) {
-            return ResponseDTO.wrap(FileResponseCodeConst.FILE_NOT_EXIST);
+            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
 
         // 返回 meta
@@ -330,6 +330,6 @@ public class FileService {
         metadataDTO.setFileSize(fileEntity.getFileSize());
         metadataDTO.setFileName(fileEntity.getFileName());
         metadataDTO.setFileFormat(fileEntity.getFileType());
-        return ResponseDTO.succData(metadataDTO);
+        return ResponseDTO.ok(metadataDTO);
     }
 }

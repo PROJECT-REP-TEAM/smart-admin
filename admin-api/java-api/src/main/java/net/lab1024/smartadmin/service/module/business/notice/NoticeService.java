@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.business.notice;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.PageBaseDTO;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -47,7 +47,7 @@ public class NoticeService {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<NoticeVO> dtoList = noticeDao.queryByPage(page, queryDTO);
         PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -65,7 +65,7 @@ public class NoticeService {
             e.setReadStatus(e.getReceiveTime() != null);
         });
         PageResultDTO<NoticeReceiveDTO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -78,7 +78,7 @@ public class NoticeService {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<NoticeVO> dtoList = noticeDao.queryUnreadByPage(page, employeeId, true);
         PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
-        return ResponseDTO.succData(pageResultDTO);
+        return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
@@ -92,7 +92,7 @@ public class NoticeService {
         entity.setSendStatus(false);
         entity.setDeletedFlag(true);
         noticeDao.insert(entity);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -104,16 +104,16 @@ public class NoticeService {
     public ResponseDTO<String> update(NoticeUpdateDTO updateDTO) {
         NoticeEntity entity = noticeDao.selectById(updateDTO.getId());
         if (entity == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "此系统通知不存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知不存在");
         }
         if (entity.getDeletedFlag()) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "此系统通知已删除");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知已删除");
         }
         if (entity.getSendStatus()) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "此系统通知已发送无法修改");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知已发送无法修改");
         }
         noticeManage.update(updateDTO);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -124,10 +124,10 @@ public class NoticeService {
     public ResponseDTO<String> delete(Long id) {
         NoticeEntity entity = noticeDao.selectById(id);
         if (entity == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "此系统通知不存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知不存在");
         }
         noticeManage.delete(entity);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -137,7 +137,7 @@ public class NoticeService {
      */
     public ResponseDTO<NoticeDetailVO> detail(Long id) {
         NoticeDetailVO noticeDTO = noticeDao.detail(id);
-        return ResponseDTO.succData(noticeDTO);
+        return ResponseDTO.ok(noticeDTO);
     }
 
     /**
@@ -160,11 +160,11 @@ public class NoticeService {
     public ResponseDTO<NoticeDetailVO> send(Long id, Long employeeId) {
         NoticeEntity entity = noticeDao.selectById(id);
         if (entity == null) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "此系统通知不存在");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知不存在");
         }
         noticeManage.send(entity, employeeId);
         this.sendMessage(employeeId);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
     /**
@@ -206,10 +206,10 @@ public class NoticeService {
 
         NoticeReceiveRecordEntity recordEntity = noticeReceiveRecordDao.selectByEmployeeAndNotice(employeeId, id);
         if (recordEntity != null) {
-            return ResponseDTO.succData(noticeDTO);
+            return ResponseDTO.ok(noticeDTO);
         }
         noticeManage.saveReadRecord(id, employeeId);
         this.sendMessage(employeeId);
-        return ResponseDTO.succData(noticeDTO);
+        return ResponseDTO.ok(noticeDTO);
     }
 }

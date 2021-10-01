@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.datascope.service;
 
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.codeconst.ResponseCodeConst;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.datascope.DataScopeRoleDao;
 import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
@@ -40,7 +40,7 @@ public class DataScopeService {
         dataScopeAndTypeList.forEach(e -> {
             e.setViewTypeList(typeList);
         });
-        return ResponseDTO.succData(dataScopeAndTypeList);
+        return ResponseDTO.ok(dataScopeAndTypeList);
     }
 
     /**
@@ -85,10 +85,10 @@ public class DataScopeService {
 
         List<DataScopeRoleEntity> dataScopeRoleEntityList = dataScopeRoleDao.listByRoleId(roleId);
         if (CollectionUtils.isEmpty(dataScopeRoleEntityList)) {
-            return ResponseDTO.succData(Lists.newArrayList());
+            return ResponseDTO.ok(Lists.newArrayList());
         }
         List<DataScopeSelectVO> dataScopeSelects = SmartBeanUtil.copyList(dataScopeRoleEntityList, DataScopeSelectVO.class);
-        return ResponseDTO.succData(dataScopeSelects);
+        return ResponseDTO.ok(dataScopeSelects);
     }
 
     /**
@@ -101,13 +101,13 @@ public class DataScopeService {
     public ResponseDTO<String> dataScopeBatchSet(DataScopeBatchSetRoleDTO batchSetRoleDTO) {
         List<DataScopeBatchSetDTO> batchSetList = batchSetRoleDTO.getBatchSetList();
         if (CollectionUtils.isEmpty(batchSetList)) {
-            return ResponseDTO.wrapMsg(ResponseCodeConst.ERROR_PARAM, "缺少配置信息");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "缺少配置信息");
         }
         List<DataScopeRoleEntity> dataScopeRoleEntityList = SmartBeanUtil.copyList(batchSetList, DataScopeRoleEntity.class);
         dataScopeRoleEntityList.forEach(e -> e.setRoleId(batchSetRoleDTO.getRoleId()));
         dataScopeRoleDao.deleteByRoleId(batchSetRoleDTO.getRoleId());
         dataScopeRoleDao.batchInsert(dataScopeRoleEntityList);
-        return ResponseDTO.succ();
+        return ResponseDTO.ok();
     }
 
 }
