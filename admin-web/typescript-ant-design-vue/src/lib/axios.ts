@@ -38,7 +38,7 @@ smartAxios.interceptors.response.use(
     const res = response.data;
     if (res.code && res.code !== 1) {
       // `token` 过期或者账号已在别处登录
-      if (res.code === 1001) {
+      if (res.code === 30007 || res.code === 30008) {
         message.error('您没有登录，请重新登录');
         //TODO 跳转到登录页面
         setTimeout(() => {
