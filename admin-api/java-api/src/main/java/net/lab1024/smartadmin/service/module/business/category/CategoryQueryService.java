@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
+import net.lab1024.smartadmin.service.module.business.category.constant.CategoryConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategorySimpleDTO;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeQueryDTO;
@@ -118,7 +119,7 @@ public class CategoryQueryService {
      */
     public List<CategoryEntity> queryCategoryByParent(Long categoryId, Integer categoryType) {
         if (null == categoryId) {
-            return StringConst.EMPTY_LIST;
+            return Collections.emptyList();
         }
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY_SUB, getCacheId(categoryId, categoryType));
         return cache.get(cacheKey);
@@ -132,7 +133,7 @@ public class CategoryQueryService {
      */
     public Map<Long, CategoryEntity> queryCategoryList(List<Long> categoryIdList) {
         if (CollectionUtils.isEmpty(categoryIdList)) {
-            return StringConst.EMPTY_MAP;
+            return Collections.emptyMap();
         }
         categoryIdList = categoryIdList.stream().distinct().collect(Collectors.toList());
 
@@ -161,7 +162,7 @@ public class CategoryQueryService {
      */
     public List<Long> queryCategorySubId(List<Long> categoryIdList) {
         if (CollectionUtils.isEmpty(categoryIdList)) {
-            return StringConst.EMPTY_LIST;
+            return Collections.emptyList();
         }
         // 查询所有子类
         Map<Long, List<CategoryEntity>> subTypeMap = this.querySubCategoryFromCache(categoryIdList);
@@ -288,7 +289,7 @@ public class CategoryQueryService {
         // 父级始终放在第一位
         parentCategoryList.add(0, categoryEntity);
         Long parentId = categoryEntity.getParentId();
-        if (Objects.equals(StringConst.DEFAULT_PARENT_ID, parentId)) {
+        if (Objects.equals(CategoryConst.DEFAULT_PARENT_ID, parentId)) {
             return parentCategoryList;
         }
         parentCategoryList.addAll(0, this.queryCategoryAndParent(parentId));

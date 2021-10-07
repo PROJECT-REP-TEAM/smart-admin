@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -402,7 +403,7 @@ public class EmployeeService {
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
         List<EmployeeEntity> employeeEntityList = beanCache.get(cacheKey);
         if (CollectionUtils.isEmpty(employeeEntityList)) {
-            return ResponseDTO.ok(StringConst.EMPTY_LIST);
+            return ResponseDTO.ok(Collections.emptyList());
         }
         List<EmployeeVO> voList = SmartBeanUtil.copyList(employeeEntityList, EmployeeVO.class);
         return ResponseDTO.ok(voList);

@@ -173,7 +173,7 @@ public class DepartmentService {
         List<DepartmentVO> deptList = departmentVOList.stream().filter(e -> e.getId().equals(parentId)).collect(Collectors.toList());
         for (DepartmentVO item : deptList) {
             result.add(item);
-            if (item.getParentId() != StringConst.DEFAULT_PARENT_ID && item.getParentId() != null) {
+            if (item.getParentId() != DepartmentConst.DEFAULT_PARENT_ID && item.getParentId() != null) {
                 result.addAll(getParentDepartment(departmentVOList, item.getParentId(), result));
             }
         }
@@ -341,7 +341,7 @@ public class DepartmentService {
         if (departmentEntity == null) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
-        if (departmentEntity.getParentId() == null || departmentEntity.getParentId().equals(StringConst.DEFAULT_PARENT_ID)) {
+        if (departmentEntity.getParentId() == null || departmentEntity.getParentId().equals(DepartmentConst.DEFAULT_PARENT_ID)) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此部门已经是根节点无法移动");
         }
         DepartmentEntity parentEntity = departmentDao.selectById(departmentEntity.getParentId());
@@ -453,7 +453,7 @@ public class DepartmentService {
      */
     private void recursionFindParentDepartmentName(List<String> departmentNameList, List<DepartmentVO> departmentList, Long departmentId) {
         Optional<DepartmentVO> findRes = departmentList.stream().filter(e -> e.getId().equals(departmentId)).findFirst();
-        if (!findRes.isPresent() || findRes.get().getParentId() == StringConst.DEFAULT_PARENT_ID) {
+        if (!findRes.isPresent() || findRes.get().getParentId() == DepartmentConst.DEFAULT_PARENT_ID) {
             return;
         }
         DepartmentVO departmentVO = findRes.get();
@@ -501,7 +501,7 @@ public class DepartmentService {
     private DepartmentVO recursionFindSchoolDepartmentId(List<DepartmentVO> departmentList, Long departmentId) {
         Optional<DepartmentVO> findRes = departmentList.stream().filter(e -> e.getId().equals(departmentId)).findFirst();
         // 如果查询不到 或者自己本身为最顶级 返回null
-        if (!findRes.isPresent() || findRes.get().getParentId() == StringConst.DEFAULT_PARENT_ID) {
+        if (!findRes.isPresent() || findRes.get().getParentId() == DepartmentConst.DEFAULT_PARENT_ID) {
             return null;
         }
         DepartmentVO departmentVO = findRes.get();
@@ -512,7 +512,7 @@ public class DepartmentService {
             return null;
         }
         // 若父级为最顶级 则返回本级ID
-        if (parentFindRes.get().getParentId() == StringConst.DEFAULT_PARENT_ID) {
+        if (parentFindRes.get().getParentId() == DepartmentConst.DEFAULT_PARENT_ID) {
             return departmentVO;
         }
         // 若父级不为最顶级 进入递归

@@ -231,7 +231,7 @@ public class MenuService {
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, disabledFlag, null);
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuVO> filterMenuVOList = this.filterNoParentMenu(parentMap, StringConst.DEFAULT_PARENT_ID);
+        List<MenuVO> filterMenuVOList = this.filterNoParentMenu(parentMap, MenuConst.DEFAULT_PARENT_ID);
         return filterMenuVOList;
     }
 
@@ -275,7 +275,7 @@ public class MenuService {
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, null, menuTypeList);
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, StringConst.DEFAULT_PARENT_ID);
+        List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, MenuConst.DEFAULT_PARENT_ID);
         return ResponseDTO.ok(menuTreeVOList);
     }
 

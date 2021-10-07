@@ -29,7 +29,7 @@ public class DepartmentTreeService {
         if (CollectionUtils.isEmpty(voList)) {
             return Lists.newArrayList();
         }
-        List<DepartmentVO> rootList = voList.stream().filter(e -> e.getParentId() == null || e.getParentId() == StringConst.DEFAULT_PARENT_ID).collect(Collectors.toList());
+        List<DepartmentVO> rootList = voList.stream().filter(e -> e.getParentId() == null || e.getParentId() == DepartmentConst.DEFAULT_PARENT_ID).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(rootList)) {
             return Lists.newArrayList();
         }
