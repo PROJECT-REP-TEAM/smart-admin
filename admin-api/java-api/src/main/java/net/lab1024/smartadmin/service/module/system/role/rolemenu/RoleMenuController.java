@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.system.role.rolemenu;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.domain.RoleMenuDTO;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.domain.RoleMenuTreeVO;
@@ -20,7 +20,7 @@ import javax.validation.Valid;
  */
 @RestController
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_ROLE_MENU})
-public class RoleMenuController extends AdminBaseController {
+public class RoleMenuController extends SystemBaseController {
 
     @Autowired
     private RoleMenuService roleMenuService;

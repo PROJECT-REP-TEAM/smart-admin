@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScope
 import net.lab1024.smartadmin.service.module.system.datascope.domain.dto.DataScopeSqlConfigDTO;
 import net.lab1024.smartadmin.service.module.system.datascope.strategy.DataScopePowerStrategy;
 import net.lab1024.smartadmin.service.third.SmartApplicationContext;
-import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;

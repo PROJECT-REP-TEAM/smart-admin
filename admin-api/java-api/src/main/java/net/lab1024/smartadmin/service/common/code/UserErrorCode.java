@@ -32,8 +32,6 @@ public enum UserErrorCode implements ErrorCode {
 
     LOGIN_FAILED(30010, "用户名或密码错误!"),
 
-    VERIFICATION_CODE_INVALID(30011, "验证码错误或已过期，请输入正确的验证码"),
-
     ;
 
     private final int code;

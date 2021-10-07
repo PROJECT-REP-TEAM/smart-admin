@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.role.rolemenu;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.menu.MenuDao;
 import net.lab1024.smartadmin.service.module.system.menu.MenuEmployeeService;
@@ -13,7 +13,7 @@ import net.lab1024.smartadmin.service.module.system.role.basic.domain.entity.Rol
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.domain.RoleMenuDTO;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.domain.RoleMenuEntity;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.domain.RoleMenuTreeVO;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -83,7 +83,7 @@ public class RoleMenuService {
         //查询菜单权限
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, Boolean.FALSE, null);
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, StringConst.DEFAULT_PARENT_ID);
         res.setMenuTreeList(menuTreeList);
         return ResponseDTO.ok(res);
     }

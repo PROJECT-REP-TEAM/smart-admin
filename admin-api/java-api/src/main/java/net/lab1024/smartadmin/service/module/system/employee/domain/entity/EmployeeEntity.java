@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.enumconst.GenderEnum;
+import net.lab1024.smartadmin.service.common.enumeration.GenderEnum;
 
 import java.time.LocalDateTime;
 

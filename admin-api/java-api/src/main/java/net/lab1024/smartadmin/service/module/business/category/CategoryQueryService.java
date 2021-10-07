@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.business.category;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategorySimpleDTO;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeQueryDTO;
@@ -11,8 +11,8 @@ import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTr
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
 import net.lab1024.smartadmin.service.module.support.beancache.anno.CacheLoad;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartStringUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +63,7 @@ public class CategoryQueryService {
          * 左边 categoryId 右边 type
          */
         String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
-        String[] split = businessId.split(CommonConst.UNDERLINE);
+        String[] split = businessId.split(StringConst.UNDERLINE);
         Integer categoryType = split.length > 1 ? Integer.valueOf(split[1]) : null;
         return categoryDao.queryByParentId(Lists.newArrayList(Long.valueOf(split[0])), categoryType, false);
     }
@@ -76,7 +76,7 @@ public class CategoryQueryService {
      * @return
      */
     private static String getCacheId(Long categoryId, Integer categoryType) {
-        return categoryId + CommonConst.UNDERLINE + categoryType;
+        return categoryId + StringConst.UNDERLINE + categoryType;
     }
 
     /**
@@ -118,7 +118,7 @@ public class CategoryQueryService {
      */
     public List<CategoryEntity> queryCategoryByParent(Long categoryId, Integer categoryType) {
         if (null == categoryId) {
-            return CommonConst.EMPTY_LIST;
+            return StringConst.EMPTY_LIST;
         }
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY_SUB, getCacheId(categoryId, categoryType));
         return cache.get(cacheKey);
@@ -132,7 +132,7 @@ public class CategoryQueryService {
      */
     public Map<Long, CategoryEntity> queryCategoryList(List<Long> categoryIdList) {
         if (CollectionUtils.isEmpty(categoryIdList)) {
-            return CommonConst.EMPTY_MAP;
+            return StringConst.EMPTY_MAP;
         }
         categoryIdList = categoryIdList.stream().distinct().collect(Collectors.toList());
 
@@ -161,7 +161,7 @@ public class CategoryQueryService {
      */
     public List<Long> queryCategorySubId(List<Long> categoryIdList) {
         if (CollectionUtils.isEmpty(categoryIdList)) {
-            return CommonConst.EMPTY_LIST;
+            return StringConst.EMPTY_LIST;
         }
         // 查询所有子类
         Map<Long, List<CategoryEntity>> subTypeMap = this.querySubCategoryFromCache(categoryIdList);
@@ -236,7 +236,7 @@ public class CategoryQueryService {
             childrenVOList.forEach(item -> {
                 item.setLabel(item.getCategoryName());
                 item.setValue(item.getCategoryId());
-                item.setCategoryFullName(e.getCategoryFullName() + CommonConst.SEPARATOR_SLASH + item.getCategoryName());
+                item.setCategoryFullName(e.getCategoryFullName() + StringConst.SEPARATOR_SLASH + item.getCategoryName());
             });
             // 递归查询
             this.queryAndSetSubCategory(childrenVOList);
@@ -266,7 +266,7 @@ public class CategoryQueryService {
         CategorySimpleDTO categoryDTO = new CategorySimpleDTO();
         categoryDTO.setCategoryId(categoryId);
         categoryDTO.setCategoryName(categoryEntity.getCategoryName());
-        categoryDTO.setCategoryFullName(SmartStringUtil.join(nameList, CommonConst.SEPARATOR_SLASH));
+        categoryDTO.setCategoryFullName(SmartStringUtil.join(nameList, StringConst.SEPARATOR_SLASH));
         categoryDTO.setParentId(categoryEntity.getParentId());
         return categoryDTO;
     }
@@ -288,7 +288,7 @@ public class CategoryQueryService {
         // 父级始终放在第一位
         parentCategoryList.add(0, categoryEntity);
         Long parentId = categoryEntity.getParentId();
-        if (Objects.equals(CommonConst.DEFAULT_PARENT_ID, parentId)) {
+        if (Objects.equals(StringConst.DEFAULT_PARENT_ID, parentId)) {
             return parentCategoryList;
         }
         parentCategoryList.addAll(0, this.queryCategoryAndParent(parentId));

@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.module.system.role.basic.domain.entity.Rol
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.vo.RoleVO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.RoleEmployeeDao;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.RoleMenuDao;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

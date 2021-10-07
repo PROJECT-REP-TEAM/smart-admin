@@ -3,10 +3,10 @@ package net.lab1024.smartadmin.service.module.system.menu;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.*;
-import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_MENU})
 @RestController
-public class MenuController extends AdminBaseController {
+public class MenuController extends SystemBaseController {
 
     @Autowired
     private MenuService menuService;

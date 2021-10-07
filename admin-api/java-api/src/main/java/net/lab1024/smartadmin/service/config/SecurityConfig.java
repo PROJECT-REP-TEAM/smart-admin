@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.config;
 
-import net.lab1024.smartadmin.service.common.security.SmartSecurityUrlMatchers;
-import net.lab1024.smartadmin.service.filter.SmartSecurityTokenFilter;
-import net.lab1024.smartadmin.service.common.security.SmartSecurityAuthenticationFailHandler;
+import net.lab1024.smartadmin.service.common.security.SecurityUrlMatchers;
+import net.lab1024.smartadmin.service.filter.SecurityTokenFilter;
+import net.lab1024.smartadmin.service.common.security.SecurityAuthenticationFailHandler;
 import net.lab1024.smartadmin.service.module.system.login.EmployeeLoginTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * url
      */
     @Autowired
-    private SmartSecurityUrlMatchers smartSecurityUrlMatchers;
+    private SecurityUrlMatchers securityUrlMatchers;
 
     /**
      * 获取TOKEN 解析类
@@ -70,27 +70,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // CSRF禁用，因为不使用session
                 .csrf().disable()
                 // 认证失败处理类
-                .exceptionHandling().authenticationEntryPoint(new SmartSecurityAuthenticationFailHandler()).and()
+                .exceptionHandling().authenticationEntryPoint(new SecurityAuthenticationFailHandler()).and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 // 过滤请求
                 .authorizeRequests();
         //可以匿名登录的URL
-        String [] anonymousUrlArray = smartSecurityUrlMatchers.getAnonymousUrlArray();
+        String [] anonymousUrlArray = securityUrlMatchers.getAnonymousUrlArray();
         interceptUrlRegistry.antMatchers(anonymousUrlArray).permitAll();
 
         //登录的URL
-        String [] authenticatedUrlArray = smartSecurityUrlMatchers.getAuthenticatedUrlArray();
+        String [] authenticatedUrlArray = securityUrlMatchers.getAuthenticatedUrlArray();
         interceptUrlRegistry.antMatchers(authenticatedUrlArray).authenticated();
 
-        httpSecurity.addFilterBefore(new SmartSecurityTokenFilter(loginTokenService), UsernamePasswordAuthenticationFilter.class);
-        httpSecurity.addFilterBefore(corsFilter(), SmartSecurityTokenFilter.class);
+        httpSecurity.addFilterBefore(new SecurityTokenFilter(loginTokenService), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(corsFilter(), SecurityTokenFilter.class);
     }
 
     @Override
     public void configure(WebSecurity web) {
         // 忽略url
         WebSecurity.IgnoredRequestConfigurer ignoring = web.ignoring();
-        List<String> ignoreUrlListList = smartSecurityUrlMatchers.getIgnoreUrl();
+        List<String> ignoreUrlListList = securityUrlMatchers.getIgnoreUrl();
         for (String url : ignoreUrlListList) {
             ignoring.antMatchers(url);
         }

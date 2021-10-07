@@ -2,10 +2,10 @@ package net.lab1024.smartadmin.service.module.system.login;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
-import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaDTO;
+import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaForm;
 import net.lab1024.smartadmin.service.module.system.department.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
@@ -18,7 +18,7 @@ import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginIn
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginVO;
 import net.lab1024.smartadmin.service.module.system.menu.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.menu.domain.MenuLoginBO;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +60,7 @@ public class EmployeeLoginService {
      */
     public ResponseDTO<EmployeeLoginVO> login(EmployeeLoginDTO loginDTO) {
         // 校验图形验证码
-        CaptchaDTO captcha = loginDTO.getCaptcha();
+        CaptchaForm captcha = loginDTO.getCaptcha();
         if (null != captcha) {
             ResponseDTO<String> res = captchaService.checkCaptcha(captcha.getCaptchaId(), captcha.getCaptcha());
             if (!res.getOk()) {
@@ -90,7 +90,7 @@ public class EmployeeLoginService {
 
         // 查询部门
         DepartmentEntity deptEntity = departmentDao.selectById(employeeEntity.getDepartmentId());
-        String deptName = null == deptEntity ? CommonConst.EMPTY_STR : deptEntity.getName();
+        String deptName = null == deptEntity ? StringConst.EMPTY_STR : deptEntity.getName();
 
         // 查询所在校区
         DepartmentVO schoolIdByDepartment = departmentService.getSchoolIdByDepartment(employeeEntity.getDepartmentId());

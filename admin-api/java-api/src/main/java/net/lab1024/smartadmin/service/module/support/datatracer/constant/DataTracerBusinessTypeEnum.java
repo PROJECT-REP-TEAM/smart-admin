@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.datatracer.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 
 /**
  * [ 数据业务类型 ]

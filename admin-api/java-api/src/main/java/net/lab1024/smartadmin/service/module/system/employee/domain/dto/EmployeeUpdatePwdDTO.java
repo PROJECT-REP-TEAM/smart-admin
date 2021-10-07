@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.employee.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.util.SmartVerificationUtil;
+import net.lab1024.smartadmin.service.common.util.SmartVerificationUtil;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

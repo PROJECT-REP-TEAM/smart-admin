@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.module.support.reload.core;
 
 
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.module.support.reload.core.anno.SmartReload;
-import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadObject;
+import net.lab1024.smartadmin.service.module.support.reload.core.annoation.SmartReload;
+import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadObject;
 import net.lab1024.smartadmin.service.module.support.reload.core.thread.SmartReloadRunnable;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -28,7 +28,7 @@ public class SmartReloadManager implements BeanPostProcessor {
     private static final String THREAD_NAME_PREFIX = "smart-admin-reload";
     private static final int THREAD_COUNT = 1;
 
-    private Map<String, ReloadObject> reloadObjectMap = new ConcurrentHashMap<>();
+    private Map<String, SmartReloadObject> reloadObjectMap = new ConcurrentHashMap<>();
 
     private ScheduledThreadPoolExecutor threadPoolExecutor;
 
@@ -62,7 +62,7 @@ public class SmartReloadManager implements BeanPostProcessor {
                 continue;
             }
             String reloadTag = smartReload.value();
-            this.register(reloadTag, new ReloadObject(bean, method));
+            this.register(reloadTag, new SmartReloadObject(bean, method));
         }
         return bean;
     }
@@ -71,13 +71,13 @@ public class SmartReloadManager implements BeanPostProcessor {
      * 注册reload
      *
      * @param tag
-     * @param reloadObject
+     * @param smartReloadObject
      */
-    private void register(String tag, ReloadObject reloadObject) {
+    private void register(String tag, SmartReloadObject smartReloadObject) {
         if (reloadObjectMap.containsKey(tag)) {
             log.error("<<SmartReloadManager>> register duplicated tag reload : " + tag + " , and it will be cover!");
         }
-        reloadObjectMap.put(tag, reloadObject);
+        reloadObjectMap.put(tag, smartReloadObject);
     }
 
     /**
@@ -85,7 +85,7 @@ public class SmartReloadManager implements BeanPostProcessor {
      *
      * @return
      */
-    public Map<String, ReloadObject> reloadObjectMap() {
+    public Map<String, SmartReloadObject> reloadObjectMap() {
         return this.reloadObjectMap;
     }
 

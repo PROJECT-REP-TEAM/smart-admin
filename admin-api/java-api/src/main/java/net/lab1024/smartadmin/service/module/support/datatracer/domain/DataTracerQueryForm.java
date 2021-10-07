@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.support.datatracer.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.domain.PageBaseDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerBusinessTypeEnum;
 
@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @date 2021/8/17 8:47
  */
 @Data
-public class DataTracerQueryForm extends PageBaseDTO {
+public class DataTracerQueryForm extends PageParamDTO {
 
     @ApiModelPropertyEnum(DataTracerBusinessTypeEnum.class)
     private Integer businessType;

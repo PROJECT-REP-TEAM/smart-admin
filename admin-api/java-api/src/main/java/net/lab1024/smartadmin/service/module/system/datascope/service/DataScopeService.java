@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScope
 import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum;
 import net.lab1024.smartadmin.service.module.system.datascope.domain.dto.*;
 import net.lab1024.smartadmin.service.module.system.datascope.domain.entity.DataScopeRoleEntity;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

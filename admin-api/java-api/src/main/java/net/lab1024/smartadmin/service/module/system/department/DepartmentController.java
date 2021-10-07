@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.system.department;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.department.domain.dto.DepartmentCreateDTO;
 import net.lab1024.smartadmin.service.module.system.department.domain.dto.DepartmentUpdateDTO;
@@ -24,7 +24,7 @@ import java.util.List;
  */
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_DEPARTMENT})
 @RestController
-public class DepartmentController extends AdminBaseController {
+public class DepartmentController extends SystemBaseController {
 
     @Autowired
     private DepartmentService departmentService;

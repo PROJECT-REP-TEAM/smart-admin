@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.support.file.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 
 /**
  * 文件服务 文件夹位置类型枚举类

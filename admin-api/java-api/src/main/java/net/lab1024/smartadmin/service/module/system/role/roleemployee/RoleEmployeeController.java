@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
@@ -26,7 +26,7 @@ import java.util.List;
  */
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_ROLE})
 @RestController
-public class RoleEmployeeController extends AdminBaseController {
+public class RoleEmployeeController extends SystemBaseController {
 
     @Autowired
     private RoleEmployeeService roleEmployeeService;

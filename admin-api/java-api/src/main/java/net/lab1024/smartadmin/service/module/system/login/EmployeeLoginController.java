@@ -2,14 +2,14 @@ package net.lab1024.smartadmin.service.module.system.login;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.anno.NoNeedLogin;
+import net.lab1024.smartadmin.service.common.annoation.NoNeedLogin;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeLoginDTO;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginVO;
-import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @RestController
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_EMPLOYEE_LOGIN})
-public class EmployeeLoginController extends AdminBaseController {
+public class EmployeeLoginController extends SystemBaseController {
 
     @Autowired
     private EmployeeLoginService employeeLoginService;

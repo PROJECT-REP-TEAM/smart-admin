@@ -9,7 +9,7 @@ import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.RequestHeaderConst;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.enumeration.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerApiModelPropertyEnumPlugin;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeansException;

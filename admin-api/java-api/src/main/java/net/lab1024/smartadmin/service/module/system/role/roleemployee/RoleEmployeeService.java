@@ -17,8 +17,8 @@ import net.lab1024.smartadmin.service.module.system.role.basic.domain.entity.Rol
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.vo.RoleSelectedVO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeBatchDTO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeEntity;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

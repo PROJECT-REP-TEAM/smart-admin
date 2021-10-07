@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.config;
 
-import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
-import net.lab1024.smartadmin.service.common.domain.SystemEnvironmentBO;
-import net.lab1024.smartadmin.service.util.SmartBaseEnumUtil;
+import net.lab1024.smartadmin.service.common.enumeration.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.domain.SystemEnvironment;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,12 +30,12 @@ public class SystemEnvironmentConfig implements Condition {
     }
 
     @Bean
-    public SystemEnvironmentBO initEnvironment() {
+    public SystemEnvironment initEnvironment() {
         SystemEnvironmentEnum currentEnvironment = SmartBaseEnumUtil.getEnumByValue(systemEnvironment, SystemEnvironmentEnum.class);
         if (currentEnvironment == null) {
             throw new ExceptionInInitializerError("无法获取当前环境！请在 application.properties 或者 application.yaml 配置好参数：spring.profiles.active");
         }
-        return new SystemEnvironmentBO(currentEnvironment == SystemEnvironmentEnum.PROD, currentEnvironment);
+        return new SystemEnvironment(currentEnvironment == SystemEnvironmentEnum.PROD, currentEnvironment);
 
     }
 }

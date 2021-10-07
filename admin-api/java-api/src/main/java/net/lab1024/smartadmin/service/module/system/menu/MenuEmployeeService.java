@@ -11,7 +11,7 @@ import net.lab1024.smartadmin.service.module.system.menu.domain.MenuTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.MenuVO;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.RoleMenuDao;
 import net.lab1024.smartadmin.service.module.system.role.rolemenu.domain.RoleMenuEntity;
-import net.lab1024.smartadmin.service.util.SmartStringUtil;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.apache.commons.lang3.StringUtils;

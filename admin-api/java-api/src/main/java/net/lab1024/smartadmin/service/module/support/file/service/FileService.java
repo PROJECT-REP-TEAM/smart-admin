@@ -5,8 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
-import net.lab1024.smartadmin.service.common.constant.NumberLimitConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -17,9 +16,9 @@ import net.lab1024.smartadmin.service.module.support.file.domain.dto.*;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
 import net.lab1024.smartadmin.service.third.SmartRedisService;
-import net.lab1024.smartadmin.service.util.SmartBaseEnumUtil;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +46,11 @@ import java.util.stream.Collectors;
  */
 @Service
 public class FileService {
+
+    /**
+     * 文件名最大长度
+     */
+    private static final int FILE_NAME_MAX_LENGTH = 100;
 
     @Resource
     private IFileStorageService fileStorageService;
@@ -99,7 +103,7 @@ public class FileService {
         }
         // 校验文件名称
         String originalFilename = file.getOriginalFilename();
-        if (StringUtils.isBlank(originalFilename) || originalFilename.length() > NumberLimitConst.FILE_NAME) {
+        if (StringUtils.isBlank(originalFilename) || originalFilename.length() > FILE_NAME_MAX_LENGTH) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "上传文件名称不能为空");
         }
         // 校验文件大小
@@ -126,10 +130,10 @@ public class FileService {
             fileDao.insert(fileEntity);
             uploadVO.setFileId(fileEntity.getId());
             //添加缓存
-            String redisKey = RedisKeyConst.Base.FILE_URL + uploadVO.getFileKey();
+            String redisKey = RedisKeyConst.Support.FILE_URL + uploadVO.getFileKey();
             redisService.set(redisKey, uploadVO.getFileUrl(), fileStorageService.cacheExpireSecond());
 
-            String fileRedisKey = RedisKeyConst.Base.FILE_VO + uploadVO.getFileKey();
+            String fileRedisKey = RedisKeyConst.Support.FILE_VO + uploadVO.getFileKey();
             FileVO fileVO = SmartBeanUtil.copy(fileEntity, FileVO.class);
             redisService.set(fileRedisKey, fileVO, fileStorageService.cacheExpireSecond());
         }
@@ -152,7 +156,7 @@ public class FileService {
     }
 
     private FileVO getCacheFileVO(String fileKey) {
-        String redisKey = RedisKeyConst.Base.FILE_VO + fileKey;
+        String redisKey = RedisKeyConst.Support.FILE_VO + fileKey;
         FileVO fileVO = redisService.getObject(redisKey, FileVO.class);
         if (fileVO == null) {
             fileVO = fileDao.getByFileKey(fileKey);
@@ -177,15 +181,15 @@ public class FileService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         // 处理逗号分隔的字符串
-        List<String> stringList = Arrays.asList(fileKey.split(CommonConst.SEPARATOR));
+        List<String> stringList = Arrays.asList(fileKey.split(StringConst.SEPARATOR));
         stringList = stringList.stream().map(e -> this.getCacheUrl(e)).collect(Collectors.toList());
-        String result = StringUtils.join(stringList, CommonConst.SEPARATOR_CHAR);
+        String result = StringUtils.join(stringList, StringConst.SEPARATOR_CHAR);
         return ResponseDTO.ok(result);
     }
 
 
     private String getCacheUrl(String fileKey) {
-        String redisKey = RedisKeyConst.Base.FILE_URL + fileKey;
+        String redisKey = RedisKeyConst.Support.FILE_URL + fileKey;
         String fileUrl = redisService.get(redisKey);
         if (null != fileUrl) {
             return fileUrl;
@@ -212,9 +216,9 @@ public class FileService {
         List<String> fileKeyList = queryDTO.getFileKeyList();
         List<FileUrlResultDTO> resultDTOList = fileKeyList.stream().map(fileKey -> {
             // 处理逗号分隔的字符串
-            List<String> stringList = Arrays.asList(fileKey.split(CommonConst.SEPARATOR));
+            List<String> stringList = Arrays.asList(fileKey.split(StringConst.SEPARATOR));
             stringList = stringList.stream().map(e -> fileStorageService.getFileUrl(e).getData()).collect(Collectors.toList());
-            String result = StringUtils.join(stringList, CommonConst.SEPARATOR_CHAR);
+            String result = StringUtils.join(stringList, StringConst.SEPARATOR_CHAR);
             return new FileUrlResultDTO(fileKey, result);
         }).collect(Collectors.toList());
 

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.system.datascope.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import net.lab1024.smartadmin.service.common.enumconst.BaseEnum;
+import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 
 /**
  * [  ]

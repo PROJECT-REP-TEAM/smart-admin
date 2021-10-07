@@ -4,7 +4,7 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
@@ -54,7 +54,7 @@ public class CaptchaService {
             return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "generate captcha error" );
         }
         // uuid 唯一标识
-        String uuid = UUID.randomUUID().toString().replace("-", CommonConst.EMPTY_STR);
+        String uuid = UUID.randomUUID().toString().replace("-", StringConst.EMPTY_STR);
 
         /**
          * 返回验证码对象
@@ -82,10 +82,10 @@ public class CaptchaService {
         String redisKey = buildCaptchaRedisKey(captchaId);
         String redisCode = redisService.get(redisKey);
         if (StringUtils.isBlank(redisCode)) {
-            return ResponseDTO.error(UserErrorCode.VERIFICATION_CODE_INVALID, "验证码错误或已过期，请刷新重试" );
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误或已过期，请刷新重试" );
         }
         if (!Objects.equals(redisCode, captcha)) {
-            return ResponseDTO.error(UserErrorCode.VERIFICATION_CODE_INVALID, "验证码错误或已过期，请刷新重试" );
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误或已过期，请刷新重试" );
         }
         // 校验通过 移除
         redisService.del(redisKey);
@@ -93,6 +93,6 @@ public class CaptchaService {
     }
 
     private String buildCaptchaRedisKey(String codeId) {
-        return RedisKeyConst.Base.CAPTCHA + codeId;
+        return RedisKeyConst.Support.CAPTCHA + codeId;
     }
 }

@@ -1,12 +1,10 @@
 package net.lab1024.smartadmin.service.module.system.menu;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.module.system.menu.domain.RequestUrlVO;
-import net.lab1024.smartadmin.service.util.SmartStringUtil;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.AnnotationUtils;

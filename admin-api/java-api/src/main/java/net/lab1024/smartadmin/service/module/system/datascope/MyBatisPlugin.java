@@ -4,7 +4,7 @@ import com.google.common.collect.Maps;
 import net.lab1024.smartadmin.service.module.system.datascope.domain.dto.DataScopeSqlConfigDTO;
 import net.lab1024.smartadmin.service.module.system.datascope.service.DataScopeSqlConfigService;
 import net.lab1024.smartadmin.service.third.SmartApplicationContext;
-import net.lab1024.smartadmin.service.util.SmartStringUtil;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.plugin.*;

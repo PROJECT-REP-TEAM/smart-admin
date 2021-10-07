@@ -1,10 +1,10 @@
 package net.lab1024.smartadmin.service.module.system.department;
 
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +29,7 @@ public class DepartmentTreeService {
         if (CollectionUtils.isEmpty(voList)) {
             return Lists.newArrayList();
         }
-        List<DepartmentVO> rootList = voList.stream().filter(e -> e.getParentId() == null || e.getParentId() == CommonConst.DEFAULT_PARENT_ID).collect(Collectors.toList());
+        List<DepartmentVO> rootList = voList.stream().filter(e -> e.getParentId() == null || e.getParentId() == StringConst.DEFAULT_PARENT_ID).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(rootList)) {
             return Lists.newArrayList();
         }

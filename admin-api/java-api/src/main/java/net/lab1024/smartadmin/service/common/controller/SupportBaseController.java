@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.common.controller;
 
-import net.lab1024.smartadmin.service.common.constant.ApiUrlPrefixConst;
+import net.lab1024.smartadmin.service.common.constant.UrlPrefixConst;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author 胡克
  * @date 2019/10/18 11:51
  */
-@RequestMapping(ApiUrlPrefixConst.API_PREFIX_SUPPORT)
+@RequestMapping(UrlPrefixConst.SUPPORT)
 public class SupportBaseController {
 }

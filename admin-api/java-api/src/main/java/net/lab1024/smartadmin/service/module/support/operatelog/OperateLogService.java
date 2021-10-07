@@ -6,8 +6,8 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryDTO;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +53,6 @@ public class OperateLogService {
      * @description 编辑
      * @date 2019-05-15 11:32:14
      */
-    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> update(OperateLogDTO updateDTO) {
         OperateLogEntity entity = SmartBeanUtil.copy(updateDTO, OperateLogEntity.class);
         operateLogDao.updateById(entity);
@@ -65,7 +64,6 @@ public class OperateLogService {
      * @description 删除
      * @date 2019-05-15 11:32:14
      */
-    @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> delete(Long id) {
         operateLogDao.deleteById(id);
         return ResponseDTO.ok();

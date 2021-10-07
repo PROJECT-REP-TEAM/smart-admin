@@ -1,13 +1,13 @@
 package net.lab1024.smartadmin.service.module.support.reload;
 
 import net.lab1024.smartadmin.service.module.support.reload.core.AbstractSmartReloadCommand;
-import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadItem;
+import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadItem;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadResult;
 import net.lab1024.smartadmin.service.module.support.reload.dao.ReloadItemDao;
 import net.lab1024.smartadmin.service.module.support.reload.dao.ReloadResultDao;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemEntity;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadResultEntity;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -34,9 +34,9 @@ public class SmartReloadCommand extends AbstractSmartReloadCommand {
      * @return List<ReloadItem>
      */
     @Override
-    public List<ReloadItem> readReloadItem() {
+    public List<SmartReloadItem> readReloadItem() {
         List<ReloadItemEntity> reloadItemEntityList = reloadItemDao.selectList(null);
-        return SmartBeanUtil.copyList(reloadItemEntityList, ReloadItem.class);
+        return SmartBeanUtil.copyList(reloadItemEntityList, SmartReloadItem.class);
     }
 
 

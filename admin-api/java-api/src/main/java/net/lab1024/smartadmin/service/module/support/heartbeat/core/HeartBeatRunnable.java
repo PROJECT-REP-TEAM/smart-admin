@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.heartbeat.core;
 
-import net.lab1024.smartadmin.service.util.SmartIPUtil;
+import net.lab1024.smartadmin.service.common.util.SmartIPUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.lang.management.ManagementFactory;

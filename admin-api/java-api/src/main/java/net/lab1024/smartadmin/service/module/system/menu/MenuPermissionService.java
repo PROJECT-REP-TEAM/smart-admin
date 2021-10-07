@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.module.system.menu;
 
-import net.lab1024.smartadmin.service.common.security.SmartSecurityMetadataSource;
+import net.lab1024.smartadmin.service.common.security.SecurityMetadataSource;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
-import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @author 卓大
  * @date 2021/8/5 17:14
  */
-@Service(SmartSecurityMetadataSource.PRIVILEGE_CHECK_NAME)
+@Service(SecurityMetadataSource.PRIVILEGE_CHECK_NAME)
 public class MenuPermissionService {
 
     @Autowired

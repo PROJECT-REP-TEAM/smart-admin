@@ -4,8 +4,8 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.enumconst.SystemEnvironmentEnum;
-import net.lab1024.smartadmin.service.common.domain.SystemEnvironmentBO;
+import net.lab1024.smartadmin.service.common.enumeration.SystemEnvironmentEnum;
+import net.lab1024.smartadmin.service.common.domain.SystemEnvironment;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginBO;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
@@ -43,7 +43,7 @@ public class EmployeeLoginTokenService {
     private EmployeeService employeeService;
 
     @Autowired
-    private SystemEnvironmentBO systemEnvironmentBO;
+    private SystemEnvironment systemEnvironment;
 
     /**
      * 生成 JWT TOKEN
@@ -75,7 +75,7 @@ public class EmployeeLoginTokenService {
          * 非生产环境 直接使用 token 作为id
          * 不需要的话 注释了吧
          */
-        SystemEnvironmentEnum currentEnvironment = systemEnvironmentBO.getCurrentEnvironment();
+        SystemEnvironmentEnum currentEnvironment = systemEnvironment.getCurrentEnvironment();
         if (SystemEnvironmentEnum.PROD != currentEnvironment && NumberUtils.isParsable(token)) {
             return employeeService.getById(Long.parseLong(token));
         }
@@ -106,7 +106,7 @@ public class EmployeeLoginTokenService {
          * 非生产环境 直接使用 token 作为id
          * 不需要的话 注释了吧
          */
-        SystemEnvironmentEnum currentEnvironment = systemEnvironmentBO.getCurrentEnvironment();
+        SystemEnvironmentEnum currentEnvironment = systemEnvironment.getCurrentEnvironment();
         if (SystemEnvironmentEnum.PROD != currentEnvironment && NumberUtils.isParsable(token)) {
             return employeeService.getBoById(Long.parseLong(token));
         }

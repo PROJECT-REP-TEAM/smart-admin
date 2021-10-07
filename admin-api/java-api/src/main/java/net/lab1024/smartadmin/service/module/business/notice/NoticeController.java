@@ -3,14 +3,14 @@ package net.lab1024.smartadmin.service.module.business.notice;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
-import net.lab1024.smartadmin.service.common.domain.PageBaseDTO;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
+import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.dto.*;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO;
-import net.lab1024.smartadmin.service.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ import javax.validation.Valid;
  */
 @RestController
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_NOTICE})
-public class NoticeController extends AdminBaseController {
+public class NoticeController extends SystemBaseController {
 
     @Autowired
     private NoticeService noticeService;
@@ -44,7 +44,7 @@ public class NoticeController extends AdminBaseController {
 
     @ApiOperation(value = "分页查询未读消息", notes = "@author 罗伊")
     @PostMapping("/notice/unread/page/query")
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(@RequestBody PageBaseDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(@RequestBody PageParamDTO queryDTO) {
         return noticeService.queryUnreadByPage(queryDTO, SmartEmployeeTokenUtil.getRequestEmployeeId());
     }
 

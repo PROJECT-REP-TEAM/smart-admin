@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.employee.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.domain.PageBaseDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Size;
@@ -15,7 +15,7 @@ import java.util.List;
  * @date 2017年12月21日上午09:09:31
  */
 @Data
-public class EmployeeQueryDTO extends PageBaseDTO {
+public class EmployeeQueryDTO extends PageParamDTO {
 
     @ApiModelProperty("搜索词")
     @Length(max = 20, message = "搜索词最多20字符")

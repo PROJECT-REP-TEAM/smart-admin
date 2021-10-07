@@ -2,9 +2,9 @@ package net.lab1024.smartadmin.service.module.system.employee.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.enumconst.GenderEnum;
+import net.lab1024.smartadmin.service.common.enumeration.GenderEnum;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.util.SmartVerificationUtil;
+import net.lab1024.smartadmin.service.common.util.SmartVerificationUtil;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;

@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.notice;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.PageBaseDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.notice.dao.NoticeDao;
@@ -12,8 +12,8 @@ import net.lab1024.smartadmin.service.module.business.notice.domain.entity.Notic
 import net.lab1024.smartadmin.service.module.business.notice.domain.entity.NoticeReceiveRecordEntity;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +74,7 @@ public class NoticeService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(PageBaseDTO queryDTO, Long employeeId) {
+    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(PageParamDTO queryDTO, Long employeeId) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<NoticeVO> dtoList = noticeDao.queryUnreadByPage(page, employeeId, true);
         PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);

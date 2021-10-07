@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.module.support.reload.core;
 
 
-import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadItem;
-import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadObject;
+import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadItem;
+import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadObject;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadResult;
 
 import java.util.List;
@@ -39,14 +39,14 @@ public abstract class AbstractSmartReloadCommand {
      *
      * @return List<ReloadItem>
      */
-    public abstract List<ReloadItem> readReloadItem();
+    public abstract List<SmartReloadItem> readReloadItem();
 
     /**
      * 处理Reload结果
      *
-     * @param reloadResult
+     * @param smartReloadResult
      */
-    public abstract void handleReloadResult(SmartReloadResult reloadResult);
+    public abstract void handleReloadResult(SmartReloadResult smartReloadResult);
 
 
     /**
@@ -57,13 +57,13 @@ public abstract class AbstractSmartReloadCommand {
         if (tagIdentifierMap != null) {
             return tagIdentifierMap;
         }
-        List<ReloadItem> reloadItemList = this.readReloadItem();
-        if (reloadItemList == null) {
+        List<SmartReloadItem> smartReloadItemList = this.readReloadItem();
+        if (smartReloadItemList == null) {
             return tagIdentifierMap;
         }
-        for (ReloadItem reloadItem : reloadItemList) {
-            String tag = reloadItem.getTag();
-            String identification = reloadItem.getIdentification();
+        for (SmartReloadItem smartReloadItem : smartReloadItemList) {
+            String tag = smartReloadItem.getTag();
+            String identification = smartReloadItem.getIdentification();
             tagIdentifierMap.put(tag, identification);
         }
         return tagIdentifierMap;
@@ -84,11 +84,11 @@ public abstract class AbstractSmartReloadCommand {
      * 获取重载对象
      * @return
      */
-    public ReloadObject reloadObject(String tag) {
+    public SmartReloadObject reloadObject(String tag) {
         if(this.smartReloadManager == null){
             return null;
         }
-        Map<String, ReloadObject> reloadObjectMap = smartReloadManager.reloadObjectMap();
+        Map<String, SmartReloadObject> reloadObjectMap = smartReloadManager.reloadObjectMap();
         return reloadObjectMap.get(tag);
     }
 }

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.system.role.basic;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleAddDTO;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleUpdateDTO;
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_ROLE})
 @RestController
-public class RoleController extends AdminBaseController {
+public class RoleController extends SystemBaseController {
 
     @Autowired
     private RoleService roleService;

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.datatracer;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerQueryForm;
@@ -24,7 +24,7 @@ import javax.validation.Valid;
 
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_DATA_TRACER})
 @RestController
-public class DataTracerController extends AdminBaseController {
+public class DataTracerController extends SystemBaseController {
 
     @Autowired
     private DataTracerService dataTracerService;

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.business.category;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.category.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ import java.util.List;
  */
 @Api(tags = SwaggerTagConst.Admin.MANAGER_CATEGORY)
 @RestController
-public class CategoryController extends AdminBaseController {
+public class CategoryController extends SystemBaseController {
 
     @Autowired
     private CategoryService categoryService;

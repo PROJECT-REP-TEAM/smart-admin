@@ -2,10 +2,10 @@ package net.lab1024.smartadmin.service.module.business.category;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.category.domain.*;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,9 +43,9 @@ public class CategoryService {
             return res;
         }
         // 没有父类则使用默认父类
-        Long parentId = null == addDTO.getParentId() ? CommonConst.DEFAULT_PARENT_ID : addDTO.getParentId();
+        Long parentId = null == addDTO.getParentId() ? StringConst.DEFAULT_PARENT_ID : addDTO.getParentId();
         categoryEntity.setParentId(parentId);
-        categoryEntity.setSort(null == addDTO.getSort() ? CommonConst.ZERO : addDTO.getSort());
+        categoryEntity.setSort(null == addDTO.getSort() ? StringConst.ZERO : addDTO.getSort());
         categoryEntity.setDeletedFlag(false);
 
         // 保存数据
@@ -106,7 +106,7 @@ public class CategoryService {
             if (Objects.equals(categoryEntity.getCategoryId(), parentId)) {
                 return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "父级类目怎么和自己相同了");
             }
-            if (!Objects.equals(parentId, CommonConst.DEFAULT_PARENT_ID)) {
+            if (!Objects.equals(parentId, StringConst.DEFAULT_PARENT_ID)) {
                 Optional<CategoryEntity> optional = categoryQueryService.queryCategory(parentId);
                 if (!optional.isPresent()) {
                     return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "父级类目不存在~");
@@ -120,7 +120,7 @@ public class CategoryService {
 
         } else {
             // 如果没有父类 使用默认父类
-            parentId = CommonConst.DEFAULT_PARENT_ID;
+            parentId = StringConst.DEFAULT_PARENT_ID;
         }
 
         // 校验同父类下 名称是否重复
@@ -169,7 +169,7 @@ public class CategoryService {
             if (null == queryDTO.getCategoryType()) {
                 return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "类目类型不能为空");
             }
-            queryDTO.setParentId(CommonConst.DEFAULT_PARENT_ID);
+            queryDTO.setParentId(StringConst.DEFAULT_PARENT_ID);
         }
         List<CategoryTreeVO> treeList = categoryQueryService.queryCategoryTree(queryDTO);
         return ResponseDTO.ok(treeList);

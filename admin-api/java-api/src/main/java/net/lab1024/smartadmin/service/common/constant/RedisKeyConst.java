@@ -8,17 +8,17 @@ package net.lab1024.smartadmin.service.common.constant;
  */
 public class RedisKeyConst {
 
-    public class Base {
+    public static final String PROJECT = "smart:";
 
-        private static final String PROJECT = "base:";
+    public class Support {
 
         public static final String FILE_URL = PROJECT + "file:";
 
-        public static final String FILE_VO = PROJECT + "fileVO:";
+        public static final String FILE_VO = PROJECT + "file-vo:";
 
         public static final String LOCK = PROJECT + "lock:";
 
-        public static final String ID_GENERATOR = LOCK + "id:";
+        public static final String ID_GENERATOR = LOCK + "id-generator:";
 
         public static final String CAPTCHA = PROJECT + "captcha:";
 

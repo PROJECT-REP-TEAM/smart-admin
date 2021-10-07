@@ -13,7 +13,7 @@ import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.menu.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.RoleEmployeeDao;
-import net.lab1024.smartadmin.service.util.SmartBaseEnumUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 
 import java.util.Comparator;
 import java.util.List;

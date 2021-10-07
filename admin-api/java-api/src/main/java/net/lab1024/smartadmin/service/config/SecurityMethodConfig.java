@@ -1,10 +1,8 @@
 package net.lab1024.smartadmin.service.config;
 
-import net.lab1024.smartadmin.service.common.security.SmartSecurityMetadataSource;
-import net.lab1024.smartadmin.service.common.security.SmartSecurityUrlMatchers;
+import net.lab1024.smartadmin.service.common.security.SecurityMetadataSource;
+import net.lab1024.smartadmin.service.common.security.SecurityUrlMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.access.expression.method.ExpressionBasedAnnotationAttributeFactory;
 import org.springframework.security.access.method.MethodSecurityMetadataSource;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -20,11 +18,11 @@ import org.springframework.security.config.annotation.method.configuration.Globa
 public class SecurityMethodConfig extends GlobalMethodSecurityConfiguration {
 
     @Autowired
-    private SmartSecurityUrlMatchers smartSecurityUrlMatchers;
+    private SecurityUrlMatchers securityUrlMatchers;
 
     @Override
     public MethodSecurityMetadataSource customMethodSecurityMetadataSource(){
         ExpressionBasedAnnotationAttributeFactory attributeFactory = new ExpressionBasedAnnotationAttributeFactory(this.getExpressionHandler());
-        return new SmartSecurityMetadataSource(attributeFactory, smartSecurityUrlMatchers);
+        return new SecurityMetadataSource(attributeFactory, securityUrlMatchers);
     }
 }

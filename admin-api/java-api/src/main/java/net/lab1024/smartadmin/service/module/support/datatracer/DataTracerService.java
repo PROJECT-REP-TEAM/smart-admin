@@ -11,7 +11,7 @@ import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTrace
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerEntity;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerQueryForm;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerVO;
-import net.lab1024.smartadmin.service.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

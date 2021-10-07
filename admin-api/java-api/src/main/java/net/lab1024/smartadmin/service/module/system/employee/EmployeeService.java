@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
-import net.lab1024.smartadmin.service.common.constant.SystemConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
@@ -21,8 +20,8 @@ import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginIn
 import net.lab1024.smartadmin.service.module.system.menu.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.RoleEmployeeDao;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeEntity;
-import net.lab1024.smartadmin.service.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -403,7 +402,7 @@ public class EmployeeService {
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
         List<EmployeeEntity> employeeEntityList = beanCache.get(cacheKey);
         if (CollectionUtils.isEmpty(employeeEntityList)) {
-            return ResponseDTO.ok(CommonConst.EMPTY_LIST);
+            return ResponseDTO.ok(StringConst.EMPTY_LIST);
         }
         List<EmployeeVO> voList = SmartBeanUtil.copyList(employeeEntityList, EmployeeVO.class);
         return ResponseDTO.ok(voList);
@@ -489,8 +488,8 @@ public class EmployeeService {
      * @return
      */
     public static String getEncryptPwd(String pwd) {
-        pwd = StringUtils.isBlank(pwd) ? SystemConst.Password.DEFAULT : pwd;
-        return DigestUtils.md5Hex(String.format(SystemConst.Password.SALT_FORMAT, pwd));
+        pwd = StringUtils.isBlank(pwd) ? EmployeeConst.Password.DEFAULT : pwd;
+        return DigestUtils.md5Hex(String.format(EmployeeConst.Password.SALT_FORMAT, pwd));
     }
 
     public static void main(String[] args) {

@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.module.support.reload.core.thread;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.module.support.reload.core.AbstractSmartReloadCommand;
-import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadItem;
-import net.lab1024.smartadmin.service.module.support.reload.core.domain.ReloadObject;
+import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadItem;
+import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadObject;
 import net.lab1024.smartadmin.service.module.support.reload.core.domain.SmartReloadResult;
 
 import java.io.PrintWriter;
@@ -41,18 +41,18 @@ public class SmartReloadRunnable implements Runnable {
      * 检测Identifier变化，执行reload
      */
     private void doTask() {
-        List<ReloadItem> reloadItemList = this.abstractSmartReloadCommand.readReloadItem();
+        List<SmartReloadItem> smartReloadItemList = this.abstractSmartReloadCommand.readReloadItem();
         ConcurrentHashMap<String, String> tagIdentifierMap = this.abstractSmartReloadCommand.getTagIdentifierMap();
-        for (ReloadItem reloadItem : reloadItemList) {
-            String tag = reloadItem.getTag();
-            String tagIdentifier = reloadItem.getIdentification();
+        for (SmartReloadItem smartReloadItem : smartReloadItemList) {
+            String tag = smartReloadItem.getTag();
+            String tagIdentifier = smartReloadItem.getIdentification();
             String preTagChangeIdentifier = tagIdentifierMap.get(tag);
             // 数据不一致
             if (preTagChangeIdentifier == null || !preTagChangeIdentifier.equals(tagIdentifier)) {
                 this.abstractSmartReloadCommand.putIdentifierMap(tag, tagIdentifier);
                 // 执行重新加载此项的动作
-                SmartReloadResult reloadResult = this.doReload(reloadItem);
-                this.abstractSmartReloadCommand.handleReloadResult(reloadResult);
+                SmartReloadResult smartReloadResult = this.doReload(smartReloadItem);
+                this.abstractSmartReloadCommand.handleReloadResult(smartReloadResult);
             }
         }
     }
@@ -60,16 +60,16 @@ public class SmartReloadRunnable implements Runnable {
     /**
      * 方法调用
      *
-     * @param reloadItem
+     * @param smartReloadItem
      * @return
      */
-    private SmartReloadResult doReload(ReloadItem reloadItem) {
+    private SmartReloadResult doReload(SmartReloadItem smartReloadItem) {
         SmartReloadResult result = new SmartReloadResult();
-        ReloadObject reloadObject = this.abstractSmartReloadCommand.reloadObject(reloadItem.getTag());
-        Method method = reloadObject.getMethod();
-        result.setTag(reloadItem.getTag());
-        result.setArgs(reloadItem.getArgs());
-        result.setIdentification(reloadItem.getIdentification());
+        SmartReloadObject smartReloadObject = this.abstractSmartReloadCommand.reloadObject(smartReloadItem.getTag());
+        Method method = smartReloadObject.getMethod();
+        result.setTag(smartReloadItem.getTag());
+        result.setArgs(smartReloadItem.getArgs());
+        result.setIdentification(smartReloadItem.getIdentification());
         result.setResult(true);
         int paramCount = method.getParameterCount();
         if (paramCount > 1) {
@@ -79,9 +79,9 @@ public class SmartReloadRunnable implements Runnable {
         }
         try {
             if (paramCount == 0) {
-                method.invoke(reloadObject.getReloadObject());
+                method.invoke(smartReloadObject.getReloadObject());
             } else {
-                method.invoke(reloadObject.getReloadObject(), reloadItem.getArgs());
+                method.invoke(smartReloadObject.getReloadObject(), smartReloadItem.getArgs());
             }
         } catch (Throwable throwable) {
             StringWriter sw = new StringWriter();

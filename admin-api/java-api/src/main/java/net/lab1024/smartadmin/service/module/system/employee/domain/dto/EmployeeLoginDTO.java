@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.module.system.employee.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaDTO;
-import net.lab1024.smartadmin.service.util.SmartVerificationUtil;
+import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaForm;
+import net.lab1024.smartadmin.service.common.util.SmartVerificationUtil;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.Valid;
@@ -32,5 +32,5 @@ public class EmployeeLoginDTO {
     @ApiModelProperty("图形验证码|可选")
     // @NotNull(message = "图形验证码不能为空")
     @Valid
-    private CaptchaDTO captcha;
+    private CaptchaForm captcha;
 }
