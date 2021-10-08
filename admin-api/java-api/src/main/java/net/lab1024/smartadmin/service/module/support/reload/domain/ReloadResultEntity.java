@@ -1,8 +1,9 @@
 package net.lab1024.smartadmin.service.module.support.reload.domain;
+
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 /**
  * t_reload_result 数据表 实体类
@@ -42,7 +43,7 @@ public class ReloadResultEntity {
     /**
      * 创建时间
      */
-    private Date createTime;
+    private LocalDateTime createTime;
 
 
 }
