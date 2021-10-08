@@ -9,7 +9,7 @@ import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
-import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleQueryDTO;
+import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleQueryForm;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.vo.RoleSelectedVO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeBatchDTO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class RoleEmployeeController extends SystemBaseController {
 
     @ApiOperation(value = "获取角色成员-员工列表", notes = "获取角色成员-员工列表（分页）")
     @PostMapping("/role/listEmployee")
-    public ResponseDTO<PageResultDTO<EmployeeVO>> listEmployeeByName(@Valid @RequestBody RoleQueryDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<EmployeeVO>> listEmployeeByName(@Valid @RequestBody RoleQueryForm queryDTO) {
         return roleEmployeeService.listEmployeeByName(queryDTO);
     }
 

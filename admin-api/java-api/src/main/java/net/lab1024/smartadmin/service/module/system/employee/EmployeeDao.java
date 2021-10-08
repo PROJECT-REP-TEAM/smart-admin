@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO;
-import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeQueryDTO;
+import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeQueryForm;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 
@@ -29,7 +29,7 @@ public interface EmployeeDao extends BaseMapper<EmployeeEntity> {
      * @param queryDTO
      * @return
      */
-    List<EmployeeVO> queryEmployee(Page page, @Param("queryDTO") EmployeeQueryDTO queryDTO);
+    List<EmployeeVO> queryEmployee(Page page, @Param("queryDTO") EmployeeQueryForm queryDTO);
 
     /**
      * 查询员工列表
@@ -37,7 +37,7 @@ public interface EmployeeDao extends BaseMapper<EmployeeEntity> {
      * @param queryDTO
      * @return
      */
-    List<EmployeeVO> queryEmployee(@Param("queryDTO") EmployeeQueryDTO queryDTO);
+    List<EmployeeVO> queryEmployee(@Param("queryDTO") EmployeeQueryForm queryDTO);
 
     /**
      * 批量更新禁用状态

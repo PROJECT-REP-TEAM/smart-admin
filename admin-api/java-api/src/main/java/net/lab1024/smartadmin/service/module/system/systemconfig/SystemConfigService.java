@@ -81,7 +81,7 @@ public class SystemConfigService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<SystemConfigVO>> queryConfigPage(SystemConfigQueryDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<SystemConfigVO>> queryConfigPage(SystemConfigQueryForm queryDTO) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<SystemConfigEntity> entityList = systemConfigDao.queryByPage(page, queryDTO);
         PageResultDTO<SystemConfigVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, entityList, SystemConfigVO.class);

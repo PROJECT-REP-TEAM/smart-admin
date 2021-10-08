@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  * @date 2021/1/20 16:24
  */
 @Data
-public class CategoryUpdateDTO extends CategoryBaseDTO {
+public class CategoryUpdateForm extends CategoryBaseDTO {
 
     @ApiModelProperty("类目id")
     @NotNull(message = "类目id不能为空")

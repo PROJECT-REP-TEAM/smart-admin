@@ -2,7 +2,6 @@ package net.lab1024.smartadmin.service.module.business.category;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.category.constant.CategoryConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.*;
@@ -36,17 +35,17 @@ public class CategoryService {
      * @author 胡克
      * @date 2021/1/20 17:17
      */
-    public ResponseDTO<String> add(CategoryAddDTO addDTO) {
+    public ResponseDTO<String> add(CategoryAddForm addForm) {
         // 校验类目
-        CategoryEntity categoryEntity = SmartBeanUtil.copy(addDTO, CategoryEntity.class);
+        CategoryEntity categoryEntity = SmartBeanUtil.copy(addForm, CategoryEntity.class);
         ResponseDTO<String> res = this.checkCategory(categoryEntity, false);
         if (!res.getOk()) {
             return res;
         }
         // 没有父类则使用默认父类
-        Long parentId = null == addDTO.getParentId() ? CategoryConst.DEFAULT_PARENT_ID : addDTO.getParentId();
+        Long parentId = null == addForm.getParentId() ? CategoryConst.DEFAULT_PARENT_ID : addForm.getParentId();
         categoryEntity.setParentId(parentId);
-        categoryEntity.setSort(null == addDTO.getSort() ? 0 : addDTO.getSort());
+        categoryEntity.setSort(null == addForm.getSort() ? 0 : addForm.getSort());
         categoryEntity.setDeletedFlag(false);
 
         // 保存数据
@@ -64,14 +63,14 @@ public class CategoryService {
      * @author 胡克
      * @date 2021/1/20 17:17
      */
-    public ResponseDTO<String> update(CategoryUpdateDTO updateDTO) {
+    public ResponseDTO<String> update(CategoryUpdateForm updateForm) {
         // 校验类目
-        Long categoryId = updateDTO.getCategoryId();
+        Long categoryId = updateForm.getCategoryId();
         Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
         if (!optional.isPresent()) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
-        CategoryEntity categoryEntity = SmartBeanUtil.copy(updateDTO, CategoryEntity.class);
+        CategoryEntity categoryEntity = SmartBeanUtil.copy(updateForm, CategoryEntity.class);
 
         /**
          * 不更新类目类型
@@ -162,17 +161,17 @@ public class CategoryService {
      * 根据父级id 查询所有子类 返回层级树
      * 如果父类id 为空 返回所有类目层级
      *
-     * @param queryDTO
+     * @param queryForm
      * @return
      */
-    public ResponseDTO<List<CategoryTreeVO>> queryTree(CategoryTreeQueryDTO queryDTO) {
-        if (null == queryDTO.getParentId()) {
-            if (null == queryDTO.getCategoryType()) {
+    public ResponseDTO<List<CategoryTreeVO>> queryTree(CategoryTreeQueryForm queryForm) {
+        if (null == queryForm.getParentId()) {
+            if (null == queryForm.getCategoryType()) {
                 return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "类目类型不能为空");
             }
-            queryDTO.setParentId(CategoryConst.DEFAULT_PARENT_ID);
+            queryForm.setParentId(CategoryConst.DEFAULT_PARENT_ID);
         }
-        List<CategoryTreeVO> treeList = categoryQueryService.queryCategoryTree(queryDTO);
+        List<CategoryTreeVO> treeList = categoryQueryService.queryCategoryTree(queryForm);
         return ResponseDTO.ok(treeList);
     }
 

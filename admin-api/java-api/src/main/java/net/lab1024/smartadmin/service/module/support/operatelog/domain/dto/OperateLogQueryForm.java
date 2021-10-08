@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.operatelog.domain.dto;
 
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import lombok.Data;
  * @author 罗伊
  */
 @Data
-public class OperateLogQueryDTO extends PageParamDTO {
+public class OperateLogQueryForm extends PageParamForm {
 
 
     @ApiModelProperty("开始日期")

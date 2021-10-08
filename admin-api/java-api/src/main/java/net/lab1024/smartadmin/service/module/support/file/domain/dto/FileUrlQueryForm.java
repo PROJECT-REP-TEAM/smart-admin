@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class FileUrlQueryDTO {
+public class FileUrlQueryForm {
 
     @ApiModelProperty("file key")
     @NotEmpty(message = "file key not empty")

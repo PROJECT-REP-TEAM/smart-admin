@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.goods.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
 import net.lab1024.smartadmin.service.module.business.goods.constant.GoodsTypeEnum;
 import org.hibernate.validator.constraints.Length;
@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
  * @date 2021/8/5 14:42
  */
 @Data
-public class GoodsQueryDTO extends PageParamDTO {
+public class GoodsQueryForm extends PageParamForm {
 
     @ApiModelPropertyEnum(desc = "商品类型|可选", value = GoodsTypeEnum.class)
     private Integer goodsType;

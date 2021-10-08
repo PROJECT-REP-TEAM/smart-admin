@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.dto.*;
@@ -31,34 +31,34 @@ public class NoticeController extends SystemBaseController {
 
     @ApiOperation(value = "分页查询全部消息", notes = "@author 罗伊")
     @PostMapping("/notice/page/query")
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryByPage(@RequestBody NoticeQueryDTO queryDTO) {
-        return noticeService.queryByPage(queryDTO);
+    public ResponseDTO<PageResultDTO<NoticeVO>> queryByPage(@RequestBody NoticeQueryForm queryForm) {
+        return noticeService.queryByPage(queryForm);
     }
 
     @ApiOperation(value = "获取已收取的所有消息", notes = "@author 罗伊")
     @PostMapping("/notice/receive/page/query")
-    public ResponseDTO<PageResultDTO<NoticeReceiveDTO>> queryReceiveByPage(@RequestBody NoticeReceiveQueryDTO queryDTO) {
-        queryDTO.setEmployeeId(SmartEmployeeTokenUtil.getRequestEmployeeId());
-        return noticeService.queryReceiveByPage(queryDTO);
+    public ResponseDTO<PageResultDTO<NoticeReceiveForm>> queryReceiveByPage(@RequestBody NoticeReceiveQueryForm queryForm) {
+        queryForm.setEmployeeId(SmartEmployeeTokenUtil.getRequestEmployeeId());
+        return noticeService.queryReceiveByPage(queryForm);
     }
 
     @ApiOperation(value = "分页查询未读消息", notes = "@author 罗伊")
     @PostMapping("/notice/unread/page/query")
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(@RequestBody PageParamDTO queryDTO) {
-        return noticeService.queryUnreadByPage(queryDTO, SmartEmployeeTokenUtil.getRequestEmployeeId());
+    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(@RequestBody PageParamForm queryForm) {
+        return noticeService.queryUnreadByPage(queryForm, SmartEmployeeTokenUtil.getRequestEmployeeId());
     }
 
     @ApiOperation(value = "添加", notes = "@author 罗伊")
     @PostMapping("/notice/add")
-    public ResponseDTO<String> add(@RequestBody @Valid NoticeAddDTO addDTO) {
-        addDTO.setCreateId(SmartEmployeeTokenUtil.getRequestEmployeeId());
-        return noticeService.add(addDTO);
+    public ResponseDTO<String> add(@RequestBody @Valid NoticeAddForm addForm) {
+        addForm.setCreateId(SmartEmployeeTokenUtil.getRequestEmployeeId());
+        return noticeService.add(addForm);
     }
 
     @ApiOperation(value = "修改", notes = "@author 罗伊")
     @PostMapping("/notice/update")
-    public ResponseDTO<String> update(@RequestBody @Valid NoticeUpdateDTO updateDTO) {
-        return noticeService.update(updateDTO);
+    public ResponseDTO<String> update(@RequestBody @Valid NoticeUpdateForm updateForm) {
+        return noticeService.update(updateForm);
     }
 
     @ApiOperation(value = "删除", notes = "@author 罗伊")

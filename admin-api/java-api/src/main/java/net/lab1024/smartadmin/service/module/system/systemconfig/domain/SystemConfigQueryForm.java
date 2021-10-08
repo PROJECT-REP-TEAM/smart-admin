@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.systemconfig.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
  * @since JDK1.8
  */
 @Data
-public class SystemConfigQueryDTO extends PageParamDTO {
+public class SystemConfigQueryForm extends PageParamForm {
 
     @ApiModelProperty("参数KEY")
     @Length(max = 50, message = "参数Key最多50字符")

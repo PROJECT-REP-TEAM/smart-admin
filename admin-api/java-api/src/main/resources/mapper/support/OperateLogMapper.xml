@@ -3,32 +3,20 @@
 <mapper namespace="net.lab1024.smartadmin.service.module.support.operatelog.OperateLogDao">
 
     <select id="queryByPage" resultType="net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity">
-        select
-          id,
-          user_id,
-          user_name,
-          module,
-          content,
-          url,
-          method,
-          param,
-          success_flag,
-          fail_reason,
-          update_time,
-          create_time
+        select *
         from t_user_operate_log
         <where>
-            <if test="queryDTO.startDate != null and queryDTO.startDate != ''">
-                AND DATE_FORMAT(create_time, '%Y-%m-%d') &gt;= #{queryDTO.startDate}
+            <if test="query.startDate != null and query.startDate != ''">
+                AND DATE_FORMAT(create_time, '%Y-%m-%d') &gt;= #{query.startDate}
             </if>
-            <if test="queryDTO.endDate != null and queryDTO.endDate != ''">
-                AND DATE_FORMAT(create_time, '%Y-%m-%d') &lt;= #{queryDTO.endDate}
+            <if test="query.endDate != null and query.endDate != ''">
+                AND DATE_FORMAT(create_time, '%Y-%m-%d') &lt;= #{query.endDate}
             </if>
-            <if test="queryDTO.userName != null and queryDTO.userName != ''">
-                AND INSTR(user_name,#{queryDTO.userName})
+            <if test="query.userName != null and query.userName != ''">
+                AND INSTR(user_name,#{query.userName})
             </if>
-            <if test="queryDTO.resultFlag != null">
-                AND result = #{queryDTO.resultFlag}
+            <if test="query.resultFlag != null">
+                AND result = #{query.resultFlag}
             </if>
         </where>
         order by create_time desc

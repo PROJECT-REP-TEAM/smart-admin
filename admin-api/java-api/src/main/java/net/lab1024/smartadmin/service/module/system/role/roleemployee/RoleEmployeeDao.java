@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO;
-import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleQueryDTO;
+import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleQueryForm;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeEntity;
 
 import java.util.List;
@@ -46,7 +46,7 @@ public interface RoleEmployeeDao extends BaseMapper<RoleEmployeeEntity> {
      * @param queryDTO
      * @return
      */
-    List<EmployeeDTO> selectEmployeeByNamePage(Page page, @Param("queryDTO") RoleQueryDTO queryDTO);
+    List<EmployeeDTO> selectEmployeeByNamePage(Page page, @Param("queryDTO") RoleQueryForm queryDTO);
 
     /**
      *

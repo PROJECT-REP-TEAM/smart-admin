@@ -9,7 +9,7 @@ import lombok.Data;
  * @author 罗伊
  */
 @Data
-public class NoticeReceiveQueryDTO extends NoticeQueryDTO {
+public class NoticeReceiveQueryForm extends NoticeQueryForm {
 
     @ApiModelProperty(hidden = true)
     private Long employeeId;

@@ -9,6 +9,6 @@ import lombok.Data;
  * @date 2021/1/20 16:24
  */
 @Data
-public class CategoryAddDTO extends CategoryBaseDTO {
+public class CategoryAddForm extends CategoryBaseDTO {
 
 }

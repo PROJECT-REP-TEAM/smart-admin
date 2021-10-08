@@ -27,14 +27,14 @@ public class CategoryController extends SystemBaseController {
 
     @ApiOperation("添加类目 by listen")
     @PostMapping("/category/add")
-    public ResponseDTO<String> add(@RequestBody @Valid CategoryAddDTO addDTO) {
-        return categoryService.add(addDTO);
+    public ResponseDTO<String> add(@RequestBody @Valid CategoryAddForm addForm) {
+        return categoryService.add(addForm);
     }
 
     @ApiOperation("更新类目 by listen")
     @PostMapping("/category/update")
-    public ResponseDTO<String> update(@RequestBody @Valid CategoryUpdateDTO updateDTO) {
-        return categoryService.update(updateDTO);
+    public ResponseDTO<String> update(@RequestBody @Valid CategoryUpdateForm updateForm) {
+        return categoryService.update(updateForm);
     }
 
     @ApiOperation("查询类目详情 by listen")
@@ -45,8 +45,8 @@ public class CategoryController extends SystemBaseController {
 
     @ApiOperation("查询类目层级树 by listen")
     @PostMapping("/category/tree")
-    public ResponseDTO<List<CategoryTreeVO>> queryTree(@RequestBody @Valid CategoryTreeQueryDTO queryDTO) {
-        return categoryService.queryTree(queryDTO);
+    public ResponseDTO<List<CategoryTreeVO>> queryTree(@RequestBody @Valid CategoryTreeQueryForm queryForm) {
+        return categoryService.queryTree(queryForm);
     }
 
     @ApiOperation("删除类目 by listen")

@@ -5,12 +5,11 @@ import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogDTO;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryDTO;
+import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryForm;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,9 +29,9 @@ public class OperateLogService {
      * @description 分页查询
      * @date 2019-05-15 11:32:14
      */
-    public ResponseDTO<PageResultDTO<OperateLogDTO>> queryByPage(OperateLogQueryDTO queryDTO) {
-        Page page = SmartPageUtil.convert2PageQuery(queryDTO);
-        List<OperateLogEntity> logEntityList = operateLogDao.queryByPage(page, queryDTO);
+    public ResponseDTO<PageResultDTO<OperateLogDTO>> queryByPage(OperateLogQueryForm queryForm) {
+        Page page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<OperateLogEntity> logEntityList = operateLogDao.queryByPage(page, queryForm);
         PageResultDTO<OperateLogDTO> pageResultDTO = SmartPageUtil.convert2PageResult(page, logEntityList, OperateLogDTO.class);
         return ResponseDTO.ok(pageResultDTO);
     }

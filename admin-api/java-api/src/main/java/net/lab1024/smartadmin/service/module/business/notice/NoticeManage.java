@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.notice;
 
 import net.lab1024.smartadmin.service.module.business.notice.dao.NoticeDao;
 import net.lab1024.smartadmin.service.module.business.notice.dao.NoticeReceiveRecordDao;
-import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeUpdateDTO;
+import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeUpdateForm;
 import net.lab1024.smartadmin.service.module.business.notice.domain.entity.NoticeEntity;
 import net.lab1024.smartadmin.service.module.business.notice.domain.entity.NoticeReceiveRecordEntity;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,7 +76,7 @@ public class NoticeManage {
      *
      * @param updateDTO
      */
-    public void update(NoticeUpdateDTO updateDTO) {
+    public void update(NoticeUpdateForm updateDTO) {
         NoticeEntity updateEntity = new NoticeEntity();
         updateEntity.setId(updateDTO.getId());
         updateEntity.setTitle(updateDTO.getTitle());

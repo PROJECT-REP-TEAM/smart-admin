@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.notice;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.notice.dao.NoticeDao;
@@ -42,10 +42,10 @@ public class NoticeService {
      * @description 分页查询
      * @date 2019-07-11 16:19:48
      */
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryByPage(NoticeQueryDTO queryDTO) {
-        queryDTO.setDeletedFlag(false);
-        Page page = SmartPageUtil.convert2PageQuery(queryDTO);
-        List<NoticeVO> dtoList = noticeDao.queryByPage(page, queryDTO);
+    public ResponseDTO<PageResultDTO<NoticeVO>> queryByPage(NoticeQueryForm queryForm) {
+        queryForm.setDeletedFlag(false);
+        Page page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<NoticeVO> dtoList = noticeDao.queryByPage(page, queryForm);
         PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
         return ResponseDTO.ok(pageResultDTO);
     }
@@ -53,29 +53,29 @@ public class NoticeService {
     /**
      * 获取当前登录人的消息列表
      *
-     * @param queryDTO
+     * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<NoticeReceiveDTO>> queryReceiveByPage(NoticeReceiveQueryDTO queryDTO) {
-        queryDTO.setSendStatus(true);
-        Page page = SmartPageUtil.convert2PageQuery(queryDTO);
-        List<NoticeReceiveDTO> dtoList = noticeDao.queryReceiveByPage(page, queryDTO);
+    public ResponseDTO<PageResultDTO<NoticeReceiveForm>> queryReceiveByPage(NoticeReceiveQueryForm queryForm) {
+        queryForm.setSendStatus(true);
+        Page page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<NoticeReceiveForm> dtoList = noticeDao.queryReceiveByPage(page, queryForm);
         //根据用户的接收时间设置读取状态，以便前端对其设置
         dtoList.forEach(e -> {
             e.setReadStatus(e.getReceiveTime() != null);
         });
-        PageResultDTO<NoticeReceiveDTO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
+        PageResultDTO<NoticeReceiveForm> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
         return ResponseDTO.ok(pageResultDTO);
     }
 
     /**
      * 获取我的未读消息
      *
-     * @param queryDTO
+     * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(PageParamDTO queryDTO, Long employeeId) {
-        Page page = SmartPageUtil.convert2PageQuery(queryDTO);
+    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(PageParamForm queryForm, Long employeeId) {
+        Page page = SmartPageUtil.convert2PageQuery(queryForm);
         List<NoticeVO> dtoList = noticeDao.queryUnreadByPage(page, employeeId, true);
         PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
         return ResponseDTO.ok(pageResultDTO);
@@ -86,9 +86,9 @@ public class NoticeService {
      * @description 添加
      * @date 2019-07-11 16:19:48
      */
-    public ResponseDTO<String> add(NoticeAddDTO addDTO) {
-        NoticeEntity entity = SmartBeanUtil.copy(addDTO, NoticeEntity.class);
-        entity.setCreateUser(addDTO.getCreateId());
+    public ResponseDTO<String> add(NoticeAddForm addForm) {
+        NoticeEntity entity = SmartBeanUtil.copy(addForm, NoticeEntity.class);
+        entity.setCreateUser(addForm.getCreateId());
         entity.setSendStatus(false);
         entity.setDeletedFlag(true);
         noticeDao.insert(entity);
@@ -101,8 +101,8 @@ public class NoticeService {
      * @date 2019-07-11 16:19:48
      */
     @Transactional(rollbackFor = Exception.class)
-    public ResponseDTO<String> update(NoticeUpdateDTO updateDTO) {
-        NoticeEntity entity = noticeDao.selectById(updateDTO.getId());
+    public ResponseDTO<String> update(NoticeUpdateForm updateForm) {
+        NoticeEntity entity = noticeDao.selectById(updateForm.getId());
         if (entity == null) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知不存在");
         }
@@ -112,7 +112,7 @@ public class NoticeService {
         if (entity.getSendStatus()) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "此系统通知已发送无法修改");
         }
-        noticeManage.update(updateDTO);
+        noticeManage.update(updateForm);
         return ResponseDTO.ok();
     }
 

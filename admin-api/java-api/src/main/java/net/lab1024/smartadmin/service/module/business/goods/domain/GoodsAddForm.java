@@ -10,7 +10,7 @@ import lombok.Data;
  * @date 2021/8/5 14:42
  */
 @Data
-public class GoodsAddDTO extends GoodsBaseDTO {
+public class GoodsAddForm extends GoodsBaseDTO {
 
     @ApiModelProperty(hidden = true)
     private Long updateId;

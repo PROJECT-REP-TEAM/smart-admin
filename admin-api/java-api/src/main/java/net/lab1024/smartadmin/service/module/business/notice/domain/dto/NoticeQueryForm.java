@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.notice.domain.dto;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 
 /**
  * [  ]
@@ -10,7 +10,7 @@ import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
  * @author 罗伊
  */
 @Data
-public class NoticeQueryDTO extends PageParamDTO {
+public class NoticeQueryForm extends PageParamForm {
 
 
     @ApiModelProperty("开始日期")

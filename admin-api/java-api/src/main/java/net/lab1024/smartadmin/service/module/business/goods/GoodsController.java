@@ -31,34 +31,34 @@ public class GoodsController extends SystemBaseController {
 
     @ApiOperation("添加商品 by listen")
     @PostMapping("/goods/add")
-    public ResponseDTO<String> add(@RequestBody @Valid GoodsAddDTO addDTO) {
+    public ResponseDTO<String> add(@RequestBody @Valid GoodsAddForm addForm) {
         EmployeeLoginInfoDTO employee = SmartEmployeeTokenUtil.getRequestEmployee();
-        addDTO.setUpdateId(employee.getEmployeeId());
-        addDTO.setUpdateName(employee.getActualName());
-        return goodsService.add(addDTO);
+        addForm.setUpdateId(employee.getEmployeeId());
+        addForm.setUpdateName(employee.getActualName());
+        return goodsService.add(addForm);
     }
 
     @ApiOperation("更新商品 by listen")
     @PostMapping("/goods/update")
-    public ResponseDTO<String> update(@RequestBody @Valid GoodsUpdateDTO updateDTO) {
+    public ResponseDTO<String> update(@RequestBody @Valid GoodsUpdateForm updateForm) {
         EmployeeLoginInfoDTO employee = SmartEmployeeTokenUtil.getRequestEmployee();
-        updateDTO.setUpdateId(employee.getEmployeeId());
-        updateDTO.setUpdateName(employee.getActualName());
-        return goodsService.update(updateDTO);
+        updateForm.setUpdateId(employee.getEmployeeId());
+        updateForm.setUpdateName(employee.getActualName());
+        return goodsService.update(updateForm);
     }
 
     @ApiOperation("删除 by listen")
     @PostMapping("/goods/del")
-    public ResponseDTO<String> del(@RequestBody @Valid GoodsDelDTO delDTO) {
+    public ResponseDTO<String> del(@RequestBody @Valid GoodsDelForm delForm) {
         EmployeeLoginInfoDTO employee = SmartEmployeeTokenUtil.getRequestEmployee();
-        delDTO.setUpdateId(employee.getEmployeeId());
-        delDTO.setUpdateName(employee.getActualName());
-        return goodsService.del(delDTO);
+        delForm.setUpdateId(employee.getEmployeeId());
+        delForm.setUpdateName(employee.getActualName());
+        return goodsService.del(delForm);
     }
 
     @ApiOperation("分页查询 by listen")
     @PostMapping("/goods/query")
-    public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(@RequestBody @Valid GoodsQueryDTO queryDTO) {
-        return goodsService.query(queryDTO);
+    public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(@RequestBody @Valid GoodsQueryForm queryForm) {
+        return goodsService.query(queryForm);
     }
 }

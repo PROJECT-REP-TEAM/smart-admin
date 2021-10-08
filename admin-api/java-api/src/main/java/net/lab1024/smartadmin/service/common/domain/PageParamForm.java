@@ -3,10 +3,12 @@ package net.lab1024.smartadmin.service.common.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.Range;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.List;
 
 /**
@@ -16,7 +18,7 @@ import java.util.List;
  * @Date Created in 2017/10/28 16:19
  */
 @Data
-public class PageParamDTO {
+public class PageParamForm {
 
     @ApiModelProperty(value = "页码(不能为空)", required = true, example = "1")
     @NotNull(message = "分页参数不能为空")

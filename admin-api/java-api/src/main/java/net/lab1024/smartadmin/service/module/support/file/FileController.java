@@ -40,8 +40,8 @@ public class FileController extends SupportBaseController {
 
     @ApiOperation(value = "文件上传，通过url上传 by listen", notes = FileFolderTypeEnum.INFO)
     @PostMapping("/file/upload/url")
-    public ResponseDTO<FileUploadVO> uploadByUrl(@RequestBody @Valid FileUrlUploadDTO urlUploadDTO) {
-        return fileService.fileUpload(urlUploadDTO);
+    public ResponseDTO<FileUploadVO> uploadByUrl(@RequestBody @Valid FileUrlUploadForm uploadForm) {
+        return fileService.fileUpload(uploadForm);
     }
 
     @ApiOperation("获取文件URL：根据fileKey by listen")
@@ -52,14 +52,14 @@ public class FileController extends SupportBaseController {
 
     @ApiOperation("批量获取文件url：根据fileKey by listen")
     @PostMapping("/file/url/query")
-    public ResponseDTO<List<FileUrlResultDTO>> getBatchFileUrl(@RequestBody @Valid FileUrlQueryDTO queryDTO) {
-        return fileService.getBatchFileUrl(queryDTO);
+    public ResponseDTO<List<FileUrlResultDTO>> getBatchFileUrl(@RequestBody @Valid FileUrlQueryForm queryForm) {
+        return fileService.getBatchFileUrl(queryForm);
     }
 
     @ApiOperation(value = "系统文件查询 by listen")
     @PostMapping("/file/query")
-    public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(@RequestBody @Valid FileQueryDTO queryDTO) {
-        return fileService.queryListByPage(queryDTO);
+    public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(@RequestBody @Valid FileQueryForm queryForm) {
+        return fileService.queryListByPage(queryForm);
     }
 
     @ApiOperation(value = "下载文件流（根据fileId） by listen")

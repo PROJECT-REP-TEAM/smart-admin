@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.file;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileEntity;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryDTO;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -36,9 +36,9 @@ public interface FileDao extends BaseMapper<FileEntity> {
     /**
      * 分页查询
      * @param page
-     * @param queryDTO
+     * @param query
      * @return
      */
-    List<FileVO> queryListByPage(Page page, @Param("query") FileQueryDTO queryDTO);
+    List<FileVO> queryListByPage(Page page, @Param("query") FileQueryForm query);
 
 }

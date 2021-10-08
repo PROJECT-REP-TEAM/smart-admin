@@ -12,7 +12,7 @@ import net.lab1024.smartadmin.service.module.business.category.constant.Category
  * @date 2021/1/20 16:17
  */
 @Data
-public class CategoryTreeQueryDTO {
+public class CategoryTreeQueryForm {
 
     @ApiModelPropertyEnum(desc = "分类类型|可选", value = CategoryTypeEnum.class)
     private Integer categoryType;

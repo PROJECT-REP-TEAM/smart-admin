@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2021/8/5 14:42
  */
 @Data
-public class GoodsDelDTO {
+public class GoodsDelForm {
 
     @ApiModelProperty("商品id集合")
     @NotEmpty(message = "商品id不能为空")

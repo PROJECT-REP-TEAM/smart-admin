@@ -70,7 +70,7 @@ public class FileService {
      * @param urlUploadDTO
      * @return
      */
-    public ResponseDTO<FileUploadVO> fileUpload(FileUrlUploadDTO urlUploadDTO) {
+    public ResponseDTO<FileUploadVO> fileUpload(FileUrlUploadForm urlUploadDTO) {
         try {
             URL url = new URL(urlUploadDTO.getFileUrl());
             URLConnection urlConnection = url.openConnection();
@@ -211,7 +211,7 @@ public class FileService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<List<FileUrlResultDTO>> getBatchFileUrl(FileUrlQueryDTO queryDTO) {
+    public ResponseDTO<List<FileUrlResultDTO>> getBatchFileUrl(FileUrlQueryForm queryDTO) {
         // 获取文件服务
         List<String> fileKeyList = queryDTO.getFileKeyList();
         List<FileUrlResultDTO> resultDTOList = fileKeyList.stream().map(fileKey -> {
@@ -231,7 +231,7 @@ public class FileService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(FileQueryDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(FileQueryForm queryDTO) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<FileVO> fileList = fileDao.queryListByPage(page, queryDTO);
         if (CollectionUtils.isNotEmpty(fileList)) {

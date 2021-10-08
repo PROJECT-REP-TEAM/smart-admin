@@ -7,7 +7,7 @@ import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.module.business.category.constant.CategoryConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategorySimpleDTO;
-import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeQueryDTO;
+import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeQueryForm;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeVO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
 import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
@@ -195,10 +195,10 @@ public class CategoryQueryService {
      *
      * @return
      */
-    public List<CategoryTreeVO> queryCategoryTree(CategoryTreeQueryDTO queryDTO) {
+    public List<CategoryTreeVO> queryCategoryTree(CategoryTreeQueryForm queryForm) {
         // 查询缓存
-        Long parentId = queryDTO.getParentId();
-        Integer categoryType = queryDTO.getCategoryType();
+        Long parentId = queryForm.getParentId();
+        Integer categoryType = queryForm.getCategoryType();
         String cacheKey = CacheKey.cacheKey(CacheModuleConst.Category.CATEGORY_TREE, getCacheId(parentId, categoryType));
         List<CategoryTreeVO> treeList = cache.get(cacheKey);
         if (null != treeList) {

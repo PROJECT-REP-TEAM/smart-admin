@@ -40,17 +40,17 @@ public class GoodsService {
     /**
      * 添加商品
      *
-     * @param addDTO
+     * @param addForm
      * @return
      */
-    public ResponseDTO<String> add(GoodsAddDTO addDTO) {
+    public ResponseDTO<String> add(GoodsAddForm addForm) {
         // 商品校验
-        ResponseDTO<String> res = this.checkGoods(addDTO, null);
+        ResponseDTO<String> res = this.checkGoods(addForm, null);
         if (!res.getOk()) {
             return res;
         }
 
-        GoodsEntity goodsEntity = SmartBeanUtil.copy(addDTO, GoodsEntity.class);
+        GoodsEntity goodsEntity = SmartBeanUtil.copy(addForm, GoodsEntity.class);
         goodsDao.insert(goodsEntity);
         return ResponseDTO.ok();
     }
@@ -58,17 +58,17 @@ public class GoodsService {
     /**
      * 更新商品
      *
-     * @param updateDTO
+     * @param updateForm
      * @return
      */
-    public ResponseDTO<String> update(GoodsUpdateDTO updateDTO) {
+    public ResponseDTO<String> update(GoodsUpdateForm updateForm) {
         // 商品校验
-        ResponseDTO<String> res = this.checkGoods(updateDTO, updateDTO.getGoodsId());
+        ResponseDTO<String> res = this.checkGoods(updateForm, updateForm.getGoodsId());
         if (!res.getOk()) {
             return res;
         }
 
-        GoodsEntity goodsEntity = SmartBeanUtil.copy(updateDTO, GoodsEntity.class);
+        GoodsEntity goodsEntity = SmartBeanUtil.copy(updateForm, GoodsEntity.class);
         goodsDao.updateById(goodsEntity);
         return ResponseDTO.ok();
     }
@@ -76,17 +76,17 @@ public class GoodsService {
     /**
      * 添加/更新 商品校验
      *
-     * @param addDTO
+     * @param addForm
      * @param goodsId 不为空 代表更新商品
      * @return
      */
-    private ResponseDTO<String> checkGoods(GoodsAddDTO addDTO, Long goodsId) {
+    private ResponseDTO<String> checkGoods(GoodsAddForm addForm, Long goodsId) {
         // 校验商品名称重复
-        Long categoryId = addDTO.getCategoryId();
+        Long categoryId = addForm.getCategoryId();
 
         GoodsBO goodsBO = new GoodsBO();
-        goodsBO.setGoodsName(addDTO.getGoodsName());
-        goodsBO.setGoodsType(addDTO.getGoodsType());
+        goodsBO.setGoodsName(addForm.getGoodsName());
+        goodsBO.setGoodsType(addForm.getGoodsType());
         goodsBO.setCategoryId(categoryId);
         goodsBO.setDeletedFlag(false);
         GoodsEntity goodsEntity = goodsDao.selectOne(goodsBO);
@@ -108,12 +108,12 @@ public class GoodsService {
     /**
      * 批量删除
      *
-     * @param delDTO
+     * @param delForm
      * @return
      */
-    public ResponseDTO<String> del(GoodsDelDTO delDTO) {
+    public ResponseDTO<String> del(GoodsDelForm delForm) {
         // 批量更新删除状态
-        List<GoodsEntity> goodsList = delDTO.getGoodsIdList().stream().map(id -> {
+        List<GoodsEntity> goodsList = delForm.getGoodsIdList().stream().map(id -> {
             GoodsEntity goodsEntity = new GoodsEntity();
             goodsEntity.setGoodsId(id);
             goodsEntity.setDeletedFlag(true);
@@ -126,13 +126,13 @@ public class GoodsService {
     /**
      * 分页查询
      *
-     * @param queryDTO
+     * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(GoodsQueryDTO queryDTO) {
-        queryDTO.setDeletedFlag(false);
-        Page<?> page = SmartPageUtil.convert2PageQuery(queryDTO);
-        List<GoodsAdminVO> list = goodsDao.query(page, queryDTO);
+    public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(GoodsQueryForm queryForm) {
+        queryForm.setDeletedFlag(false);
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
+        List<GoodsAdminVO> list = goodsDao.query(page, queryForm);
         PageResultDTO<GoodsAdminVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         if (pageResult.getEmptyFlag()) {
             return ResponseDTO.ok(pageResult);

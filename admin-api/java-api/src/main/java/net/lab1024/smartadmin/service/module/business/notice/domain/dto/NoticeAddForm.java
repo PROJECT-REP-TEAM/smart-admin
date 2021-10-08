@@ -10,7 +10,7 @@ import org.hibernate.validator.constraints.Length;
  * @author 罗伊
  */
 @Data
-public class NoticeAddDTO {
+public class NoticeAddForm {
 
     @ApiModelProperty("消息标题")
     @Length(max = 200)

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.heartbeat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
@@ -24,8 +24,8 @@ public class HeartBeatController extends SupportBaseController {
 
     @PostMapping("/heartBeat/query")
     @ApiOperation("查询心跳记录 @author 卓大")
-    public ResponseDTO<PageResultDTO<HeartBeatRecordVO>> query(@RequestBody @Valid PageParamDTO pageParamDTO) {
-        return heartBeatService.pageQuery(pageParamDTO);
+    public ResponseDTO<PageResultDTO<HeartBeatRecordVO>> query(@RequestBody @Valid PageParamForm pageParamForm) {
+        return heartBeatService.pageQuery(pageParamForm);
     }
 
 }

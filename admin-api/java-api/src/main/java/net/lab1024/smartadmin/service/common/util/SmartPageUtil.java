@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.common.util;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.common.domain.PageParamDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParamForm;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -23,10 +23,10 @@ public class SmartPageUtil {
      * @param baseDTO
      * @return
      */
-    public static Page<?> convert2PageQuery(PageParamDTO baseDTO) {
+    public static Page<?> convert2PageQuery(PageParamForm baseDTO) {
         Page<?> page = new Page<>(baseDTO.getPageNum(), baseDTO.getPageSize());
         // 设置排序字段
-        List<PageParamDTO.SortItemDTO> sortItemList = baseDTO.getSortItemList();
+        List<PageParamForm.SortItemDTO> sortItemList = baseDTO.getSortItemList();
         if (CollectionUtils.isNotEmpty(sortItemList)) {
             List<OrderItem> orderItemList = sortItemList.stream().map(e -> new OrderItem(e.getColumn(), e.getIsAsc())).collect(Collectors.toList());
             page.setOrders(orderItemList);

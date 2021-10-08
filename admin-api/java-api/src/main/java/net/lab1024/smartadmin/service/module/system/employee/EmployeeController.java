@@ -30,7 +30,7 @@ public class EmployeeController extends SystemBaseController {
 
     @PostMapping("/employee/query")
     @ApiOperation(value = "员工管理查询", notes = "员工管理查询 @author 开云")
-    public ResponseDTO<PageResultDTO<EmployeeVO>> query(@Valid @RequestBody EmployeeQueryDTO query) {
+    public ResponseDTO<PageResultDTO<EmployeeVO>> query(@Valid @RequestBody EmployeeQueryForm query) {
         return employeeService.queryEmployeeList(query);
     }
 

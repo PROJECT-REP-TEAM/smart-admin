@@ -2,10 +2,10 @@ package net.lab1024.smartadmin.service.module.business.notice.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeQueryDTO;
+import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeQueryForm;
 import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReadCountDTO;
-import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveDTO;
-import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveQueryDTO;
+import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveForm;
+import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveQueryForm;
 import net.lab1024.smartadmin.service.module.business.notice.domain.entity.NoticeEntity;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO;
@@ -30,11 +30,11 @@ public interface NoticeDao extends BaseMapper<NoticeEntity> {
     /**
      * 分页查询
      *
-     * @param queryDTO
+     * @param query
      * @return NoticeEntity
      */
     @DataScope(dataScopeType = DataScopeTypeEnum.NOTICE, joinSql = "n.create_user in (#employeeIds)", whereInType = DataScopeWhereInTypeEnum.EMPLOYEE)
-    List<NoticeVO> queryByPage(Page page, @Param("queryDTO") NoticeQueryDTO queryDTO);
+    List<NoticeVO> queryByPage(Page page, @Param("query") NoticeQueryForm query);
 
 
     /**
@@ -52,10 +52,10 @@ public interface NoticeDao extends BaseMapper<NoticeEntity> {
      * 获取
      *
      * @param page
-     * @param queryDTO
+     * @param query
      * @return
      */
-    List<NoticeReceiveDTO> queryReceiveByPage(Page page, @Param("queryDTO") NoticeReceiveQueryDTO queryDTO);
+    List<NoticeReceiveForm> queryReceiveByPage(Page page, @Param("query") NoticeReceiveQueryForm query);
 
     /**
      * 详情

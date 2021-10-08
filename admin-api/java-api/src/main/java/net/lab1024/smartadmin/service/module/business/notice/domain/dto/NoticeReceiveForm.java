@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author 罗伊
  */
 @Data
-public class NoticeReceiveDTO{
+public class NoticeReceiveForm {
 
     @ApiModelProperty("id")
     private Long id;

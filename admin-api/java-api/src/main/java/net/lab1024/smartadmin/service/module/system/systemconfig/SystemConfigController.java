@@ -30,7 +30,7 @@ public class SystemConfigController extends SupportBaseController {
 
     @ApiOperation("分页查询系统配置")
     @PostMapping("/system/config/query")
-    public ResponseDTO<PageResultDTO<SystemConfigVO>> querySystemConfigPage(@RequestBody @Valid SystemConfigQueryDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<SystemConfigVO>> querySystemConfigPage(@RequestBody @Valid SystemConfigQueryForm queryDTO) {
         return systemConfigService.queryConfigPage(queryDTO);
     }
 

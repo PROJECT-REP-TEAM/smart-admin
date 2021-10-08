@@ -9,7 +9,7 @@ import lombok.Data;
  * @author 罗伊
  */
 @Data
-public class NoticeUpdateDTO extends NoticeAddDTO {
+public class NoticeUpdateForm extends NoticeAddForm {
 
     @ApiModelProperty("id")
     private Long id;

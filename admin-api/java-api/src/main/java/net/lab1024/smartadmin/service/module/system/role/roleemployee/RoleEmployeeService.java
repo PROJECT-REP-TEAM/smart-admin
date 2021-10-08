@@ -12,7 +12,7 @@ import net.lab1024.smartadmin.service.module.system.department.domain.entity.Dep
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.service.module.system.role.basic.RoleDao;
-import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleQueryDTO;
+import net.lab1024.smartadmin.service.module.system.role.basic.domain.dto.RoleQueryForm;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.entity.RoleEntity;
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.vo.RoleSelectedVO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeBatchDTO;
@@ -57,7 +57,7 @@ public class RoleEmployeeService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<EmployeeVO>> listEmployeeByName(RoleQueryDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<EmployeeVO>> listEmployeeByName(RoleQueryForm queryDTO) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<EmployeeDTO> employeeDTOS = roleEmployeeDao.selectEmployeeByNamePage(page, queryDTO);
         employeeDTOS.stream().filter(e -> e.getDepartmentId() != null).forEach(employeeDTO -> {

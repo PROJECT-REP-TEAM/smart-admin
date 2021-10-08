@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
-import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
@@ -113,7 +112,7 @@ public class EmployeeService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<EmployeeVO>> queryEmployeeList(EmployeeQueryDTO queryDTO) {
+    public ResponseDTO<PageResultDTO<EmployeeVO>> queryEmployeeList(EmployeeQueryForm queryDTO) {
         queryDTO.setDeletedFlag(false);
         Page pageParam = SmartPageUtil.convert2PageQuery(queryDTO);
         List<EmployeeVO> employeeList = employeeDao.queryEmployee(pageParam, queryDTO);
@@ -504,7 +503,7 @@ public class EmployeeService {
      * @return
      */
     public ResponseDTO<List<EmployeeVO>> queryAllEmploy(Boolean disabledFlag) {
-        EmployeeQueryDTO queryDTO = new EmployeeQueryDTO();
+        EmployeeQueryForm queryDTO = new EmployeeQueryForm();
         queryDTO.setDeletedFlag(Boolean.FALSE);
         if (disabledFlag != null) {
             queryDTO.setDisabledFlag(disabledFlag);

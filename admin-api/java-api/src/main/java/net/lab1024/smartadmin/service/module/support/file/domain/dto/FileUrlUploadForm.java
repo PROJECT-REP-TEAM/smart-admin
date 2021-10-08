@@ -19,7 +19,7 @@ import javax.validation.constraints.NotNull;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileUrlUploadDTO {
+public class FileUrlUploadForm {
 
     @ApiModelPropertyEnum(FileFolderTypeEnum.class)
     private Integer folder;
