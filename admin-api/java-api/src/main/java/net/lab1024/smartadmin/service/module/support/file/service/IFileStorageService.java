@@ -1,19 +1,17 @@
 package net.lab1024.smartadmin.service.module.support.file.service;
 
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
-import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.common.util.date.SmartDateFormatterEnum;
 import net.lab1024.smartadmin.service.common.util.date.SmartLocalDateUtil;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
+import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 /**
@@ -26,6 +24,7 @@ public interface IFileStorageService {
 
     /**
      * 文件上传
+     *
      * @param file
      * @param path
      * @return
@@ -42,106 +41,29 @@ public interface IFileStorageService {
 
     /**
      * 流式下载（名称为原文件）
+     *
      * @param key
      * @return
      */
     ResponseDTO<FileDownloadDTO> fileDownload(String key);
 
-
     /**
      * 单个删除文件
+     * 根据文件key删除
+     *
      * @param fileKey
      * @return
      */
-   ResponseDTO<String> delete(String fileKey);
+    ResponseDTO<String> delete(String fileKey);
 
 
     /**
      * 缓存过期秒数
-     * @return
-     */
-   default Long cacheExpireSecond(){
-       return 3600L;
-   }
-
-
-    /**
-     * 不带后缀名的文件名
      *
-     * @param file
      * @return
      */
-    default String getNameWithoutExtension(String file) {
-        String fileName = new File(file).getName();
-        int dotIndex = fileName.lastIndexOf('.');
-        return (dotIndex == -1) ? fileName : fileName.substring(0, dotIndex);
-    }
-
-    /**
-     * 判断指定目录的文件是否存在
-     * @param filePath
-     * @return
-     */
-    default boolean isFileExist(String filePath) {
-        File file = new File(filePath);
-        return file.exists();
-    }
-
-    /**
-     * 验证文件是否存在，如果不存在则抛出异常
-     *
-     * @param filePath
-     * @throws IOException
-     */
-    default void isFileExistThrowException(String filePath) throws IOException {
-        File file = new File(filePath);
-        if (!file.exists()) {
-            throw new FileNotFoundException(filePath);
-        }
-    }
-
-    /**
-     * 文件流读取
-     * @param file
-     * @param charset
-     * @return
-     * @throws FileNotFoundException
-     */
-    default BufferedReader newBufferedReader(File file, Charset charset) throws FileNotFoundException {
-        return new BufferedReader(new InputStreamReader(new FileInputStream(file), charset));
-    }
-
-    /**
-     * 文件写
-     * @param file
-     * @param charset
-     * @return
-     * @throws FileNotFoundException
-     */
-    default BufferedWriter newBufferedWriter(File file, Charset charset) throws FileNotFoundException {
-        return new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), charset));
-    }
-
-    /**
-     * 创建文件所在目录
-     * @param file
-     * @return
-     * @throws IOException
-     */
-    default boolean createParentDirs(File file) throws IOException {
-        File parent = file.getCanonicalFile().getParentFile();
-        if (parent == null) {
-            return false;
-        }
-        return parent.mkdirs();
-    }
-
-    default boolean createNotExistParentDirFile(File file) throws IOException {
-        boolean createParentDirsRes = createParentDirs(file);
-        if (!createParentDirsRes) {
-            throw new IOException("cannot create parent Directory of " + file.getName());
-        }
-        return file.createNewFile();
+    default Long cacheExpireSecond() {
+        return 3600L;
     }
 
     /**
@@ -152,48 +74,20 @@ public interface IFileStorageService {
      * @return String
      */
     default String generateFileName(String originalFileName) {
-        String time = SmartLocalDateUtil.format(LocalDateTime.now(), SmartDateFormatterEnum.YMDHMS);
-        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String fileType = FileUtils.getExtension(originalFileName);
-        return time + uuid + "." + fileType;
+        return generateFileNameByType(FileUtils.getExtension(originalFileName));
     }
 
     /**
      * 根据文件类型 生成文件名
+     * 当前年月日时分秒 +32位 uuid + 文件格式后缀
+     *
      * @param fileType
      * @return
      */
     default String generateFileNameByType(String fileType) {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyMMddHH"));
+        String time = SmartLocalDateUtil.format(LocalDateTime.now(), SmartDateFormatterEnum.YMDHMS);
         return uuid + time + "." + fileType;
-    }
-
-    /**
-     * 获取文件类型
-     *
-     * @param originalFileName
-     * @return
-     */
-    default String getFileType(String originalFileName) {
-        return originalFileName.substring(originalFileName.lastIndexOf(".") + 1);
-    }
-
-    /**
-     * 获取文件格式
-     *
-     * @param fileName
-     * @return 返回内容：png、mp4 等
-     */
-    default String getFormat(String fileName) {
-        if (StringUtils.isBlank(fileName)) {
-            return null;
-        }
-        int index = fileName.lastIndexOf(".");
-        if (index == -1) {
-            return null;
-        }
-        return fileName.substring(index + 1);
     }
 
     /**
@@ -293,27 +187,20 @@ public interface IFileStorageService {
      */
     default String getDownloadFileNameByUA(String fileName, String userAgent) {
         try {
-            if (userAgent.toLowerCase().indexOf("firefox") > 0) {
-                // firefox浏览器
-                fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
-            } else if (userAgent.toUpperCase().indexOf("MSIE") > 0) {
+            userAgent = userAgent.toUpperCase();
+            if (userAgent.indexOf("MSIE") > 0) {
                 // IE浏览器
-                fileName = URLEncoder.encode(fileName, "UTF-8");
-            } else if (userAgent.toUpperCase().indexOf("EDGE") > 0) {
+                fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.name());
+            } else if (userAgent.indexOf("EDGE") > 0) {
                 // WIN10浏览器
-                fileName = URLEncoder.encode(fileName, "UTF-8");
-            } else if (userAgent.toUpperCase().indexOf("CHROME") > 0) {
-                // 谷歌
-                fileName = new String(fileName.getBytes("UTF-8"), "ISO8859-1");
+                fileName = URLEncoder.encode(fileName, StandardCharsets.UTF_8.name());
             } else {
-                //万能乱码问题解决
-                fileName = new String(fileName.getBytes("UTF-8"), "ISO-8859-1");
+                // 其他
+                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
             }
         } catch (UnsupportedEncodingException e) {
             return null;
         }
         return fileName;
     }
-
-
 }

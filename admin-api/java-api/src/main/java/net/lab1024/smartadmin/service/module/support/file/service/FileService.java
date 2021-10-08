@@ -9,6 +9,7 @@ import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.support.file.FileDao;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileEntity;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
@@ -145,14 +146,7 @@ public class FileService {
         if (CollectionUtils.isEmpty(fileKeyList)) {
             return Lists.newArrayList();
         }
-        List<FileVO> fileVOList = Lists.newArrayList();
-        fileKeyList.forEach(e -> {
-            FileVO fileVO = this.getCacheFileVO(e);
-            if (fileVO != null) {
-                fileVOList.add(fileVO);
-            }
-        });
-        return fileVOList;
+        return fileKeyList.stream().map(this::getCacheFileVO).collect(Collectors.toList());
     }
 
     private FileVO getCacheFileVO(String fileKey) {
@@ -160,11 +154,11 @@ public class FileService {
         FileVO fileVO = redisService.getObject(redisKey, FileVO.class);
         if (fileVO == null) {
             fileVO = fileDao.getByFileKey(fileKey);
-            if (fileVO != null) {
-                redisService.set(redisKey, fileVO, fileStorageService.cacheExpireSecond());
+            if (fileVO == null) {
+                return null;
             }
+            redisService.set(redisKey, fileVO, fileStorageService.cacheExpireSecond());
         }
-
         fileVO.setFileUrl(this.getCacheUrl(fileKey));
         return fileVO;
     }
@@ -181,10 +175,10 @@ public class FileService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         // 处理逗号分隔的字符串
-        List<String> stringList = Arrays.asList(fileKey.split(StringConst.SEPARATOR));
-        stringList = stringList.stream().map(e -> this.getCacheUrl(e)).collect(Collectors.toList());
-        String result = StringUtils.join(stringList, StringConst.SEPARATOR_CHAR);
-        return ResponseDTO.ok(result);
+        String keyList = SmartStringUtil.splitConvertToList(fileKey, StringConst.SEPARATOR)
+                                        .stream().map(this::getCacheUrl)
+                                        .collect(Collectors.joining(StringConst.SEPARATOR));
+        return ResponseDTO.ok(keyList);
     }
 
 

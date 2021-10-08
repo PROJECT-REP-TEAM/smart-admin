@@ -14,6 +14,7 @@ import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloa
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import org.apache.commons.collections4.MapUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -65,7 +66,7 @@ public class FileStorageCloudServiceImpl implements IFileStorageService {
     public ResponseDTO<FileUploadVO> fileUpload(MultipartFile file, String path) {
         // 设置文件 key
         String originalFilename = file.getOriginalFilename();
-        String fileType = this.getFileType(originalFilename);
+        String fileType = FileUtils.getExtension(originalFilename);
         String fileKey = path + this.generateFileName(originalFilename);
         // 文件名称 URL 编码
         String urlEncoderFilename;

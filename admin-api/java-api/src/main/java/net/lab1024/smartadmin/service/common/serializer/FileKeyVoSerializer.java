@@ -19,7 +19,7 @@ import java.util.List;
  * @author 罗伊
  * @date 2020/8/15 15:06
  */
-public class FileKeyVOSerializer extends JsonSerializer<String> {
+public class FileKeyVoSerializer extends JsonSerializer<String> {
 
     @Autowired
     private FileService fileService;
