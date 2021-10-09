@@ -18,7 +18,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableScheduling
 @EnableAspectJAutoProxy(proxyTargetClass = true, exposeProxy = true)
-@MapperScan(value = "net.lab1024.smartadmin.service.*",basePackageClasses = Mapper.class)
+@MapperScan(value = "net.lab1024.smartadmin.service.*",annotationClass = Mapper.class)
 public class SmartAdminApplication {
 
     public static void main(String[] args) {

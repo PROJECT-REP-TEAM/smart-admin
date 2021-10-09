@@ -12,6 +12,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.stereotype.Component;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -26,8 +27,8 @@ import java.io.InputStream;
  * @author 罗伊
  * @date 2020/8/25 11:57
  */
-
 @Slf4j
+@Component
 @ConditionalOnProperty(prefix = "file.storage", name = {"mode"}, havingValue = "local")
 public class FileStorageLocalServiceImpl implements IFileStorageService {
 

@@ -11,6 +11,7 @@ import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
 import net.lab1024.smartadmin.service.module.support.file.service.FileService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.lab1024.smartadmin.service.module.support.repeatsubmit.annoation.RepeatSubmit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -58,6 +59,7 @@ public class FileController extends SupportBaseController {
 
     @ApiOperation(value = "系统文件查询 by listen")
     @PostMapping("/file/query")
+    @RepeatSubmit(3000)
     public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(@RequestBody @Valid FileQueryForm queryForm) {
         return fileService.queryListByPage(queryForm);
     }

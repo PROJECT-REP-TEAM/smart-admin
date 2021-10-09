@@ -1,10 +1,9 @@
 package net.lab1024.smartadmin.service.module.support.repeatsubmit;
 
-import com.github.benmanes.caffeine.cache.Cache;
-import com.github.benmanes.caffeine.cache.Caffeine;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.repeatsubmit.annoation.RepeatSubmit;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -12,10 +11,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 /**
  * [  ]
@@ -26,23 +22,16 @@ import java.util.function.Function;
 @Aspect
 public class RepeatSubmitAspect {
 
-    /**
-     * 限制缓存最大数量 超过后先放入的会自动移除
-     * 默认缓存时间
-     */
-    private static Cache<Object, Object> cache = Caffeine.newBuilder()
-            .maximumSize(5000)
-            .expireAfterWrite(RepeatSubmit.MAX_INTERVAL, TimeUnit.MILLISECONDS).build();
-
-    private Function<HttpServletRequest, RepeatSubmitTicket> userFunction;
+    private AbstractRepeatSubmitTicket repeatSubmitTicket;
 
     /**
-     * 获取用户信息
-     *rep
-     * @param userFunction
+     * 获取凭证信息
+     * rep
+     *
+     * @param repeatSubmitTicket
      */
-    public RepeatSubmitAspect(Function<HttpServletRequest, RepeatSubmitTicket> userFunction) {
-        this.userFunction = userFunction;
+    public RepeatSubmitAspect(AbstractRepeatSubmitTicket repeatSubmitTicket) {
+        this.repeatSubmitTicket = repeatSubmitTicket;
     }
 
     /**
@@ -54,29 +43,30 @@ public class RepeatSubmitAspect {
      */
     @Around("@annotation(net.lab1024.smartadmin.service.module.support.repeatsubmit.annoation.RepeatSubmit)")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-
-        RepeatSubmitTicket user = this.userFunction.apply(request);
-        if (user == null) {
-            return point.proceed();
-        }
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         String servletPath = attributes.getRequest().getServletPath();
-        String key = user.getUserId() + "_" + servletPath;
-        Object value = cache.getIfPresent(key);
-        if (value != null) {
+        String ticket = this.repeatSubmitTicket.getTicket(servletPath);
+        if (StringUtils.isEmpty(ticket)) {
+            return point.proceed();
+        }
+        Long timeStamp = this.repeatSubmitTicket.ticketTimeStamp(ticket);
+        if (timeStamp != null) {
             Method method = ((MethodSignature) point.getSignature()).getMethod();
             RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
             int interval = Math.min(annotation.value(), RepeatSubmit.MAX_INTERVAL);
-            if (System.currentTimeMillis() < (long) value + interval) {
+            if (System.currentTimeMillis() < (long) timeStamp + interval) {
                 // 提交频繁
                 return ResponseDTO.error(UserErrorCode.REPEAT_SUBMIT);
             }
         }
-        cache.put(key, System.currentTimeMillis());
-        Object obj = point.proceed();
-        cache.put(key, System.currentTimeMillis());
+        Object obj = null;
+        try {
+            obj = point.proceed();
+            this.repeatSubmitTicket.putTicket(ticket);
+        }catch (Throwable throwable){
+            this.repeatSubmitTicket.removeTicket(ticket);
+        }
         return obj;
     }
 
