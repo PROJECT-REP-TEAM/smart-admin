@@ -18,7 +18,7 @@ public class SwaggerTagConst {
 
         public static final String ID_GENERATOR = "基础-ID生成器";
 
-        public static final String SMART_RELOAD = "基础-Reload";
+        public static final String RELOAD = "基础-Reload";
 
         public static final String TASK_SCHEDULER = "基础-任务调度";
 

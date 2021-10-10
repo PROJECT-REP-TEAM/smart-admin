@@ -20,7 +20,7 @@ import java.util.List;
  * @author 开云
  */
 @Service
-public class SmartReloadService {
+public class ReloadService {
 
     @Autowired
     private ReloadItemDao reloadItemDao;

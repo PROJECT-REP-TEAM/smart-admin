@@ -19,27 +19,27 @@ import java.util.List;
  * @author 开云
  */
 @RestController
-@Api(tags = {SwaggerTagConst.Support.SMART_RELOAD})
-public class SmartReloadController extends SupportBaseController {
+@Api(tags = {SwaggerTagConst.Support.RELOAD})
+public class ReloadController extends SupportBaseController {
 
     @Autowired
-    private SmartReloadService smartReloadService;
+    private ReloadService reloadService;
 
     @ApiOperation(value = "查询reload列表 by 开云")
     @GetMapping("/reload/query")
     public ResponseDTO<List<ReloadItemVO>> query() {
-        return smartReloadService.query();
+        return reloadService.query();
     }
 
     @ApiOperation(value = "获取reload result by 开云")
-    @GetMapping("/smartReload/result/{tag}")
+    @GetMapping("/reload/result/{tag}")
     public ResponseDTO<List<ReloadResultVO>> queryReloadResult(@PathVariable("tag") String tag) {
-        return smartReloadService.queryReloadItemResult(tag);
+        return reloadService.queryReloadItemResult(tag);
     }
 
     @ApiOperation(value = "通过tag更新标识 by 开云")
-    @PostMapping("/smartReload/update")
+    @PostMapping("/reload/update")
     public ResponseDTO<String> updateByTag(@RequestBody @Valid ReloadItemUpdateDTO updateDTO) {
-        return smartReloadService.updateByTag(updateDTO);
+        return reloadService.updateByTag(updateDTO);
     }
 }
