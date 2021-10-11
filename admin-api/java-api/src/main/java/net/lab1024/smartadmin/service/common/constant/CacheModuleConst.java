@@ -25,10 +25,6 @@ public class CacheModuleConst {
 
     public static class Department {
 
-        /**
-         * 部门树
-         */
-        public static final String DEPARTMENT_CACHE = "department_cache";
 
         /**
          * 部门树
@@ -38,7 +34,7 @@ public class CacheModuleConst {
         /**
          * 某个部门以及下级的id列表
          */
-        public static final String DEPARTMENT_TREE_ID_CACHE = "department_tree_id_cache";
+        public static final String DEPARTMENT_SELF_CHILDREN_ID_CACHE = "department_self_children_id_cache";
 
     }
 

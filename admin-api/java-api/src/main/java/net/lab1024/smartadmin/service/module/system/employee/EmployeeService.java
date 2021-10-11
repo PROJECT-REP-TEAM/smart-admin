@@ -3,14 +3,12 @@ package net.lab1024.smartadmin.service.module.system.employee;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
-import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
-import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.*;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
@@ -19,8 +17,6 @@ import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginIn
 import net.lab1024.smartadmin.service.module.system.menu.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.RoleEmployeeDao;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeEntity;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -58,7 +54,7 @@ public class EmployeeService {
     private RoleEmployeeDao roleEmployeeDao;
 
     @Autowired
-    protected IBeanCache beanCache;
+    private EmployeeCacheManager employeeCacheManager;
 
     /**
      * 获取员工登录信息
@@ -67,11 +63,8 @@ public class EmployeeService {
      * @return
      */
     public EmployeeLoginInfoDTO getById(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
-        EmployeeEntity employeeEntity = beanCache.get(cacheKey);
-        //获取员工角色缓存
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
-        List<Long> roleIdList = beanCache.get(roleCacheKey);
+        EmployeeEntity employeeEntity = employeeCacheManager.singleEmployeeCache(employeeId);
+        List<Long> roleIdList = employeeCacheManager.singleEmployeeRoleCache(employeeId);
         if (employeeEntity != null) {
             Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
             EmployeeLoginInfoDTO loginDTO = SmartBeanUtil.copy(employeeEntity, EmployeeLoginInfoDTO.class);
@@ -90,11 +83,8 @@ public class EmployeeService {
      * @return
      */
     public EmployeeLoginBO getBoById(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
-        EmployeeEntity employeeEntity = beanCache.get(cacheKey);
-        //获取员工角色缓存
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
-        List<Long> roleIdList = beanCache.get(roleCacheKey);
+        EmployeeEntity employeeEntity = employeeCacheManager.singleEmployeeCache(employeeId);
+        List<Long> roleIdList = employeeCacheManager.singleEmployeeRoleCache(employeeId);
         if (employeeEntity != null) {
             Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
             EmployeeLoginBO loginDTO = SmartBeanUtil.copy(employeeEntity, EmployeeLoginBO.class);
@@ -112,7 +102,7 @@ public class EmployeeService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<EmployeeVO>> queryEmployeeList(EmployeeQueryForm queryDTO) {
+    public ResponseDTO<PageResultDTO<EmployeeVO>>  queryEmployeeList(EmployeeQueryForm queryDTO) {
         queryDTO.setDeletedFlag(false);
         Page pageParam = SmartPageUtil.convert2PageQuery(queryDTO);
         List<EmployeeVO> employeeList = employeeDao.queryEmployee(pageParam, queryDTO);
@@ -163,7 +153,7 @@ public class EmployeeService {
         // 保存数据
         employeeManager.saveEmployee(entity, addDTO.getRoleIdList());
 
-        this.clearCacheByDepartmentId(departmentId);
+        employeeCacheManager.clearCacheByDepartmentId(departmentId);
 
         return ResponseDTO.ok();
     }
@@ -202,8 +192,8 @@ public class EmployeeService {
         employeeManager.updateEmployee(entity, updateDTO.getRoleIdList());
 
         // 清除缓存
-        this.clearCacheByEmployeeId(employeeId);
-        this.clearCacheByDepartmentId(departmentId);
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByDepartmentId(departmentId);
 
         return ResponseDTO.ok();
     }
@@ -225,8 +215,8 @@ public class EmployeeService {
 
         employeeDao.updateDisableFlag(employeeId, !employeeEntity.getDisabledFlag());
 
-        this.clearCacheByEmployeeId(employeeId);
-        this.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
         return ResponseDTO.ok();
     }
 
@@ -247,8 +237,8 @@ public class EmployeeService {
 
         // 清除缓存
         employeeEntityList.forEach(e -> {
-            this.clearCacheByEmployeeId(e.getId());
-            this.clearCacheByDepartmentId(e.getDepartmentId());
+            employeeCacheManager.clearCacheByEmployeeId(e.getId());
+            employeeCacheManager.clearCacheByDepartmentId(e.getDepartmentId());
         });
         return ResponseDTO.ok();
     }
@@ -278,8 +268,8 @@ public class EmployeeService {
 
         // 清除缓存
         employeeEntityList.forEach(e -> {
-            this.clearCacheByEmployeeId(e.getId());
-            this.clearCacheByDepartmentId(e.getDepartmentId());
+            employeeCacheManager.clearCacheByEmployeeId(e.getId());
+            employeeCacheManager.clearCacheByDepartmentId(e.getDepartmentId());
         });
         return ResponseDTO.ok();
     }
@@ -301,8 +291,8 @@ public class EmployeeService {
         updateEmployee.setDeletedFlag(true);
         employeeDao.updateById(updateEmployee);
 
-        this.clearCacheByEmployeeId(employeeId);
-        this.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
         return ResponseDTO.ok();
     }
 
@@ -330,8 +320,8 @@ public class EmployeeService {
 
         // 清除缓存
         employeeEntityList.forEach(e -> {
-            this.clearCacheByEmployeeId(e.getId());
-            this.clearCacheByDepartmentId(e.getDepartmentId());
+            employeeCacheManager.clearCacheByEmployeeId(e.getId());
+            employeeCacheManager.clearCacheByDepartmentId(e.getDepartmentId());
         });
         return ResponseDTO.ok();
     }
@@ -399,8 +389,7 @@ public class EmployeeService {
      * @return
      */
     public ResponseDTO<List<EmployeeVO>> getEmployeeByDeptId(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
-        List<EmployeeEntity> employeeEntityList = beanCache.get(cacheKey);
+        List<EmployeeEntity> employeeEntityList = employeeCacheManager.departmentEmployeeCache(departmentId);
         if (CollectionUtils.isEmpty(employeeEntityList)) {
             return ResponseDTO.ok(Collections.emptyList());
         }
@@ -408,44 +397,6 @@ public class EmployeeService {
         return ResponseDTO.ok(voList);
     }
 
-    /**
-     * 获取某个校区的员工信息
-     *
-     * @param departmentId
-     * @return
-     */
-    public ResponseDTO<List<EmployeeVO>> getEmployeeBySchoolId(Long departmentId) {
-        // 查询部门下所有部门包含子部门
-        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Department.DEPARTMENT_CACHE);
-        List<DepartmentVO> departmentList = beanCache.get(cacheKey);
-        // 先查询本部门的员工
-        ResponseDTO<List<EmployeeVO>> employeeByDeptId = getEmployeeByDeptId(departmentId);
-        List<EmployeeVO> schoolEmployeeList = employeeByDeptId.getData();
-        // 进入递归
-        List<EmployeeVO> employeeList = Lists.newArrayList(schoolEmployeeList);
-        recursionFindEmployee(employeeList, departmentList, departmentId);
-        return ResponseDTO.ok(employeeList);
-    }
-
-    /**
-     * 递归查询员工
-     *
-     * @param employeeList
-     * @param departmentList
-     */
-    private void recursionFindEmployee(List<EmployeeVO> employeeList, List<DepartmentVO> departmentList, Long parentId) {
-        // 寻找子集部门
-        List<DepartmentVO> childDepartmentList = departmentList.stream().filter(e -> e.getParentId().equals(parentId)).collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(childDepartmentList)) {
-            return;
-        }
-        for (DepartmentVO departmentVO : childDepartmentList) {
-            // 查询本级部门下包含的员工
-            ResponseDTO<List<EmployeeVO>> employeeByDeptId = getEmployeeByDeptId(departmentVO.getId());
-            employeeList.addAll(employeeByDeptId.getData());
-            recursionFindEmployee(employeeList, departmentList, departmentVO.getId());
-        }
-    }
 
     /**
      * 重置密码
@@ -457,28 +408,6 @@ public class EmployeeService {
         String md5Password = getEncryptPwd(null);
         employeeDao.updatePassword(employeeId, md5Password);
         return ResponseDTO.ok();
-    }
-
-    /**
-     * 清除businessId为员工id的缓存信息
-     *
-     * @param employeeId
-     */
-    public void clearCacheByEmployeeId(Long employeeId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, employeeId.toString());
-        beanCache.remove(cacheKey);
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
-        beanCache.remove(roleCacheKey);
-    }
-
-    /**
-     * 清除businessId为部门id的缓存信息
-     *
-     * @param departmentId
-     */
-    private void clearCacheByDepartmentId(Long departmentId) {
-        String cacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE, departmentId.toString());
-        beanCache.remove(cacheKey);
     }
 
     /**

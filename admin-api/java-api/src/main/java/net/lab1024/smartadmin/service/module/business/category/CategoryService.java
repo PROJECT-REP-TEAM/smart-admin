@@ -3,10 +3,10 @@ package net.lab1024.smartadmin.service.module.business.category;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.business.category.constant.CategoryConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.*;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +29,9 @@ public class CategoryService {
     @Autowired
     private CategoryQueryService categoryQueryService;
 
+    @Autowired
+    private CategoryCacheManager categoryCacheManager;
+
     /**
      * 添加类目
      *
@@ -43,7 +46,7 @@ public class CategoryService {
             return res;
         }
         // 没有父类则使用默认父类
-        Long parentId = null == addForm.getParentId() ? CategoryConst.DEFAULT_PARENT_ID : addForm.getParentId();
+        Long parentId = null == addForm.getParentId() ? NumberUtils.LONG_ZERO : addForm.getParentId();
         categoryEntity.setParentId(parentId);
         categoryEntity.setSort(null == addForm.getSort() ? 0 : addForm.getSort());
         categoryEntity.setDeletedFlag(false);
@@ -52,7 +55,7 @@ public class CategoryService {
         categoryDao.insert(categoryEntity);
 
         // 更新缓存
-        categoryQueryService.removeCache();
+        categoryCacheManager.removeCache();
         return ResponseDTO.ok();
     }
 
@@ -87,7 +90,7 @@ public class CategoryService {
         categoryDao.updateById(categoryEntity);
 
         // 更新缓存
-        categoryQueryService.removeCache();
+        categoryCacheManager.removeCache();
         return ResponseDTO.ok();
     }
 
@@ -106,7 +109,7 @@ public class CategoryService {
             if (Objects.equals(categoryEntity.getCategoryId(), parentId)) {
                 return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "父级类目怎么和自己相同了");
             }
-            if (!Objects.equals(parentId, CategoryConst.DEFAULT_PARENT_ID)) {
+            if (!Objects.equals(parentId, NumberUtils.LONG_ZERO)) {
                 Optional<CategoryEntity> optional = categoryQueryService.queryCategory(parentId);
                 if (!optional.isPresent()) {
                     return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST, "父级类目不存在~");
@@ -120,7 +123,7 @@ public class CategoryService {
 
         } else {
             // 如果没有父类 使用默认父类
-            parentId = CategoryConst.DEFAULT_PARENT_ID;
+            parentId = NumberUtils.LONG_ZERO;
         }
 
         // 校验同父类下 名称是否重复
@@ -169,9 +172,9 @@ public class CategoryService {
             if (null == queryForm.getCategoryType()) {
                 return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "类目类型不能为空");
             }
-            queryForm.setParentId(CategoryConst.DEFAULT_PARENT_ID);
+            queryForm.setParentId(NumberUtils.LONG_ZERO);
         }
-        List<CategoryTreeVO> treeList = categoryQueryService.queryCategoryTree(queryForm);
+        List<CategoryTreeVO> treeList = categoryCacheManager.queryCategoryTree(queryForm.getParentId(),queryForm.getCategoryType());
         return ResponseDTO.ok(treeList);
     }
 
@@ -200,7 +203,7 @@ public class CategoryService {
         categoryDao.updateById(categoryEntity);
 
         // 更新缓存
-        categoryQueryService.removeCache();
+        categoryCacheManager.removeCache();
         return ResponseDTO.ok();
     }
 

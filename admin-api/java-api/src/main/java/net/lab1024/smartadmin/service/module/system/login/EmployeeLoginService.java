@@ -4,12 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaForm;
 import net.lab1024.smartadmin.service.module.system.department.DepartmentDao;
-import net.lab1024.smartadmin.service.module.system.department.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
-import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeLoginDTO;
@@ -18,7 +17,6 @@ import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginIn
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginVO;
 import net.lab1024.smartadmin.service.module.system.menu.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.menu.domain.MenuLoginBO;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,9 +34,6 @@ public class EmployeeLoginService {
 
     @Autowired
     private DepartmentDao departmentDao;
-
-    @Autowired
-    private DepartmentService departmentService;
 
     @Autowired
     private EmployeeLoginTokenService employeeLoginTokenService;
@@ -91,10 +86,6 @@ public class EmployeeLoginService {
         // 查询部门
         DepartmentEntity deptEntity = departmentDao.selectById(employeeEntity.getDepartmentId());
         String deptName = null == deptEntity ? StringConst.EMPTY_STR : deptEntity.getName();
-
-        // 查询所在校区
-        DepartmentVO schoolIdByDepartment = departmentService.getSchoolIdByDepartment(employeeEntity.getDepartmentId());
-
         // 返回登录结果
         EmployeeLoginVO loginResultDTO = SmartBeanUtil.copy(employeeEntity, EmployeeLoginVO.class);
         loginResultDTO.setEmployeeId(employeeEntity.getId());
@@ -103,10 +94,6 @@ public class EmployeeLoginService {
         loginResultDTO.setDepartmentName(deptName);
         loginResultDTO.setToken(token);
         loginResultDTO.setIsSuperMan(isSuperman);
-        if (schoolIdByDepartment != null) {
-            loginResultDTO.setSchoolId(schoolIdByDepartment.getId());
-            loginResultDTO.setSchoolName(schoolIdByDepartment.getName());
-        }
         return ResponseDTO.ok(loginResultDTO);
     }
 
@@ -117,7 +104,6 @@ public class EmployeeLoginService {
      * @return
      */
     public ResponseDTO<String> logoutByToken(Long employeeId) {
-        employeeService.clearCacheByEmployeeId(employeeId);
         return ResponseDTO.ok();
     }
 

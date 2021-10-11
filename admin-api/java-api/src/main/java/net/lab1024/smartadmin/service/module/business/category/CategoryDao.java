@@ -23,11 +23,21 @@ public interface CategoryDao extends BaseMapper<CategoryEntity> {
      * 根据父级id 类型 查询子类
      *
      * @param parentIdList
-     * @param categoryType {@link CategoryTypeEnum}
      * @param deletedFlag
      * @return
      */
     List<CategoryEntity> queryByParentId(@Param("parentIdList") List<Long> parentIdList,
+                                         @Param("deletedFlag") Boolean deletedFlag);
+
+    /**
+     * 根据父级id 类型 查询子类
+     *
+     * @param parentIdList
+     * @param categoryType {@link CategoryTypeEnum}
+     * @param deletedFlag
+     * @return
+     */
+    List<CategoryEntity> queryByParentIdAndType(@Param("parentIdList") List<Long> parentIdList,
                                          @Param("categoryType") Integer categoryType,
                                          @Param("deletedFlag") Boolean deletedFlag);
 

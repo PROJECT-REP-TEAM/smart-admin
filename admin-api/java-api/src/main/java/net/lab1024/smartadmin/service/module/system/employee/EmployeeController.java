@@ -109,10 +109,5 @@ public class EmployeeController extends SystemBaseController {
         return employeeService.resetPassword(employeeId);
     }
 
-    @ApiOperation(value = "查询员工-根据校区id", notes = "@author 善逸")
-    @GetMapping("/employee/query/school/{deptId}")
-    public ResponseDTO<List<EmployeeVO>> listBySchoolId(@PathVariable Long deptId) {
-        return employeeService.getEmployeeBySchoolId(deptId);
-    }
 
 }

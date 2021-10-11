@@ -2,13 +2,13 @@ package net.lab1024.smartadmin.service.module.system.role.roleemployee;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.beancache.cache.IBeanCache;
-import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
+import net.lab1024.smartadmin.service.module.system.employee.EmployeeCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.service.module.system.role.basic.RoleDao;
@@ -17,8 +17,6 @@ import net.lab1024.smartadmin.service.module.system.role.basic.domain.entity.Rol
 import net.lab1024.smartadmin.service.module.system.role.basic.domain.vo.RoleSelectedVO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeBatchDTO;
 import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeEntity;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +47,7 @@ public class RoleEmployeeService {
     private RoleEmployeeManager roleEmployeeManager;
 
     @Autowired
-    protected IBeanCache beanCache;
+    protected EmployeeCacheManager employeeCacheManager;
 
     /**
      * 通过角色id，分页获取成员员工列表
@@ -87,7 +85,7 @@ public class RoleEmployeeService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         roleEmployeeDao.deleteByEmployeeIdRoleId(employeeId, roleId);
-        this.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
         return ResponseDTO.ok();
     }
 
@@ -100,7 +98,7 @@ public class RoleEmployeeService {
     public ResponseDTO<String> batchRemoveEmployeeRole(RoleEmployeeBatchDTO removeDTO) {
         roleEmployeeDao.batchDeleteEmployeeRole(removeDTO.getRoleId(), removeDTO.getEmployeeIdList());
         for (Long employeeId : removeDTO.getEmployeeIdList()) {
-            this.clearCacheByEmployeeId(employeeId);
+            employeeCacheManager.clearCacheByEmployeeId(employeeId);
         }
         return ResponseDTO.ok();
     }
@@ -118,13 +116,13 @@ public class RoleEmployeeService {
         List<RoleEmployeeEntity> roleEmployeeList = null;
         if (CollectionUtils.isNotEmpty(employeeIdList)) {
             roleEmployeeList = employeeIdList.stream()
-                                             .map(employeeId -> new RoleEmployeeEntity(roleId, employeeId))
-                                             .collect(Collectors.toList());
+                    .map(employeeId -> new RoleEmployeeEntity(roleId, employeeId))
+                    .collect(Collectors.toList());
         }
         // 保存数据
         roleEmployeeManager.saveRoleEmployee(roleId, roleEmployeeList);
         for (Long employeeId : employeeIdList) {
-            this.clearCacheByEmployeeId(employeeId);
+            employeeCacheManager.clearCacheByEmployeeId(employeeId);
         }
         return ResponseDTO.ok();
     }
@@ -141,15 +139,5 @@ public class RoleEmployeeService {
         List<RoleSelectedVO> result = SmartBeanUtil.copyList(roleList, RoleSelectedVO.class);
         result.stream().forEach(item -> item.setSelected(roleIds.contains(item.getId())));
         return ResponseDTO.ok(result);
-    }
-
-    /**
-     * 清除businessId为员工id的缓存信息
-     *
-     * @param employeeId
-     */
-    public void clearCacheByEmployeeId(Long employeeId) {
-        String roleCacheKey = CacheKey.cacheKey(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE, employeeId.toString());
-        beanCache.remove(roleCacheKey);
     }
 }

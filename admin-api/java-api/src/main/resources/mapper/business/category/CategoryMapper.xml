@@ -9,9 +9,19 @@
         WHERE
         parent_id IN
         <foreach collection="parentIdList" open="(" separator="," close=")" item="id">#{id}</foreach>
-        <if test="categoryType != null">
-            AND category_type = #{categoryType}
-        </if>
+        AND deleted_flag = #{deletedFlag}
+        ORDER BY sort ASC
+    </select>
+
+
+    <!-- 根据父级id 查询子类 -->
+    <select id="queryByParentIdAndType"
+            resultType="net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity">
+        SELECT * FROM t_category
+        WHERE
+        parent_id IN
+        <foreach collection="parentIdList" open="(" separator="," close=")" item="id">#{id}</foreach>
+        AND category_type = #{categoryType}
         AND deleted_flag = #{deletedFlag}
         ORDER BY sort ASC
     </select>

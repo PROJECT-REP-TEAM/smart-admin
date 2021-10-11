@@ -2,11 +2,11 @@ package net.lab1024.smartadmin.service.module.system.department;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
-import net.lab1024.smartadmin.service.module.support.beancache.key.CacheKey;
-import net.lab1024.smartadmin.service.module.support.beancache.anno.CacheLoad;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class DepartmentCacheService {
+public class DepartmentCacheManager {
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -25,27 +25,29 @@ public class DepartmentCacheService {
     @Autowired
     private DepartmentTreeService departmentTreeService;
 
+
     /**
-     * 缓存部门结构
-     * cacheKey = CacheKeyConst.DEPARTMENT_TREE_CACHE
-     * 无businessId
-     *
-     * @return
+     * 清除自身以及下级的id列表缓存
      */
-    @CacheLoad(CacheModuleConst.Department.DEPARTMENT_CACHE)
-    public List<DepartmentVO> departmentCache() {
-        List<DepartmentVO> departmentVOList = departmentDao.listAll();
-        return departmentVOList;
+    @CacheEvict(CacheModuleConst.Department.DEPARTMENT_SELF_CHILDREN_ID_CACHE)
+    public void clearSelfAndChildrenIdCache() {
+        log.info("clear DEPARTMENT_SELF_CHILDREN_ID_CACHE");
+    }
+
+    /**
+     * 清除树结构缓存
+     */
+    @CacheEvict(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE)
+    public void clearTreeCache() {
+        log.info("clear DEPARTMENT_TREE_CACHE");
     }
 
     /**
      * 缓存部门树结构
-     * cacheKey = CacheKeyConst.DEPARTMENT_TREE_CACHE
-     * 无businessId
      *
      * @return
      */
-    @CacheLoad(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE)
+    @Cacheable(CacheModuleConst.Department.DEPARTMENT_TREE_CACHE)
     public List<DepartmentTreeVO> departmentTreeCache() {
         List<DepartmentVO> departmentVOList = departmentDao.listAll();
         List<DepartmentTreeVO> treeList = departmentTreeService.buildTree(departmentVOList);
@@ -54,16 +56,12 @@ public class DepartmentCacheService {
 
     /**
      * 缓存某个部门的下级id列表
-     * cacheKey = CacheKeyConst.DEPARTMENT_TREE_ID_CACHE
-     * businessId = departmentId
      *
-     * @param cacheKey
+     * @param departmentId
      * @return
      */
-    @CacheLoad(CacheModuleConst.Department.DEPARTMENT_TREE_ID_CACHE)
-    public List<Long> departmentTreeCache(String cacheKey) {
-        String businessId = CacheKey.getBusinessIdByCacheKey(cacheKey);
-        Long departmentId = Long.valueOf(businessId);
+    @Cacheable(CacheModuleConst.Department.DEPARTMENT_SELF_CHILDREN_ID_CACHE)
+    public List<Long> departmentSelfAndChildrenIdCache(Long departmentId) {
         List<DepartmentVO> departmentVOList = departmentDao.listAll();
         List<Long> idList = departmentTreeService.selfAndChildrenIdList(departmentId, departmentVOList);
         return idList;
