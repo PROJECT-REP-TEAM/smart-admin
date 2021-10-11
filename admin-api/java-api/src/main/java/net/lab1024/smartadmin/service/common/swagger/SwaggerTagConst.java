@@ -51,5 +51,7 @@ public class SwaggerTagConst {
         public static final String MANAGER_CATEGORY = "管理端-分类";
 
         public static final String MANAGER_GOODS = "管理端-商品业务";
+
+        public static final String MANAGER_SYSTEM_CACHE = "管理端-系统缓存";
     }
 }
