@@ -1,5 +1,8 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.domain;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -10,15 +13,15 @@ import java.time.LocalDateTime;
  * @Description:
  */
 @Data
-public class IdGeneratorRecordDTO {
+@TableName("t_id_generator_record")
+public class IdGeneratorRecordEntity {
+
+    @TableId(type = IdType.AUTO)
+    private Long id;
 
     private Integer generatorId;
 
-    private Integer year;
-
-    private Integer month;
-
-    private Integer day;
+    private String time;
 
     private Long lastNumber;
 

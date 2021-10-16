@@ -27,7 +27,7 @@ public class IdGeneratorController extends SupportBaseController {
     @Autowired
     private IdGeneratorService idGeneratorService;
 
-    @ApiOperation("生成id")
+    @ApiOperation("生成id by listen")
     @GetMapping("/id/generator/{generatorId}")
     public ResponseDTO<String> generate(@PathVariable Integer generatorId) {
         IdGeneratorEnum idGeneratorEnum = SmartBaseEnumUtil.getEnumByValue(generatorId, IdGeneratorEnum.class);

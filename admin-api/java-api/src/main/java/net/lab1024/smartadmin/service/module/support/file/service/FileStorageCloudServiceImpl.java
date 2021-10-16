@@ -18,7 +18,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,7 +39,7 @@ import java.util.Map;
  * @date 2020/8/25 11:57
  */
 @Slf4j
-@Component
+@Configuration
 @ConditionalOnProperty(prefix = "file.storage", name = {"mode"}, havingValue = "cloud")
 public class FileStorageCloudServiceImpl implements IFileStorageService {
 

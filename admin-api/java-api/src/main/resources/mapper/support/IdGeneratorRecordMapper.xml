@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorRecordDao">
+
+    <select id="selectHistoryLastNumber" resultType="net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorRecordEntity">
+        select * from t_id_generator_record
+        where generator_id = #{generatorId}
+        <if test="null != time">
+            and `time`= #{time}
+        </if>
+        ORDER BY id DESC LIMIT 1
+    </select>
+
+    <update id="replaceIdGeneratorRecord">
+        UPDATE t_id_generator_record
+        <set>
+            <if test="null != year">
+                and `year`= #{year}
+            </if>
+            <if test="null != month">
+                and `month`= #{month}
+            </if>
+            <if test="null != day">
+                and `day`= #{day}
+            </if>
+        </set>
+        where generator_id = #{generatorId}
+    </update>
+
+
+</mapper>

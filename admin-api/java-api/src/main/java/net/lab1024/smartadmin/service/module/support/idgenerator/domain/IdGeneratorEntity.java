@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
+import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,22 +16,20 @@ import java.time.LocalDateTime;
  */
 @Data
 @TableName("t_id_generator")
-public class IdGeneratorEntity implements Serializable {
-
-    private static final long serialVersionUID = 5582354131134766548L;
+public class IdGeneratorEntity {
 
     /**
      * 主键id
      *
-     * @see net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum
+     * @see IdGeneratorEnum
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(type = IdType.INPUT)
     private Integer id;
 
     /**
-     * 英文key
+     * 业务
      */
-    private String keyName;
+    private String businessName;
 
     /**
      * 前缀
@@ -38,14 +37,16 @@ public class IdGeneratorEntity implements Serializable {
     private String prefix;
 
     /**
-     * 最低补位长度
-     */
-    private Integer minLength;
-
-    /**
-     * 类型
+     * 生成规则
+     *
+     * @see IdGeneratorRuleTypeEnum
      */
     private String ruleType;
+
+    /**
+     * 最低生成id长度
+     */
+    private Integer minLength;
 
     /**
      * 初始值

@@ -1,28 +1,29 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.service;
 
+import com.google.common.collect.Interner;
+import com.google.common.collect.Interners;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.code.UnexpectedErrorCode;
-import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
-import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.exception.BusinessException;
 import net.lab1024.smartadmin.service.common.util.SmartRandomUtil;
 import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorDao;
+import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorRecordDao;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorEntity;
-import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorRecordDTO;
-import net.lab1024.smartadmin.service.third.SmartRedisService;
+import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorRecordEntity;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -34,28 +35,25 @@ import java.util.stream.Collectors;
 @Service
 public class IdGeneratorService {
 
-    private static final int MAX_GET_LOCK_COUNT = 5;
-
-    private static final long SLEEP_MILLISECONDS = 500L;
-
-    private static volatile long lastSleepMilliSeconds = SLEEP_MILLISECONDS;
-
-    private ConcurrentHashMap<Integer, IdGeneratorEntity> idGeneratorMap;
+    private static final Interner<Integer> POOL = Interners.newWeakInterner();
 
     @Autowired
     private IdGeneratorDao idGeneratorDao;
 
     @Autowired
-    private SmartRedisService redisService;
+    private IdGeneratorRecordDao idGeneratorRecordDao;
+
+    private Map<Integer, IdGeneratorEntity> idGeneratorMap;
 
     @PostConstruct
-    void init() {
-        List<IdGeneratorEntity> idGeneratorEntityList = idGeneratorDao.selectAll();
-        idGeneratorMap = idGeneratorEntityList.stream().collect(Collectors.toMap(IdGeneratorEntity::getId, Function.identity(), (x, y) -> y, ConcurrentHashMap::new));
+    public void init() {
+        List<IdGeneratorEntity> idGeneratorEntityList = idGeneratorDao.selectList(null);
+        idGeneratorMap = idGeneratorEntityList.stream().collect(Collectors.toMap(IdGeneratorEntity::getId, Function.identity()));
+        log.info("##################### init IdGenerator #####################");
     }
 
     /**
-     * id 生成器
+     * id生成
      *
      * @param idGeneratorEnum 类型
      * @return
@@ -64,84 +62,78 @@ public class IdGeneratorService {
         int generatorId = idGeneratorEnum.getValue();
         IdGeneratorEntity idGeneratorEntity = this.idGeneratorMap.get(generatorId);
         if (null == idGeneratorEntity) {
-            throw new BusinessException("IdGenerator， 生成器 不存在 " + idGeneratorEnum.getDesc());
+            throw new BusinessException("IdGenerator生产业务不存在 " + idGeneratorEnum.getDesc());
+        }
+        // 校验生成规则
+        IdGeneratorRuleTypeEnum ruleTypeEnum = this.getIdGeneratorRuleTypeEnum(idGeneratorEntity.getRuleType());
+        Assert.notNull(ruleTypeEnum, "IdGenerator rule type 不存在 " + idGeneratorEntity.getRuleType());
+
+        // 默认起始值
+        Long startNumber = idGeneratorEntity.getInitNumber();
+
+        // 判断是否有循环规则
+        String timeFormat = null;
+        DateTimeFormatter timeFormatter = null;
+        if (IdGeneratorRuleTypeEnum.YEAR_CYCLE == ruleTypeEnum || IdGeneratorRuleTypeEnum.MONTH_CYCLE == ruleTypeEnum || IdGeneratorRuleTypeEnum.DAY_CYCLE == ruleTypeEnum) {
+            timeFormatter = DateTimeFormatter.ofPattern(ruleTypeEnum.getValue());
+            timeFormat = LocalDateTime.now().format(timeFormatter);
         }
 
-        // 获取全局唯一锁
-        String lockKey = RedisKeyConst.Support.ID_GENERATOR + idGeneratorEnum.getDesc();
-        boolean lock = false;
-        for (int i = 0; i < MAX_GET_LOCK_COUNT; i++) {
-            try {
-                //60秒
-                lock = redisService.getLock(lockKey, 60 * 1000L);
-                if (lock) {
-                    break;
-                }
-                Thread.sleep(Math.max(SLEEP_MILLISECONDS, lastSleepMilliSeconds));
-            } catch (Throwable e) {
-                log.error(e.getMessage(), e);
-            }
-        }
-        if (!lock) {
-            throw new BusinessException("IdGenerator， 生成器繁忙，无法处理： " + idGeneratorEnum.getDesc());
-        }
+        synchronized (POOL.intern(generatorId)) {
+            // 获取最后一次生成记录
+            boolean isFirst = false;
+            IdGeneratorRecordEntity recordEntity = idGeneratorRecordDao.selectHistoryLastNumber(generatorId, timeFormat);
+            if (recordEntity == null) {
+                recordEntity = new IdGeneratorRecordEntity();
+                recordEntity.setGeneratorId(generatorId);
+                recordEntity.setTime(timeFormat);
+                recordEntity.setLastNumber(startNumber);
+                recordEntity.setCount(1L);
+                idGeneratorRecordDao.insert(recordEntity);
 
-        try {
-            long beginTime = System.currentTimeMillis();
-            LocalDateTime now = LocalDateTime.now();
-            int year = now.getYear();
-            int monthValue = now.getMonthValue();
-            int dayOfMonth = now.getDayOfMonth();
-
-            IdGeneratorRecordDTO generatorRecordDTO = idGeneratorDao.selectHistoryLastNumber(generatorId, year, monthValue, dayOfMonth);
-            if (generatorRecordDTO == null) {
-                generatorRecordDTO = new IdGeneratorRecordDTO();
-                generatorRecordDTO.setGeneratorId(generatorId);
-                generatorRecordDTO.setYear(year);
-                generatorRecordDTO.setMonth(monthValue);
-                generatorRecordDTO.setDay(dayOfMonth);
-                generatorRecordDTO.setLastNumber(idGeneratorEntity.getInitNumber());
-                generatorRecordDTO.setCount(0L);
-                generatorRecordDTO.setUpdateTime(now);
+                isFirst = true;
             }
 
-            Long lastNumber = generatorRecordDTO.getLastNumber();
-            IdGeneratorRuleTypeEnum ruleTypeEnum = this.getIdGeneratorRuleTypeEnum(idGeneratorEntity.getRuleType());
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(ruleTypeEnum.getValue());
-            String nowFormat = now.format(formatter);
-            if (IdGeneratorRuleTypeEnum.YEAR_CYCLE == ruleTypeEnum || IdGeneratorRuleTypeEnum.MONTH_CYCLE == ruleTypeEnum || IdGeneratorRuleTypeEnum.DAY_CYCLE == ruleTypeEnum) {
-                if (!Objects.equals(generatorRecordDTO.getUpdateTime().format(formatter), nowFormat)) {
-                    lastNumber = idGeneratorEntity.getInitNumber();
-                }
+            // 没有循环 或 在同个循环周期内，起始值 = 上次id
+            if (IdGeneratorRuleTypeEnum.NO_CYCLE == ruleTypeEnum || Objects.equals(recordEntity.getUpdateTime().format(timeFormatter), timeFormat)) {
+                startNumber = recordEntity.getLastNumber();
             }
 
-            lastNumber += SmartRandomUtil.nextInt(1, idGeneratorEntity.getStepRandomRange());
-            long count = generatorRecordDTO.getCount() + 1;
-            idGeneratorDao.replaceIdGeneratorRecord(generatorId, year, monthValue, dayOfMonth, lastNumber, count);
+            // 在范围内随机生成此次增加的数值 更新id生成记录
+            if (!isFirst) {
+                startNumber += SmartRandomUtil.nextInt(1, idGeneratorEntity.getStepRandomRange());
+                IdGeneratorRecordEntity updateRecordEntity = new IdGeneratorRecordEntity();
+                updateRecordEntity.setId(recordEntity.getId());
+                updateRecordEntity.setLastNumber(startNumber);
+                updateRecordEntity.setCount(recordEntity.getCount() + 1);
+                idGeneratorRecordDao.updateById(updateRecordEntity);
+            }
 
-            // 格式化num 不足位数则补零
-            int minLength = idGeneratorEntity.getMinLength();
-            minLength = minLength <= 0 ? 1 : minLength;
-            // 补位
-            String finalId = String.format("%0" + minLength + "d", lastNumber);
-            String prefix = StringUtils.isBlank(idGeneratorEntity.getPrefix()) ? StringUtils.EMPTY : idGeneratorEntity.getPrefix();
-
-            lastSleepMilliSeconds = System.currentTimeMillis() - beginTime + 100;
-            return prefix + nowFormat + finalId;
-        } catch (Throwable e) {
-            log.error(e.getMessage(), e);
-            throw e;
-        } finally {
-            redisService.unLock(lockKey);
+            // 默认 最低长度 1
+            int minLength = NumberUtils.max(idGeneratorEntity.getMinLength(), 1);
+            // id长度补位
+            String finalId = String.format("%0" + minLength + "d", startNumber);
+            if (null != timeFormat) {
+                finalId = timeFormat + finalId;
+            }
+            // 前缀
+            if (StringUtils.isNotBlank(idGeneratorEntity.getPrefix())) {
+                finalId = idGeneratorEntity.getPrefix() + finalId;
+            }
+            return finalId;
         }
+
     }
 
+    /**
+     * 查询生成规则
+     *
+     * @param ruleType
+     * @return 没有则返回null
+     */
     private IdGeneratorRuleTypeEnum getIdGeneratorRuleTypeEnum(String ruleType) {
-        for (IdGeneratorRuleTypeEnum en : IdGeneratorRuleTypeEnum.values()) {
-            if (en.name().equalsIgnoreCase(ruleType)) {
-                return en;
-            }
-        }
-        return null;
+        return Arrays.stream(IdGeneratorRuleTypeEnum.values())
+                     .filter(e -> StringUtils.equalsIgnoreCase(e.name(), ruleType))
+                     .findFirst().orElse(null);
     }
 }

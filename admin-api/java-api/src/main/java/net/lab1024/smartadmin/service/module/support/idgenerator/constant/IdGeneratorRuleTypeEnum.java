@@ -2,6 +2,7 @@ package net.lab1024.smartadmin.service.module.support.idgenerator.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 
 /**
@@ -15,7 +16,7 @@ public enum IdGeneratorRuleTypeEnum implements BaseEnum {
     /**
      * 没有周期
      */
-    NO_CYCLE("", "没有周期"),
+    NO_CYCLE(StringConst.EMPTY_STR, "没有周期"),
     /**
      * 年周期
      */
