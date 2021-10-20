@@ -17,7 +17,6 @@ public class FileVO {
     @ApiModelProperty("主键")
     private Long id;
 
-
     @ApiModelProperty("存储文件夹类型")
     @ApiModelPropertyEnum(FileFolderTypeEnum.class)
     private Integer folderType;

@@ -3,7 +3,6 @@ package net.lab1024.smartadmin.service.module.support.idgenerator.service;
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.exception.BusinessException;
 import net.lab1024.smartadmin.service.common.util.SmartRandomUtil;
 import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorDao;
 import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorRecordDao;
@@ -61,9 +60,8 @@ public class IdGeneratorService {
     public String generate(IdGeneratorEnum idGeneratorEnum) {
         int generatorId = idGeneratorEnum.getValue();
         IdGeneratorEntity idGeneratorEntity = this.idGeneratorMap.get(generatorId);
-        if (null == idGeneratorEntity) {
-            throw new BusinessException("IdGenerator生产业务不存在 " + idGeneratorEnum.getDesc());
-        }
+        Assert.notNull(idGeneratorEntity, "IdGenerator不存在 " + idGeneratorEntity.getRuleType());
+
         // 校验生成规则
         IdGeneratorRuleTypeEnum ruleTypeEnum = this.getIdGeneratorRuleTypeEnum(idGeneratorEntity.getRuleType());
         Assert.notNull(ruleTypeEnum, "IdGenerator rule type 不存在 " + idGeneratorEntity.getRuleType());

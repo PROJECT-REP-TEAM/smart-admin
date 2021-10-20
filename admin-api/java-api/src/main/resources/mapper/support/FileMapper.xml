@@ -18,13 +18,6 @@
         </if>
     </select>
 
-    <select id="listByFileKeyList" resultType="net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO">
-        SELECT * FROM t_file where file_key in
-        <foreach collection="fileKeyList" item="item" open="(" close=")" index="index" separator=",">
-            #{item}
-        </foreach>
-    </select>
-
     <select id="getByFileKey" resultType="net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO">
         SELECT * FROM t_file where file_key = #{fileKey}
     </select>

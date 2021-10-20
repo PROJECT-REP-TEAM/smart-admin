@@ -20,14 +20,8 @@ import java.util.List;
 public interface FileDao extends BaseMapper<FileEntity> {
 
     /**
-     * 文件key批量查询
-     * @param fileKeyList
-     * @return
-     */
-    List<FileVO> listByFileKeyList(@Param("fileKeyList") List<String> fileKeyList);
-
-    /**
      * 文件key单个查询
+     *
      * @param fileKey
      * @return
      */
@@ -35,6 +29,7 @@ public interface FileDao extends BaseMapper<FileEntity> {
 
     /**
      * 分页查询
+     *
      * @param page
      * @param query
      * @return

@@ -5,21 +5,24 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.support.file.FileDao;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileEntity;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.*;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryForm;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileUrlUploadForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
 import net.lab1024.smartadmin.service.third.SmartRedisService;
-import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +38,6 @@ import javax.annotation.Resource;
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLConnection;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,30 +117,30 @@ public class FileService {
         }
         // 获取文件服务
         ResponseDTO<FileUploadVO> response = fileStorageService.fileUpload(file, folderTypeEnum.getFolder());
-
         if (response.getOk()) {
-            // 上传成功 保存记录数据库
-            FileUploadVO uploadVO = response.getData();
-
-            FileEntity fileEntity = new FileEntity();
-            fileEntity.setFolderType(folderTypeEnum.getValue());
-            fileEntity.setFileName(originalFilename);
-            fileEntity.setFileSize(file.getSize());
-            fileEntity.setFileKey(uploadVO.getFileKey());
-            fileEntity.setFileType(uploadVO.getFileType());
-            fileEntity.setCreatorId(userId);
-            fileEntity.setCreatorName(userName);
-            fileDao.insert(fileEntity);
-            uploadVO.setFileId(fileEntity.getId());
-            //添加缓存
-            String redisKey = RedisKeyConst.Support.FILE_URL + uploadVO.getFileKey();
-            redisService.set(redisKey, uploadVO.getFileUrl(), fileStorageService.cacheExpireSecond());
-
-            String fileRedisKey = RedisKeyConst.Support.FILE_VO + uploadVO.getFileKey();
-            FileVO fileVO = SmartBeanUtil.copy(fileEntity, FileVO.class);
-            redisService.set(fileRedisKey, fileVO, fileStorageService.cacheExpireSecond());
+            return response;
         }
 
+        // 上传成功 保存记录数据库
+        FileUploadVO uploadVO = response.getData();
+
+        FileEntity fileEntity = new FileEntity();
+        fileEntity.setFolderType(folderTypeEnum.getValue());
+        fileEntity.setFileName(originalFilename);
+        fileEntity.setFileSize(file.getSize());
+        fileEntity.setFileKey(uploadVO.getFileKey());
+        fileEntity.setFileType(uploadVO.getFileType());
+        fileEntity.setCreatorId(userId);
+        fileEntity.setCreatorName(userName);
+        fileDao.insert(fileEntity);
+        uploadVO.setFileId(fileEntity.getId());
+        // 添加缓存
+        String redisKey = RedisKeyConst.Support.FILE_URL + uploadVO.getFileKey();
+        redisService.set(redisKey, uploadVO.getFileUrl(), fileStorageService.cacheExpireSecond());
+
+        String fileRedisKey = RedisKeyConst.Support.FILE_VO + uploadVO.getFileKey();
+        FileVO fileVO = SmartBeanUtil.copy(fileEntity, FileVO.class);
+        redisService.set(fileRedisKey, fileVO, fileStorageService.cacheExpireSecond());
         return response;
     }
 
@@ -197,28 +199,6 @@ public class FileService {
         return fileUrl;
     }
 
-
-    /**
-     * 批量获取文件url
-     * 支持单个 key 逗号分隔的形式
-     *
-     * @param queryDTO
-     * @return
-     */
-    public ResponseDTO<List<FileUrlResultDTO>> getBatchFileUrl(FileUrlQueryForm queryDTO) {
-        // 获取文件服务
-        List<String> fileKeyList = queryDTO.getFileKeyList();
-        List<FileUrlResultDTO> resultDTOList = fileKeyList.stream().map(fileKey -> {
-            // 处理逗号分隔的字符串
-            List<String> stringList = Arrays.asList(fileKey.split(StringConst.SEPARATOR));
-            stringList = stringList.stream().map(e -> fileStorageService.getFileUrl(e).getData()).collect(Collectors.toList());
-            String result = StringUtils.join(stringList, StringConst.SEPARATOR_CHAR);
-            return new FileUrlResultDTO(fileKey, result);
-        }).collect(Collectors.toList());
-
-        return ResponseDTO.ok(resultDTOList);
-    }
-
     /**
      * 分页查询文件列表
      *
@@ -226,7 +206,7 @@ public class FileService {
      * @return
      */
     public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(FileQueryForm queryDTO) {
-        Page page = SmartPageUtil.convert2PageQuery(queryDTO);
+        Page<?> page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<FileVO> fileList = fileDao.queryListByPage(page, queryDTO);
         if (CollectionUtils.isNotEmpty(fileList)) {
             fileList.forEach(e -> {
@@ -267,26 +247,7 @@ public class FileService {
     }
 
     /**
-     * 根据id 下载文件
-     *
-     * @param id
-     * @return
-     */
-    public ResponseEntity<Object> downLoadById(Long id, String userAgent) throws IOException {
-        FileEntity entity = fileDao.selectById(id);
-        if (null == entity) {
-            HttpHeaders heads = new HttpHeaders();
-            heads.add(HttpHeaders.CONTENT_TYPE, "text/html;charset=UTF-8");
-            return new ResponseEntity<>("文件不存在", heads, HttpStatus.OK);
-        }
-
-        // 根据文件服务类 获取对应文件服务 查询 url
-        ResponseEntity<Object> responseEntity = this.downloadByFileKey(entity.getFileKey(), userAgent);
-        return responseEntity;
-    }
-
-    /**
-     * 根据文件服务和key 删除
+     * 根据文件key 删除
      *
      * @param fileKey
      * @return
@@ -303,31 +264,5 @@ public class FileService {
         }
         // 根据文件服务类 获取对应文件服务 删除文件
         return fileStorageService.delete(fileKey);
-    }
-
-    /**
-     * 根据文件服务和key 查询文件元数据
-     *
-     * @param fileKey
-     * @return
-     */
-    public ResponseDTO<FileMetadataDTO> queryFileMetadata(String fileKey) {
-        if (StringUtils.isBlank(fileKey)) {
-            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
-        }
-        // 查询数据库文件记录
-        FileEntity fileEntity = new FileEntity();
-        fileEntity.setFileKey(fileKey);
-        fileEntity = fileDao.selectOne(new QueryWrapper<>(fileEntity));
-        if (null == fileEntity) {
-            return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
-        }
-
-        // 返回 meta
-        FileMetadataDTO metadataDTO = new FileMetadataDTO();
-        metadataDTO.setFileSize(fileEntity.getFileSize());
-        metadataDTO.setFileName(fileEntity.getFileName());
-        metadataDTO.setFileFormat(fileEntity.getFileType());
-        return ResponseDTO.ok(metadataDTO);
     }
 }
