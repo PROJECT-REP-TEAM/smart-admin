@@ -1,6 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.service;
 
 import net.lab1024.smartadmin.service.SmartAdminApplicationTest;
+import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorService;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

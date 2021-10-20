@@ -8,7 +8,6 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
-import net.lab1024.smartadmin.service.module.support.idgenerator.service.IdGeneratorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

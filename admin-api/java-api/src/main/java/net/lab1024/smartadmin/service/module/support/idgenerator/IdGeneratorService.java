@@ -1,11 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.idgenerator.service;
+package net.lab1024.smartadmin.service.module.support.idgenerator;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.util.SmartRandomUtil;
-import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorDao;
-import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorRecordDao;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorEntity;
@@ -28,7 +26,8 @@ import java.util.stream.Collectors;
 
 /**
  * 全局id生成器
- * zhuo
+ *
+ * @author zhuo
  */
 @Slf4j
 @Service
