@@ -1,7 +1,8 @@
-package net.lab1024.smartadmin.service.module.business.category.domain;
+package net.lab1024.smartadmin.service.module.business.category.domain.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import net.lab1024.smartadmin.service.module.business.category.domain.dto.CategoryBaseDTO;
 
 import javax.validation.constraints.NotNull;
 

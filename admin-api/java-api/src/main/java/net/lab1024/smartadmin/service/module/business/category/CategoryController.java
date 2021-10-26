@@ -5,7 +5,11 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.business.category.domain.*;
+import net.lab1024.smartadmin.service.module.business.category.domain.form.CategoryAddForm;
+import net.lab1024.smartadmin.service.module.business.category.domain.form.CategoryTreeQueryForm;
+import net.lab1024.smartadmin.service.module.business.category.domain.form.CategoryUpdateForm;
+import net.lab1024.smartadmin.service.module.business.category.domain.vo.CategoryTreeVO;
+import net.lab1024.smartadmin.service.module.business.category.domain.vo.CategoryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 

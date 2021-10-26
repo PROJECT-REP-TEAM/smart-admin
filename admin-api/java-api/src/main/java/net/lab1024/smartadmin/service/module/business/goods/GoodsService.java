@@ -4,15 +4,17 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.business.category.CategoryQueryService;
 import net.lab1024.smartadmin.service.module.business.category.constant.CategoryTypeEnum;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.goods.domain.*;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerOperateTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -37,6 +39,9 @@ public class GoodsService {
     @Autowired
     private CategoryQueryService categoryQueryService;
 
+    @Autowired
+    private GoodsDataTracerService goodsDataTracerService;
+
     /**
      * 添加商品
      *
@@ -49,9 +54,9 @@ public class GoodsService {
         if (!res.getOk()) {
             return res;
         }
-
         GoodsEntity goodsEntity = SmartBeanUtil.copy(addForm, GoodsEntity.class);
         goodsDao.insert(goodsEntity);
+        goodsDataTracerService.goodsAddRecord(goodsEntity, LocalDateTime.now(), addForm.getUpdateId(), addForm.getUpdateName());
         return ResponseDTO.ok();
     }
 
@@ -67,9 +72,10 @@ public class GoodsService {
         if (!res.getOk()) {
             return res;
         }
-
+        GoodsEntity originEntity = goodsDao.selectById(updateForm.getGoodsId());
         GoodsEntity goodsEntity = SmartBeanUtil.copy(updateForm, GoodsEntity.class);
         goodsDao.updateById(goodsEntity);
+        goodsDataTracerService.goodsUpdateRecord(originEntity,goodsEntity, LocalDateTime.now(), updateForm.getUpdateId(), updateForm.getUpdateName());
         return ResponseDTO.ok();
     }
 
@@ -95,7 +101,6 @@ public class GoodsService {
                 return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "商品名称不能重复~");
             }
         }
-
         // 校验类目id
         Optional<CategoryEntity> optional = categoryQueryService.queryCategory(categoryId);
         if (!optional.isPresent() || !CategoryTypeEnum.GOODS.equalsValue(optional.get().getCategoryType())) {
@@ -120,6 +125,8 @@ public class GoodsService {
             return goodsEntity;
         }).collect(Collectors.toList());
         goodsManager.updateBatchById(goodsList);
+        List<Long> goodsIdList = goodsList.stream().map(GoodsEntity::getGoodsId).collect(Collectors.toList());
+        goodsDataTracerService.batchRecord(goodsIdList, "删除商品", DataTracerOperateTypeEnum.Common.DELETE, LocalDateTime.now(), delForm.getUpdateId(), delForm.getUpdateName());
         return ResponseDTO.ok();
     }
 

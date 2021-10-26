@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.beanrecord.annotation;
+package net.lab1024.smartadmin.service.module.support.datatracer.anno;
 
 import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 

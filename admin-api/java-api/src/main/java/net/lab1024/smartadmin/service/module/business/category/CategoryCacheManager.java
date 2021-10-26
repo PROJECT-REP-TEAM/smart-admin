@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
-import net.lab1024.smartadmin.service.module.business.category.domain.CategoryTreeVO;
+import net.lab1024.smartadmin.service.module.business.category.domain.vo.CategoryTreeVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;

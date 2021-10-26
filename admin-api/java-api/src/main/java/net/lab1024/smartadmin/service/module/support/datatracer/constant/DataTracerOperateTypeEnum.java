@@ -18,11 +18,9 @@ public interface DataTracerOperateTypeEnum extends BaseEnum {
     @AllArgsConstructor
     @Getter
     enum Common implements BaseEnum {
-        SAVE(0, "保存"),
-        SAVE_SUBMIT(1, "保存并提交"),
+        SAVE(1, "保存"),
         UPDATE(2, "更新"),
-        UPDATE_SUBMIT(3, "更新并提交"),
-        DELETE(4, "删除");
+        DELETE(3, "删除");
 
         private final Integer value;
 

@@ -1,14 +1,16 @@
-package net.lab1024.smartadmin.service.module.support.beanrecord;
+package net.lab1024.smartadmin.service.module.support.datatracer;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.module.support.beanrecord.annotation.FieldBigDecimalValue;
-import net.lab1024.smartadmin.service.module.support.beanrecord.annotation.FieldDoc;
-import net.lab1024.smartadmin.service.module.support.beanrecord.annotation.FieldEnumValue;
-import net.lab1024.smartadmin.service.module.support.beanrecord.annotation.FieldSqlValue;
+import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldBigDecimalValue;
+import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldDoc;
+import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldEnumValue;
+import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldSqlValue;
+import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerOperateTypeEnum;
 import net.lab1024.smartadmin.service.third.SmartApplicationContext;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBigDecimalUtil;
@@ -29,13 +31,13 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * [  ]
+ * [ 对象对比 ]
  *
  * @author 罗伊
  */
 @Slf4j
 @Service
-public class BeanRecordService {
+public class DataTracerFieldService {
 
     /**
      * 字段描述缓存
@@ -59,16 +61,16 @@ public class BeanRecordService {
         if (!valid) {
             return "";
         }
-        OperateTypeEnum operateType = this.getOperateType(oldObjectList, newObjectList);
+        DataTracerOperateTypeEnum.Common operateType = this.getOperateType(oldObjectList, newObjectList);
         String operateContent = "";
-        if (OperateTypeEnum.ADD.equals(operateType) || OperateTypeEnum.DELETE.equals(operateType)) {
+        if (DataTracerOperateTypeEnum.Common.SAVE.equals(operateType) || DataTracerOperateTypeEnum.Common.DELETE.equals(operateType)) {
             operateContent = this.getObjectListContent(newObjectList);
             if (StringUtils.isEmpty(operateContent)) {
                 return "";
             }
             return operateType.getDesc() + ":" + operateContent;
         }
-        if (OperateTypeEnum.UPDATE.equals(operateType)) {
+        if (DataTracerOperateTypeEnum.Common.UPDATE.equals(operateType)) {
             return this.getUpdateContentList(oldObjectList, newObjectList);
         }
         return operateContent;
@@ -128,12 +130,12 @@ public class BeanRecordService {
         if (!valid) {
             return null;
         }
-        OperateTypeEnum operateType = this.getOperateType(oldObject, newObject);
+        DataTracerOperateTypeEnum.Common operateType = this.getOperateType(oldObject, newObject);
         String operateContent = "";
-        if (OperateTypeEnum.ADD.equals(operateType) || OperateTypeEnum.DELETE.equals(operateType)) {
+        if (DataTracerOperateTypeEnum.Common.SAVE.equals(operateType) || DataTracerOperateTypeEnum.Common.DELETE.equals(operateType)) {
             operateContent = this.getAddDeleteContent(newObject);
         }
-        if (OperateTypeEnum.UPDATE.equals(operateType)) {
+        if (DataTracerOperateTypeEnum.Common.UPDATE.equals(operateType)) {
             operateContent = this.getUpdateContent(oldObject, newObject);
         }
         if (StringUtils.isEmpty(operateContent)) {
@@ -149,7 +151,7 @@ public class BeanRecordService {
      * @param object
      * @return
      */
-    public String beanParse(String operateDesc, Object object) {
+    public String beanObjectParse(String operateDesc, Object object) {
         String content = this.getAddDeleteContent(object);
         if (StringUtils.isEmpty(operateDesc)) {
             return content;
@@ -303,8 +305,8 @@ public class BeanRecordService {
         }
         String relateFieldValue = fieldValue.toString();
         QueryWrapper qw = new QueryWrapper();
-        qw.select(fieldSqlValue.relateDisplayColumn());
-        qw.eq(fieldSqlValue.relateColumn(), relateFieldValue);
+        qw.select(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldSqlValue.relateDisplayColumn()));
+        qw.eq(CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldSqlValue.relateColumn()), relateFieldValue);
         List<Object> displayValue = mapper.selectObjs(qw);
         if (CollectionUtils.isEmpty(displayValue)) {
             return "";
@@ -343,14 +345,14 @@ public class BeanRecordService {
      * @param newObject
      * @return
      */
-    private OperateTypeEnum getOperateType(Object oldObject, Object newObject) {
+    private  DataTracerOperateTypeEnum.Common getOperateType(Object oldObject, Object newObject) {
         if (oldObject == null && newObject != null) {
-            return OperateTypeEnum.ADD;
+            return DataTracerOperateTypeEnum.Common.SAVE;
         }
         if (oldObject != null && newObject == null) {
-            return OperateTypeEnum.DELETE;
+            return  DataTracerOperateTypeEnum.Common.DELETE;
         }
-        return OperateTypeEnum.UPDATE;
+        return DataTracerOperateTypeEnum.Common.UPDATE;
     }
 
     /**
@@ -366,18 +368,18 @@ public class BeanRecordService {
             return false;
         }
         if (oldObject == null && newObject != null) {
-            log.info("bean operate log: oldObject is null,new:" + newObject.getClass().getName() + " " + OperateTypeEnum.ADD.getDesc());
+            log.info("bean operate log: oldObject is null,new:" + newObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.SAVE.getDesc());
             return true;
         }
         if (oldObject != null && newObject == null) {
-            log.info("bean operate log: newObject is null,old:" + oldObject.getClass().getName() + " " + OperateTypeEnum.DELETE.getDesc());
+            log.info("bean operate log: newObject is null,old:" + oldObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.DELETE.getDesc());
             return true;
         }
         if (oldObject != null && newObject != null) {
             String oldClass = oldObject.getClass().getName();
             String newClass = newObject.getClass().getName();
             if (oldClass.equals(newClass)) {
-                log.info("bean operate log: " + oldObject.getClass().getName() + " " + OperateTypeEnum.UPDATE.getDesc());
+                log.info("bean operate log: " + oldObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.UPDATE.getDesc());
                 return true;
             }
             log.error("bean operate log: is different class:old:" + oldClass + " new:" + newClass);
@@ -400,11 +402,11 @@ public class BeanRecordService {
             return false;
         }
         if (CollectionUtils.isEmpty(oldObjectList) && CollectionUtils.isNotEmpty(newObjectList)) {
-            log.info("bean operate log: oldObjectList is null,new:" + newObjectList.getClass().getName() + " " + OperateTypeEnum.ADD.getDesc());
+            log.info("bean operate log: oldObjectList is null,new:" + newObjectList.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.SAVE.getDesc());
             return true;
         }
         if (CollectionUtils.isNotEmpty(oldObjectList) && CollectionUtils.isEmpty(newObjectList)) {
-            log.info("bean operate log: newObject is null,old:" + oldObjectList.getClass().getName() + " " + OperateTypeEnum.DELETE.getDesc());
+            log.info("bean operate log: newObject is null,old:" + oldObjectList.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.DELETE.getDesc());
             return true;
         }
         if (CollectionUtils.isNotEmpty(oldObjectList) && CollectionUtils.isNotEmpty(newObjectList)) {
@@ -413,7 +415,7 @@ public class BeanRecordService {
             String oldClass = oldObject.getClass().getName();
             String newClass = newObject.getClass().getName();
             if (oldClass.equals(newClass)) {
-                log.info("bean operate log: " + oldObject.getClass().getName() + " " + OperateTypeEnum.UPDATE.getDesc());
+                log.info("bean operate log: " + oldObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.UPDATE.getDesc());
                 return true;
             }
             log.error("bean operate log: is different class:old:" + oldClass + " new:" + newClass);

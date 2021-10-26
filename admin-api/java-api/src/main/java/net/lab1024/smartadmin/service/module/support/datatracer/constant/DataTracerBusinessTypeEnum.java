@@ -15,7 +15,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 @Getter
 public enum DataTracerBusinessTypeEnum implements BaseEnum {
 
-    NOTICE(1, "系统通知"),
+    GOODS(1, "商品"),
 
     ;
 
