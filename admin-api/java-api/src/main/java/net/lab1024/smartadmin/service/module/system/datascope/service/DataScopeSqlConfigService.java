@@ -72,6 +72,7 @@ public class DataScopeSqlConfigService {
                 configDTO.setWhereIndex(dataScopeAnnotation.whereIndex());
                 configDTO.setDataScopeWhereInType(dataScopeAnnotation.whereInType());
                 configDTO.setParamName(dataScopeAnnotation.paramName());
+                configDTO.setJoinSqlImplClazz(dataScopeAnnotation.joinSqlImplClazz());
                 dataScopeMethodMap.put(method.getDeclaringClass().getSimpleName() + "." + method.getName(), configDTO);
             }
         }

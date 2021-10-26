@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -58,10 +59,14 @@ public class RoleEmployeeService {
     public ResponseDTO<PageResultDTO<EmployeeVO>> listEmployeeByName(RoleQueryForm queryDTO) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<EmployeeDTO> employeeDTOS = roleEmployeeDao.selectEmployeeByNamePage(page, queryDTO);
-        employeeDTOS.stream().filter(e -> e.getDepartmentId() != null).forEach(employeeDTO -> {
-            DepartmentEntity departmentEntity = departmentDao.selectById(employeeDTO.getDepartmentId());
-            employeeDTO.setDepartmentName(departmentEntity.getName());
-        });
+        List<Long> departmentIdList = employeeDTOS.stream().filter(e -> e.getDepartmentId() != null).map(EmployeeDTO::getDepartmentId).collect(Collectors.toList());
+        if(CollectionUtils.isNotEmpty(departmentIdList)){
+            List<DepartmentEntity> departmentEntities = departmentDao.selectBatchIds(departmentIdList);
+            Map<Long, String> departmentIdNameMap = departmentEntities.stream().collect(Collectors.toMap(DepartmentEntity::getId, DepartmentEntity::getName));
+            employeeDTOS.forEach(e->{
+                e.setDepartmentName(departmentIdNameMap.getOrDefault(e.getDepartmentId(), ""));
+            });
+        }
         PageResultDTO<EmployeeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, employeeDTOS, EmployeeVO.class);
         return ResponseDTO.ok(pageResultDTO);
     }
