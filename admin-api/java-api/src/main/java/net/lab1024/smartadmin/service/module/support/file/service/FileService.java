@@ -5,9 +5,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
+import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
@@ -18,7 +18,7 @@ import net.lab1024.smartadmin.service.module.support.file.domain.FileEntity;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryForm;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQuery;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileUrlUploadForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
@@ -205,7 +205,7 @@ public class FileService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(FileQueryForm queryDTO) {
+    public ResponseDTO<PageResult<FileVO>> queryListByPage(FileQuery queryDTO) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<FileVO> fileList = fileDao.queryListByPage(page, queryDTO);
         if (CollectionUtils.isNotEmpty(fileList)) {
@@ -214,8 +214,8 @@ public class FileService {
                 e.setFileUrl(fileStorageService.getFileUrl(e.getFileKey()).getData());
             });
         }
-        PageResultDTO<FileVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, fileList);
-        return ResponseDTO.ok(pageResultDTO);
+        PageResult<FileVO> pageResult = SmartPageUtil.convert2PageResult(page, fileList);
+        return ResponseDTO.ok(pageResult);
     }
 
     /**

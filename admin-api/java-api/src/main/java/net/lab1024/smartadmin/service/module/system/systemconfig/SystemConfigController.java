@@ -2,12 +2,12 @@ package net.lab1024.smartadmin.service.module.system.systemconfig;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
+import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +30,7 @@ public class SystemConfigController extends SupportBaseController {
 
     @ApiOperation("分页查询系统配置")
     @PostMapping("/system/config/query")
-    public ResponseDTO<PageResultDTO<SystemConfigVO>> querySystemConfigPage(@RequestBody @Valid SystemConfigQueryForm queryDTO) {
+    public ResponseDTO<PageResult<SystemConfigVO>> querySystemConfigPage(@RequestBody @Valid SystemConfigQuery queryDTO) {
         return systemConfigService.queryConfigPage(queryDTO);
     }
 

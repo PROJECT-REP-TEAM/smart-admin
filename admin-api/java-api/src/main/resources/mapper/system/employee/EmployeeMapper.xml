@@ -9,41 +9,22 @@
         FROM t_employee e
         LEFT JOIN t_department d ON d.id = e.department_id
         <where>
-            <if test="queryDTO.keyword != null and queryDTO.keyword != ''">
+            <if test="queryForm.keyword != null and queryForm.keyword != ''">
                 AND (
-                   INSTR(e.actual_name,#{queryDTO.keyword})
-                OR INSTR(e.phone,#{queryDTO.keyword})
+                INSTR(e.actual_name,#{queryForm.keyword})
+                OR INSTR(e.phone,#{queryForm.keyword})
+                OR INSTR(e.login_name,#{queryForm.keyword})
                 )
             </if>
-            <if test="queryDTO.departmentId != null">
-                AND e.department_id = #{queryDTO.departmentId}
+            <if test="queryForm.departmentId != null">
+                AND e.department_id = #{queryForm.departmentId}
             </if>
-            <if test="queryDTO.disabledFlag != null">
-                AND e.disabled_flag = #{queryDTO.disabledFlag}
-            </if>
-            <if test="queryDTO.deletedFlag != null">
-                AND e.deleted_flag = #{queryDTO.deletedFlag}
-            </if>
-            <if test="queryDTO.employeeIdList != null and queryDTO.employeeIdList.size > 0">
-                AND e.id IN
-                <foreach collection="queryDTO.employeeIdList" open="(" close= ")" item="item" separator=","  >
-                    #{item}
-                </foreach>
+            <if test="queryForm.disabledFlag != null">
+                AND e.disabled_flag = #{queryForm.disabledFlag}
             </if>
         </where>
-        <if test="queryDTO.sortItemList == null or queryDTO.sortItemList.size == 0">
-            ORDER BY e.id DESC
-        </if>
     </select>
 
-    <update id="batchUpdateDisableFlag">
-        UPDATE t_employee
-        SET disabled_flag = #{disabledFlag}
-        WHERE id in
-        <foreach collection="employeeIdList" item="item" separator="," open="(" close=")">
-            #{item}
-        </foreach>
-    </update>
 
     <update id="updateDisableFlag">
         UPDATE t_employee
@@ -51,30 +32,45 @@
         WHERE id = #{id}
     </update>
 
-    <select id="selectByLoginNameAndPwd" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+
+    <select id="getByLoginName" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
         SELECT *
         FROM t_employee
-        WHERE login_name = #{loginName}
-        AND login_pwd = #{loginPwd}
-        AND deleted_flag = #{deletedFlag}
-        LIMIT 1
+        <where>
+            login_name = #{loginName}
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
+    </select>
+
+    <select id="getByActualName" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+        SELECT *
+        FROM t_employee
+        <where>
+            actual_name = #{actualName}
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
     </select>
 
 
-    <select id="getByLoginName" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
-        SELECT * FROM t_employee
-        WHERE login_name = #{loginName} and disabled_flag = #{disabledFlag} and deleted_flag = #{deletedFlag}
+    <select id="getByPhone" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+        SELECT *
+        FROM t_employee
+        <where>
+            phone = #{phone}
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
     </select>
 
 
-    <select id="getByPhone" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
-        SELECT * FROM t_employee
-        WHERE phone = #{phone} AND disabled_flag = #{disabledFlag}
-    </select>
-
-
-    <select id="listAll" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
-        SELECT * FROM t_employee
+    <select id="listAll" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+        SELECT *
+        FROM t_employee
         ORDER BY create_time DESC
     </select>
 
@@ -88,63 +84,87 @@
     </select>
 
 
-    <select id="selectByDepartmentId" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
-        SELECT * FROM t_employee
-        WHERE
-        disabled_flag = #{disabledFlag}
-        AND deleted_flag = #{deletedFlag}
-        AND department_id = #{departmentId}
+    <select id="selectByDepartmentId"
+            resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+        SELECT *
+        FROM t_employee
+        <where>
+            department_id = #{departmentId}
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
         ORDER BY create_time DESC
+    </select>
+
+    <select id="selectByActualName"
+            resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+        SELECT * FROM t_employee
+        <where>
+            actual_name = #{actualName}
+            AND department_id in
+            <foreach collection="departmentIdList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
     </select>
 
     <select id="getEmployeeIdByDepartmentIdList" resultType="java.lang.Long">
         SELECT id
         FROM t_employee
-        WHERE
-        disabled_flag = #{disabledFlag}
-        AND deleted_flag = #{deletedFlag}
-        AND department_id IN
-        <foreach collection="departmentIds" item="item" open="("  close=")" separator=",">
-            #{item}
-        </foreach>
+        <where>
+            department_id IN
+            <foreach collection="departmentIds" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
         ORDER BY create_time DESC
     </select>
 
 
     <select id="getEmployeeId" resultType="java.lang.Long">
-            SELECT id
-            FROM t_employee
-            WHERE
-            disabled_flag = #{disabledFlag}
-            AND deleted_flag = #{deletedFlag}
+        SELECT id
+        FROM t_employee
+        <where>
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
     </select>
 
     <select id="getEmployeeIdByDepartmentId" resultType="java.lang.Long">
         SELECT id
         FROM t_employee
-        WHERE
-        disabled_flag = #{disabledFlag}
-        and deleted_flag = #{deletedFlag}
-        and department_id = #{departmentId}
+        <where>
+            department_id = #{departmentId}
+            <if test="disabledFlag != null">
+                AND disabled_flag = #{disabledFlag}
+            </if>
+        </where>
         ORDER BY create_time DESC
     </select>
 
-    <select id="getEmployeeByIds" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
+    <select id="getEmployeeByIds" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
         SELECT * FROM t_employee
         where id IN
-        <foreach collection="ids" item="item" open="("  close=")"  separator=",">
+        <foreach collection="ids" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
         ORDER BY create_time DESC
     </select>
 
 
-    <select id="getEmployeeById" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.dto.EmployeeDTO">
-        SELECT
-        e.*,
-        d.name AS departmentName
+    <select id="getEmployeeById" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+        SELECT e.*,
+               d.name AS departmentName
         FROM t_employee e
-        LEFT JOIN t_department d ON d.id = e.department_id
+                 LEFT JOIN t_department d ON d.id = e.department_id
         where e.id = #{id}
     </select>
 

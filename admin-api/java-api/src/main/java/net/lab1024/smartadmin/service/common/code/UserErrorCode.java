@@ -26,12 +26,7 @@ public enum UserErrorCode implements ErrorCode {
 
     LOGIN_STATE_INVALID(30007, "您还未登录或登录失效，请重新登录！"),
 
-    LOGIN_OTHER_DEVICE(30008, "您的账号已在其他设备登录,请重新登录"),
-
-    USER_STATUS_ERROR(30009, "用户状态异常"),
-
-    LOGIN_FAILED(30010, "用户名或密码错误!"),
-
+    USER_STATUS_ERROR(30008, "用户状态异常"),
     ;
 
     private final int code;

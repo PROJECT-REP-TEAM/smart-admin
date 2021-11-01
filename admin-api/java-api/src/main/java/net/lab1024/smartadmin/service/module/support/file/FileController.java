@@ -3,11 +3,11 @@ package net.lab1024.smartadmin.service.module.support.file;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryForm;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQuery;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileUrlUploadForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
@@ -52,7 +52,7 @@ public class FileController extends SupportBaseController {
 
     @ApiOperation(value = "文件分页查询 by listen")
     @PostMapping("/file/query")
-    public ResponseDTO<PageResultDTO<FileVO>> queryListByPage(@RequestBody @Valid FileQueryForm queryForm) {
+    public ResponseDTO<PageResult<FileVO>> queryListByPage(@RequestBody @Valid FileQuery queryForm) {
         return fileService.queryListByPage(queryForm);
     }
 

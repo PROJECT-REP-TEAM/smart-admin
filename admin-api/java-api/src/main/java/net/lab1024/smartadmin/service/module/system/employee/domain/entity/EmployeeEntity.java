@@ -4,14 +4,13 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.enumeration.GenderEnum;
 
 import java.time.LocalDateTime;
 
 /**
  * 员工实体类
  *
- * @author 开云
+ * @author lidoudou
  * @date 2017年12月19日下午1:34:48
  */
 @Data
@@ -39,7 +38,7 @@ public class EmployeeEntity {
     /**
      * 性别
      *
-     * @see GenderEnum
+     * @see net.lab1024.smartadmin.service.common.constant.GenderEnum
      */
     private Integer gender;
 
@@ -64,6 +63,11 @@ public class EmployeeEntity {
     private Boolean deletedFlag;
 
     /**
+     * 是否离职
+     */
+    private Boolean leaveFlag;
+
+    /**
      * 备注
      */
     private String remark;
@@ -71,5 +75,10 @@ public class EmployeeEntity {
     private LocalDateTime updateTime;
 
     private LocalDateTime createTime;
+
+    /**
+     * 是否校盈易导入数据
+     */
+    private Boolean importFlag;
 
 }

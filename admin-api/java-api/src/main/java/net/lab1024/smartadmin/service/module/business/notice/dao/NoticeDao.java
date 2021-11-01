@@ -2,16 +2,16 @@ package net.lab1024.smartadmin.service.module.business.notice.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeQueryForm;
+import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeQuery;
 import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReadCountDTO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveForm;
-import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveQueryForm;
+import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveQuery;
 import net.lab1024.smartadmin.service.module.business.notice.domain.entity.NoticeEntity;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO;
-import net.lab1024.smartadmin.service.module.system.datascope.anno.DataScope;
-import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeWhereInTypeEnum;
+import net.lab1024.smartadmin.service.module.support.datascope.DataScope;
+import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeWhereInTypeEnum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -34,7 +34,7 @@ public interface NoticeDao extends BaseMapper<NoticeEntity> {
      * @return NoticeEntity
      */
     @DataScope(dataScopeType = DataScopeTypeEnum.NOTICE, joinSql = "n.create_user in (#employeeIds)", whereInType = DataScopeWhereInTypeEnum.EMPLOYEE)
-    List<NoticeVO> queryByPage(Page page, @Param("query") NoticeQueryForm query);
+    List<NoticeVO> queryByPage(Page page, @Param("query") NoticeQuery query);
 
 
     /**
@@ -55,7 +55,7 @@ public interface NoticeDao extends BaseMapper<NoticeEntity> {
      * @param query
      * @return
      */
-    List<NoticeReceiveForm> queryReceiveByPage(Page page, @Param("query") NoticeReceiveQueryForm query);
+    List<NoticeReceiveForm> queryReceiveByPage(Page page, @Param("query") NoticeReceiveQuery query);
 
     /**
      * 详情

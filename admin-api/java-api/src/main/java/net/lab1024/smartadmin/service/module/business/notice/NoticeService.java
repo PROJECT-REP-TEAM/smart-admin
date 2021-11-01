@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.module.business.notice;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.PageParamForm;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParam;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.business.notice.dao.NoticeDao;
 import net.lab1024.smartadmin.service.module.business.notice.dao.NoticeReceiveRecordDao;
@@ -42,12 +42,12 @@ public class NoticeService {
      * @description 分页查询
      * @date 2019-07-11 16:19:48
      */
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryByPage(NoticeQueryForm queryForm) {
+    public ResponseDTO<PageResult<NoticeVO>> queryByPage(NoticeQuery queryForm) {
         queryForm.setDeletedFlag(false);
         Page page = SmartPageUtil.convert2PageQuery(queryForm);
         List<NoticeVO> dtoList = noticeDao.queryByPage(page, queryForm);
-        PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
-        return ResponseDTO.ok(pageResultDTO);
+        PageResult<NoticeVO> pageResult = SmartPageUtil.convert2PageResult(page, dtoList);
+        return ResponseDTO.ok(pageResult);
     }
 
     /**
@@ -56,7 +56,7 @@ public class NoticeService {
      * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<NoticeReceiveForm>> queryReceiveByPage(NoticeReceiveQueryForm queryForm) {
+    public ResponseDTO<PageResult<NoticeReceiveForm>> queryReceiveByPage(NoticeReceiveQuery queryForm) {
         queryForm.setSendStatus(true);
         Page page = SmartPageUtil.convert2PageQuery(queryForm);
         List<NoticeReceiveForm> dtoList = noticeDao.queryReceiveByPage(page, queryForm);
@@ -64,8 +64,8 @@ public class NoticeService {
         dtoList.forEach(e -> {
             e.setReadStatus(e.getReceiveTime() != null);
         });
-        PageResultDTO<NoticeReceiveForm> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
-        return ResponseDTO.ok(pageResultDTO);
+        PageResult<NoticeReceiveForm> pageResult = SmartPageUtil.convert2PageResult(page, dtoList);
+        return ResponseDTO.ok(pageResult);
     }
 
     /**
@@ -74,11 +74,11 @@ public class NoticeService {
      * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<NoticeVO>> queryUnreadByPage(PageParamForm queryForm, Long employeeId) {
+    public ResponseDTO<PageResult<NoticeVO>> queryUnreadByPage(PageParam queryForm, Long employeeId) {
         Page page = SmartPageUtil.convert2PageQuery(queryForm);
         List<NoticeVO> dtoList = noticeDao.queryUnreadByPage(page, employeeId, true);
-        PageResultDTO<NoticeVO> pageResultDTO = SmartPageUtil.convert2PageResult(page, dtoList);
-        return ResponseDTO.ok(pageResultDTO);
+        PageResult<NoticeVO> pageResult = SmartPageUtil.convert2PageResult(page, dtoList);
+        return ResponseDTO.ok(pageResult);
     }
 
     /**

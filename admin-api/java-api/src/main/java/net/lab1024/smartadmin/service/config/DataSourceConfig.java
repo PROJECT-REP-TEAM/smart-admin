@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.module.system.datascope.MyBatisPlugin;
+import net.lab1024.smartadmin.service.module.support.datascope.MyBatisPlugin;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;

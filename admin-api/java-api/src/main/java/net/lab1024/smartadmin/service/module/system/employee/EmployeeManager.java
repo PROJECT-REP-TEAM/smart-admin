@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
-import net.lab1024.smartadmin.service.module.system.role.roleemployee.RoleEmployeeManager;
-import net.lab1024.smartadmin.service.module.system.role.roleemployee.domain.RoleEmployeeEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEmployeeEntity;
+import net.lab1024.smartadmin.service.module.system.role.manager.RoleEmployeeManager;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 员工 manager
  *
- * @author 胡克
+ * @author Turbolisten
  * @date 2021/7/28 19:15
  */
 @Service

@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.config;
 
-import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import net.lab1024.smartadmin.service.module.support.repeatsubmit.RepeatSubmitAspect;
 import net.lab1024.smartadmin.service.module.support.repeatsubmit.RepeatSubmitCaffeineTicket;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class RepeatSubmitConfig {
      * @return
      */
     private String ticket(String servletPath) {
-        Long employeeId = SmartEmployeeTokenUtil.getRequestEmployeeId();
+        Long employeeId = SmartRequestUtil.getRequestEmployeeId();
         if (employeeId == null) {
             return "";
         }

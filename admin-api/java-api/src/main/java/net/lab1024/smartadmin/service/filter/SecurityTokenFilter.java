@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.filter;
 
 import net.lab1024.smartadmin.service.common.constant.RequestHeaderConst;
-import net.lab1024.smartadmin.service.module.system.login.EmployeeLoginTokenService;
+import net.lab1024.smartadmin.service.module.system.login.service.JwtService;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginBO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,9 +26,9 @@ import java.io.IOException;
 
 public class SecurityTokenFilter extends OncePerRequestFilter {
 
-    private EmployeeLoginTokenService loginTokenService;
+    private JwtService loginTokenService;
 
-    public SecurityTokenFilter(EmployeeLoginTokenService loginTokenService) {
+    public SecurityTokenFilter(JwtService loginTokenService) {
         this.loginTokenService = loginTokenService;
     }
 

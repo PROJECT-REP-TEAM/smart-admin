@@ -4,12 +4,12 @@ import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerBusinessTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerDTO;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerEntity;
-import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerQueryForm;
+import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerQuery;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerVO;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.apache.commons.collections4.CollectionUtils;
@@ -107,10 +107,10 @@ public class DataTracerService {
      * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<DataTracerVO>> query(DataTracerQueryForm queryForm) {
+    public ResponseDTO<PageResult<DataTracerVO>> query(DataTracerQuery queryForm) {
         Page page = SmartPageUtil.convert2PageQuery(queryForm);
         List<DataTracerVO> list = dataTracerDao.query(page, queryForm);
-        PageResultDTO<DataTracerVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        PageResult<DataTracerVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         return ResponseDTO.ok(pageResult);
     }
 }

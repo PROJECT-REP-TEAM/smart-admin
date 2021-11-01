@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.goods;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
@@ -136,11 +136,11 @@ public class GoodsService {
      * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(GoodsQueryForm queryForm) {
+    public ResponseDTO<PageResult<GoodsAdminVO>> query(GoodsQuery queryForm) {
         queryForm.setDeletedFlag(false);
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
         List<GoodsAdminVO> list = goodsDao.query(page, queryForm);
-        PageResultDTO<GoodsAdminVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        PageResult<GoodsAdminVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         if (pageResult.getEmptyFlag()) {
             return ResponseDTO.ok(pageResult);
         }

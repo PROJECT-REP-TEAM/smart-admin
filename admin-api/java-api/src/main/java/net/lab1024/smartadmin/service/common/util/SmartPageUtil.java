@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.common.util;
 
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import net.lab1024.smartadmin.service.common.domain.PageParamForm;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParam;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.List;
@@ -23,10 +23,10 @@ public class SmartPageUtil {
      * @param baseDTO
      * @return
      */
-    public static Page<?> convert2PageQuery(PageParamForm baseDTO) {
+    public static Page<?> convert2PageQuery(PageParam baseDTO) {
         Page<?> page = new Page<>(baseDTO.getPageNum(), baseDTO.getPageSize());
         // 设置排序字段
-        List<PageParamForm.SortItemDTO> sortItemList = baseDTO.getSortItemList();
+        List<PageParam.SortItem> sortItemList = baseDTO.getSortItemList();
         if (CollectionUtils.isNotEmpty(sortItemList)) {
             List<OrderItem> orderItemList = sortItemList.stream().map(e -> new OrderItem(e.getColumn(), e.getIsAsc())).collect(Collectors.toList());
             page.setOrders(orderItemList);
@@ -42,7 +42,7 @@ public class SmartPageUtil {
      * @param targetClazz 目标类
      * @return
      */
-    public static <T, E> PageResultDTO<T> convert2PageResult(Page<?> page, List<E> sourceList, Class<T> targetClazz) {
+    public static <T, E> PageResult<T> convert2PageResult(Page<?> page, List<E> sourceList, Class<T> targetClazz) {
         return convert2PageResult(page, SmartBeanUtil.copyList(sourceList, targetClazz));
     }
 
@@ -53,32 +53,32 @@ public class SmartPageUtil {
      * @param sourceList list
      * @return
      */
-    public static <E> PageResultDTO<E> convert2PageResult(Page<?> page, List<E> sourceList) {
-        PageResultDTO<E> pageResultDTO = new PageResultDTO<>();
-        pageResultDTO.setPageNum(page.getCurrent());
-        pageResultDTO.setPageSize(page.getSize());
-        pageResultDTO.setTotal(page.getTotal());
-        pageResultDTO.setPages(page.getPages());
-        pageResultDTO.setList(sourceList);
-        pageResultDTO.setEmptyFlag(CollectionUtils.isEmpty(sourceList));
-        return pageResultDTO;
+    public static <E> PageResult<E> convert2PageResult(Page<?> page, List<E> sourceList) {
+        PageResult<E> pageResult = new PageResult<>();
+        pageResult.setPageNum(page.getCurrent());
+        pageResult.setPageSize(page.getSize());
+        pageResult.setTotal(page.getTotal());
+        pageResult.setPages(page.getPages());
+        pageResult.setList(sourceList);
+        pageResult.setEmptyFlag(CollectionUtils.isEmpty(sourceList));
+        return pageResult;
     }
 
     /**
      * 转换分页结果对象
      *
-     * @param pageResultDTO
+     * @param pageResult
      * @param targetClazz
      * @return
      */
-    public static <E, T> PageResultDTO<T> convert2PageResult(PageResultDTO<E> pageResultDTO, Class<T> targetClazz) {
-        PageResultDTO<T> newPageResultDTO = new PageResultDTO<>();
-        newPageResultDTO.setPageNum(pageResultDTO.getPageNum());
-        newPageResultDTO.setPageSize(pageResultDTO.getPageSize());
-        newPageResultDTO.setTotal(pageResultDTO.getTotal());
-        newPageResultDTO.setPages(pageResultDTO.getPages());
-        newPageResultDTO.setEmptyFlag(pageResultDTO.getEmptyFlag());
-        newPageResultDTO.setList(SmartBeanUtil.copyList(pageResultDTO.getList(), targetClazz));
-        return newPageResultDTO;
+    public static <E, T> PageResult<T> convert2PageResult(PageResult<E> pageResult, Class<T> targetClazz) {
+        PageResult<T> newPageResult = new PageResult<>();
+        newPageResult.setPageNum(pageResult.getPageNum());
+        newPageResult.setPageSize(pageResult.getPageSize());
+        newPageResult.setTotal(pageResult.getTotal());
+        newPageResult.setPages(pageResult.getPages());
+        newPageResult.setEmptyFlag(pageResult.getEmptyFlag());
+        newPageResult.setList(SmartBeanUtil.copyList(pageResult.getList(), targetClazz));
+        return newPageResult;
     }
 }

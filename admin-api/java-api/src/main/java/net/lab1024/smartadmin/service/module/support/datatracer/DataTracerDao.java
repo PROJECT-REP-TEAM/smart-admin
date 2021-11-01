@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.datatracer;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerEntity;
-import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerQueryForm;
+import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerQuery;
 import net.lab1024.smartadmin.service.module.support.datatracer.domain.DataTracerVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -33,5 +33,5 @@ public interface DataTracerDao extends BaseMapper<DataTracerEntity> {
      * @param queryForm
      * @return
      */
-    List<DataTracerVO> query(Page page, @Param("query") DataTracerQueryForm queryForm);
+    List<DataTracerVO> query(Page page, @Param("query") DataTracerQuery queryForm);
 }

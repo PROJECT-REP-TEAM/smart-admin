@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
-import net.lab1024.smartadmin.service.common.constant.RedisKeyConst;
+import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.third.SmartRedisService;

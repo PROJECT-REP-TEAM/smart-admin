@@ -34,5 +34,5 @@ public interface GoodsDao extends BaseMapper<GoodsEntity> {
      * @param query
      * @return
      */
-    List<GoodsAdminVO> query(Page page, @Param("query") GoodsQueryForm query);
+    List<GoodsAdminVO> query(Page page, @Param("query") GoodsQuery query);
 }

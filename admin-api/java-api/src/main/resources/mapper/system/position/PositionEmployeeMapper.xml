@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.service.module.system.position.employee.PositionEmployeeDao">
+
+    <delete id="delByEmployeeId">
+        DELETE FROM t_position_employee WHERE employee_id = #{employeeId}
+    </delete>
+
+    <!-- 查询员工岗位信息 -->
+    <select id="listByEmployeeId" resultType="net.lab1024.smartadmin.service.module.system.position.employee.domain.PositionEmployeeBaseVO">
+        SELECT
+        job.position_name,
+        rel.*
+        FROM
+        t_position_employee rel
+        LEFT JOIN t_position job ON rel.position_id = job.id
+        <where>
+            rel.employee_id IN
+            <foreach collection="employeeIdList" item="item" separator="," open="(" close=")">
+                #{item}
+            </foreach>
+        </where>
+    </select>
+</mapper>

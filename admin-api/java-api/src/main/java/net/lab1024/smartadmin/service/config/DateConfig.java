@@ -19,8 +19,7 @@ import java.time.format.DateTimeParseException;
 /**
  * java8 localDate 时间类格式化配置
  *
- * @author listen
- * @date 2019年10月18日 19:02:55
+ * @author zhuoda
  */
 @Configuration
 public class DateConfig {
@@ -35,14 +34,14 @@ public class DateConfig {
         };
     }
 
+
     /**
-     * string 转为 LocalDate 配置类
+     * string 转为 LocalDateTime 配置类
      *
-     * @author Turbolisten
-     * @date 2020/3/6 14:34
+     * @author zhuoda
      */
     @Configuration
-    public static class SmartConverterStringToLocalDateTime implements Converter<String, LocalDateTime> {
+    public static class StringToLocalDateTime implements Converter<String, LocalDateTime> {
 
         @Override
         public LocalDateTime convert(String str) {
@@ -61,14 +60,14 @@ public class DateConfig {
 
     }
 
+
     /**
      * string 转为 LocalDate 配置类
      *
-     * @author Turbolisten
-     * @date 2020/3/6 14:34
+     * @author zhuoda
      */
     @Configuration
-    public static class SmartConverterStringToLocalDate implements Converter<String, LocalDate> {
+    public static class StringToLocalDate implements Converter<String, LocalDate> {
 
         @Override
         public LocalDate convert(String str) {

@@ -30,11 +30,6 @@ public class DepartmentEntity {
     private String name;
 
     /**
-     * 部门简称
-     */
-    private String shortName;
-
-    /**
      * 负责人员工 id
      */
     private Long managerId;
@@ -47,7 +42,7 @@ public class DepartmentEntity {
     /**
      * 排序
      */
-    private Long sort;
+    private Integer sort;
 
 
     /**

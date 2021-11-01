@@ -3,12 +3,12 @@ package net.lab1024.smartadmin.service.module.business.goods;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.business.goods.domain.*;
 import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
-import net.lab1024.smartadmin.service.common.util.SmartEmployeeTokenUtil;
+import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +32,7 @@ public class GoodsController extends SystemBaseController {
     @ApiOperation("添加商品 by listen")
     @PostMapping("/goods/add")
     public ResponseDTO<String> add(@RequestBody @Valid GoodsAddForm addForm) {
-        EmployeeLoginInfoDTO employee = SmartEmployeeTokenUtil.getRequestEmployee();
+        EmployeeLoginInfoDTO employee = SmartRequestUtil.getRequestEmployee();
         addForm.setUpdateId(employee.getEmployeeId());
         addForm.setUpdateName(employee.getActualName());
         return goodsService.add(addForm);
@@ -41,7 +41,7 @@ public class GoodsController extends SystemBaseController {
     @ApiOperation("更新商品 by listen")
     @PostMapping("/goods/update")
     public ResponseDTO<String> update(@RequestBody @Valid GoodsUpdateForm updateForm) {
-        EmployeeLoginInfoDTO employee = SmartEmployeeTokenUtil.getRequestEmployee();
+        EmployeeLoginInfoDTO employee = SmartRequestUtil.getRequestEmployee();
         updateForm.setUpdateId(employee.getEmployeeId());
         updateForm.setUpdateName(employee.getActualName());
         return goodsService.update(updateForm);
@@ -50,7 +50,7 @@ public class GoodsController extends SystemBaseController {
     @ApiOperation("删除 by listen")
     @PostMapping("/goods/del")
     public ResponseDTO<String> del(@RequestBody @Valid GoodsDelForm delForm) {
-        EmployeeLoginInfoDTO employee = SmartEmployeeTokenUtil.getRequestEmployee();
+        EmployeeLoginInfoDTO employee = SmartRequestUtil.getRequestEmployee();
         delForm.setUpdateId(employee.getEmployeeId());
         delForm.setUpdateName(employee.getActualName());
         return goodsService.del(delForm);
@@ -58,7 +58,7 @@ public class GoodsController extends SystemBaseController {
 
     @ApiOperation("分页查询 by listen")
     @PostMapping("/goods/query")
-    public ResponseDTO<PageResultDTO<GoodsAdminVO>> query(@RequestBody @Valid GoodsQueryForm queryForm) {
+    public ResponseDTO<PageResult<GoodsAdminVO>> query(@RequestBody @Valid GoodsQuery queryForm) {
         return goodsService.query(queryForm);
     }
 }

@@ -19,11 +19,11 @@ public class SmartAdminStartupRunner implements CommandLineRunner {
     @Override
     public void run(String... args) {
 
-        log.info("###################### init start ######################");
+        log.info("###################### SmartAdmin v2.x init start ######################");
 
         // 初始化状态码
         ErrorCodeRegister.init();
 
-        log.info("###################### init complete ######################");
+        log.info("###################### SmartAdmin v2.x init complete ######################");
     }
 }

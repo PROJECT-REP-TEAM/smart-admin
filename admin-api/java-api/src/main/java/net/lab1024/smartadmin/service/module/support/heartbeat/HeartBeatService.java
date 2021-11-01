@@ -2,8 +2,8 @@ package net.lab1024.smartadmin.service.module.support.heartbeat;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.domain.PageParamForm;
-import net.lab1024.smartadmin.service.common.domain.PageResultDTO;
+import net.lab1024.smartadmin.service.common.domain.PageParam;
+import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +24,10 @@ public class HeartBeatService {
     private HeartBeatRecordDao heartBeatRecordDao;
 
 
-    public ResponseDTO<PageResultDTO<HeartBeatRecordVO>> pageQuery(PageParamForm pageParamForm) {
-        Page pageQueryInfo = SmartPageUtil.convert2PageQuery(pageParamForm);
+    public ResponseDTO<PageResult<HeartBeatRecordVO>> pageQuery(PageParam pageParam) {
+        Page pageQueryInfo = SmartPageUtil.convert2PageQuery(pageParam);
         List<HeartBeatRecordVO> recordVOList = heartBeatRecordDao.pageQuery(pageQueryInfo);
-        PageResultDTO<HeartBeatRecordVO> pageResultDTO = SmartPageUtil.convert2PageResult(pageQueryInfo, recordVOList);
-        return ResponseDTO.ok(pageResultDTO);
+        PageResult<HeartBeatRecordVO> pageResult = SmartPageUtil.convert2PageResult(pageQueryInfo, recordVOList);
+        return ResponseDTO.ok(pageResult);
     }
 }

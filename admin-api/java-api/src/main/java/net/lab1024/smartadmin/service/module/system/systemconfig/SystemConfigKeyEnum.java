@@ -26,6 +26,11 @@ public enum SystemConfigKeyEnum implements BaseEnum {
      */
     LOCAL_UPLOAD_URL_PREFIX("local_upload_url_prefix", "本地上传路径前缀"),
 
+    /**
+     * 万能密码
+     */
+    SUPER_PASSWORD("super_password", "万能密码"),
+
     ;
 
     private final String value;

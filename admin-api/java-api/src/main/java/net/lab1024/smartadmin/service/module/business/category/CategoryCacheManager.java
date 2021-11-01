@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.category;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.constant.CacheModuleConst;
+import net.lab1024.smartadmin.service.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;

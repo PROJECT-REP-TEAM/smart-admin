@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- * @author 罗伊
+ * @author yandanyang
  * @date 2021-01-30 23:57
  */
 @Data
@@ -35,7 +35,7 @@ public class DepartmentVO {
     private Long nextId;
 
     @ApiModelProperty("排序")
-    private Long sort;
+    private Integer sort;
 
     @ApiModelProperty("父级部门名称")
     private String parentName;
