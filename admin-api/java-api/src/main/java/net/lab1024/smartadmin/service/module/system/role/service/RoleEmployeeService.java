@@ -1,15 +1,12 @@
 package net.lab1024.smartadmin.service.module.system.role.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.service.BaseService;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeCacheService;
@@ -22,8 +19,10 @@ import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleEmploye
 import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleEmployeeUpdateForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleSelectedVO;
 import net.lab1024.smartadmin.service.module.system.role.manager.RoleEmployeeManager;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -36,7 +35,7 @@ import java.util.stream.Collectors;
  * @date 2019/4/3
  */
 @Service
-public class RoleEmployeeService extends BaseService {
+public class RoleEmployeeService  {
 
     @Autowired
     private RoleEmployeeDao roleEmployeeDao;
@@ -66,7 +65,7 @@ public class RoleEmployeeService extends BaseService {
             List<DepartmentEntity> departmentEntities = departmentDao.selectBatchIds(departmentIdList);
             Map<Long, String> departmentIdNameMap = departmentEntities.stream().collect(Collectors.toMap(DepartmentEntity::getId, DepartmentEntity::getName));
             employeeDTOS.forEach(e -> {
-                e.setDepartmentName(departmentIdNameMap.getOrDefault(e.getDepartmentId(), CommonConst.EMPTY_STR));
+                e.setDepartmentName(departmentIdNameMap.getOrDefault(e.getDepartmentId(), StringConst.EMPTY_STR));
             });
         }
         PageResult<EmployeeVO> PageResult = SmartPageUtil.convert2PageResult(page, employeeDTOS, EmployeeVO.class);

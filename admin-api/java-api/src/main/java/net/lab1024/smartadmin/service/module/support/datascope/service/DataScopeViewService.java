@@ -1,9 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.datascope.service;
 
 import com.google.common.collect.Lists;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datascope.domain.entity.DataScopeRoleEntity;
@@ -13,7 +11,9 @@ import net.lab1024.smartadmin.service.module.system.employee.domain.entity.Emplo
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDataScopeDao;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
-import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
@@ -66,9 +66,6 @@ public class DataScopeViewService {
         if (DataScopeViewTypeEnum.DEPARTMENT_AND_SUB == viewType) {
             return this.getDepartmentAndSubEmployeeIdList(employeeId);
         }
-        if (DataScopeViewTypeEnum.SCHOOL == viewType) {
-            return this.getSchoolEmployeeIdList(employeeId);
-        }
         return Lists.newArrayList();
     }
 
@@ -89,9 +86,6 @@ public class DataScopeViewService {
         }
         if (DataScopeViewTypeEnum.DEPARTMENT_AND_SUB == viewType) {
             return this.getDepartmentAndSubIdList(employeeId);
-        }
-        if (DataScopeViewTypeEnum.SCHOOL == viewType) {
-            return this.getSchoolDepartmentIdList(employeeId);
         }
         return Lists.newArrayList();
     }
@@ -158,7 +152,7 @@ public class DataScopeViewService {
      */
     private List<Long> getDepartmentEmployeeIdList(Long employeeId) {
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
-        List<Long> employeeIdList = employeeDao.getEmployeeIdByDepartmentId(employeeEntity.getDepartmentId(), null, null, false);
+        List<Long> employeeIdList = employeeDao.getEmployeeIdByDepartmentId(employeeEntity.getDepartmentId(), false);
         return employeeIdList;
     }
 
@@ -170,39 +164,7 @@ public class DataScopeViewService {
      */
     private List<Long> getDepartmentAndSubEmployeeIdList(Long employeeId) {
         List<Long> allDepartmentIds = getDepartmentAndSubIdList(employeeId);
-        List<Long> employeeIdList = employeeDao.getEmployeeIdByDepartmentIdList(allDepartmentIds, null, null, false);
+        List<Long> employeeIdList = employeeDao.getEmployeeIdByDepartmentIdList(allDepartmentIds, false);
         return employeeIdList;
     }
-
-    /**
-     * 获取默认所属分校的所有员工id
-     *
-     * @param employeeId
-     * @return
-     */
-    private List<Long> getSchoolEmployeeIdList(Long employeeId) {
-        Long schoolDepartmentId = departmentService.getSchoolIdByEmployeeId(employeeId);
-        if (schoolDepartmentId == null) {
-            return Lists.newArrayList();
-        }
-        List<Long> allDepartmentIds = departmentService.selfAndChildrenIdList(schoolDepartmentId);
-        List<Long> employeeIdList = employeeDao.getEmployeeIdByDepartmentIdList(allDepartmentIds, null, null, false);
-        return employeeIdList;
-    }
-
-    /**
-     * 获取默认所属分校的所有部门id
-     *
-     * @param employeeId
-     * @return
-     */
-    private List<Long> getSchoolDepartmentIdList(Long employeeId) {
-        Long schoolDepartmentId = departmentService.getSchoolIdByEmployeeId(employeeId);
-        if (schoolDepartmentId == null) {
-            return Lists.newArrayList();
-        }
-        List<Long> allDepartmentIds = departmentService.selfAndChildrenIdList(schoolDepartmentId);
-        return allDepartmentIds;
-    }
-
 }

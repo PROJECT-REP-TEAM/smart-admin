@@ -43,7 +43,7 @@ public class RoleService {
     public ResponseDTO addRole(RoleAddForm roleAddForm) {
         RoleEntity employeeRoleEntity = roleDao.getByRoleName(roleAddForm.getRoleName());
         if (null != employeeRoleEntity) {
-            return ResponseDTO.error(UserErrorCode.ALREADY_EXISTS, "角色名称重复");
+            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "角色名称重复");
         }
         RoleEntity roleEntity = SmartBeanUtil.copy(roleAddForm, RoleEntity.class);
         roleDao.insert(roleEntity);
@@ -81,7 +81,7 @@ public class RoleService {
         }
         RoleEntity employeeRoleEntity = roleDao.getByRoleName(roleUpdateForm.getRoleName());
         if (null != employeeRoleEntity && !employeeRoleEntity.getId().equals(roleUpdateForm.getId())) {
-            return ResponseDTO.error(UserErrorCode.ALREADY_EXISTS, "角色名称重复");
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "角色名称重复");
         }
         RoleEntity roleEntity = SmartBeanUtil.copy(roleUpdateForm, RoleEntity.class);
         roleDao.updateById(roleEntity);

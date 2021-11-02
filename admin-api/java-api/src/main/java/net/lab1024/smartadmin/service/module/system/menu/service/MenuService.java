@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.system.menu.dao.MenuDao;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
@@ -32,6 +31,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class MenuService {
+
+    private static final long DEFAULT_PARENT_ID = 0;
 
     @Autowired
     private MenuDao menuDao;
@@ -174,7 +175,7 @@ public class MenuService {
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, disabledFlag, null);
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuVO> filterMenuVOList = this.filterNoParentMenu(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuVO> filterMenuVOList = this.filterNoParentMenu(parentMap, DEFAULT_PARENT_ID);
         return filterMenuVOList;
     }
 
@@ -218,7 +219,7 @@ public class MenuService {
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, null, menuTypeList);
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, DEFAULT_PARENT_ID);
         return ResponseDTO.ok(menuTreeVOList);
     }
 

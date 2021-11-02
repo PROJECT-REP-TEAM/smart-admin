@@ -2,15 +2,15 @@ package net.lab1024.smartadmin.service.module.system.role.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.system.role.service.RoleService;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleAddForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleUpdateForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleVO;
+import net.lab1024.smartadmin.service.module.system.role.service.RoleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Api(tags = {SwaggerTagConst.System.MANAGER_ROLE})
 @RestController
-public class RoleController extends AdminBaseController {
+public class RoleController extends SystemBaseController {
 
     @Autowired
     private RoleService roleService;

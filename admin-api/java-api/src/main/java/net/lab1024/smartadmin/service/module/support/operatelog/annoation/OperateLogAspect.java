@@ -6,7 +6,6 @@ import net.lab1024.smartadmin.service.module.support.operatelog.OperateLogDao;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogConfigDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogUserDTO;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
-import net.lab1024.smartadmin.service.third.SmartApplicationContext;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,6 +17,8 @@ import org.aspectj.lang.annotation.AfterThrowing;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -39,6 +40,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class OperateLogAspect {
 
     private static final String pointCut = "@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)";
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     private OperateLogConfigDTO smartLogConfig;
 
@@ -256,12 +260,13 @@ public class OperateLogAspect {
 
     /**
      * 保存操作日志
+     *
      * @param operateLogEntity
      * @return
      */
     private Boolean saveLog(OperateLogEntity operateLogEntity) {
         if (smartLogConfig.getSaveFunction() == null) {
-            BaseMapper mapper = SmartApplicationContext.getBean(OperateLogDao.class);
+            BaseMapper mapper = applicationContext.getBean(OperateLogDao.class);
             if (mapper == null) {
                 return false;
             }

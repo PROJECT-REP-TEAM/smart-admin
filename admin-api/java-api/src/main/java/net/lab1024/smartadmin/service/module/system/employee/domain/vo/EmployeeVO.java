@@ -2,8 +2,9 @@ package net.lab1024.smartadmin.service.module.system.employee.domain.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import net.lab1024.smartadmin.service.common.annoation.ApiModelPropertyEnum;
-import net.lab1024.smartadmin.service.common.constant.GenderEnum;
+import net.lab1024.smartadmin.service.common.enumeration.GenderEnum;
+import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -37,9 +38,6 @@ public class EmployeeVO {
 
     @ApiModelProperty("是否被禁用")
     private Boolean disabledFlag;
-
-    @ApiModelProperty("是否离职")
-    private Boolean leaveFlag;
 
     @ApiModelProperty("部门名称")
     private String departmentName;

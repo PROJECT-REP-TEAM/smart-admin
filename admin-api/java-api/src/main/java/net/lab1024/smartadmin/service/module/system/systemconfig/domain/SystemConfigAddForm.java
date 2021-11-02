@@ -16,7 +16,7 @@ import javax.validation.constraints.NotBlank;
  * @since JDK1.8
  */
 @Data
-public class SystemConfigAddDTO {
+public class SystemConfigAddForm {
 
     @ApiModelProperty("参数key")
     @NotBlank(message = "参数key不能为空")

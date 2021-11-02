@@ -57,7 +57,7 @@ public class EmployeeCacheService {
      */
     @Cacheable(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE)
     public List<EmployeeEntity> departmentEmployeeCache(Long departmentId) {
-        List<EmployeeEntity> employeeEntityList = employeeDao.selectByDepartmentId(departmentId, null, null, false);
+        List<EmployeeEntity> employeeEntityList = employeeDao.selectByDepartmentId(departmentId,  false);
         return employeeEntityList;
     }
 
@@ -73,7 +73,7 @@ public class EmployeeCacheService {
         if (null == employeeEntity) {
             return null;
         }
-        if (employeeEntity.getDeletedFlag()) {
+        if (employeeEntity.getDisabledFlag()) {
             return null;
         }
         return employeeEntity;

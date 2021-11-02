@@ -248,39 +248,6 @@ public class EmployeeService {
 
 
     /**
-     * 批量删除员工
-     *
-     * @param employeeIdList 员工ID列表
-     * @return
-     */
-    public ResponseDTO<String> batchUpdateDeleteFlag(List<Long> employeeIdList) {
-        if (CollectionUtils.isEmpty(employeeIdList)) {
-            return ResponseDTO.ok();
-        }
-        List<EmployeeEntity> employeeEntityList = employeeManager.listByIds(employeeIdList);
-        if (CollectionUtils.isEmpty(employeeEntityList)) {
-            return ResponseDTO.ok();
-        }
-
-        // 更新删除
-        List<EmployeeEntity> deleteList = employeeIdList.stream().map(e -> {
-            EmployeeEntity updateEmployee = new EmployeeEntity();
-            updateEmployee.setId(e);
-            updateEmployee.setDeletedFlag(true);
-            return updateEmployee;
-        }).collect(Collectors.toList());
-        employeeManager.updateBatchById(deleteList);
-
-        // 清除缓存
-        employeeEntityList.forEach(e -> {
-            employeeCacheService.clearCacheByEmployeeId(e.getId());
-            employeeCacheService.clearCacheByDepartmentId(e.getDepartmentId());
-        });
-        return ResponseDTO.ok();
-    }
-
-
-    /**
      * 批量更新部门
      *
      * @param batchUpdateDepartmentForm
@@ -351,10 +318,10 @@ public class EmployeeService {
      * @param departmentId
      * @return
      */
-    public ResponseDTO<List<EmployeeVO>> getAllEmployeeByDepartmentId(Long departmentId, Boolean leaveFlag) {
+    public ResponseDTO<List<EmployeeVO>> getAllEmployeeByDepartmentId(Long departmentId, Boolean disabledFlag) {
         List<EmployeeEntity> employeeEntityList = employeeCacheService.departmentEmployeeCache(departmentId);
-        if (leaveFlag != null) {
-            employeeEntityList = employeeEntityList.stream().filter(e -> e.getLeaveFlag().equals(leaveFlag)).collect(Collectors.toList());
+        if (disabledFlag != null) {
+            employeeEntityList = employeeEntityList.stream().filter(e -> e.getDisabledFlag().equals(disabledFlag)).collect(Collectors.toList());
         }
         // 获取部门
         List<DepartmentVO> departmentList = departmentCacheService.departmentCache();

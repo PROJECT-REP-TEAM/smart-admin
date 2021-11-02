@@ -1,11 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.menu.service;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.compress.utils.Lists;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
@@ -14,9 +10,13 @@ import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleMenuDao;
 import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleMenuEntity;
-import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigEnum;
+import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.compress.utils.Lists;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Comparator;
@@ -104,7 +104,7 @@ public class MenuEmployeeService {
      * @return
      */
     public Boolean isSuperman(Long employeeId) {
-        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigEnum.Key.EMPLOYEE_SUPERMAN);
+        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigKeyEnum.EMPLOYEE_SUPERMAN);
         List<Long> superManIdsList = SmartStringUtil.splitConverToLongList(systemConfigValue, ",");
         return superManIdsList.contains(employeeId);
     }

@@ -2,9 +2,12 @@ package net.lab1024.smartadmin.service.module.system.department.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
+import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * t_department dao接口
@@ -28,5 +31,6 @@ public interface DepartmentDao extends BaseMapper<DepartmentEntity> {
      *
      * @return
      */
+    List<DepartmentVO> listAll();
 
 }

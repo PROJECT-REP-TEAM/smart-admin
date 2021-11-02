@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.filter;
 
 import net.lab1024.smartadmin.service.common.constant.RequestHeaderConst;
+import net.lab1024.smartadmin.service.module.system.login.domain.LoginUserDetail;
 import net.lab1024.smartadmin.service.module.system.login.service.JwtService;
-import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginBO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,9 +45,9 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
         }
         //清理spring security
         SecurityContextHolder.clearContext();
-        EmployeeLoginBO loginBO = loginTokenService.getEmployeeLoginBO(xAccessToken);
-        if (null != loginBO) {
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginBO, null, loginBO.getAuthorities());
+        LoginUserDetail loginUserDetail = loginTokenService.getEmployeeLoginBO(xAccessToken);
+        if (null != loginUserDetail) {
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDetail, null, loginUserDetail.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

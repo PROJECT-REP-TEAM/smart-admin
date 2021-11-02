@@ -6,11 +6,11 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.reload.core.annoation.SmartReload;
-import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.module.support.reload.core.annoation.SmartReload;
+import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -64,9 +64,6 @@ public class SystemConfigService {
      */
     private void refreshConfigCache(Long configId) {
         Optional<SystemConfigEntity> optional = this.CONFIG_CACHE.values().stream().filter(e -> Objects.equals(configId, e.getConfigId())).findFirst();
-        // 移除缓存
-        optional.ifPresent(e -> this.CONFIG_CACHE.remove(e.getConfigKey()));
-
         // 重新查询 加入缓存
         SystemConfigEntity configEntity = systemConfigDao.selectById(configId);
         if (null == configEntity) {
@@ -81,7 +78,7 @@ public class SystemConfigService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResult<SystemConfigVO>> queryConfigPage(SystemConfigQuery queryDTO) {
+    public ResponseDTO<PageResult<SystemConfigVO>> queryConfigPage(SystemConfigQueryForm queryDTO) {
         Page page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<SystemConfigEntity> entityList = systemConfigDao.queryByPage(page, queryDTO);
         PageResult<SystemConfigVO> pageResult = SmartPageUtil.convert2PageResult(page, entityList, SystemConfigVO.class);
@@ -94,7 +91,7 @@ public class SystemConfigService {
      * @param configKey
      * @return
      */
-    public SystemConfigDTO getConfig(SystemConfigKeyEnum configKey) {
+    public SystemConfigVO getConfig(SystemConfigKeyEnum configKey) {
         return this.getConfig(configKey.getValue());
     }
 
@@ -104,14 +101,14 @@ public class SystemConfigService {
      * @param configKey
      * @return
      */
-    public SystemConfigDTO getConfig(String configKey) {
+    public SystemConfigVO getConfig(String configKey) {
         boolean check = SmartBaseEnumUtil.checkEnum(configKey, SystemConfigKeyEnum.class);
         Assert.isTrue(check, "config key error");
 
         SystemConfigEntity entity = this.CONFIG_CACHE.get(configKey);
         Assert.notNull(entity, "缺少系统配置[" + configKey + "]");
 
-        return SmartBeanUtil.copy(entity, SystemConfigDTO.class);
+        return SmartBeanUtil.copy(entity, SystemConfigVO.class);
     }
 
     /**
@@ -143,7 +140,7 @@ public class SystemConfigService {
      * @param configAddDTO
      * @return
      */
-    public ResponseDTO<String> add(SystemConfigAddDTO configAddDTO) {
+    public ResponseDTO<String> add(SystemConfigAddForm configAddDTO) {
         SystemConfigEntity entity = systemConfigDao.selectByKey(configAddDTO.getConfigKey());
         if (null != entity) {
             return ResponseDTO.error(UserErrorCode.ALREADY_EXIST);
@@ -162,7 +159,7 @@ public class SystemConfigService {
      * @param updateDTO
      * @return
      */
-    public ResponseDTO<String> updateSystemConfig(SystemConfigUpdateDTO updateDTO) {
+    public ResponseDTO<String> updateSystemConfig(SystemConfigUpdateForm updateDTO) {
         Long configId = updateDTO.getConfigId();
         SystemConfigEntity entity = systemConfigDao.selectById(configId);
         if (null == entity) {
@@ -190,7 +187,7 @@ public class SystemConfigService {
      * @return
      */
     public ResponseDTO<String> updateValueByKey(SystemConfigKeyEnum key, String value) {
-        SystemConfigDTO config = this.getConfig(key);
+        SystemConfigVO config = this.getConfig(key);
         if (null == config) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }

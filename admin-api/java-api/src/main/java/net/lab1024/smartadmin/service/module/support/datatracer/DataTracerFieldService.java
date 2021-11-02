@@ -11,13 +11,14 @@ import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldDoc;
 import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldEnumValue;
 import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldSqlValue;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerOperateTypeEnum;
-import net.lab1024.smartadmin.service.third.SmartApplicationContext;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBigDecimalUtil;
 import net.lab1024.smartadmin.service.common.util.date.SmartDateFormatterEnum;
 import net.lab1024.smartadmin.service.common.util.date.SmartLocalDateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import java.beans.PropertyDescriptor;
@@ -38,6 +39,9 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 @Service
 public class DataTracerFieldService {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     /**
      * 字段描述缓存
@@ -299,7 +303,7 @@ public class DataTracerFieldService {
      */
     private String getRelateDisplayValue(Object fieldValue, FieldSqlValue fieldSqlValue) {
         Class<? extends BaseMapper> relateMapper = fieldSqlValue.relateMapper();
-        BaseMapper mapper = SmartApplicationContext.getBean(relateMapper);
+        BaseMapper mapper = applicationContext.getBean(relateMapper);
         if (mapper == null) {
             return "";
         }

@@ -22,7 +22,7 @@ import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQuery;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileUrlUploadForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
-import net.lab1024.smartadmin.service.third.SmartRedisService;
+import net.lab1024.smartadmin.service.module.support.redis.RedisService;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,7 +62,7 @@ public class FileService {
     private FileDao fileDao;
 
     @Autowired
-    private SmartRedisService redisService;
+    private RedisService redisService;
 
     @Value("${spring.servlet.multipart.max-file-size}")
     private String maxFileSize;

@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.third;
+package net.lab1024.smartadmin.service.module.support.redis;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -26,9 +26,9 @@ import java.util.concurrent.TimeUnit;
  * @date 2020/8/25 11:57
  */
 @Component
-public class SmartRedisService {
+public class RedisService {
 
-    private static final Logger log = org.slf4j.LoggerFactory.getLogger(SmartRedisService.class);
+    private static final Logger log = org.slf4j.LoggerFactory.getLogger(RedisService.class);
 
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
@@ -117,7 +117,7 @@ public class SmartRedisService {
      * @param key 可以传一个值 或多个
      */
     @SuppressWarnings("unchecked")
-    public void del(String... key) {
+    public void delete(String... key) {
         if (key != null && key.length > 0) {
             if (key.length == 1) {
                 redisTemplate.delete(key[0]);
@@ -132,7 +132,7 @@ public class SmartRedisService {
      *
      * @param keyList
      */
-    public void del(List<String> keyList) {
+    public void delete(List<String> keyList) {
         if (CollectionUtils.isEmpty(keyList)) {
             return;
         }

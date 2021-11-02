@@ -193,7 +193,7 @@ public class DepartmentService {
         }
 
         // 是否有未删除员工
-        int employeeNum = employeeDao.countByDepartmentId(departmentId, false);
+        int employeeNum = employeeDao.countByDepartmentId(departmentId);
         if (employeeNum > 0) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请先删除部门员工");
         }

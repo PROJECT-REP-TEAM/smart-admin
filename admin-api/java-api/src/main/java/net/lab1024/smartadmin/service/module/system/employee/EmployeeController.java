@@ -56,12 +56,6 @@ public class EmployeeController extends SystemBaseController {
     }
 
 
-    @ApiOperation(value = "批量删除员工 @author zhuoda")
-    @GetMapping("/employee/update/batch/delete")
-    public ResponseDTO<String> batchUpdateDeleteFlag(@RequestParam("employeeIdList") List<Long> employeeIdList) {
-        return employeeService.batchUpdateDeleteFlag(employeeIdList);
-    }
-
     @ApiOperation(value = "批量调整员工部门 @author zhuoda")
     @PostMapping("/employee/update/batch/department")
     public ResponseDTO<String> batchUpdateDepartment(@Valid @RequestBody EmployeeBatchUpdateDepartmentForm batchUpdateDepartmentForm) {

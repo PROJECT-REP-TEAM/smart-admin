@@ -37,8 +37,6 @@ public class EmployeeEntity {
 
     /**
      * 性别
-     *
-     * @see net.lab1024.smartadmin.service.common.constant.GenderEnum
      */
     private Integer gender;
 
@@ -58,16 +56,6 @@ public class EmployeeEntity {
     private Boolean disabledFlag;
 
     /**
-     * 是否删除
-     */
-    private Boolean deletedFlag;
-
-    /**
-     * 是否离职
-     */
-    private Boolean leaveFlag;
-
-    /**
      * 备注
      */
     private String remark;
@@ -76,9 +64,5 @@ public class EmployeeEntity {
 
     private LocalDateTime createTime;
 
-    /**
-     * 是否校盈易导入数据
-     */
-    private Boolean importFlag;
 
 }

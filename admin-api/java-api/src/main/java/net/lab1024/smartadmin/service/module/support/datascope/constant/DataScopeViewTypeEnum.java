@@ -21,8 +21,6 @@ public enum DataScopeViewTypeEnum implements BaseEnum {
 
     DEPARTMENT_AND_SUB(2, 10, "本部门及下属子部门"),
 
-    SCHOOL(3, 15, "本校区"),
-
     ALL(10, 100, "全部");
 
 

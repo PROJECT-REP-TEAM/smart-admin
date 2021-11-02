@@ -7,8 +7,8 @@ import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.business.goods.domain.*;
-import net.lab1024.smartadmin.service.module.system.login.domain.EmployeeLoginInfoDTO;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
+import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,7 +32,7 @@ public class GoodsController extends SystemBaseController {
     @ApiOperation("添加商品 by listen")
     @PostMapping("/goods/add")
     public ResponseDTO<String> add(@RequestBody @Valid GoodsAddForm addForm) {
-        EmployeeLoginInfoDTO employee = SmartRequestUtil.getRequestEmployee();
+        RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
         addForm.setUpdateId(employee.getEmployeeId());
         addForm.setUpdateName(employee.getActualName());
         return goodsService.add(addForm);
@@ -41,7 +41,7 @@ public class GoodsController extends SystemBaseController {
     @ApiOperation("更新商品 by listen")
     @PostMapping("/goods/update")
     public ResponseDTO<String> update(@RequestBody @Valid GoodsUpdateForm updateForm) {
-        EmployeeLoginInfoDTO employee = SmartRequestUtil.getRequestEmployee();
+        RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
         updateForm.setUpdateId(employee.getEmployeeId());
         updateForm.setUpdateName(employee.getActualName());
         return goodsService.update(updateForm);
@@ -50,7 +50,7 @@ public class GoodsController extends SystemBaseController {
     @ApiOperation("删除 by listen")
     @PostMapping("/goods/del")
     public ResponseDTO<String> del(@RequestBody @Valid GoodsDelForm delForm) {
-        EmployeeLoginInfoDTO employee = SmartRequestUtil.getRequestEmployee();
+        RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
         delForm.setUpdateId(employee.getEmployeeId());
         delForm.setUpdateName(employee.getActualName());
         return goodsService.del(delForm);

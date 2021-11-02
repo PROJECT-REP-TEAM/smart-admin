@@ -4,18 +4,17 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
-import net.lab1024.smartadmin.service.common.controller.AdminBaseController;
+import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleEmployeeQueryForm;
+import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleEmployeeUpdateForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleSelectedVO;
 import net.lab1024.smartadmin.service.module.system.role.service.RoleEmployeeService;
-import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleEmployeeUpdateForm;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -28,7 +27,7 @@ import java.util.List;
  */
 @Api(tags = {SwaggerTagConst.System.MANAGER_ROLE})
 @RestController
-public class RoleEmployeeController extends AdminBaseController {
+public class RoleEmployeeController extends SystemBaseController {
 
     @Autowired
     private RoleEmployeeService roleEmployeeService;

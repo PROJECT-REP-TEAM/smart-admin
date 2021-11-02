@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
  * @since JDK1.8
  */
 @Data
-public class SystemConfigQuery extends PageParam {
+public class SystemConfigQueryForm extends PageParam {
 
     @ApiModelProperty("参数KEY")
     @Length(max = 50, message = "参数Key最多50字符")

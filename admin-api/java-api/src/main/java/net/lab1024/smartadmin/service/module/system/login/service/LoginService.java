@@ -21,7 +21,7 @@ import net.lab1024.smartadmin.service.module.system.menu.domain.bo.MenuLoginBO;
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
-import net.lab1024.smartadmin.service.third.SmartRedisService;
+import net.lab1024.smartadmin.service.module.support.redis.RedisService;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +57,7 @@ public class LoginService {
     private DefaultKaptcha defaultKaptcha;
 
     @Autowired
-    private SmartRedisService redisService;
+    private RedisService redisService;
 
     @Autowired
     private MenuEmployeeService menuEmployeeService;
@@ -84,7 +84,7 @@ public class LoginService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误");
         }
         // 删除已使用的验证码
-        redisService.del(redisCaptchaKey);
+        redisService.delete(redisCaptchaKey);
 
         /**
          * 验证账号和账号状态

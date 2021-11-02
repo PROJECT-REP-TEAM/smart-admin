@@ -1,23 +1,22 @@
 package net.lab1024.smartadmin.service.module.system.role.service;
 
 import com.google.common.collect.Lists;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.constant.CommonConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.system.menu.dao.MenuDao;
-import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuSimpleTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
+import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
-import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntity;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleMenuDao;
-import net.lab1024.smartadmin.service.module.system.role.manager.RoleMenuManager;
-import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleMenuUpdateForm;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntity;
 import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleMenuEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleMenuUpdateForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleMenuTreeVO;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.module.system.role.manager.RoleMenuManager;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -31,6 +30,8 @@ import java.util.stream.Collectors;
  */
 @Service
 public class RoleMenuService {
+
+    private static final long DEFAULT_PARENT_ID = 0;
 
     @Autowired
     private RoleDao roleDao;
@@ -85,7 +86,7 @@ public class RoleMenuService {
         //查询菜单权限
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, Boolean.FALSE, null);
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, DEFAULT_PARENT_ID);
         res.setMenuTreeList(menuTreeList);
         return ResponseDTO.ok(res);
     }

@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
-import net.lab1024.smartadmin.service.third.SmartRedisService;
+import net.lab1024.smartadmin.service.module.support.redis.RedisService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +34,7 @@ public class CaptchaService {
     private DefaultKaptcha defaultKaptcha;
 
     @Autowired
-    private SmartRedisService redisService;
+    private RedisService redisService;
 
     /**
      * 获取生成图形验证码
@@ -88,7 +88,7 @@ public class CaptchaService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误或已过期，请刷新重试" );
         }
         // 校验通过 移除
-        redisService.del(redisKey);
+        redisService.delete(redisKey);
         return ResponseDTO.ok();
     }
 

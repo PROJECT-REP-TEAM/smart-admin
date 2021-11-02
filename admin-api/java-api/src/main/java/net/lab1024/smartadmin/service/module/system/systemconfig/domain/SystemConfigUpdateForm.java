@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
  * @since JDK1.8
  */
 @Data
-public class SystemConfigUpdateDTO extends SystemConfigAddDTO {
+public class SystemConfigUpdateForm extends SystemConfigAddForm {
 
     @ApiModelProperty("configId")
     @NotNull(message = "configId不能为空")
