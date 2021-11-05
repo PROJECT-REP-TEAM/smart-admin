@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.dto.DataScopeAndViewTypeVO;
+import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeAndViewTypeVO;
 import net.lab1024.smartadmin.service.module.support.datascope.service.DataScopeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

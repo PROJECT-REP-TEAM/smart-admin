@@ -1,14 +1,12 @@
 package net.lab1024.smartadmin.service.module.system.login.service;
 
-import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
-import net.lab1024.smartadmin.service.common.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.constant.RedisKeyConst;
+import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
+import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
@@ -21,16 +19,8 @@ import net.lab1024.smartadmin.service.module.system.menu.domain.bo.MenuLoginBO;
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
-import net.lab1024.smartadmin.service.module.support.redis.RedisService;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.util.UUID;
 
 /**
  * @author zhuoda
@@ -54,10 +44,7 @@ public class LoginService {
     private JwtService jwtService;
 
     @Autowired
-    private DefaultKaptcha defaultKaptcha;
-
-    @Autowired
-    private RedisService redisService;
+    private CaptchaService captchaService;
 
     @Autowired
     private MenuEmployeeService menuEmployeeService;
@@ -73,18 +60,11 @@ public class LoginService {
      * @return 返回用户登录信息
      */
     public ResponseDTO<LoginResultVO> login(LoginForm loginForm) {
-
-        /**
-         * 1、校验redis里的验证码
-         * 2、校验成功后，删除redis
-         */
-        String redisCaptchaKey = RedisKeyConst.Support.CAPTCHA + loginForm.getCaptchaUuid();
-        String redisCaptchaValue = redisService.get(redisCaptchaKey);
-        if (StringUtils.isBlank(redisCaptchaValue) || !StringUtils.equalsIgnoreCase(loginForm.getCaptchaCode(), redisCaptchaValue)) {
-            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误");
+        // 校验 验证码
+        ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
+        if (!checkCaptcha.getOk()) {
+            return ResponseDTO.error(checkCaptcha);
         }
-        // 删除已使用的验证码
-        redisService.delete(redisCaptchaKey);
 
         /**
          * 验证账号和账号状态
@@ -136,6 +116,7 @@ public class LoginService {
      * @return
      */
     public ResponseDTO<String> logoutByToken(Long employeeId) {
+        //TODO 卓大  清除缓存等
         return ResponseDTO.ok();
     }
 
@@ -145,32 +126,7 @@ public class LoginService {
      * @return
      */
     public ResponseDTO<CaptchaVO> getCaptcha() {
-        String uuid = UUID.randomUUID().toString().replace("-", StringConst.EMPTY_STR);
-        String captchaText = defaultKaptcha.createText();
-        String base64Code;
-        BufferedImage image = defaultKaptcha.createImage(captchaText);
-        ByteArrayOutputStream outputStream = null;
-        try {
-            outputStream = new ByteArrayOutputStream();
-            ImageIO.write(image, "jpg", outputStream);
-            base64Code = Base64.encodeBase64String(outputStream.toByteArray());
-        } catch (Exception e) {
-            log.error("verificationCode exception .{}", e);
-            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR);
-        } finally {
-            if (outputStream != null) {
-                try {
-                    outputStream.close();
-                } catch (Exception e) {
-                    log.error("verificationCode outputStream close exception .{}", e);
-                }
-            }
-        }
-        CaptchaVO captchaVO = new CaptchaVO();
-        captchaVO.setUuid(uuid);
-        captchaVO.setCode("data:image/png;base64," + base64Code);
-        redisService.set(RedisKeyConst.Support.CAPTCHA + uuid, captchaText, 60);
-        return ResponseDTO.ok(captchaVO);
+        return ResponseDTO.ok(captchaService.generateCaptcha());
     }
 
     /**

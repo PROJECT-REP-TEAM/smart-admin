@@ -27,11 +27,11 @@
         </where>
     </update>
 
-    <select id="query" resultType="net.lab1024.smartadmin.service.module.support.heartbeat.HeartBeatRecordEntity">
+    <select id="query" resultType="net.lab1024.smartadmin.service.module.support.heartbeat.domain.HeartBeatRecordEntity">
       select * from t_heart_beat_record where project_path = #{projectPath} and server_ip = #{serverIp} and process_no =#{processNo}
     </select>
 
-    <select id="pageQuery" resultType="net.lab1024.smartadmin.service.module.support.heartbeat.HeartBeatRecordVO">
+    <select id="pageQuery" resultType="net.lab1024.smartadmin.service.module.support.heartbeat.domain.HeartBeatRecordVO">
         SELECT
         *
         FROM

@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.support.datascope;
 
 import com.google.common.collect.Maps;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.dto.DataScopeSqlConfigDTO;
+import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
 import net.lab1024.smartadmin.service.module.support.datascope.service.DataScopeSqlConfigService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.*;
@@ -49,7 +49,7 @@ public class MyBatisPlugin implements Interceptor {
         if (dataScopeSqlConfigService == null) {
             return invocation.proceed();
         }
-        DataScopeSqlConfigDTO sqlConfigDTO = dataScopeSqlConfigService.getSqlConfig(path);
+        DataScopeSqlConfig sqlConfigDTO = dataScopeSqlConfigService.getSqlConfig(path);
         if (sqlConfigDTO != null) {
             Map<String, Object> paramMap = this.getParamList(sqlConfigDTO.getParamName(), parameter);
             BoundSql newBoundSql = copyFromBoundSql(mappedStatement, boundSql, this.joinSql(originalSql, paramMap, sqlConfigDTO));
@@ -83,7 +83,7 @@ public class MyBatisPlugin implements Interceptor {
         return paramMap;
     }
 
-    private String joinSql(String sql, Map<String, Object> paramMap, DataScopeSqlConfigDTO sqlConfigDTO) {
+    private String joinSql(String sql, Map<String, Object> paramMap, DataScopeSqlConfig sqlConfigDTO) {
         if (null == sqlConfigDTO) {
             return sql;
         }

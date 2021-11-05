@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.entity.DataScopeRoleEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
@@ -121,16 +121,16 @@ public class DataScopeViewService {
             return DataScopeViewTypeEnum.ME;
         }
         //未设置角色数据范围 默认本人
-        List<DataScopeRoleEntity> dataScopeRoleList = roleDataScopeDao.listByRoleIdList(roleIdList);
+        List<RoleDataScopeEntity> dataScopeRoleList = roleDataScopeDao.listByRoleIdList(roleIdList);
         if (CollectionUtils.isEmpty(dataScopeRoleList)) {
             return DataScopeViewTypeEnum.ME;
         }
-        Map<Integer, List<DataScopeRoleEntity>> listMap = dataScopeRoleList.stream().collect(Collectors.groupingBy(DataScopeRoleEntity::getDataScopeType));
-        List<DataScopeRoleEntity> viewLevelList = listMap.getOrDefault(dataScopeTypeEnum.getValue(), Lists.newArrayList());
+        Map<Integer, List<RoleDataScopeEntity>> listMap = dataScopeRoleList.stream().collect(Collectors.groupingBy(RoleDataScopeEntity::getDataScopeType));
+        List<RoleDataScopeEntity> viewLevelList = listMap.getOrDefault(dataScopeTypeEnum.getValue(), Lists.newArrayList());
         if (CollectionUtils.isEmpty(viewLevelList)) {
             return DataScopeViewTypeEnum.ME;
         }
-        DataScopeRoleEntity maxLevel = viewLevelList.stream().max(Comparator.comparing(e -> SmartBaseEnumUtil.getEnumByValue(e.getViewType(), DataScopeViewTypeEnum.class).getLevel())).get();
+        RoleDataScopeEntity maxLevel = viewLevelList.stream().max(Comparator.comparing(e -> SmartBaseEnumUtil.getEnumByValue(e.getViewType(), DataScopeViewTypeEnum.class).getLevel())).get();
         return SmartBaseEnumUtil.getEnumByValue(maxLevel.getViewType(), DataScopeViewTypeEnum.class);
     }
 

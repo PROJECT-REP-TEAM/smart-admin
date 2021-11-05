@@ -6,6 +6,7 @@ import net.lab1024.smartadmin.service.common.domain.PageParam;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.module.support.heartbeat.domain.HeartBeatRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

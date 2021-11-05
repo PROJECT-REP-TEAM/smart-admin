@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
+import net.lab1024.smartadmin.service.common.exception.BusinessException;
 import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaForm;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.module.support.redis.RedisService;
 import org.apache.commons.lang3.StringUtils;
@@ -30,6 +32,11 @@ import java.util.UUID;
 @Service
 public class CaptchaService {
 
+    /**
+     * 过期时间：65秒
+     */
+    private static final long EXPIRE_SECOND = 65L;
+
     @Autowired
     private DefaultKaptcha defaultKaptcha;
 
@@ -37,21 +44,22 @@ public class CaptchaService {
     private RedisService redisService;
 
     /**
-     * 获取生成图形验证码
+     * 生成图形验证码
      * 默认 1 分钟有效期
      *
      * @return
      */
-    public ResponseDTO<CaptchaVO> generateCaptcha() {
-        String base64Code;
+    public CaptchaVO generateCaptcha() {
         String captchaText = defaultKaptcha.createText();
         BufferedImage image = defaultKaptcha.createImage(captchaText);
+
+        String base64Code;
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ImageIO.write(image, "jpg", os);
             base64Code = Base64Utils.encodeToString(os.toByteArray());
         } catch (Exception e) {
-            log.error("verificationCode exception:", e);
-            return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "generate captcha error" );
+            log.error("generateCaptcha error:", e);
+            throw new BusinessException("生成验证码错误");
         }
         // uuid 唯一标识
         String uuid = UUID.randomUUID().toString().replace("-", StringConst.EMPTY_STR);
@@ -62,33 +70,36 @@ public class CaptchaService {
          * 默认有效时长 80s
          */
         CaptchaVO captchaVO = new CaptchaVO();
-        captchaVO.setCaptchaId(uuid);
-        captchaVO.setCaptchaImg("data:image/png;base64," + base64Code);
-        redisService.set(buildCaptchaRedisKey(uuid), captchaText, 80L);
-        return ResponseDTO.ok(captchaVO);
+        captchaVO.setCaptchaUUid(uuid);
+        captchaVO.setCaptchaBase64Image("data:image/png;base64," + base64Code);
+        redisService.set(buildCaptchaRedisKey(uuid), captchaText, EXPIRE_SECOND);
+        return captchaVO;
     }
 
     /**
      * 校验图形验证码
      *
-     * @param captchaId
-     * @param captcha
+     * @param captchaForm
      * @return
      */
-    public ResponseDTO<String> checkCaptcha(String captchaId, String captcha) {
-        if (StringUtils.isBlank(captchaId) || StringUtils.isBlank(captcha)) {
-            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请输入正确验证码" );
+    public ResponseDTO<String> checkCaptcha(CaptchaForm captchaForm) {
+        if (StringUtils.isBlank(captchaForm.getCaptchaUuid()) || StringUtils.isBlank(captchaForm.getCaptchaCode())) {
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "请输入正确验证码");
         }
-        String redisKey = buildCaptchaRedisKey(captchaId);
-        String redisCode = redisService.get(redisKey);
-        if (StringUtils.isBlank(redisCode)) {
-            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误或已过期，请刷新重试" );
+        /**
+         * 1、校验redis里的验证码
+         * 2、校验成功后，删除redis
+         */
+        String redisCaptchaKey = buildCaptchaRedisKey(captchaForm.getCaptchaUuid());
+        String redisCaptchaCode = redisService.get(redisCaptchaKey);
+        if (StringUtils.isBlank(redisCaptchaCode)) {
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码已过期，请刷新重试");
         }
-        if (!Objects.equals(redisCode, captcha)) {
-            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误或已过期，请刷新重试" );
+        if (!Objects.equals(redisCaptchaCode, captchaForm.getCaptchaCode())) {
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "验证码错误，请输入正确的验证码");
         }
-        // 校验通过 移除
-        redisService.delete(redisKey);
+        // 删除已使用的验证码
+        redisService.delete(redisCaptchaKey);
         return ResponseDTO.ok();
     }
 

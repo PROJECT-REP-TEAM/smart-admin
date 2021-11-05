@@ -2,6 +2,7 @@ package net.lab1024.smartadmin.service.module.support.cache;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,19 +20,19 @@ import java.util.List;
  */
 @RestController
 @Api(tags = {SwaggerTagConst.Admin.MANAGER_SYSTEM_CACHE})
-public class CacheController {
+public class CacheController extends SupportBaseController {
 
     @Autowired
     private CacheService systemCacheService;
 
-    @ApiOperation(value = "获取所有缓存", notes = "@author 罗伊")
+    @ApiOperation(value = "获取所有缓存 @author 罗伊")
     @GetMapping("/cache/names")
     public ResponseDTO<List<String>> cacheNames() {
         return ResponseDTO.ok(systemCacheService.cacheNames());
     }
 
 
-    @ApiOperation(value = "移除某个缓存", notes = "@author 罗伊")
+    @ApiOperation(value = "移除某个缓存 @author 罗伊")
     @GetMapping("/cache/remove/{cacheName}")
     public ResponseDTO<String> removeCache(@PathVariable String cacheName) {
         systemCacheService.removeCache(cacheName);
@@ -39,7 +40,7 @@ public class CacheController {
     }
 
 
-    @ApiOperation(value = "获取某个缓存的所有key", notes = "@author 罗伊")
+    @ApiOperation(value = "获取某个缓存的所有key @author 罗伊")
     @GetMapping("/cache/keys/{cacheName}")
     public ResponseDTO<List<String>> cacheKeys(@PathVariable String cacheName) {
         return ResponseDTO.ok(systemCacheService.cacheKey(cacheName));

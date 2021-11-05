@@ -12,9 +12,9 @@ import lombok.Data;
 @Data
 public class CaptchaVO {
 
-    @ApiModelProperty("验证码标识" )
-    private String captchaId;
+    @ApiModelProperty("验证码唯一标识" )
+    private String captchaUUid;
 
-    @ApiModelProperty("验证码图片" )
-    private String captchaImg;
+    @ApiModelProperty("验证码Base64图片" )
+    private String captchaBase64Image;
 }

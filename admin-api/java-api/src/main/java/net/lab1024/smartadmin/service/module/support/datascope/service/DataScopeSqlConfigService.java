@@ -16,7 +16,7 @@ import net.lab1024.smartadmin.service.module.support.datascope.DataScope;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeWhereInTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.dto.DataScopeSqlConfigDTO;
+import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
 import net.lab1024.smartadmin.service.module.support.datascope.strategy.DataScopePowerStrategy;
 
 import javax.annotation.PostConstruct;
@@ -47,7 +47,7 @@ public class DataScopeSqlConfigService {
 
     private static final String DEPARTMENT_PARAM = "#departmentIds";
 
-    private ConcurrentHashMap<String, DataScopeSqlConfigDTO> dataScopeMethodMap = new ConcurrentHashMap<>();
+    private ConcurrentHashMap<String, DataScopeSqlConfig> dataScopeMethodMap = new ConcurrentHashMap<>();
 
     @Autowired
     private DataScopeViewService dataScopeViewService;
@@ -69,13 +69,13 @@ public class DataScopeSqlConfigService {
      *
      * @return
      */
-    private Map<String, DataScopeSqlConfigDTO> refreshDataScopeMethodMap() {
+    private Map<String, DataScopeSqlConfig> refreshDataScopeMethodMap() {
         Reflections reflections = new Reflections(new ConfigurationBuilder().setUrls(ClasspathHelper.forPackage(scanPackage)).setScanners(new MethodAnnotationsScanner()));
         Set<Method> methods = reflections.getMethodsAnnotatedWith(DataScope.class);
         for (Method method : methods) {
             DataScope dataScopeAnnotation = method.getAnnotation(DataScope.class);
             if (dataScopeAnnotation != null) {
-                DataScopeSqlConfigDTO configDTO = new DataScopeSqlConfigDTO();
+                DataScopeSqlConfig configDTO = new DataScopeSqlConfig();
                 configDTO.setDataScopeType(dataScopeAnnotation.dataScopeType());
                 configDTO.setJoinSql(dataScopeAnnotation.joinSql());
                 configDTO.setWhereIndex(dataScopeAnnotation.whereIndex());
@@ -94,8 +94,8 @@ public class DataScopeSqlConfigService {
      * @param method
      * @return
      */
-    public DataScopeSqlConfigDTO getSqlConfig(String method) {
-        DataScopeSqlConfigDTO sqlConfigDTO = this.dataScopeMethodMap.get(method);
+    public DataScopeSqlConfig getSqlConfig(String method) {
+        DataScopeSqlConfig sqlConfigDTO = this.dataScopeMethodMap.get(method);
         return sqlConfigDTO;
     }
 
@@ -105,7 +105,7 @@ public class DataScopeSqlConfigService {
      * @param sqlConfigDTO
      * @return
      */
-    public String getJoinSql(Map<String, Object> paramMap, DataScopeSqlConfigDTO sqlConfigDTO) {
+    public String getJoinSql(Map<String, Object> paramMap, DataScopeSqlConfig sqlConfigDTO) {
         DataScopeTypeEnum dataScopeTypeEnum = sqlConfigDTO.getDataScopeType();
         String joinSql = sqlConfigDTO.getJoinSql();
         Long employeeId = SmartRequestUtil.getRequestEmployeeId();

@@ -7,6 +7,7 @@ import net.lab1024.smartadmin.service.common.domain.PageParam;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
+import net.lab1024.smartadmin.service.module.support.heartbeat.domain.HeartBeatRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

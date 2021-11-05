@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.entity.DataScopeRoleEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDataScopeDao;
 import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleDataScopeUpdateForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleDataScopeVO;
@@ -33,11 +33,11 @@ public class RoleDataScopeService {
      * @return
      */
     public ResponseDTO<List<RoleDataScopeVO>> getRoleDataScopeList(Long roleId) {
-        List<DataScopeRoleEntity> dataScopeRoleEntityList = roleDataScopeDao.listByRoleId(roleId);
-        if (CollectionUtils.isEmpty(dataScopeRoleEntityList)) {
+        List<RoleDataScopeEntity> roleDataScopeEntityList = roleDataScopeDao.listByRoleId(roleId);
+        if (CollectionUtils.isEmpty(roleDataScopeEntityList)) {
             return ResponseDTO.ok(Lists.newArrayList());
         }
-        List<RoleDataScopeVO> roleDataScopeList = SmartBeanUtil.copyList(dataScopeRoleEntityList, RoleDataScopeVO.class);
+        List<RoleDataScopeVO> roleDataScopeList = SmartBeanUtil.copyList(roleDataScopeEntityList, RoleDataScopeVO.class);
         return ResponseDTO.ok(roleDataScopeList);
     }
 
@@ -53,10 +53,10 @@ public class RoleDataScopeService {
         if (CollectionUtils.isEmpty(batchSetList)) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "缺少配置信息");
         }
-        List<DataScopeRoleEntity> dataScopeRoleEntityList = SmartBeanUtil.copyList(batchSetList, DataScopeRoleEntity.class);
-        dataScopeRoleEntityList.forEach(e -> e.setRoleId(roleDataScopeUpdateForm.getRoleId()));
+        List<RoleDataScopeEntity> roleDataScopeEntityList = SmartBeanUtil.copyList(batchSetList, RoleDataScopeEntity.class);
+        roleDataScopeEntityList.forEach(e -> e.setRoleId(roleDataScopeUpdateForm.getRoleId()));
         roleDataScopeDao.deleteByRoleId(roleDataScopeUpdateForm.getRoleId());
-        roleDataScopeDao.batchInsert(dataScopeRoleEntityList);
+        roleDataScopeDao.batchInsert(roleDataScopeEntityList);
         return ResponseDTO.ok();
     }
 }

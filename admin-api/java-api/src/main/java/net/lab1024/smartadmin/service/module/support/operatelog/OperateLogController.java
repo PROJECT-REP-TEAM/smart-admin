@@ -7,7 +7,7 @@ import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogDTO;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQuery;
+import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,7 +27,7 @@ public class OperateLogController extends SupportBaseController {
 
     @ApiOperation(value = "分页查询 @author 罗伊")
     @PostMapping("/userOperateLog/page/query")
-    public ResponseDTO<PageResult<OperateLogDTO>> queryByPage(@RequestBody OperateLogQuery queryForm) {
+    public ResponseDTO<PageResult<OperateLogDTO>> queryByPage(@RequestBody OperateLogQueryForm queryForm) {
         return operateLogService.queryByPage(queryForm);
     }
 

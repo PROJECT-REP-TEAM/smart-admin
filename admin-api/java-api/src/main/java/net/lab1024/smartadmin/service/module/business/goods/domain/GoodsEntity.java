@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import net.lab1024.smartadmin.service.module.business.category.CategoryDao;
 import net.lab1024.smartadmin.service.module.business.goods.constant.GoodsTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldBigDecimalValue;
-import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldDoc;
-import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldEnumValue;
-import net.lab1024.smartadmin.service.module.support.datatracer.anno.FieldSqlValue;
+import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldBigDecimal;
+import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldDoc;
+import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldEnum;
+import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldSql;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,8 +32,8 @@ public class GoodsEntity {
      *
      * @see GoodsTypeEnum
      */
-    @FieldDoc("商品类型")
-    @FieldEnumValue(enumClass = GoodsTypeEnum.class)
+    @DataTracerFieldDoc("商品类型")
+    @DataTracerFieldEnum(enumClass = GoodsTypeEnum.class)
     private Integer goodsType;
 
     /**
@@ -44,13 +44,13 @@ public class GoodsEntity {
     /**
      * 商品分类
      */
-    @FieldSqlValue(relateColumn = "categoryId",relateDisplayColumn = "categoryName",relateMapper = CategoryDao.class)
+    @DataTracerFieldSql(relateColumn = "categoryId",relateDisplayColumn = "categoryName",relateMapper = CategoryDao.class)
     private Long categoryId;
 
     /**
      * 商品名称
      */
-    @FieldDoc("商品名称")
+    @DataTracerFieldDoc("商品名称")
     private String goodsName;
 
     /**
@@ -61,8 +61,8 @@ public class GoodsEntity {
     /**
      * 商品价格
      */
-    @FieldDoc("商品价格")
-    @FieldBigDecimalValue
+    @DataTracerFieldDoc("商品价格")
+    @DataTracerFieldBigDecimal
     private BigDecimal price;
 
     /**
@@ -73,7 +73,7 @@ public class GoodsEntity {
     /**
      * 上架状态
      */
-    @FieldDoc("上架状态")
+    @DataTracerFieldDoc("上架状态")
     private Boolean shelvesFlag;
 
     /**

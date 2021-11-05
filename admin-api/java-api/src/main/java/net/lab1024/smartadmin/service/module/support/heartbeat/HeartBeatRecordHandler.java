@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.module.support.heartbeat.core.HeartBeatRecord;
 import net.lab1024.smartadmin.service.module.support.heartbeat.core.IHeartBeatRecordHandler;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.module.support.heartbeat.domain.HeartBeatRecordEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

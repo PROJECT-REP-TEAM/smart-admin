@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.operatelog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQuery;
+import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public interface OperateLogDao extends BaseMapper<OperateLogEntity> {
      * @param queryForm
      * @return UserOperateLogEntity
      */
-    List<OperateLogEntity> queryByPage(Page page, @Param("query") OperateLogQuery queryForm);
+    List<OperateLogEntity> queryByPage(Page page, @Param("query") OperateLogQueryForm queryForm);
 
     /**
      * 根据id删除

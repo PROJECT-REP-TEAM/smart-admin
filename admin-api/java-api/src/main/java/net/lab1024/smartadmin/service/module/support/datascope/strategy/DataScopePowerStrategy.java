@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.datascope.strategy;
 
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.dto.DataScopeSqlConfigDTO;
+import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
 
 import java.util.Map;
 
@@ -23,5 +23,5 @@ public abstract class DataScopePowerStrategy {
      * @param sqlConfigDTO
      * @return
      */
-    public abstract String getCondition(DataScopeViewTypeEnum viewTypeEnum, Map<String, Object> paramMap, DataScopeSqlConfigDTO sqlConfigDTO);
+    public abstract String getCondition(DataScopeViewTypeEnum viewTypeEnum, Map<String, Object> paramMap, DataScopeSqlConfig sqlConfigDTO);
 }

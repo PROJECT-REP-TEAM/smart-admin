@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.entity.DataScopeRoleEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
 
 import java.util.List;
 
@@ -20,21 +20,21 @@ import java.util.List;
  */
 @Mapper
 @Component
-public interface RoleDataScopeDao extends BaseMapper<DataScopeRoleEntity> {
+public interface RoleDataScopeDao extends BaseMapper<RoleDataScopeEntity> {
 
     /**
      * 获取某个角色的设置信息
      * @param roleId
      * @return
      */
-    List<DataScopeRoleEntity> listByRoleId(@Param("roleId") Long roleId);
+    List<RoleDataScopeEntity> listByRoleId(@Param("roleId") Long roleId);
 
     /**
      * 获取某批角色的所有数据范围配置信息
      * @param roleIdList
      * @return
      */
-    List<DataScopeRoleEntity> listByRoleIdList(@Param("roleIdList") List<Long> roleIdList);
+    List<RoleDataScopeEntity> listByRoleIdList(@Param("roleIdList") List<Long> roleIdList);
 
     /**
      * 删除某个角色的设置信息
@@ -48,5 +48,5 @@ public interface RoleDataScopeDao extends BaseMapper<DataScopeRoleEntity> {
      * 批量添加设置信息
      * @param list
      */
-    void batchInsert(@Param("list")List<DataScopeRoleEntity> list);
+    void batchInsert(@Param("list")List<RoleDataScopeEntity> list);
 }

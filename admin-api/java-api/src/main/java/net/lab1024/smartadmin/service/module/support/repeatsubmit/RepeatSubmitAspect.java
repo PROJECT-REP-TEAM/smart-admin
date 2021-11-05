@@ -1,8 +1,10 @@
 package net.lab1024.smartadmin.service.module.support.repeatsubmit;
 
+import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.repeatsubmit.annoation.RepeatSubmit;
+import net.lab1024.smartadmin.service.module.support.repeatsubmit.ticket.AbstractRepeatSubmitTicket;
 import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -20,6 +22,7 @@ import java.lang.reflect.Method;
  * @date
  */
 @Aspect
+@Slf4j
 public class RepeatSubmitAspect {
 
     private AbstractRepeatSubmitTicket repeatSubmitTicket;
@@ -50,7 +53,7 @@ public class RepeatSubmitAspect {
         if (StringUtils.isEmpty(ticket)) {
             return point.proceed();
         }
-        Long timeStamp = this.repeatSubmitTicket.ticketTimeStamp(ticket);
+        Long timeStamp = this.repeatSubmitTicket.getTicketTimestamp(ticket);
         if (timeStamp != null) {
             Method method = ((MethodSignature) point.getSignature()).getMethod();
             RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
@@ -64,7 +67,9 @@ public class RepeatSubmitAspect {
         try {
             obj = point.proceed();
             this.repeatSubmitTicket.putTicket(ticket);
-        }catch (Throwable throwable){
+        } catch (Throwable throwable) {
+            log.error("", throwable);
+        } finally {
             this.repeatSubmitTicket.removeTicket(ticket);
         }
         return obj;
