@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
  * @Version: 1.0
  */
 @Data
-public class FileQuery extends PageParam {
+public class FileQueryForm extends PageParam {
 
     @ApiModelProperty(value = "文件名称")
     @Length(max = 50, message = "文件名称搜索最多50字符")

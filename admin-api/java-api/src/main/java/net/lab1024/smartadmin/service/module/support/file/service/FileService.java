@@ -18,7 +18,7 @@ import net.lab1024.smartadmin.service.module.support.file.domain.FileEntity;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQuery;
+import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileUrlUploadForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
@@ -205,7 +205,7 @@ public class FileService {
      * @param queryDTO
      * @return
      */
-    public ResponseDTO<PageResult<FileVO>> queryListByPage(FileQuery queryDTO) {
+    public ResponseDTO<PageResult<FileVO>> queryListByPage(FileQueryForm queryDTO) {
         Page<?> page = SmartPageUtil.convert2PageQuery(queryDTO);
         List<FileVO> fileList = fileDao.queryListByPage(page, queryDTO);
         if (CollectionUtils.isNotEmpty(fileList)) {
