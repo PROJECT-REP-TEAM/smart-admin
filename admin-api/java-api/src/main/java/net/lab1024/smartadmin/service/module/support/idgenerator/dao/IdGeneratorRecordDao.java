@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.idgenerator;
+package net.lab1024.smartadmin.service.module.support.idgenerator.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorRecordEntity;

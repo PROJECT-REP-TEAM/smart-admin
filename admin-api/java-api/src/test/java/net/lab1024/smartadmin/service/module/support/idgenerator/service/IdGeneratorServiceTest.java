@@ -1,8 +1,8 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.service;
 
 import net.lab1024.smartadmin.service.SmartAdminApplicationTest;
-import net.lab1024.smartadmin.service.module.support.idgenerator.IdGeneratorService;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
+import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorStrategyTypeEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -23,7 +23,7 @@ class IdGeneratorServiceTest extends SmartAdminApplicationTest {
         CountDownLatch countDownLatch = new CountDownLatch(thread);
 
         Runnable task = () -> {
-            String id = generatorService.generate(IdGeneratorEnum.CONTRACT);
+            String id = generatorService.generate(IdGeneratorEnum.CONTRACT, IdGeneratorStrategyTypeEnum.MYSQL_LOCK);
             System.out.println(countDownLatch.getCount() + "生成id->" + id);
             countDownLatch.countDown();
         };
