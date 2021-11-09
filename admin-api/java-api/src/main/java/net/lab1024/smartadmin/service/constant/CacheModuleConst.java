@@ -6,6 +6,11 @@ package net.lab1024.smartadmin.service.constant;
  */
 public class CacheModuleConst {
 
+    public static class IdGenerator {
+        public static final String ID_GENERATOR_CACHE = "id_generator_cache";
+    }
+
+
     public static class Employee {
         /**
          * 某个部门下的员工缓存
