@@ -10,7 +10,7 @@ import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
+import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginForm;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginResultVO;
@@ -90,21 +90,21 @@ public class LoginService {
         }
 
         // 生成 登录token
-        String token = jwtService.generateJwtToken(employeeEntity.getId());
+        String token = jwtService.generateJwtToken(employeeEntity.getEmployeeId());
         // 获取前端菜单以及功能权限
-        MenuLoginBO menuLoginBORespDTO = menuEmployeeService.queryMenuTreeByEmployeeId(employeeEntity.getId());
+        MenuLoginBO menuLoginBORespDTO = menuEmployeeService.queryMenuTreeByEmployeeId(employeeEntity.getEmployeeId());
         // 查询部门
         DepartmentEntity departmentEntity = departmentDao.selectById(employeeEntity.getDepartmentId());
         // 返回登录结果
         LoginResultVO loginResultDTO = SmartBeanUtil.copy(employeeEntity, LoginResultVO.class);
-        loginResultDTO.setEmployeeId(employeeEntity.getId());
+        loginResultDTO.setEmployeeId(employeeEntity.getEmployeeId());
         loginResultDTO.setMenuTree(menuLoginBORespDTO.getMenuTree());
         loginResultDTO.setMenuList(menuLoginBORespDTO.getMenuList());
         loginResultDTO.setAllMenuList(menuLoginBORespDTO.getAllMenuList());
         loginResultDTO.setPointsList(menuLoginBORespDTO.getPointsList());
         loginResultDTO.setDepartmentName(null == departmentEntity ? StringConst.EMPTY_STR : departmentEntity.getName());
         loginResultDTO.setToken(token);
-        loginResultDTO.setIsSuperMan(menuEmployeeService.isSuperman(employeeEntity.getId()));
+        loginResultDTO.setIsSuperMan(menuEmployeeService.isSuperman(employeeEntity.getEmployeeId()));
 
         return ResponseDTO.ok(loginResultDTO);
     }

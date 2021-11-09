@@ -20,7 +20,11 @@ import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntit
 @Component
 public interface RoleDao extends BaseMapper<RoleEntity> {
 
-
-    RoleEntity getByRoleName(@Param("roleName") String name);
+    /**
+     * 根据角色名称查询
+     * @param roleName
+     * @return
+     */
+    RoleEntity getByRoleName(@Param("roleName") String roleName);
 
 }

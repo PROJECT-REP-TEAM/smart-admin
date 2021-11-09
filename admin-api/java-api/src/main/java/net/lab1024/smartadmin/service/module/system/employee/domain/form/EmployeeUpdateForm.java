@@ -17,5 +17,5 @@ public class EmployeeUpdateForm extends EmployeeAddForm {
 
     @ApiModelProperty("员工id")
     @NotNull(message = "员工id不能为空")
-    private Long id;
+    private Long employeeId;
 }

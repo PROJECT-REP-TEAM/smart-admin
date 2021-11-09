@@ -1,7 +1,8 @@
-package net.lab1024.smartadmin.service.module.system.employee;
+package net.lab1024.smartadmin.service.module.system.employee.manager;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +40,7 @@ public class EmployeeManager extends ServiceImpl<EmployeeDao, EmployeeEntity> {
         employeeDao.insert(employee);
 
         if (CollectionUtils.isNotEmpty(roleIdList)) {
-            List<RoleEmployeeEntity> roleEmployeeList = roleIdList.stream().map(e -> new RoleEmployeeEntity(e, employee.getId())).collect(Collectors.toList());
+            List<RoleEmployeeEntity> roleEmployeeList = roleIdList.stream().map(e -> new RoleEmployeeEntity(e, employee.getEmployeeId())).collect(Collectors.toList());
             roleEmployeeManager.saveBatch(roleEmployeeList);
         }
     }
@@ -55,8 +56,8 @@ public class EmployeeManager extends ServiceImpl<EmployeeDao, EmployeeEntity> {
         employeeDao.updateById(employee);
 
         if (CollectionUtils.isNotEmpty(roleIdList)) {
-            List<RoleEmployeeEntity> roleEmployeeList = roleIdList.stream().map(e -> new RoleEmployeeEntity(e, employee.getId())).collect(Collectors.toList());
-            this.updateEmployeeRole(employee.getId(),roleEmployeeList);
+            List<RoleEmployeeEntity> roleEmployeeList = roleIdList.stream().map(e -> new RoleEmployeeEntity(e, employee.getEmployeeId())).collect(Collectors.toList());
+            this.updateEmployeeRole(employee.getEmployeeId(),roleEmployeeList);
         }
     }
 

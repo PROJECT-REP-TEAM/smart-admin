@@ -19,7 +19,7 @@ import java.util.List;
 public class EmployeeVO {
 
     @ApiModelProperty("主键id")
-    private Long id;
+    private Long employeeId;
 
     @ApiModelProperty("登录账号")
     private String loginName;

@@ -22,7 +22,7 @@ public class DepartmentEntity {
      * 主键id
      */
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long departmentId;
 
     /**
      * 部门名称
@@ -55,11 +55,6 @@ public class DepartmentEntity {
      */
     private LocalDateTime createTime;
 
-
-    /**
-     * 导入标识
-     */
-    private Boolean importFlag;
 
 
 }

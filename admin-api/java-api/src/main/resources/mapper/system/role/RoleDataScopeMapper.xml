@@ -20,17 +20,5 @@
         WHERE role_id = #{roleId}
     </delete>
 
-    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.List">
-        INSERT INTO t_role_data_scope (data_scope_type,view_type,role_id,update_time,create_time) VALUES
-        <foreach collection="list" item="item" separator=",">
-            (
-            #{item.dataScopeType},
-            #{item.viewType},
-            #{item.roleId},
-            now(),
-            now()
-            )
-        </foreach>
-    </insert>
 
 </mapper>

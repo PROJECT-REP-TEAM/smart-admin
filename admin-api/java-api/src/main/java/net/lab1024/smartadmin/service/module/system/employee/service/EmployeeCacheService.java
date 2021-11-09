@@ -1,7 +1,8 @@
-package net.lab1024.smartadmin.service.module.system.employee;
+package net.lab1024.smartadmin.service.module.system.employee.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.constant.CacheModuleConst;
+import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;

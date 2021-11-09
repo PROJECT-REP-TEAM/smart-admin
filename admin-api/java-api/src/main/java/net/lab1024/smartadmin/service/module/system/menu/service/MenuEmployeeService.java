@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.menu.service;
 
 import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeService;
+import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
 import net.lab1024.smartadmin.service.module.system.menu.domain.bo.MenuLoginBO;

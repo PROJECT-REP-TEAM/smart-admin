@@ -20,6 +20,6 @@ public class DepartmentUpdateForm extends DepartmentAddForm {
 
     @ApiModelProperty("部门id")
     @NotNull(message = "部门id不能为空")
-    private Long id;
+    private Long departmentId;
 
 }

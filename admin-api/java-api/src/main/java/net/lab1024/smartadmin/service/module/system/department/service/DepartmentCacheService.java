@@ -6,6 +6,7 @@ import net.lab1024.smartadmin.service.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -129,7 +131,7 @@ public class DepartmentCacheService {
      * @return
      */
     private DepartmentVO findSchoolDepartmentId(List<DepartmentVO> departmentList, Long departmentId, Long schoolParentDepartmentId) {
-        Optional<DepartmentVO> findRes = departmentList.stream().filter(e -> e.getId().equals(departmentId)).findFirst();
+        Optional<DepartmentVO> findRes = departmentList.stream().filter(e -> e.getDepartmentId().equals(departmentId)).findFirst();
         // 如果查询不到 或者自己本身为最顶级 返回null
         if (!findRes.isPresent()) {
             return null;
@@ -150,12 +152,12 @@ public class DepartmentCacheService {
     @Cacheable(CacheModuleConst.Department.DEPARTMENT_ROUTE_CACHE)
     public Map<Long, String> departmentRouteCache() {
         List<DepartmentVO> departmentVOList = departmentDao.listAll();
-        Map<Long, DepartmentVO> departmentMap = departmentVOList.stream().collect(Collectors.toMap(DepartmentVO::getId, Function.identity()));
+        Map<Long, DepartmentVO> departmentMap = departmentVOList.stream().collect(Collectors.toMap(DepartmentVO::getDepartmentId, Function.identity()));
 
         Map<Long, String> routeNameMap = Maps.newHashMap();
         for (DepartmentVO departmentVO : departmentVOList) {
             String routeName = this.buildRoutePath(departmentVO, departmentMap);
-            routeNameMap.put(departmentVO.getId(), routeName);
+            routeNameMap.put(departmentVO.getDepartmentId(), routeName);
         }
 
         return routeNameMap;
@@ -168,7 +170,7 @@ public class DepartmentCacheService {
      * @param departmentMap
      */
     private String buildRoutePath(DepartmentVO departmentVO, Map<Long, DepartmentVO> departmentMap) {
-        if (departmentVO.getParentId() == DepartmentService.DEFAULT_PARENT_ID) {
+        if (Objects.equals(departmentVO.getParentId(), NumberUtils.LONG_ZERO)) {
             return departmentVO.getName();
         }
         //父节点

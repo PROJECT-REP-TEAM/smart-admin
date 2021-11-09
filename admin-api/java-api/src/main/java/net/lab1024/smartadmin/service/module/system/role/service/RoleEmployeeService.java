@@ -9,7 +9,7 @@ import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeCacheService;
+import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeCacheService;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
@@ -39,13 +39,10 @@ public class RoleEmployeeService  {
 
     @Autowired
     private RoleEmployeeDao roleEmployeeDao;
-
     @Autowired
     private RoleDao roleDao;
-
     @Autowired
     private DepartmentDao departmentDao;
-
     @Autowired
     private RoleEmployeeManager roleEmployeeManager;
     @Autowired
@@ -63,7 +60,7 @@ public class RoleEmployeeService  {
         List<Long> departmentIdList = employeeDTOS.stream().filter(e -> e.getDepartmentId() != null).map(EmployeeVO::getDepartmentId).collect(Collectors.toList());
         if (CollectionUtils.isNotEmpty(departmentIdList)) {
             List<DepartmentEntity> departmentEntities = departmentDao.selectBatchIds(departmentIdList);
-            Map<Long, String> departmentIdNameMap = departmentEntities.stream().collect(Collectors.toMap(DepartmentEntity::getId, DepartmentEntity::getName));
+            Map<Long, String> departmentIdNameMap = departmentEntities.stream().collect(Collectors.toMap(DepartmentEntity::getDepartmentId, DepartmentEntity::getName));
             employeeDTOS.forEach(e -> {
                 e.setDepartmentName(departmentIdNameMap.getOrDefault(e.getDepartmentId(), StringConst.EMPTY_STR));
             });
@@ -141,7 +138,7 @@ public class RoleEmployeeService  {
         List<Long> roleIds = roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);
         List<RoleEntity> roleList = roleDao.selectList(null);
         List<RoleSelectedVO> result = SmartBeanUtil.copyList(roleList, RoleSelectedVO.class);
-        result.stream().forEach(item -> item.setSelected(roleIds.contains(item.getId())));
+        result.stream().forEach(item -> item.setSelected(roleIds.contains(item.getRoleId())));
         return ResponseDTO.ok(result);
     }
 

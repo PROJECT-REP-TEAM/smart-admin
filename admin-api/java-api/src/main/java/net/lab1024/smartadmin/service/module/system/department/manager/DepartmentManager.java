@@ -19,19 +19,4 @@ import java.util.List;
 public class DepartmentManager extends ServiceImpl<DepartmentDao, DepartmentEntity> {
 
 
-    /**
-     * 批量添加 编辑
-     *
-     * @param insertDepartmentList
-     * @param updateDepartmentList
-     */
-    @Transactional(rollbackFor = Exception.class)
-    public void batchInsertUpdate(List<DepartmentEntity> insertDepartmentList, List<DepartmentEntity> updateDepartmentList) {
-        if(!CollectionUtils.isEmpty(insertDepartmentList)){
-            saveBatch(insertDepartmentList);
-        }
-        if(!CollectionUtils.isEmpty(updateDepartmentList)){
-            updateBatchById(updateDepartmentList);
-        }
-    }
 }

@@ -7,7 +7,7 @@
         e.*,
         d.name AS departmentName
         FROM t_employee e
-        LEFT JOIN t_department d ON d.id = e.department_id
+        LEFT JOIN t_department d ON d.department_id = e.department_id
         <where>
             <if test="queryForm.keyword != null and queryForm.keyword != ''">
                 AND (
@@ -29,7 +29,7 @@
     <update id="updateDisableFlag">
         UPDATE t_employee
         SET disabled_flag = #{disabledFlag}
-        WHERE id = #{id}
+        WHERE employee_id = #{employeeId}
     </update>
 
 
@@ -113,7 +113,7 @@
     </select>
 
     <select id="getEmployeeIdByDepartmentIdList" resultType="java.lang.Long">
-        SELECT id
+        SELECT employee_id
         FROM t_employee
         <where>
             department_id IN
@@ -129,7 +129,7 @@
 
 
     <select id="getEmployeeId" resultType="java.lang.Long">
-        SELECT id
+        SELECT employee_id
         FROM t_employee
         <where>
             <if test="disabledFlag != null">
@@ -139,7 +139,7 @@
     </select>
 
     <select id="getEmployeeIdByDepartmentId" resultType="java.lang.Long">
-        SELECT id
+        SELECT employee_id
         FROM t_employee
         <where>
             department_id = #{departmentId}
@@ -152,8 +152,8 @@
 
     <select id="getEmployeeByIds" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
         SELECT * FROM t_employee
-        where id IN
-        <foreach collection="ids" item="item" open="(" close=")" separator=",">
+        where employee_id IN
+        <foreach collection="employeeIds" item="item" open="(" close=")" separator=",">
             #{item}
         </foreach>
         ORDER BY create_time DESC
@@ -164,14 +164,14 @@
         SELECT e.*,
                d.name AS departmentName
         FROM t_employee e
-                 LEFT JOIN t_department d ON d.id = e.department_id
-        where e.id = #{id}
+                 LEFT JOIN t_department d ON d.department_id = e.department_id
+        where e.employee_id = #{employeeId}
     </select>
 
     <update id="updatePassword">
         UPDATE t_employee
         SET login_pwd = #{password}
-        WHERE id = #{employeeId}
+        WHERE employee_id = #{employeeId}
     </update>
 
 

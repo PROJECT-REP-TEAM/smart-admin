@@ -43,10 +43,4 @@ public interface RoleDataScopeDao extends BaseMapper<RoleDataScopeEntity> {
      */
     void deleteByRoleId(@Param("roleId") Long roleId);
 
-
-    /**
-     * 批量添加设置信息
-     * @param list
-     */
-    void batchInsert(@Param("list")List<RoleDataScopeEntity> list);
 }

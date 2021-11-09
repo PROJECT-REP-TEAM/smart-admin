@@ -5,6 +5,7 @@ import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class DepartmentTreeService {
         if (CollectionUtils.isEmpty(voList)) {
             return Lists.newArrayList();
         }
-        List<DepartmentVO> rootList = voList.stream().filter(e -> e.getParentId() == null || Objects.equals(e.getParentId(), DepartmentService.DEFAULT_PARENT_ID)).collect(Collectors.toList());
+        List<DepartmentVO> rootList = voList.stream().filter(e -> e.getParentId() == null || Objects.equals(e.getParentId(), NumberUtils.LONG_ZERO)).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(rootList)) {
             return Lists.newArrayList();
         }
@@ -49,10 +50,10 @@ public class DepartmentTreeService {
             int nextIndex = i + 1;
             DepartmentTreeVO node = nodeList.get(i);
             if (preIndex > -1) {
-                node.setPreId(nodeList.get(preIndex).getId());
+                node.setPreId(nodeList.get(preIndex).getDepartmentId());
             }
             if (nextIndex < nodeSize) {
-                node.setNextId(nodeList.get(nextIndex).getId());
+                node.setNextId(nodeList.get(nextIndex).getDepartmentId());
             }
             buildTree(node, voList);
         }
@@ -65,7 +66,7 @@ public class DepartmentTreeService {
      * @param voList
      */
     private void buildTree(DepartmentTreeVO node, List<DepartmentVO> voList) {
-        List<DepartmentTreeVO> children = getChildren(node.getId(), voList);
+        List<DepartmentTreeVO> children = getChildren(node.getDepartmentId(), voList);
         if (CollectionUtils.isNotEmpty(children)) {
             node.setChildren(children);
             this.buildTree(children, voList);
@@ -104,7 +105,7 @@ public class DepartmentTreeService {
         if (CollectionUtils.isEmpty(children)) {
             return selfAndChildrenIdList;
         }
-        List<Long> childrenIdList = children.stream().map(DepartmentTreeVO::getId).collect(Collectors.toList());
+        List<Long> childrenIdList = children.stream().map(DepartmentTreeVO::getDepartmentId).collect(Collectors.toList());
         selfAndChildrenIdList.addAll(childrenIdList);
         for (Long childId : childrenIdList) {
             this.selfAndChildrenRecursion(selfAndChildrenIdList, childId, voList);
@@ -124,7 +125,7 @@ public class DepartmentTreeService {
         if (CollectionUtils.isEmpty(children)) {
             return;
         }
-        List<Long> childrenIdList = children.stream().map(DepartmentTreeVO::getId).collect(Collectors.toList());
+        List<Long> childrenIdList = children.stream().map(DepartmentTreeVO::getDepartmentId).collect(Collectors.toList());
         selfAndChildrenIdList.addAll(childrenIdList);
         for (Long childId : childrenIdList) {
             this.selfAndChildrenRecursion(selfAndChildrenIdList, childId, voList);

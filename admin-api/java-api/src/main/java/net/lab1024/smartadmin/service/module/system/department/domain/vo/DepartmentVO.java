@@ -11,7 +11,7 @@ import lombok.Data;
 public class DepartmentVO {
 
     @ApiModelProperty("部门id")
-    private Long id;
+    private Long departmentId;
 
     @ApiModelProperty("部门名称")
     private String name;

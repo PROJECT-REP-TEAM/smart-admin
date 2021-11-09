@@ -18,7 +18,7 @@ public class RoleUpdateForm extends RoleAddForm {
      */
     @ApiModelProperty("角色id")
     @NotNull(message = "角色id不能为空")
-    protected Long id;
+    protected Long roleId;
 
 
 }

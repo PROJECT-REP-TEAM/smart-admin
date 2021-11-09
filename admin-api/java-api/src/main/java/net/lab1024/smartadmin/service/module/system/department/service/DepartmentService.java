@@ -1,6 +1,5 @@
 package net.lab1024.smartadmin.service.module.system.department.service;
 
-import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
@@ -8,21 +7,13 @@ import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.domain.form.DepartmentAddForm;
 import net.lab1024.smartadmin.service.module.system.department.domain.form.DepartmentUpdateForm;
-import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentEmployeeTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
-import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
-import org.apache.commons.collections4.CollectionUtils;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * 部门管理
@@ -31,8 +22,6 @@ import java.util.stream.Collectors;
  */
 @Service
 public class DepartmentService {
-
-    static final long DEFAULT_PARENT_ID = 0L;
 
     @Autowired
     private DepartmentDao departmentDao;
@@ -66,77 +55,6 @@ public class DepartmentService {
 
 
     /**
-     * 递归构建每部门的员工信息
-     *
-     * @param treeVOList
-     * @param employeeMap
-     * @return
-     */
-    private List<DepartmentEmployeeTreeVO> buildTreeEmployee(List<DepartmentTreeVO> treeVOList, Map<Long, List<EmployeeVO>> employeeMap) {
-        List<DepartmentEmployeeTreeVO> departmentEmployeeTreeVOList = Lists.newArrayList();
-        for (DepartmentTreeVO departmentTreeVO : treeVOList) {
-            DepartmentEmployeeTreeVO departmentEmployeeTreeVO = SmartBeanUtil.copy(departmentTreeVO, DepartmentEmployeeTreeVO.class);
-            departmentEmployeeTreeVO.setEmployees(employeeMap.getOrDefault(departmentEmployeeTreeVO.getId(), Lists.newArrayList()));
-            List<DepartmentTreeVO> children = departmentTreeVO.getChildren();
-            if (CollectionUtils.isEmpty(children)) {
-                continue;
-            }
-            List<DepartmentEmployeeTreeVO> childrenList = this.buildTreeEmployee(children, employeeMap);
-            departmentEmployeeTreeVO.setChildren(childrenList);
-            departmentEmployeeTreeVOList.add(departmentEmployeeTreeVO);
-        }
-        return departmentEmployeeTreeVOList;
-    }
-
-
-    /**
-     * 过滤部门名称，获取过滤后的结果
-     *
-     * @author lidoudou
-     * @date 2019/4/28 20:17
-     */
-    private List<DepartmentVO> filterDepartment(List<DepartmentVO> departmentVOList, String departmentName) {
-        Map<Long, DepartmentVO> departmentMap = new HashMap<>(departmentVOList.size());
-        departmentVOList.forEach(item -> {
-            if (!item.getName().contains(departmentName)) {
-                return;
-            }
-            // 当前部门包含关键字
-            departmentMap.put(item.getId(), item);
-            Long parentId = item.getParentId();
-            if (null != parentId) {
-                List<DepartmentVO> filterResult = new ArrayList<>();
-                getParentDepartment(departmentVOList, parentId, filterResult);
-                for (DepartmentVO dto : filterResult) {
-                    if (!departmentMap.containsKey(dto.getId())) {
-                        departmentMap.put(dto.getId(), dto);
-                    }
-                }
-            }
-        });
-        return new ArrayList<>(departmentMap.values());
-    }
-
-    /**
-     * 递归获取部门的所有上级元素
-     *
-     * @param departmentVOList
-     * @param parentId
-     * @param result
-     * @return
-     */
-    private List<DepartmentVO> getParentDepartment(List<DepartmentVO> departmentVOList, Long parentId, List<DepartmentVO> result) {
-        List<DepartmentVO> deptList = departmentVOList.stream().filter(e -> e.getId().equals(parentId)).collect(Collectors.toList());
-        for (DepartmentVO item : deptList) {
-            result.add(item);
-            if (item.getParentId() != DEFAULT_PARENT_ID && item.getParentId() != null) {
-                result.addAll(getParentDepartment(departmentVOList, item.getParentId(), result));
-            }
-        }
-        return result;
-    }
-
-    /**
      * 新增添加部门
      *
      * @param departmentAddForm
@@ -145,7 +63,6 @@ public class DepartmentService {
 
     public ResponseDTO<String> addDepartment(DepartmentAddForm departmentAddForm) {
         DepartmentEntity departmentEntity = SmartBeanUtil.copy(departmentAddForm, DepartmentEntity.class);
-        DepartmentService departmentService = (DepartmentService) AopContext.currentProxy();
         departmentDao.insert(departmentEntity);
         this.clearCache();
         return ResponseDTO.ok();
@@ -162,7 +79,7 @@ public class DepartmentService {
         if (updateDTO.getParentId() == null) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "父级部门id不能为空");
         }
-        DepartmentEntity entity = departmentDao.selectById(updateDTO.getId());
+        DepartmentEntity entity = departmentDao.selectById(updateDTO.getDepartmentId());
         if (entity == null) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }

@@ -1,7 +1,10 @@
 package net.lab1024.smartadmin.service.common.util;
 
 import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
+import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
+import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;
@@ -15,6 +18,8 @@ import java.util.stream.Stream;
  * @date 2017/10/10 18:17
  */
 public class SmartBaseEnumUtil {
+
+    private Object e;
 
     /**
      * 校验参数与枚举类比较是否合法
@@ -97,6 +102,16 @@ public class SmartBaseEnumUtil {
                 .findFirst()
                 .orElse(null);
     }
+
+
+    public static <T extends BaseEnum> T getEnumByName(String name, Class<T> enumClass) {
+        return Stream.of(enumClass.getEnumConstants())
+                .filter(e->StringUtils.equalsIgnoreCase(e.toString(), name))
+                .findFirst()
+                .orElse(null);
+    }
+
+
 
     /**
      * 根据lambda getter/setter 注入

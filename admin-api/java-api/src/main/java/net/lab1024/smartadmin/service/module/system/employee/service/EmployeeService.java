@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.system.employee;
+package net.lab1024.smartadmin.service.module.system.employee.service;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
@@ -11,9 +11,11 @@ import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentCacheService;
+import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.employee.domain.form.*;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
+import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeManager;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginUserDetail;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
@@ -116,7 +118,7 @@ public class EmployeeService {
             return ResponseDTO.ok(PageResult);
         }
 
-        List<Long> employeeIdList = employeeList.stream().map(EmployeeVO::getId).collect(Collectors.toList());
+        List<Long> employeeIdList = employeeList.stream().map(EmployeeVO::getEmployeeId).collect(Collectors.toList());
         // 查询员工角色
         List<RoleEmployeeVO> roleEmployeeEntityList = roleEmployeeDao.selectRoleByEmployeeIdList(employeeIdList);
         Map<Long, List<Long>> employeeRoleIdListMap = roleEmployeeEntityList.stream().collect(Collectors.groupingBy(RoleEmployeeVO::getEmployeeId, Collectors.mapping(RoleEmployeeVO::getRoleId, Collectors.toList())));
@@ -125,8 +127,8 @@ public class EmployeeService {
         Map<Long, String> departmentNameMap = departmentCacheService.departmentRouteCache();
 
         employeeList.forEach(e -> {
-            e.setRoleIdList(employeeRoleIdListMap.getOrDefault(e.getId(), Lists.newArrayList()));
-            e.setRoleNameList(employeeRoleNameListMap.getOrDefault(e.getId(), Lists.newArrayList()));
+            e.setRoleIdList(employeeRoleIdListMap.getOrDefault(e.getEmployeeId(), Lists.newArrayList()));
+            e.setRoleNameList(employeeRoleNameListMap.getOrDefault(e.getEmployeeId(), Lists.newArrayList()));
             e.setDepartmentName(departmentNameMap.getOrDefault(e.getDepartmentId(), ""));
         });
         PageResult<EmployeeVO> PageResult = SmartPageUtil.convert2PageResult(pageParam, employeeList);
@@ -181,7 +183,7 @@ public class EmployeeService {
      */
     public synchronized ResponseDTO<String> updateEmployee(EmployeeUpdateForm employeeUpdateForm) {
 
-        Long employeeId = employeeUpdateForm.getId();
+        Long employeeId = employeeUpdateForm.getEmployeeId();
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         if (null == employeeEntity) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
@@ -196,12 +198,12 @@ public class EmployeeService {
 
 
         EmployeeEntity existEntity = employeeDao.getByLoginName(employeeUpdateForm.getLoginName(), false);
-        if (null != existEntity && !Objects.equals(existEntity.getId(), employeeId)) {
+        if (null != existEntity && !Objects.equals(existEntity.getEmployeeId(), employeeId)) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "登录名重复");
         }
 
         existEntity = employeeDao.getByPhone(employeeUpdateForm.getPhone(), false);
-        if (null != existEntity && !Objects.equals(existEntity.getId(), employeeId)) {
+        if (null != existEntity && !Objects.equals(existEntity.getEmployeeId(), employeeId)) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "手机号已存在");
         }
 
@@ -238,7 +240,6 @@ public class EmployeeService {
         if (null == employeeEntity) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
-
         employeeDao.updateDisableFlag(employeeId, !employeeEntity.getDisabledFlag());
 
         employeeCacheService.clearCacheByEmployeeId(employeeId);
@@ -259,11 +260,10 @@ public class EmployeeService {
         if (employeeIdList.size() != employeeEntityList.size()) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
-
+        // 更新
         List<EmployeeEntity> updateList = employeeIdList.stream().map(e -> {
-            // 更新删除
             EmployeeEntity updateEmployee = new EmployeeEntity();
-            updateEmployee.setId(e);
+            updateEmployee.setEmployeeId(e);
             updateEmployee.setDepartmentId(batchUpdateDepartmentForm.getDepartmentId());
             return updateEmployee;
         }).collect(Collectors.toList());
@@ -271,7 +271,7 @@ public class EmployeeService {
 
         // 清除缓存
         employeeEntityList.forEach(e -> {
-            employeeCacheService.clearCacheByEmployeeId(e.getId());
+            employeeCacheService.clearCacheByEmployeeId(e.getEmployeeId());
             employeeCacheService.clearCacheByDepartmentId(e.getDepartmentId());
         });
         employeeCacheService.clearCacheByDepartmentId(batchUpdateDepartmentForm.getDepartmentId());
@@ -305,7 +305,7 @@ public class EmployeeService {
 
         // 更新密码
         EmployeeEntity updateEntity = new EmployeeEntity();
-        updateEntity.setId(employeeId);
+        updateEntity.setEmployeeId(employeeId);
         updateEntity.setLoginPwd(getEncryptPwd(newPassword));
         employeeDao.updateById(updateEntity);
 
@@ -325,7 +325,7 @@ public class EmployeeService {
         }
         // 获取部门
         List<DepartmentVO> departmentList = departmentCacheService.departmentCache();
-        Optional<DepartmentVO> departmentVO = departmentList.stream().filter(e -> e.getId().equals(departmentId)).findFirst();
+        Optional<DepartmentVO> departmentVO = departmentList.stream().filter(e -> e.getDepartmentId().equals(departmentId)).findFirst();
         if (CollectionUtils.isEmpty(employeeEntityList)) {
             return ResponseDTO.ok(Collections.emptyList());
         }

@@ -1,18 +1,18 @@
 package net.lab1024.smartadmin.service.module.system.role.service;
 
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
+import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
+import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
+import net.lab1024.smartadmin.service.module.system.role.dao.RoleMenuDao;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleAddForm;
+import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleUpdateForm;
+import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
-import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleAddForm;
-import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleUpdateForm;
-import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntity;
-import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleVO;
-import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
-import net.lab1024.smartadmin.service.module.system.role.dao.RoleMenuDao;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 
 import java.util.List;
 
@@ -41,9 +41,9 @@ public class RoleService {
      * @return ResponseDTO
      */
     public ResponseDTO addRole(RoleAddForm roleAddForm) {
-        RoleEntity employeeRoleEntity = roleDao.getByRoleName(roleAddForm.getRoleName());
-        if (null != employeeRoleEntity) {
-            return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "角色名称重复");
+        RoleEntity existRoleEntity = roleDao.getByRoleName(roleAddForm.getRoleName());
+        if (null != existRoleEntity) {
+            return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "角色名称重复");
         }
         RoleEntity roleEntity = SmartBeanUtil.copy(roleAddForm, RoleEntity.class);
         roleDao.insert(roleEntity);
@@ -76,11 +76,11 @@ public class RoleService {
      */
     @Transactional(rollbackFor = Exception.class)
     public ResponseDTO<String> updateRole(RoleUpdateForm roleUpdateForm) {
-        if (null == roleDao.selectById(roleUpdateForm.getId())) {
+        if (null == roleDao.selectById(roleUpdateForm.getRoleId())) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
-        RoleEntity employeeRoleEntity = roleDao.getByRoleName(roleUpdateForm.getRoleName());
-        if (null != employeeRoleEntity && !employeeRoleEntity.getId().equals(roleUpdateForm.getId())) {
+        RoleEntity existRoleEntity = roleDao.getByRoleName(roleUpdateForm.getRoleName());
+        if (null != existRoleEntity && !existRoleEntity.getRoleId().equals(roleUpdateForm.getRoleId())) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "角色名称重复");
         }
         RoleEntity roleEntity = SmartBeanUtil.copy(roleUpdateForm, RoleEntity.class);

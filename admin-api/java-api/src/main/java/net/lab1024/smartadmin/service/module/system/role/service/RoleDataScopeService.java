@@ -1,17 +1,17 @@
 package net.lab1024.smartadmin.service.module.system.role.service;
 
 import com.google.common.collect.Lists;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
+import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
+import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
+import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleDataScopeUpdateForm;
+import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleDataScopeVO;
+import net.lab1024.smartadmin.service.module.system.role.manager.RoleDataScopeManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
-import net.lab1024.smartadmin.service.module.system.role.dao.RoleDataScopeDao;
-import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleDataScopeUpdateForm;
-import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleDataScopeVO;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
 public class RoleDataScopeService {
 
     @Autowired
-    private RoleDataScopeDao roleDataScopeDao;
+    private RoleDataScopeManager roleDataScopeManager;
 
 
     /**
@@ -33,7 +33,7 @@ public class RoleDataScopeService {
      * @return
      */
     public ResponseDTO<List<RoleDataScopeVO>> getRoleDataScopeList(Long roleId) {
-        List<RoleDataScopeEntity> roleDataScopeEntityList = roleDataScopeDao.listByRoleId(roleId);
+        List<RoleDataScopeEntity> roleDataScopeEntityList = roleDataScopeManager.getBaseMapper().listByRoleId(roleId);
         if (CollectionUtils.isEmpty(roleDataScopeEntityList)) {
             return ResponseDTO.ok(Lists.newArrayList());
         }
@@ -55,8 +55,8 @@ public class RoleDataScopeService {
         }
         List<RoleDataScopeEntity> roleDataScopeEntityList = SmartBeanUtil.copyList(batchSetList, RoleDataScopeEntity.class);
         roleDataScopeEntityList.forEach(e -> e.setRoleId(roleDataScopeUpdateForm.getRoleId()));
-        roleDataScopeDao.deleteByRoleId(roleDataScopeUpdateForm.getRoleId());
-        roleDataScopeDao.batchInsert(roleDataScopeEntityList);
+        roleDataScopeManager.getBaseMapper().deleteByRoleId(roleDataScopeUpdateForm.getRoleId());
+        roleDataScopeManager.saveBatch(roleDataScopeEntityList);
         return ResponseDTO.ok();
     }
 }

@@ -42,10 +42,10 @@ public interface EmployeeDao extends BaseMapper<EmployeeEntity> {
     /**
      * 更新单个
      *
-     * @param id
+     * @param employeeId
      * @param disabledFlag
      */
-    void updateDisableFlag(@Param("id") Long id, @Param("disabledFlag") Boolean disabledFlag);
+    void updateDisableFlag(@Param("employeeId") Long employeeId, @Param("disabledFlag") Boolean disabledFlag);
 
 
     /**
@@ -100,7 +100,7 @@ public interface EmployeeDao extends BaseMapper<EmployeeEntity> {
      * @param employeeIds
      * @return
      */
-    List<EmployeeVO> getEmployeeByIds(@Param("ids") Collection<Long> employeeIds);
+    List<EmployeeVO> getEmployeeByIds(@Param("employeeIds") Collection<Long> employeeIds);
 
 
     /**
@@ -109,7 +109,7 @@ public interface EmployeeDao extends BaseMapper<EmployeeEntity> {
      * @param employeeId
      * @return
      */
-    EmployeeVO getEmployeeById(@Param("id") Long employeeId);
+    EmployeeVO getEmployeeById(@Param("employeeId") Long employeeId);
 
 
     /**

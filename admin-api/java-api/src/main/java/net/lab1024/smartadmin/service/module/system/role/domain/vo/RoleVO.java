@@ -17,7 +17,7 @@ import lombok.Data;
 public class RoleVO {
 
     @ApiModelProperty("角色ID")
-    private Long id;
+    private Long roleId;
 
     @ApiModelProperty("角色名称")
     private String roleName;

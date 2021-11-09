@@ -8,14 +8,11 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
+ * 
  * [ 角色 ]
- *
- * @author yandanyang
- * @version 1.0
- * @company 1024lab.net
- * @copyright (c) 2018 1024lab.netInc. All rights reserved.
- * @date 2019/3/27 0027 下午 13:01
- * @since JDK1.8
+ * 
+ * @author 罗伊
+ * @date
  */
 @Data
 @TableName("t_role")
@@ -24,7 +21,7 @@ public class RoleEntity {
      * 主键id
      */
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long roleId;
 
     private String roleName;
 

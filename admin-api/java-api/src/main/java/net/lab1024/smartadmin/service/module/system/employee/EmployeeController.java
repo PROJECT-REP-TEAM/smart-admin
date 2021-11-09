@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
+import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import net.lab1024.smartadmin.service.common.annoation.NoValidPrivilege;
