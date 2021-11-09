@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.file;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileEntity;
-import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileQueryForm;
+import net.lab1024.smartadmin.service.module.support.file.domain.form.FileQueryForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;

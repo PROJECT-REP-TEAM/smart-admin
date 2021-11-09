@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.file.domain.dto;
+package net.lab1024.smartadmin.service.module.support.file.domain.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
