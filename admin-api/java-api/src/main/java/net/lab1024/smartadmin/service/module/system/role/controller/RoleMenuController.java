@@ -20,7 +20,7 @@ import javax.validation.Valid;
  * @date 2021/7/30 17:06
  */
 @RestController
-@Api(tags = {SwaggerTagConst.System.MANAGER_ROLE_MENU})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_ROLE_MENU})
 public class RoleMenuController extends SystemBaseController {
 
     @Autowired

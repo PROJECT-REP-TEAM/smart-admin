@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.system.department.service;
+package net.lab1024.smartadmin.service.module.system.department.manager;
 
 import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
@@ -6,6 +6,7 @@ import net.lab1024.smartadmin.service.constant.CacheModuleConst;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
+import net.lab1024.smartadmin.service.module.system.department.service.DepartmentTreeService;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -25,7 +26,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
-public class DepartmentCacheService {
+public class DepartmentCacheManager {
 
     @Autowired
     private DepartmentDao departmentDao;

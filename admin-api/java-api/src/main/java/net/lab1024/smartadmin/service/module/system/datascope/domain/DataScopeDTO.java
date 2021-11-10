@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.datascope.domain;
+package net.lab1024.smartadmin.service.module.system.datascope.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
@@ -16,7 +16,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class DataScope {
+public class DataScopeDTO {
 
     @ApiModelProperty("数据范围类型")
     private Integer dataScopeType;

@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.system.employee.service;
+package net.lab1024.smartadmin.service.module.system.employee.manager;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.constant.CacheModuleConst;
@@ -19,7 +19,7 @@ import java.util.List;
  */
 @Slf4j
 @Service
-public class EmployeeCacheService {
+public class EmployeeCacheManager {
 
     @Autowired
     private EmployeeDao employeeDao;

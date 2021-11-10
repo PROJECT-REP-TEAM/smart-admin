@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.datascope.constant;
+package net.lab1024.smartadmin.service.module.system.datascope.constant;
 
 
 import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;

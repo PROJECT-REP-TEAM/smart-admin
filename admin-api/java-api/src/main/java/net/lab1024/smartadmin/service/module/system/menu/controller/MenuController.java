@@ -23,7 +23,7 @@ import java.util.List;
  *
  * @author zhuoda
  */
-@Api(tags = {SwaggerTagConst.System.MANAGER_MENU})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_MENU})
 @RestController
 public class MenuController extends SystemBaseController {
 

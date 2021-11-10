@@ -1,7 +1,7 @@
-package net.lab1024.smartadmin.service.module.support.datascope.strategy;
+package net.lab1024.smartadmin.service.module.system.datascope.strategy;
 
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeSqlConfig;
 
 import java.util.Map;
 
@@ -19,7 +19,8 @@ public abstract class DataScopePowerStrategy {
 
     /**
      * 获取joinsql 字符串
-     * @param viewTypeEnum 查看的类型
+     * @param viewTypeEnum
+     * @param paramMap
      * @param sqlConfigDTO
      * @return
      */

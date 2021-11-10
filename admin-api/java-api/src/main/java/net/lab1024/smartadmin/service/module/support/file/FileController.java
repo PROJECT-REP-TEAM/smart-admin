@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
 import net.lab1024.smartadmin.service.module.support.file.domain.form.FileQueryForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.form.FileUrlUploadForm;
@@ -26,7 +26,7 @@ import javax.validation.Valid;
  * @Author: 1024lab
  */
 @RestController
-@Api(tags = {SwaggerTagConst.Support.FILE})
+@Api(tags = {SwaggerTagConst.Support.SUPPORT_FILE})
 public class FileController extends SupportBaseController {
 
     @Autowired

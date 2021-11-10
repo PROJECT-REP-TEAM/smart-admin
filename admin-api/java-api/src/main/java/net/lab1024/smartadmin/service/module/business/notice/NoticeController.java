@@ -2,15 +2,15 @@ package net.lab1024.smartadmin.service.module.business.notice;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageParam;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.business.notice.domain.dto.*;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO;
-import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +23,7 @@ import javax.validation.Valid;
  * @date
  */
 @RestController
-@Api(tags = {SwaggerTagConst.Admin.MANAGER_NOTICE})
+@Api(tags = {SwaggerTagConst.Business.MANAGER_NOTICE})
 public class NoticeController extends SystemBaseController {
 
     @Autowired

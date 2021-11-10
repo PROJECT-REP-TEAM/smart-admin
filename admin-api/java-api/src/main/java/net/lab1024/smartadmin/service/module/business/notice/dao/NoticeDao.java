@@ -9,9 +9,9 @@ import net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeRe
 import net.lab1024.smartadmin.service.module.business.notice.domain.entity.NoticeEntity;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO;
 import net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO;
-import net.lab1024.smartadmin.service.module.support.datascope.DataScope;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeWhereInTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.DataScope;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeWhereInTypeEnum;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

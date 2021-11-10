@@ -1,9 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.datascope.service;
+package net.lab1024.smartadmin.service.module.system.datascope.service;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum;
 import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;

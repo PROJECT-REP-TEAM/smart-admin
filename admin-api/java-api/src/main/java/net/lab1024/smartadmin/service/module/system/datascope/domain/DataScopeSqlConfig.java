@@ -1,8 +1,8 @@
-package net.lab1024.smartadmin.service.module.support.datascope.domain;
+package net.lab1024.smartadmin.service.module.system.datascope.domain;
 
 import lombok.Data;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeWhereInTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeWhereInTypeEnum;
 
 /**
  * [  ]

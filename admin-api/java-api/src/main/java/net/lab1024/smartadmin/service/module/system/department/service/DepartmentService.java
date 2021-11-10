@@ -9,6 +9,7 @@ import net.lab1024.smartadmin.service.module.system.department.domain.form.Depar
 import net.lab1024.smartadmin.service.module.system.department.domain.form.DepartmentUpdateForm;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
+import net.lab1024.smartadmin.service.module.system.department.manager.DepartmentCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class DepartmentService {
     private EmployeeDao employeeDao;
 
     @Autowired
-    private DepartmentCacheService departmentCacheService;
+    private DepartmentCacheManager departmentCacheManager;
 
 
     /**
@@ -39,7 +40,7 @@ public class DepartmentService {
      * @return
      */
     public ResponseDTO<List<DepartmentTreeVO>> departmentTree() {
-        List<DepartmentTreeVO> treeVOList = departmentCacheService.departmentTreeCache();
+        List<DepartmentTreeVO> treeVOList = departmentCacheManager.departmentTreeCache();
         return ResponseDTO.ok(treeVOList);
     }
 
@@ -50,7 +51,7 @@ public class DepartmentService {
      * @return
      */
     public List<Long> selfAndChildrenIdList(Long departmentId) {
-        return departmentCacheService.departmentSelfChildrenCache(departmentId);
+        return departmentCacheManager.departmentSelfChildrenCache(departmentId);
     }
 
 
@@ -136,11 +137,11 @@ public class DepartmentService {
      * 清除自身以及下级的id列表缓存
      */
     private void clearCache() {
-        departmentCacheService.clearDepartmentCache();
-        departmentCacheService.clearSelfAndChildrenIdCache();
-        departmentCacheService.clearTreeCache();
-        departmentCacheService.clearDepartmentSchoolCache();
-        departmentCacheService.clearDepartmentRouteCache();
+        departmentCacheManager.clearDepartmentCache();
+        departmentCacheManager.clearSelfAndChildrenIdCache();
+        departmentCacheManager.clearTreeCache();
+        departmentCacheManager.clearDepartmentSchoolCache();
+        departmentCacheManager.clearDepartmentRouteCache();
     }
 
 

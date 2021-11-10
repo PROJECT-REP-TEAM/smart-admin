@@ -1,7 +1,8 @@
-package net.lab1024.smartadmin.service.module.support.datascope.service;
+package net.lab1024.smartadmin.service.module.system.datascope.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.reflections.Reflections;
@@ -12,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
-import net.lab1024.smartadmin.service.module.support.datascope.DataScope;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeWhereInTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
-import net.lab1024.smartadmin.service.module.support.datascope.strategy.DataScopePowerStrategy;
+import net.lab1024.smartadmin.service.module.system.datascope.DataScope;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeWhereInTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeSqlConfig;
+import net.lab1024.smartadmin.service.module.system.datascope.strategy.DataScopePowerStrategy;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;

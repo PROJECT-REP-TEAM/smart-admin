@@ -19,7 +19,7 @@ import java.util.List;
  * @Date 2021-10-22
  */
 
-@Api(tags = {SwaggerTagConst.System.MANAGER_ROLE})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_ROLE_DATA_SCOPE})
 @RestController
 public class RoleDataScopeController extends SystemBaseController {
 

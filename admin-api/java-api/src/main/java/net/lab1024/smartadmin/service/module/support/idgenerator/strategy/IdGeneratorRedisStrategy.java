@@ -1,27 +1,15 @@
 package net.lab1024.smartadmin.service.module.support.idgenerator.strategy;
 
-import com.google.common.collect.Interner;
-import com.google.common.collect.Interners;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.exception.BusinessException;
-import net.lab1024.smartadmin.service.common.util.SmartRandomUtil;
 import net.lab1024.smartadmin.service.constant.RedisKeyConst;
-import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
-import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorStrategyTypeEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorEntity;
-import net.lab1024.smartadmin.service.module.support.idgenerator.service.IdGeneratorCacheService;
+import net.lab1024.smartadmin.service.module.support.idgenerator.service.IdGeneratorCacheManager;
 import net.lab1024.smartadmin.service.module.support.redis.RedisService;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 
 /**
  * [  ]
@@ -40,7 +28,7 @@ public class IdGeneratorRedisStrategy extends IdGeneratorStrategyBaseService {
     private static volatile long lastSleepMilliSeconds = SLEEP_MILLISECONDS;
 
     @Autowired
-    private IdGeneratorCacheService idGeneratorCacheService;
+    private IdGeneratorCacheManager idGeneratorCacheManager;
     @Autowired
     private RedisService redisService;
 
@@ -62,7 +50,7 @@ public class IdGeneratorRedisStrategy extends IdGeneratorStrategyBaseService {
      */
     @Override
     public String generate(IdGeneratorEnum idGeneratorEnum) {
-        IdGeneratorEntity idGeneratorEntity = idGeneratorCacheService.getIdGeneratorEntity(idGeneratorEnum.getValue());
+        IdGeneratorEntity idGeneratorEntity = idGeneratorCacheManager.getIdGeneratorEntity(idGeneratorEnum.getValue());
         String lockKey = RedisKeyConst.Support.ID_GENERATOR + idGeneratorEnum.getValue();
         try {
             boolean lock = false;

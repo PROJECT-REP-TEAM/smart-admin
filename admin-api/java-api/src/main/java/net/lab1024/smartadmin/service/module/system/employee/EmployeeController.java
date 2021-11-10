@@ -24,7 +24,7 @@ import java.util.List;
  * @date 2021年09月19日上午21:34:52
  */
 @RestController
-@Api(tags = {SwaggerTagConst.System.EMPLOYEE})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_EMPLOYEE})
 public class EmployeeController extends SystemBaseController {
 
     @Autowired

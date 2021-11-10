@@ -21,7 +21,7 @@ import java.util.List;
  * @author listen
  * @date 2017/12/28 10:10
  */
-@Api(tags = {SwaggerTagConst.System.MANAGER_ROLE})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_ROLE})
 @RestController
 public class RoleController extends SystemBaseController {
 

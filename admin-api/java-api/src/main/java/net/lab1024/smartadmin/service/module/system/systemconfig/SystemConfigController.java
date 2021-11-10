@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigAddForm;
 import net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigQueryForm;
 import net.lab1024.smartadmin.service.module.system.systemconfig.domain.SystemConfigUpdateForm;
@@ -23,7 +23,7 @@ import javax.validation.Valid;
  * @date
  * @since JDK1.8
  */
-@Api(tags = {SwaggerTagConst.Support.SYSTEM_CONFIG})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_CONFIG})
 @RestController
 public class SystemConfigController extends SystemBaseController {
 

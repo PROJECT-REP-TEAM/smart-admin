@@ -4,7 +4,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemUpdateDTO;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemVO;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadResultVO;
@@ -19,7 +19,7 @@ import java.util.List;
  * @author 开云
  */
 @RestController
-@Api(tags = {SwaggerTagConst.Support.RELOAD})
+@Api(tags = {SwaggerTagConst.Support.SUPPORT_RELOAD})
 public class ReloadController extends SupportBaseController {
 
     @Autowired

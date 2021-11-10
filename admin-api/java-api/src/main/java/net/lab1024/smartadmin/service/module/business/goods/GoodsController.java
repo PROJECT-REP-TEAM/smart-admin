@@ -5,9 +5,9 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
-import net.lab1024.smartadmin.service.module.business.goods.domain.*;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
+import net.lab1024.smartadmin.service.module.business.goods.domain.*;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ import javax.validation.Valid;
  * @author 胡克
  * @date 2021/08/21 19:10
  */
-@Api(tags = SwaggerTagConst.Admin.MANAGER_GOODS)
+@Api(tags = SwaggerTagConst.Business.MANAGER_GOODS)
 @RestController
 public class GoodsController extends SystemBaseController {
 

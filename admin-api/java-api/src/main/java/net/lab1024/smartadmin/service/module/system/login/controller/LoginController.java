@@ -27,7 +27,7 @@ import javax.validation.Valid;
  * @author zhuoda
  */
 @RestController
-@Api(tags = {SwaggerTagConst.System.MANAGER_EMPLOYEE_LOGIN})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_LOGIN})
 public class LoginController extends SystemBaseController {
 
     @Autowired

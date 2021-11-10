@@ -5,7 +5,7 @@ import com.google.common.collect.Interners;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorStrategyTypeEnum;
 import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorEntity;
-import net.lab1024.smartadmin.service.module.support.idgenerator.service.IdGeneratorCacheService;
+import net.lab1024.smartadmin.service.module.support.idgenerator.service.IdGeneratorCacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +20,7 @@ public class IdGeneratorInternStrategy extends IdGeneratorStrategyBaseService {
 
     private static final Interner<Integer> POOL = Interners.newWeakInterner();
     @Autowired
-    private IdGeneratorCacheService idGeneratorCacheService;
+    private IdGeneratorCacheManager idGeneratorCacheManager;
 
     /**
      * 策略类型
@@ -40,7 +40,7 @@ public class IdGeneratorInternStrategy extends IdGeneratorStrategyBaseService {
      */
     @Override
     public String generate(IdGeneratorEnum idGeneratorEnum) {
-        IdGeneratorEntity idGeneratorEntity = idGeneratorCacheService.getIdGeneratorEntity(idGeneratorEnum.getValue());
+        IdGeneratorEntity idGeneratorEntity = idGeneratorCacheManager.getIdGeneratorEntity(idGeneratorEnum.getValue());
         synchronized (POOL.intern(idGeneratorEntity.getId())) {
             return generate(idGeneratorEntity);
         }

@@ -10,11 +10,12 @@ import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
-import net.lab1024.smartadmin.service.module.system.department.service.DepartmentCacheService;
+import net.lab1024.smartadmin.service.module.system.department.manager.DepartmentCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.employee.domain.form.*;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
+import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeManager;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginUserDetail;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
@@ -58,9 +59,9 @@ public class EmployeeService {
     private RoleEmployeeDao roleEmployeeDao;
 
     @Autowired
-    private EmployeeCacheService employeeCacheService;
+    private EmployeeCacheManager employeeCacheManager;
     @Autowired
-    private DepartmentCacheService departmentCacheService;
+    private DepartmentCacheManager departmentCacheManager;
 
     /**
      * 获取员工登录信息
@@ -69,9 +70,9 @@ public class EmployeeService {
      * @return
      */
     public RequestEmployee getById(Long employeeId) {
-        EmployeeEntity employeeEntity = employeeCacheService.singleEmployeeCache(employeeId);
+        EmployeeEntity employeeEntity = employeeCacheManager.singleEmployeeCache(employeeId);
         //获取员工角色缓存
-        List<Long> roleIdList = employeeCacheService.singleEmployeeRoleCache(employeeId);
+        List<Long> roleIdList = employeeCacheManager.singleEmployeeRoleCache(employeeId);
         if (employeeEntity != null) {
             Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
             RequestEmployee loginDTO = SmartBeanUtil.copy(employeeEntity, RequestEmployee.class);
@@ -90,9 +91,9 @@ public class EmployeeService {
      * @return
      */
     public LoginUserDetail getBoById(Long employeeId) {
-        EmployeeEntity employeeEntity = employeeCacheService.singleEmployeeCache(employeeId);
+        EmployeeEntity employeeEntity = employeeCacheManager.singleEmployeeCache(employeeId);
         //获取员工角色缓存
-        List<Long> roleIdList = employeeCacheService.singleEmployeeRoleCache(employeeId);
+        List<Long> roleIdList = employeeCacheManager.singleEmployeeRoleCache(employeeId);
         if (employeeEntity == null) {
             return null;
         }
@@ -124,7 +125,7 @@ public class EmployeeService {
         Map<Long, List<Long>> employeeRoleIdListMap = roleEmployeeEntityList.stream().collect(Collectors.groupingBy(RoleEmployeeVO::getEmployeeId, Collectors.mapping(RoleEmployeeVO::getRoleId, Collectors.toList())));
         Map<Long, List<String>> employeeRoleNameListMap = roleEmployeeEntityList.stream().collect(Collectors.groupingBy(RoleEmployeeVO::getEmployeeId, Collectors.mapping(RoleEmployeeVO::getRoleName, Collectors.toList())));
         // 查询员工部门
-        Map<Long, String> departmentNameMap = departmentCacheService.departmentRouteCache();
+        Map<Long, String> departmentNameMap = departmentCacheManager.departmentRouteCache();
 
         employeeList.forEach(e -> {
             e.setRoleIdList(employeeRoleIdListMap.getOrDefault(e.getEmployeeId(), Lists.newArrayList()));
@@ -170,7 +171,7 @@ public class EmployeeService {
 
         // 保存数据
         employeeManager.saveEmployee(entity, employeeAddForm.getRoleIdList());
-        employeeCacheService.clearCacheByDepartmentId(departmentId);
+        employeeCacheManager.clearCacheByDepartmentId(departmentId);
 
         return ResponseDTO.ok();
     }
@@ -220,8 +221,8 @@ public class EmployeeService {
         employeeManager.updateEmployee(entity, employeeUpdateForm.getRoleIdList());
 
         // 清除缓存
-        employeeCacheService.clearCacheByEmployeeId(employeeId);
-        employeeCacheService.clearCacheByDepartmentId(departmentId);
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByDepartmentId(departmentId);
 
         return ResponseDTO.ok();
     }
@@ -242,8 +243,8 @@ public class EmployeeService {
         }
         employeeDao.updateDisableFlag(employeeId, !employeeEntity.getDisabledFlag());
 
-        employeeCacheService.clearCacheByEmployeeId(employeeId);
-        employeeCacheService.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
         return ResponseDTO.ok();
     }
 
@@ -271,10 +272,10 @@ public class EmployeeService {
 
         // 清除缓存
         employeeEntityList.forEach(e -> {
-            employeeCacheService.clearCacheByEmployeeId(e.getEmployeeId());
-            employeeCacheService.clearCacheByDepartmentId(e.getDepartmentId());
+            employeeCacheManager.clearCacheByEmployeeId(e.getEmployeeId());
+            employeeCacheManager.clearCacheByDepartmentId(e.getDepartmentId());
         });
-        employeeCacheService.clearCacheByDepartmentId(batchUpdateDepartmentForm.getDepartmentId());
+        employeeCacheManager.clearCacheByDepartmentId(batchUpdateDepartmentForm.getDepartmentId());
         return ResponseDTO.ok();
     }
 
@@ -319,12 +320,12 @@ public class EmployeeService {
      * @return
      */
     public ResponseDTO<List<EmployeeVO>> getAllEmployeeByDepartmentId(Long departmentId, Boolean disabledFlag) {
-        List<EmployeeEntity> employeeEntityList = employeeCacheService.departmentEmployeeCache(departmentId);
+        List<EmployeeEntity> employeeEntityList = employeeCacheManager.departmentEmployeeCache(departmentId);
         if (disabledFlag != null) {
             employeeEntityList = employeeEntityList.stream().filter(e -> e.getDisabledFlag().equals(disabledFlag)).collect(Collectors.toList());
         }
         // 获取部门
-        List<DepartmentVO> departmentList = departmentCacheService.departmentCache();
+        List<DepartmentVO> departmentList = departmentCacheManager.departmentCache();
         Optional<DepartmentVO> departmentVO = departmentList.stream().filter(e -> e.getDepartmentId().equals(departmentId)).findFirst();
         if (CollectionUtils.isEmpty(employeeEntityList)) {
             return ResponseDTO.ok(Collections.emptyList());

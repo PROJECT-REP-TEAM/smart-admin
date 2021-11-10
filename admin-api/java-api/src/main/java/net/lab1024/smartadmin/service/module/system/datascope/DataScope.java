@@ -1,9 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.datascope;
+package net.lab1024.smartadmin.service.module.system.datascope;
 
 
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeWhereInTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.strategy.DataScopePowerStrategy;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeWhereInTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.strategy.DataScopePowerStrategy;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

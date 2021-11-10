@@ -1,9 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.datascope;
+package net.lab1024.smartadmin.service.module.system.datascope;
 
 import com.google.common.collect.Maps;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
-import net.lab1024.smartadmin.service.module.support.datascope.service.DataScopeSqlConfigService;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeSqlConfig;
+import net.lab1024.smartadmin.service.module.system.datascope.service.DataScopeSqlConfigService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.plugin.*;

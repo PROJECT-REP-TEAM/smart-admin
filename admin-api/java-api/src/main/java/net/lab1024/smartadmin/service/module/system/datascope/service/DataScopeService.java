@@ -1,14 +1,14 @@
-package net.lab1024.smartadmin.service.module.support.datascope.service;
+package net.lab1024.smartadmin.service.module.system.datascope.service;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import org.springframework.stereotype.Service;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeAndViewTypeVO;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScope;
-import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeViewTypeVO;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeAndViewTypeVO;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeDTO;
+import net.lab1024.smartadmin.service.module.system.datascope.domain.DataScopeViewTypeVO;
 
 import java.util.Comparator;
 import java.util.List;
@@ -32,7 +32,7 @@ public class DataScopeService {
      * @return
      */
     public ResponseDTO<List<DataScopeAndViewTypeVO>> dataScopeList() {
-        List<DataScope> dataScopeList = this.getDataScopeType();
+        List<DataScopeDTO> dataScopeList = this.getDataScopeType();
         List<DataScopeAndViewTypeVO> dataScopeAndTypeList = SmartBeanUtil.copyList(dataScopeList, DataScopeAndViewTypeVO.class);
         List<DataScopeViewTypeVO> typeList = this.getViewType();
         dataScopeAndTypeList.forEach(e -> {
@@ -59,16 +59,16 @@ public class DataScopeService {
         return viewTypeList;
     }
 
-    public List<DataScope> getDataScopeType() {
-        List<DataScope> dataScopeTypeList = Lists.newArrayList();
+    public List<DataScopeDTO> getDataScopeType() {
+        List<DataScopeDTO> dataScopeTypeList = Lists.newArrayList();
         DataScopeTypeEnum[] enums = DataScopeTypeEnum.class.getEnumConstants();
-        DataScope dataScope;
+        DataScopeDTO dataScopeDTO;
         for (DataScopeTypeEnum typeEnum : enums) {
-            dataScope =
-                    DataScope.builder().dataScopeType(typeEnum.getValue()).dataScopeTypeDesc(typeEnum.getDesc()).dataScopeTypeName(typeEnum.getName()).dataScopeTypeSort(typeEnum.getSort()).build();
-            dataScopeTypeList.add(dataScope);
+            dataScopeDTO =
+                    DataScopeDTO.builder().dataScopeType(typeEnum.getValue()).dataScopeTypeDesc(typeEnum.getDesc()).dataScopeTypeName(typeEnum.getName()).dataScopeTypeSort(typeEnum.getSort()).build();
+            dataScopeTypeList.add(dataScopeDTO);
         }
-        Comparator<DataScope> comparator = (h1, h2) -> h1.getDataScopeTypeSort().compareTo(h2.getDataScopeTypeSort());
+        Comparator<DataScopeDTO> comparator = (h1, h2) -> h1.getDataScopeTypeSort().compareTo(h2.getDataScopeTypeSort());
         dataScopeTypeList.sort(comparator);
         return dataScopeTypeList;
     }

@@ -2,9 +2,9 @@ package net.lab1024.smartadmin.service.module.business.category;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
 import net.lab1024.smartadmin.service.common.controller.SystemBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.form.CategoryAddForm;
 import net.lab1024.smartadmin.service.module.business.category.domain.form.CategoryTreeQueryForm;
 import net.lab1024.smartadmin.service.module.business.category.domain.form.CategoryUpdateForm;
@@ -22,7 +22,7 @@ import java.util.List;
  * @author 胡克
  * @date 2021/1/21 9:10
  */
-@Api(tags = SwaggerTagConst.Admin.MANAGER_CATEGORY)
+@Api(tags = SwaggerTagConst.Business.MANAGER_CATEGORY)
 @RestController
 public class CategoryController extends SystemBaseController {
 

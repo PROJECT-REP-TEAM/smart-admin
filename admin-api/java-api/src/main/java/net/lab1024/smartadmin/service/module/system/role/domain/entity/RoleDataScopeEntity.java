@@ -27,12 +27,12 @@ public class RoleDataScopeEntity {
     private Long id;
     /**
      * 数据范围id
-     * {@link net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum}
+     * {@link net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeTypeEnum}
      */
     private Integer dataScopeType;
     /**
      * 数据范围类型
-     * {@link net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum}
+     * {@link net.lab1024.smartadmin.service.module.system.datascope.constant.DataScopeViewTypeEnum}
      */
     private Integer viewType;
     /**

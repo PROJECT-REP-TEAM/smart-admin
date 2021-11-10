@@ -21,7 +21,7 @@ import java.util.List;
  *
  * @author zhuoda
  */
-@Api(tags = {SwaggerTagConst.System.DEPARTMENT})
+@Api(tags = {SwaggerTagConst.System.SYSTEM_DEPARTMENT})
 @RestController
 public class DepartmentController extends SystemBaseController {
 

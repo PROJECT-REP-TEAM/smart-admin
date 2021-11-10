@@ -2,11 +2,11 @@ package net.lab1024.smartadmin.service.module.support.heartbeat;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.swagger.SwaggerTagConst;
+import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.PageParam;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
+import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.support.heartbeat.domain.HeartBeatRecordVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,8 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
-
-@Api(tags = {SwaggerTagConst.Support.HEART_BEAT})
+/**
+ * 
+ * [  ]
+ * 
+ * @author yandanyang
+ * @date
+ */
+@Api(tags = {SwaggerTagConst.Support.SUPPORT_HEART_BEAT})
 @RestController
 public class HeartBeatController extends SupportBaseController {
 

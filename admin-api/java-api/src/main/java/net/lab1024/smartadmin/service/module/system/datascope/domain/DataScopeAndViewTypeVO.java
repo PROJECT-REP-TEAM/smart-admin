@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.datascope.domain;
+package net.lab1024.smartadmin.service.module.system.datascope.domain;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

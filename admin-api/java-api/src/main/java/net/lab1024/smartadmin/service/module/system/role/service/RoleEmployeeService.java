@@ -9,7 +9,7 @@ import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
-import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeCacheService;
+import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
@@ -46,7 +46,7 @@ public class RoleEmployeeService  {
     @Autowired
     private RoleEmployeeManager roleEmployeeManager;
     @Autowired
-    private EmployeeCacheService employeeCacheService;
+    private EmployeeCacheManager employeeCacheManager;
 
     /**
      * 通过角色id，分页获取成员员工列表
@@ -86,7 +86,7 @@ public class RoleEmployeeService  {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         roleEmployeeDao.deleteByEmployeeIdRoleId(employeeId, roleId);
-        employeeCacheService.clearCacheByEmployeeId(employeeId);
+        employeeCacheManager.clearCacheByEmployeeId(employeeId);
         return ResponseDTO.ok();
     }
 
@@ -99,7 +99,7 @@ public class RoleEmployeeService  {
     public ResponseDTO<String> batchRemoveRoleEmployee(RoleEmployeeUpdateForm roleEmployeeUpdateForm) {
         roleEmployeeDao.batchDeleteEmployeeRole(roleEmployeeUpdateForm.getRoleId(), roleEmployeeUpdateForm.getEmployeeIdList());
         for (Long employeeId : roleEmployeeUpdateForm.getEmployeeIdList()) {
-            employeeCacheService.clearCacheByEmployeeId(employeeId);
+            employeeCacheManager.clearCacheByEmployeeId(employeeId);
         }
         return ResponseDTO.ok();
     }
@@ -123,7 +123,7 @@ public class RoleEmployeeService  {
         // 保存数据
         roleEmployeeManager.saveRoleEmployee(roleId, roleEmployeeList);
         for (Long employeeId : employeeIdList) {
-            employeeCacheService.clearCacheByEmployeeId(employeeId);
+            employeeCacheManager.clearCacheByEmployeeId(employeeId);
         }
         return ResponseDTO.ok();
     }
