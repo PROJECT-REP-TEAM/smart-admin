@@ -1,5 +1,6 @@
 package net.lab1024.smartadmin.service.module.system.login.service;
 
+import cn.dev33.satoken.stp.StpUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
@@ -86,7 +87,9 @@ public class LoginService {
         }
 
         // 生成 登录token
-        String token = jwtService.generateJwtToken(employeeEntity.getEmployeeId());
+        Long employeeId = employeeEntity.getEmployeeId();
+        StpUtil.login(employeeId);
+        String token = StpUtil.getTokenValue();
         // 获取前端菜单以及功能权限
         MenuLoginBO menuLoginBORespDTO = menuEmployeeService.queryMenuTreeByEmployeeId(employeeEntity.getEmployeeId());
         // 查询部门

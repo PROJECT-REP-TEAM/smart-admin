@@ -1,6 +1,5 @@
 package net.lab1024.smartadmin.service.module.system.menu.service;
 
-import net.lab1024.smartadmin.service.common.security.SecurityMetadataSource;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -18,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
  * @author lihaifan
  * @date 2021/8/5 17:14
  */
-@Service(SecurityMetadataSource.PRIVILEGE_CHECK_NAME)
+@Service
 public class MenuPermissionService {
 
     @Autowired

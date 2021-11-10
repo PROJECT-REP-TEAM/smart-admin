@@ -1,5 +1,6 @@
 package net.lab1024.smartadmin.service.module.system.login.service;
 
+import cn.dev33.satoken.SaManager;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -20,11 +21,6 @@ import java.util.Date;
 @Slf4j
 @Service
 public class JwtService {
-
-    /**
-     * 默认 token 过期时间 1 天
-     */
-    private static final int EXPIRE_SECONDS = 24 * 3600;
 
     /**
      * 默认 jwt key
@@ -53,7 +49,7 @@ public class JwtService {
         return Jwts.builder()
                 .setClaims(jwtClaims)
                 .setIssuedAt(new Date(nowTimeMilli))
-                .setExpiration(new Date(nowTimeMilli + EXPIRE_SECONDS * 1000))
+                .setExpiration(new Date(SaManager.getConfig().getTimeout() * 1000))
                 .signWith(SignatureAlgorithm.HS512, JWT_KEY)
                 .compact();
     }

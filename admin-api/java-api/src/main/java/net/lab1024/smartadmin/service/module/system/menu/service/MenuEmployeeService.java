@@ -115,7 +115,7 @@ public class MenuEmployeeService {
      * @param roleIdList
      * @return
      */
-    private List<MenuVO> getMenuByRoleIdList(List<Long> roleIdList, Boolean isSuperman) {
+    public List<MenuVO> getMenuByRoleIdList(List<Long> roleIdList, Boolean isSuperman) {
         if (CollectionUtils.isEmpty(roleIdList)) {
             return Lists.newArrayList();
         }

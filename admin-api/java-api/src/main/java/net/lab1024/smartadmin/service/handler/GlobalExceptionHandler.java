@@ -1,19 +1,18 @@
 package net.lab1024.smartadmin.service.handler;
 
+import cn.dev33.satoken.exception.NotLoginException;
+import cn.dev33.satoken.exception.NotPermissionException;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.domain.SystemEnvironment;
-import net.lab1024.smartadmin.service.common.enumeration.SystemEnvironmentEnum;
 import net.lab1024.smartadmin.service.common.exception.BusinessException;
 import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -81,12 +80,24 @@ public class GlobalExceptionHandler {
      * 权限异常
      */
     @ResponseBody
-    @ExceptionHandler({AccessDeniedException.class})
-    public ResponseDTO<?> permissionExceptionHandler(AccessDeniedException e) {
+    @ExceptionHandler({NotPermissionException.class})
+    public ResponseDTO<?> permissionExceptionHandler(NotPermissionException e) {
         if (!systemEnvironment.isProd()) {
             log.error("全局参数异常,URL:{}", getCurrentRequestUrl(), e);
         }
         return ResponseDTO.error(UserErrorCode.NO_PERMISSION);
+    }
+
+    /**
+     * 未登录异常
+     */
+    @ResponseBody
+    @ExceptionHandler({NotLoginException.class})
+    public ResponseDTO<?> notLoginExceptionHandler(NotLoginException e) {
+        if (!systemEnvironment.isProd()) {
+            log.error("全局参数异常,URL:{}", getCurrentRequestUrl(), e);
+        }
+        return ResponseDTO.error(UserErrorCode.LOGIN_STATE_INVALID);
     }
 
     /**
