@@ -9,11 +9,7 @@ import javax.validation.constraints.NotNull;
  * [  ]
  *
  * @author yandanyang
- * @version 1.0
- * @company 1024lab.net
- * @copyright (c) 2019 1024lab.netInc. All rights reserved.
  * @date
- * @since JDK1.8
  */
 @Data
 public class DepartmentUpdateForm extends DepartmentAddForm {

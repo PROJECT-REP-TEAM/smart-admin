@@ -24,11 +24,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author zhuoda
- * @version 2.0
- * @company 1024lab.net
- * @copyright (c) 2019-2021 1024lab.netInc. All rights reserved.
  * @date 2021-11-1
- * @since JDK1.8
  */
 @Slf4j
 @Service

@@ -14,11 +14,7 @@ import java.lang.annotation.Target;
  * [ 数据范围 ]
  *
  * @author yandanyang
- * @version 1.0
- * @company 1024lab.net
- * @copyright (c) 2019 1024lab.netInc. All rights reserved.
  * @date
- * @since JDK1.8
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

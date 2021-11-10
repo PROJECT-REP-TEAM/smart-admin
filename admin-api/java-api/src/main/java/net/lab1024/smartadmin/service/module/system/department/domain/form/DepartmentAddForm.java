@@ -9,12 +9,8 @@ import javax.validation.constraints.NotNull;
 /**
  * 
  * [  ]
- * 
- * @version 1.0
- * @since JDK1.8
+ *
  * @author yandanyang
- * @company 1024lab.net
- * @copyright (c) 2019 1024lab.netInc. All rights reserved.
  * @date
  */
 @Data

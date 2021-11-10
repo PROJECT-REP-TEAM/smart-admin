@@ -21,11 +21,7 @@ import java.util.Properties;
  * [ mybaits sql 拦截 ]
  *
  * @author yandanyang
- * @version 1.0
- * @company 1024lab.net
- * @copyright (c) 2019 1024lab.netInc. All rights reserved.
  * @date
- * @since JDK1.8
  */
 @Intercepts({@Signature(type = org.apache.ibatis.executor.Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})
 @Component
