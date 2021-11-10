@@ -9,7 +9,7 @@ import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.config.FileCloudConfig;
-import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
+import net.lab1024.smartadmin.service.module.support.file.constant.FileFolderTypeEnum;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;

@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
 import net.lab1024.smartadmin.service.common.validator.enumeration.CheckEnum;
-import net.lab1024.smartadmin.service.module.support.file.domain.FileFolderTypeEnum;
+import net.lab1024.smartadmin.service.module.support.file.constant.FileFolderTypeEnum;
 
 import javax.validation.constraints.NotBlank;
 
