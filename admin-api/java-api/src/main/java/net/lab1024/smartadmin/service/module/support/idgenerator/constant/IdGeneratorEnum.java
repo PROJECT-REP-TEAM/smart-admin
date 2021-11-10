@@ -19,7 +19,20 @@ public enum IdGeneratorEnum implements BaseEnum {
 
     ;
 
-    private final Integer value;
+    private final Integer idGeneratorId;
 
     private final String desc;
+
+    @Override
+    public Integer getValue() {
+        return idGeneratorId;
+    }
+
+    @Override
+    public String toString() {
+        return "IdGeneratorEnum{" +
+                "idGeneratorId=" + idGeneratorId +
+                ", desc='" + desc + '\'' +
+                '}';
+    }
 }

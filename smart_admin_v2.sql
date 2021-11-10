@@ -1,23 +1,13 @@
--- --------------------------------------------------------
--- 主机:                           82.157.125.186
--- 服务器版本:                        8.0.26 - MySQL Community Server - GPL
--- 服务器操作系统:                      Linux
--- HeidiSQL 版本:                  11.0.0.5919
--- --------------------------------------------------------
-
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!50503 SET NAMES utf8mb4 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-
--- 导出 smart_admin_v2 的数据库结构
 DROP DATABASE IF EXISTS `smart_admin_v2`;
 CREATE DATABASE IF NOT EXISTS `smart_admin_v2` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `smart_admin_v2`;
 
--- 导出  表 smart_admin_v2.t_area 结构
 DROP TABLE IF EXISTS `t_area`;
 CREATE TABLE IF NOT EXISTS `t_area` (
   `area_code` int unsigned NOT NULL COMMENT '地区编码',
@@ -30,7 +20,6 @@ CREATE TABLE IF NOT EXISTS `t_area` (
   PRIMARY KEY (`area_code`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='公用服务 - 地区数据表 listen';
 
--- 正在导出表  smart_admin_v2.t_area 的数据：~3,434 rows (大约)
 DELETE FROM `t_area`;
 /*!40000 ALTER TABLE `t_area` DISABLE KEYS */;
 INSERT INTO `t_area` (`area_code`, `parent_code`, `area_name`, `full_name`, `depth`, `update_time`, `create_time`) VALUES
@@ -3470,7 +3459,6 @@ INSERT INTO `t_area` (`area_code`, `parent_code`, `area_name`, `full_name`, `dep
 	(820010, 820000, '澳门特别行政区直辖', '澳门|澳门|澳门特别行政区直辖', 3, '2019-10-12 18:33:08', '2019-10-12 18:33:08');
 /*!40000 ALTER TABLE `t_area` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_category 结构
 DROP TABLE IF EXISTS `t_category`;
 CREATE TABLE IF NOT EXISTS `t_category` (
   `category_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '分类id',
@@ -3486,19 +3474,39 @@ CREATE TABLE IF NOT EXISTS `t_category` (
   PRIMARY KEY (`category_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='经营分类 - 数据表 by listen';
 
--- 正在导出表  smart_admin_v2.t_category 的数据：~3 rows (大约)
 DELETE FROM `t_category`;
 /*!40000 ALTER TABLE `t_category` DISABLE KEYS */;
 INSERT INTO `t_category` (`category_id`, `category_name`, `category_type`, `parent_id`, `sort`, `disabled_flag`, `deleted_flag`, `remark`, `update_time`, `create_time`) VALUES
 	(1, '技术类', 1, 0, 0, 0, 0, NULL, '2021-09-01 22:24:32', '2021-09-01 22:24:32'),
-	(2, '设计类', 1, 0, 0, 0, 0, NULL, '2021-09-02 21:03:32', '2021-09-01 22:24:42'),
+	(2, '康复类', 1, 0, 0, 0, 1, NULL, '2021-10-11 19:54:28', '2021-09-01 22:24:42'),
 	(3, 'demo', 2, 0, 0, 0, 0, NULL, '2021-09-01 22:37:35', '2021-09-01 22:37:35');
 /*!40000 ALTER TABLE `t_category` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_department 结构
+DROP TABLE IF EXISTS `t_data_tracer`;
+CREATE TABLE IF NOT EXISTS `t_data_tracer` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `business_id` bigint NOT NULL COMMENT '各种单据的id',
+  `business_type` int NOT NULL COMMENT '单据类型',
+  `business_type_desc` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '单据类型 对应的中文',
+  `operate_type` int NOT NULL COMMENT '操作类型',
+  `operate_type_desc` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '操作类型 对应的中文',
+  `operate_content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '操作内容',
+  `operator_id` bigint NOT NULL COMMENT '员工id',
+  `operator_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '员工名称',
+  `extra_data` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci COMMENT '额外信息',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `order_id_order_type` (`business_id`,`business_type`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='各种单据操作记录';
+
+DELETE FROM `t_data_tracer`;
+/*!40000 ALTER TABLE `t_data_tracer` DISABLE KEYS */;
+/*!40000 ALTER TABLE `t_data_tracer` ENABLE KEYS */;
+
 DROP TABLE IF EXISTS `t_department`;
 CREATE TABLE IF NOT EXISTS `t_department` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '部门主键id',
+  `department_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '部门主键id',
   `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '部门名称',
   `short_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '部门简称',
   `manager_id` int unsigned DEFAULT NULL COMMENT '部门负责人id',
@@ -3507,14 +3515,13 @@ CREATE TABLE IF NOT EXISTS `t_department` (
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `import_flag` tinyint(1) DEFAULT NULL COMMENT '是否校盈易导入数据',
-  PRIMARY KEY (`id`) USING BTREE,
+  PRIMARY KEY (`department_id`) USING BTREE,
   KEY `parent_id` (`parent_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=86 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='部门表';
 
--- 正在导出表  smart_admin_v2.t_department 的数据：~13 rows (大约)
 DELETE FROM `t_department`;
 /*!40000 ALTER TABLE `t_department` DISABLE KEYS */;
-INSERT INTO `t_department` (`id`, `name`, `short_name`, `manager_id`, `parent_id`, `sort`, `update_time`, `create_time`, `import_flag`) VALUES
+INSERT INTO `t_department` (`department_id`, `name`, `short_name`, `manager_id`, `parent_id`, `sort`, `update_time`, `create_time`, `import_flag`) VALUES
 	(1, '1024创新实验室', 'company', 1, 0, 1, '2019-04-03 10:41:25', '2019-04-03 10:41:25', 1),
 	(56, '产品部门1', NULL, 50, 30, 56, '2021-08-17 14:04:46', '2021-08-17 14:04:46', NULL),
 	(57, '产品部门2', NULL, 51, 30, 57, '2021-08-17 14:04:52', '2021-08-17 14:04:52', NULL),
@@ -3530,10 +3537,9 @@ INSERT INTO `t_department` (`id`, `name`, `short_name`, `manager_id`, `parent_id
 	(85, '人力部', NULL, 47, 1, 85, '2021-09-01 22:28:47', '2021-09-01 22:28:47', NULL);
 /*!40000 ALTER TABLE `t_department` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_employee 结构
 DROP TABLE IF EXISTS `t_employee`;
 CREATE TABLE IF NOT EXISTS `t_employee` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `employee_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `login_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录帐号',
   `login_pwd` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '登录密码',
   `actual_name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '员工名称',
@@ -3541,24 +3547,23 @@ CREATE TABLE IF NOT EXISTS `t_employee` (
   `phone` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '手机号码',
   `department_id` int NOT NULL COMMENT '部门id',
   `disabled_flag` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否被禁用 0否1是',
+  `deleted_flag` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否删除0否 1是',
   `remark` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '备注',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`employee_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='员工表';
 
--- 正在导出表  smart_admin_v2.t_employee 的数据：~5 rows (大约)
 DELETE FROM `t_employee`;
 /*!40000 ALTER TABLE `t_employee` DISABLE KEYS */;
-INSERT INTO `t_employee` (`id`, `login_name`, `login_pwd`, `actual_name`, `gender`, `phone`, `department_id`, `disabled_flag`, `remark`, `update_time`, `create_time`) VALUES
-	(1, 'sa', 'c655798e4648c540812a1b8f48759af7', '管理员', 0, '13592000000', 30, 0, NULL, '2021-09-01 22:18:36', '2018-05-11 09:38:54'),
-	(2, 'huke', 'c655798e4648c540812a1b8f48759af7', '胡克', 0, '13123123123', 1, 0, NULL, '2021-09-01 22:25:38', '2021-07-29 11:24:55'),
-	(44, 'bonjour', 'c655798e4648c540812a1b8f48759af7', 'string', 1, '15194550204', 1, 0, NULL, '2021-09-01 22:18:38', '2021-08-11 10:04:53'),
-	(47, 'shanyi', 'c655798e4648c540812a1b8f48759af7', '善逸', 1, '13123123123', 1, 0, NULL, '2021-09-01 22:25:32', '2021-08-16 17:14:55'),
-	(48, 'qinjiu', 'c655798e4648c540812a1b8f48759af7', '琴酒', 2, '17366273884', 1, 0, NULL, '2021-09-01 22:25:53', '2021-08-17 10:29:41');
+INSERT INTO `t_employee` (`employee_id`, `login_name`, `login_pwd`, `actual_name`, `gender`, `phone`, `department_id`, `disabled_flag`, `deleted_flag`, `remark`, `update_time`, `create_time`) VALUES
+	(1, 'sa', 'ee06618ad99145ef96fa91f214726a58', '管理员', 0, '13592000000', 30, 0, 0, NULL, '2021-10-14 21:42:13', '2018-05-11 09:38:54'),
+	(2, 'huke', 'ee06618ad99145ef96fa91f214726a58', '胡克', 0, '13123123123', 1, 0, 0, NULL, '2021-10-14 21:42:13', '2021-07-29 11:24:55'),
+	(44, 'bonjour', 'ee06618ad99145ef96fa91f214726a58', 'string', 1, '15194550204', 1, 0, 1, NULL, '2021-10-14 21:42:13', '2021-08-11 10:04:53'),
+	(47, 'shanyi', 'ee06618ad99145ef96fa91f214726a58', '善逸', 1, '13123123123', 1, 0, 0, NULL, '2021-10-14 21:42:13', '2021-08-16 17:14:55'),
+	(48, 'qinjiu', 'ee06618ad99145ef96fa91f214726a58', '琴酒', 2, '17366273884', 1, 0, 0, NULL, '2021-10-14 21:42:13', '2021-08-17 10:29:41');
 /*!40000 ALTER TABLE `t_employee` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_file 结构
 DROP TABLE IF EXISTS `t_file`;
 CREATE TABLE IF NOT EXISTS `t_file` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '主键ID',
@@ -3568,7 +3573,7 @@ CREATE TABLE IF NOT EXISTS `t_file` (
   `file_size` int DEFAULT NULL COMMENT '文件大小',
   `file_key` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文件key，用于文件下载',
   `file_type` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '文件类型',
-  `creator_id` int unsigned DEFAULT NULL COMMENT '创建人，即上传人',
+  `creator_id` int DEFAULT NULL COMMENT '创建人，即上传人',
   `creator_name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '创建人姓名',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '上次更新时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
@@ -3578,12 +3583,10 @@ CREATE TABLE IF NOT EXISTS `t_file` (
   KEY `module_type` (`folder_type`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
--- 正在导出表  smart_admin_v2.t_file 的数据：~0 rows (大约)
 DELETE FROM `t_file`;
 /*!40000 ALTER TABLE `t_file` DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_file` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_goods 结构
 DROP TABLE IF EXISTS `t_goods`;
 CREATE TABLE IF NOT EXISTS `t_goods` (
   `goods_id` int NOT NULL AUTO_INCREMENT,
@@ -3601,7 +3604,6 @@ CREATE TABLE IF NOT EXISTS `t_goods` (
   PRIMARY KEY (`goods_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='商品数据表 by listen 2021年8月6日 17:42:57';
 
--- 正在导出表  smart_admin_v2.t_goods 的数据：~3 rows (大约)
 DELETE FROM `t_goods`;
 /*!40000 ALTER TABLE `t_goods` DISABLE KEYS */;
 INSERT INTO `t_goods` (`goods_id`, `goods_type`, `category_id`, `goods_name`, `goods_intro`, `cover_pic`, `price`, `shelves_flag`, `deleted_flag`, `remark`, `update_time`, `create_time`) VALUES
@@ -3610,7 +3612,6 @@ INSERT INTO `t_goods` (`goods_id`, `goods_type`, `category_id`, `goods_name`, `g
 	(3, 1, 1, '深入理解Java虚拟机', '', '', 103.00, 1, 0, NULL, '2021-09-01 22:33:37', '2021-09-01 22:33:37');
 /*!40000 ALTER TABLE `t_goods` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_heart_beat_record 结构
 DROP TABLE IF EXISTS `t_heart_beat_record`;
 CREATE TABLE IF NOT EXISTS `t_heart_beat_record` (
   `id` int NOT NULL AUTO_INCREMENT COMMENT '自增id',
@@ -3622,19 +3623,19 @@ CREATE TABLE IF NOT EXISTS `t_heart_beat_record` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='公用服务 - 服务心跳';
 
--- 正在导出表  smart_admin_v2.t_heart_beat_record 的数据：~0 rows (大约)
 DELETE FROM `t_heart_beat_record`;
 /*!40000 ALTER TABLE `t_heart_beat_record` DISABLE KEYS */;
+INSERT INTO `t_heart_beat_record` (`id`, `project_path`, `server_ip`, `process_no`, `process_start_time`, `heart_beat_time`) VALUES
+	(1, 'E:\\idea-work\\idea-smart', '192.168.8.64', 548, '2021-09-23 20:24:39', '2021-09-23 20:25:47');
 /*!40000 ALTER TABLE `t_heart_beat_record` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_id_generator 结构
 DROP TABLE IF EXISTS `t_id_generator`;
 CREATE TABLE IF NOT EXISTS `t_id_generator` (
-  `id` int unsigned NOT NULL,
-  `business_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '英文key',
+  `id` int NOT NULL,
+  `business_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '业务名称',
   `prefix` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '前缀',
-  `min_length` tinyint unsigned NOT NULL COMMENT '最低补位长度',
-  `rule_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT ' 无周期 年周期 月周期 天周期',
+  `rule_type` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '无周期 年周期 月周期 天周期',
+  `min_length` tinyint unsigned NOT NULL COMMENT '最低长度',
   `init_number` int unsigned NOT NULL DEFAULT '1' COMMENT '初始值',
   `step_random_range` int unsigned NOT NULL COMMENT '步长随机数',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '备注',
@@ -3644,34 +3645,37 @@ CREATE TABLE IF NOT EXISTS `t_id_generator` (
   UNIQUE KEY `key_name` (`business_name`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='id生成器定义表';
 
--- 正在导出表  smart_admin_v2.t_id_generator 的数据：~2 rows (大约)
 DELETE FROM `t_id_generator`;
 /*!40000 ALTER TABLE `t_id_generator` DISABLE KEYS */;
-INSERT INTO `t_id_generator` (`id`, `business_name`, `prefix`, `min_length`, `rule_type`, `init_number`, `step_random_range`, `remark`, `update_time`, `create_time`) VALUES
-	(1, 'order', NULL, 6, 'DAY_CYCLE', 10000, 100, '订单id生成', '2021-08-11 11:13:20', '2021-02-19 14:37:50'),
-	(2, 'contract', NULL, 6, 'DAY_CYCLE', 1, 1, '合同id生成', '2021-08-12 20:40:37', '2021-08-12 20:40:37');
+INSERT INTO `t_id_generator` (`id`, `business_name`, `prefix`, `rule_type`, `min_length`, `init_number`, `step_random_range`, `remark`, `update_time`, `create_time`) VALUES
+	(1, '订单id生成', NULL, 'DAY_CYCLE', 5, 1000, 10, '例：2021101501001', '2021-10-16 18:23:53', '2021-02-19 14:37:50'),
+	(2, '合同id生成', 'CC', 'NO_CYCLE', 2, 1, 1, '例：2021101501', '2021-10-16 18:26:08', '2021-08-12 20:40:37');
 /*!40000 ALTER TABLE `t_id_generator` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_id_generator_record 结构
 DROP TABLE IF EXISTS `t_id_generator_record`;
 CREATE TABLE IF NOT EXISTS `t_id_generator_record` (
+  `id` int NOT NULL AUTO_INCREMENT,
   `generator_id` int NOT NULL,
-  `year` int NOT NULL,
-  `month` int NOT NULL,
-  `day` int NOT NULL,
+  `time` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `last_number` int NOT NULL,
   `count` int unsigned NOT NULL COMMENT '更新次数',
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `create_time` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`generator_id`,`year`,`month`,`day`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='id_generator记录表';
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `uk_generator` (`generator_id`,`time`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='id_generator记录表';
 
--- 正在导出表  smart_admin_v2.t_id_generator_record 的数据：~0 rows (大约)
 DELETE FROM `t_id_generator_record`;
 /*!40000 ALTER TABLE `t_id_generator_record` DISABLE KEYS */;
+INSERT INTO `t_id_generator_record` (`id`, `generator_id`, `time`, `last_number`, `count`, `update_time`, `create_time`) VALUES
+	(37, 1, '20211015', 1087, 20, '2021-10-16 18:16:11', '2021-10-16 18:14:25'),
+	(38, 1, '20211016', 1131, 30, '2021-10-16 18:24:17', '2021-10-16 18:16:30'),
+	(39, 1, '2021', 1089, 20, '2021-10-16 18:17:27', '2021-10-16 18:17:27'),
+	(40, 1, '202110', 1201, 40, '2021-10-16 18:23:25', '2021-10-16 18:18:51'),
+	(41, 2, NULL, 65, 65, '2021-11-09 19:46:57', '2021-10-16 18:25:32'),
+	(42, 1, '20211110', 8556, 1113, '2021-11-10 21:55:48', '2021-11-10 21:55:48');
 /*!40000 ALTER TABLE `t_id_generator_record` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_login_log 结构
 DROP TABLE IF EXISTS `t_login_log`;
 CREATE TABLE IF NOT EXISTS `t_login_log` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
@@ -3689,12 +3693,10 @@ CREATE TABLE IF NOT EXISTS `t_login_log` (
   KEY `auditor_id` (`remote_browser`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=1743 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户登录日志';
 
--- 正在导出表  smart_admin_v2.t_login_log 的数据：~0 rows (大约)
 DELETE FROM `t_login_log`;
 /*!40000 ALTER TABLE `t_login_log` DISABLE KEYS */;
 /*!40000 ALTER TABLE `t_login_log` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_menu 结构
 DROP TABLE IF EXISTS `t_menu`;
 CREATE TABLE IF NOT EXISTS `t_menu` (
   `menu_id` bigint NOT NULL AUTO_INCREMENT COMMENT '菜单ID',
@@ -3720,7 +3722,6 @@ CREATE TABLE IF NOT EXISTS `t_menu` (
   PRIMARY KEY (`menu_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=78 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='菜单表';
 
--- 正在导出表  smart_admin_v2.t_menu 的数据：~11 rows (大约)
 DELETE FROM `t_menu`;
 /*!40000 ALTER TABLE `t_menu` DISABLE KEYS */;
 INSERT INTO `t_menu` (`menu_id`, `menu_name`, `menu_type`, `parent_id`, `sort`, `path`, `component`, `perms`, `web_perms`, `icon`, `context_menu_id`, `frame_flag`, `cache_flag`, `visible_flag`, `disabled_flag`, `delete_flag`, `create_user_id`, `create_time`, `update_user_id`, `update_time`) VALUES
@@ -3737,7 +3738,6 @@ INSERT INTO `t_menu` (`menu_id`, `menu_name`, `menu_type`, `parent_id`, `sort`, 
 	(77, '类目', 2, 48, 5, '/goods/demo', '/business/setting/demo-setting.vue', NULL, NULL, 'InsertRowRightOutlined', NULL, 0, 0, 1, 0, 0, 1, '2021-09-01 22:34:40', 1, '2021-09-01 22:37:13');
 /*!40000 ALTER TABLE `t_menu` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_notice 结构
 DROP TABLE IF EXISTS `t_notice`;
 CREATE TABLE IF NOT EXISTS `t_notice` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -3751,7 +3751,6 @@ CREATE TABLE IF NOT EXISTS `t_notice` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=108 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 正在导出表  smart_admin_v2.t_notice 的数据：~13 rows (大约)
 DELETE FROM `t_notice`;
 /*!40000 ALTER TABLE `t_notice` DISABLE KEYS */;
 INSERT INTO `t_notice` (`id`, `title`, `content`, `deleted`, `send_status`, `create_user`, `create_time`, `update_time`) VALUES
@@ -3770,7 +3769,6 @@ INSERT INTO `t_notice` (`id`, `title`, `content`, `deleted`, `send_status`, `cre
 	(107, 'AAS', 's\'da\'ssdas', 1, 1, 1, '2019-11-13 19:06:55', '2019-11-14 09:07:06');
 /*!40000 ALTER TABLE `t_notice` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_notice_receive_record 结构
 DROP TABLE IF EXISTS `t_notice_receive_record`;
 CREATE TABLE IF NOT EXISTS `t_notice_receive_record` (
   `id` bigint NOT NULL AUTO_INCREMENT,
@@ -3781,7 +3779,6 @@ CREATE TABLE IF NOT EXISTS `t_notice_receive_record` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=141 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 正在导出表  smart_admin_v2.t_notice_receive_record 的数据：~27 rows (大约)
 DELETE FROM `t_notice_receive_record`;
 /*!40000 ALTER TABLE `t_notice_receive_record` DISABLE KEYS */;
 INSERT INTO `t_notice_receive_record` (`id`, `notice_id`, `employee_id`, `create_time`, `update_time`) VALUES
@@ -3814,49 +3811,6 @@ INSERT INTO `t_notice_receive_record` (`id`, `notice_id`, `employee_id`, `create
 	(140, 100, 38, '2019-11-15 03:19:18', '2019-11-15 03:19:18');
 /*!40000 ALTER TABLE `t_notice_receive_record` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_position 结构
-DROP TABLE IF EXISTS `t_position`;
-CREATE TABLE IF NOT EXISTS `t_position` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `position_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT '岗位名称',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '岗位描述',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='岗位表';
-
--- 正在导出表  smart_admin_v2.t_position 的数据：~4 rows (大约)
-DELETE FROM `t_position`;
-/*!40000 ALTER TABLE `t_position` DISABLE KEYS */;
-INSERT INTO `t_position` (`id`, `position_name`, `remark`, `update_time`, `create_time`) VALUES
-	(1, '后端爸爸', 'java develop is good job', '2021-07-29 09:42:55', '2019-07-03 15:18:45'),
-	(2, 'android develop', 'android develop is good job', '2019-07-04 16:11:11', '2019-07-04 16:11:00'),
-	(3, '测试', '这是内容11', '2021-07-29 09:42:42', '2019-07-10 14:03:50'),
-	(18, '前端大神', NULL, '2021-07-29 09:42:49', '2021-07-29 09:42:49');
-/*!40000 ALTER TABLE `t_position` ENABLE KEYS */;
-
--- 导出  表 smart_admin_v2.t_position_employee 结构
-DROP TABLE IF EXISTS `t_position_employee`;
-CREATE TABLE IF NOT EXISTS `t_position_employee` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `position_id` int NOT NULL COMMENT '岗位ID',
-  `employee_id` int NOT NULL COMMENT '员工ID',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE KEY `uk_position_employee` (`position_id`,`employee_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='岗位员工 数据表';
-
--- 正在导出表  smart_admin_v2.t_position_employee 的数据：~3 rows (大约)
-DELETE FROM `t_position_employee`;
-/*!40000 ALTER TABLE `t_position_employee` DISABLE KEYS */;
-INSERT INTO `t_position_employee` (`id`, `position_id`, `employee_id`, `update_time`, `create_time`) VALUES
-	(63, 1, 2, '2021-08-03 16:26:57', '2021-07-29 11:19:32'),
-	(64, 2, 2, '2021-08-03 16:26:58', '2021-07-29 11:19:32'),
-	(67, 0, 44, '2021-08-11 10:04:53', '2021-08-11 10:04:53');
-/*!40000 ALTER TABLE `t_position_employee` ENABLE KEYS */;
-
--- 导出  表 smart_admin_v2.t_reload_item 结构
 DROP TABLE IF EXISTS `t_reload_item`;
 CREATE TABLE IF NOT EXISTS `t_reload_item` (
   `tag` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '项名称',
@@ -3867,14 +3821,12 @@ CREATE TABLE IF NOT EXISTS `t_reload_item` (
   PRIMARY KEY (`tag`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 正在导出表  smart_admin_v2.t_reload_item 的数据：~0 rows (大约)
 DELETE FROM `t_reload_item`;
 /*!40000 ALTER TABLE `t_reload_item` DISABLE KEYS */;
 INSERT INTO `t_reload_item` (`tag`, `args`, `identification`, `update_time`, `create_time`) VALUES
-	('system_config', '235', 'xxxx', '2021-09-01 11:27:24', '2019-04-18 11:48:27');
+	('system_config', '235', 'string', '2021-10-08 20:54:09', '2019-04-18 11:48:27');
 /*!40000 ALTER TABLE `t_reload_item` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_reload_result 结构
 DROP TABLE IF EXISTS `t_reload_result`;
 CREATE TABLE IF NOT EXISTS `t_reload_result` (
   `tag` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -3885,28 +3837,147 @@ CREATE TABLE IF NOT EXISTS `t_reload_result` (
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 正在导出表  smart_admin_v2.t_reload_result 的数据：~0 rows (大约)
 DELETE FROM `t_reload_result`;
 /*!40000 ALTER TABLE `t_reload_result` DISABLE KEYS */;
 INSERT INTO `t_reload_result` (`tag`, `identification`, `args`, `result`, `exception`, `create_time`) VALUES
-	('system_config', 'xxxx', '235', 1, NULL, '2021-11-02 19:18:05');
+	('system_config', 'xxxx', '235', 1, NULL, '2021-09-25 14:35:43'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 14:37:05'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 14:53:38'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 16:16:46'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 16:17:25'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 16:25:24'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 16:27:02'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 16:58:29'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:02:39'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:04:38'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:09:50'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:14:56'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:16:40'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:25:43'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:27:53'),
+	('system_config', '222', '235', 1, NULL, '2021-09-25 17:29:56'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 16:36:14'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 16:39:20'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 16:51:42'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 16:53:00'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 18:52:06'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 18:53:59'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 18:55:45'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 18:59:37'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 19:02:34'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 20:56:07'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 20:58:04'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 21:00:34'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 21:02:39'),
+	('system_config', '222', '235', 1, NULL, '2021-09-26 21:04:55'),
+	('system_config', '222', '235', 1, NULL, '2021-10-01 13:30:42'),
+	('system_config', '222', '235', 1, NULL, '2021-10-08 20:45:47'),
+	('system_config', '222', '235', 1, NULL, '2021-10-08 20:51:48'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-08 20:54:19'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-08 20:54:42'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 18:32:03'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 18:38:20'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 18:46:01'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 19:00:15'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 20:03:57'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 20:09:14'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 20:13:48'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 20:15:20'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 20:16:37'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-09 20:18:12'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 16:57:56'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 18:52:26'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 18:54:37'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 19:51:43'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 19:53:08'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 19:56:49'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 19:57:27'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-11 20:25:32'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 20:15:12'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 20:40:30'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 20:41:01'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 20:42:03'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 20:42:29'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 20:43:26'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 21:25:53'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 21:33:40'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 21:36:23'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 21:38:08'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-14 21:40:22'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:16:40'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:18:30'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:19:26'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:20:26'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:24:42'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:26:42'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:30:21'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:33:39'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 09:37:44'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 10:02:56'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 10:23:22'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 10:38:54'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 11:26:49'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 11:27:46'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 11:30:52'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 11:31:33'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 18:09:17'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 18:16:40'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-15 18:23:05'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:02:03'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:03:44'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:06:18'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:27:10'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:30:00'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:38:23'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:40:48'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:43:49'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:48:12'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:52:21'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 17:53:14'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:00:58'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:01:25'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:02:05'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:03:33'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:04:04'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:13:57'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:14:26'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:16:32'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:17:02'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:17:28'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:18:52'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:19:25'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:24:17'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-16 18:24:57'),
+	('system_config', 'string', '235', 1, NULL, '2021-10-18 22:42:32'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-01 22:50:33'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-02 21:44:19'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-05 20:08:56'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-09 19:44:42'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-09 19:45:20'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-09 19:46:25'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 14:27:14'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 21:44:14'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 21:47:38'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 21:49:23'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 21:55:48'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 21:57:36'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 21:59:01'),
+	('system_config', 'string', '235', 1, NULL, '2021-11-10 22:00:32');
 /*!40000 ALTER TABLE `t_reload_result` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_role 结构
 DROP TABLE IF EXISTS `t_role`;
 CREATE TABLE IF NOT EXISTS `t_role` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `role_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `role_name` varchar(20) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '角色名称',
   `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '角色描述',
   `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '创建时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8mb3 COMMENT='角色表';
+  PRIMARY KEY (`role_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=utf8 COMMENT='角色表';
 
--- 正在导出表  smart_admin_v2.t_role 的数据：~9 rows (大约)
 DELETE FROM `t_role`;
 /*!40000 ALTER TABLE `t_role` DISABLE KEYS */;
-INSERT INTO `t_role` (`id`, `role_name`, `remark`, `update_time`, `create_time`) VALUES
+INSERT INTO `t_role` (`role_id`, `role_name`, `remark`, `update_time`, `create_time`) VALUES
 	(1, '管理员', '', '2019-06-21 12:09:34', '2019-06-21 12:09:34'),
 	(34, '销售', '', '2019-08-30 09:30:50', '2019-08-30 09:30:50'),
 	(35, '总经理', '', '2019-08-30 09:31:05', '2019-08-30 09:31:05'),
@@ -3918,7 +3989,6 @@ INSERT INTO `t_role` (`id`, `role_name`, `remark`, `update_time`, `create_time`)
 	(55, '技术', '2', '2021-09-01 22:31:05', '2021-09-01 22:31:05');
 /*!40000 ALTER TABLE `t_role` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_role_data_scope 结构
 DROP TABLE IF EXISTS `t_role_data_scope`;
 CREATE TABLE IF NOT EXISTS `t_role_data_scope` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -3930,14 +4000,12 @@ CREATE TABLE IF NOT EXISTS `t_role_data_scope` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 正在导出表  smart_admin_v2.t_role_data_scope 的数据：~0 rows (大约)
 DELETE FROM `t_role_data_scope`;
 /*!40000 ALTER TABLE `t_role_data_scope` DISABLE KEYS */;
 INSERT INTO `t_role_data_scope` (`id`, `data_scope_type`, `view_type`, `role_id`, `update_time`, `create_time`) VALUES
 	(66, 7, 1, 55, '2021-09-01 22:31:12', '2021-09-01 22:31:12');
 /*!40000 ALTER TABLE `t_role_data_scope` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_role_employee 结构
 DROP TABLE IF EXISTS `t_role_employee`;
 CREATE TABLE IF NOT EXISTS `t_role_employee` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -3949,7 +4017,6 @@ CREATE TABLE IF NOT EXISTS `t_role_employee` (
   UNIQUE KEY `uk_role_employee` (`role_id`,`employee_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=288 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色员工功能表';
 
--- 正在导出表  smart_admin_v2.t_role_employee 的数据：~2 rows (大约)
 DELETE FROM `t_role_employee`;
 /*!40000 ALTER TABLE `t_role_employee` DISABLE KEYS */;
 INSERT INTO `t_role_employee` (`id`, `role_id`, `employee_id`, `update_time`, `create_time`) VALUES
@@ -3957,7 +4024,6 @@ INSERT INTO `t_role_employee` (`id`, `role_id`, `employee_id`, `update_time`, `c
 	(287, 54, 47, '2021-09-01 22:36:46', '2021-09-01 22:36:46');
 /*!40000 ALTER TABLE `t_role_employee` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_role_menu 结构
 DROP TABLE IF EXISTS `t_role_menu`;
 CREATE TABLE IF NOT EXISTS `t_role_menu` (
   `role_menu_id` bigint NOT NULL AUTO_INCREMENT COMMENT '主键id',
@@ -3968,7 +4034,6 @@ CREATE TABLE IF NOT EXISTS `t_role_menu` (
   PRIMARY KEY (`role_menu_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=162 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色-菜单\n';
 
--- 正在导出表  smart_admin_v2.t_role_menu 的数据：~61 rows (大约)
 DELETE FROM `t_role_menu`;
 /*!40000 ALTER TABLE `t_role_menu` DISABLE KEYS */;
 INSERT INTO `t_role_menu` (`role_menu_id`, `role_id`, `menu_id`, `update_time`, `create_time`) VALUES
@@ -4035,68 +4100,25 @@ INSERT INTO `t_role_menu` (`role_menu_id`, `role_id`, `menu_id`, `update_time`, 
 	(161, 54, 45, '2021-09-01 22:36:34', '2021-09-01 22:36:34');
 /*!40000 ALTER TABLE `t_role_menu` ENABLE KEYS */;
 
--- 导出  表 smart_admin_v2.t_role_privilege 结构
-DROP TABLE IF EXISTS `t_role_privilege`;
-CREATE TABLE IF NOT EXISTS `t_role_privilege` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `role_id` int NOT NULL COMMENT '角色id',
-  `privilege_key` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '权限key',
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=11089 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='角色权限功能表';
-
--- 正在导出表  smart_admin_v2.t_role_privilege 的数据：~0 rows (大约)
-DELETE FROM `t_role_privilege`;
-/*!40000 ALTER TABLE `t_role_privilege` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_role_privilege` ENABLE KEYS */;
-
--- 导出  表 smart_admin_v2.t_sms_record 结构
-DROP TABLE IF EXISTS `t_sms_record`;
-CREATE TABLE IF NOT EXISTS `t_sms_record` (
-  `record_id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `sms_type` tinyint NOT NULL COMMENT '短信类型 ',
-  `sms_type_desc` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信类型说明',
-  `sms_sub_type` tinyint NOT NULL COMMENT '短信子类型',
-  `sms_sub_type_desc` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信子类型说明',
-  `content` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信内容',
-  `extra_data` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '额外数据',
-  `phone` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '手机号',
-  `sms_service_type` tinyint NOT NULL COMMENT '短信服务商类型',
-  `sms_service_type_desc` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '短信服务商类型说明',
-  `service_record_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT '服务商id',
-  `success_flag` tinyint(1) NOT NULL COMMENT '是否成功',
-  `receive_time` datetime DEFAULT NULL COMMENT '接收时间',
-  `error_msg` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`record_id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci COMMENT='公用服务 - 短信记录 数据表 by listen';
-
--- 正在导出表  smart_admin_v2.t_sms_record 的数据：~0 rows (大约)
-DELETE FROM `t_sms_record`;
-/*!40000 ALTER TABLE `t_sms_record` DISABLE KEYS */;
-/*!40000 ALTER TABLE `t_sms_record` ENABLE KEYS */;
-
--- 导出  表 smart_admin_v2.t_system_config 结构
 DROP TABLE IF EXISTS `t_system_config`;
 CREATE TABLE IF NOT EXISTS `t_system_config` (
   `config_id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键',
   `config_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '参数名字',
   `config_key` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '参数key',
   `config_value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `config_group` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL COMMENT '参数类别',
+  `disabled_flag` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '是否禁用',
   `remark` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `update_time` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '上次修改时间',
   `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`config_id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- 正在导出表  smart_admin_v2.t_system_config 的数据：~2 rows (大约)
 DELETE FROM `t_system_config`;
 /*!40000 ALTER TABLE `t_system_config` DISABLE KEYS */;
-INSERT INTO `t_system_config` (`config_id`, `config_name`, `config_key`, `config_value`, `remark`, `update_time`, `create_time`) VALUES
-	(1, '超级管理员', 'employee_superman', '1,2,52,53,58,56', '123r8566456', '2021-09-01 17:55:02', '2018-08-18 16:28:03'),
-	(2, '商品', 'xxx', '11', NULL, '2021-09-01 22:32:18', '2021-08-10 14:33:47');
+INSERT INTO `t_system_config` (`config_id`, `config_name`, `config_key`, `config_value`, `config_group`, `disabled_flag`, `remark`, `update_time`, `create_time`) VALUES
+	(1, '超级管理员', 'employee_superman', '1,2,52,53,58,56', 'system', 1, '123r8566456', '2021-09-01 17:55:02', '2018-08-18 16:28:03'),
+	(2, '商品', 'xxx', '11', 'system', 1, NULL, '2021-09-01 22:32:18', '2021-08-10 14:33:47');
 /*!40000 ALTER TABLE `t_system_config` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
