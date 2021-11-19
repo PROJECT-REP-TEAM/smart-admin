@@ -2,7 +2,11 @@ package net.lab1024.smartadmin.service.module.business.category;
 
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.service.common.constant.StringConst;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
+import net.lab1024.smartadmin.service.constant.CommonConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
+import net.lab1024.smartadmin.service.module.business.category.domain.dto.CategorySimpleDTO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,7 +30,6 @@ public class CategoryQueryService {
 
     @Autowired
     private CategoryCacheManager categoryCacheManager;
-
 
     /**
      * 根据 id 查询未删除的类目
@@ -124,6 +127,78 @@ public class CategoryQueryService {
             return null;
         }
         return categoryEntity.getCategoryName();
+    }
+
+    /**
+     * 根据类目id 查询类目详情 包含类目全称 如：医考/医师资格/临床执业
+     *
+     * @param categoryId
+     * @return
+     */
+    public CategorySimpleDTO queryCategoryInfo(Long categoryId) {
+        CategoryEntity categoryEntity = categoryCacheManager.queryCategory(categoryId);
+        if (null == categoryEntity || categoryEntity.getDeletedFlag()) {
+            return null;
+        }
+        String fullName = this.queryFullName(categoryId);
+        // 返回DTO
+        CategorySimpleDTO categoryDTO = new CategorySimpleDTO();
+        categoryDTO.setCategoryId(categoryId);
+        categoryDTO.setCategoryName(categoryEntity.getCategoryName());
+        categoryDTO.setCategoryFullName(fullName);
+        categoryDTO.setParentId(categoryEntity.getParentId());
+        return categoryDTO;
+    }
+
+    /**
+     * 递归查询分类和所有父级类目
+     * ps:特别注意返回的集合中 包含自己
+     *
+     * @param categoryId
+     * @return
+     */
+    public List<CategoryEntity> queryCategoryAndParent(Long categoryId) {
+        List<CategoryEntity> parentCategoryList = Lists.newArrayList();
+        CategoryEntity categoryEntity = categoryCacheManager.queryCategory(categoryId);
+        if (null == categoryEntity || categoryEntity.getDeletedFlag()) {
+            return parentCategoryList;
+        }
+
+        // 父级始终放在第一位
+        parentCategoryList.add(0, categoryEntity);
+        Long parentId = categoryEntity.getParentId();
+        if (Objects.equals(CommonConst.DEFAULT_PARENT_ID, parentId)) {
+            return parentCategoryList;
+        }
+        parentCategoryList.addAll(0, this.queryCategoryAndParent(parentId));
+        return parentCategoryList;
+    }
+
+    /**
+     * 查询 分类全称 如：医考/医师资格/临床执业
+     *
+     * @param categoryId
+     * @return
+     */
+    public String queryFullName(Long categoryId) {
+        List<CategoryEntity> parentCategoryList = this.queryCategoryAndParent(categoryId);
+        // 拼接父级类目名称 斜杠分隔返回
+        List<String> nameList = parentCategoryList.stream().map(CategoryEntity::getCategoryName).collect(Collectors.toList());
+        return SmartStringUtil.join(nameList, StringConst.SEPARATOR_SLASH);
+    }
+
+    /**
+     * 查询 分类全称 如：医考/医师资格/临床执业
+     *
+     * @param categoryIdList
+     * @return
+     */
+    public Map<Long, String> queryFullName(List<Long> categoryIdList) {
+        if (CollectionUtils.isEmpty(categoryIdList)) {
+            return Collections.EMPTY_MAP;
+        }
+        // 循环内查询的缓存 还ok
+        return categoryIdList.stream().collect(Collectors.toMap(Function.identity(), this::queryFullName));
     }
 
 }
