@@ -12,7 +12,7 @@ import java.util.stream.Stream;
 /**
  * 枚举类校验器
  *
- * @author listen
+ * @author 胡克
  * @date 2017/11/11 15:34
  */
 public class EnumValidator implements ConstraintValidator<CheckEnum, Object> {

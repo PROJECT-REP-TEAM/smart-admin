@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 /**
  * [  ]
  *
- * @author yandanyang
+ * @author 罗伊
  * @date 2019/4/28 0028 下午 15:37
  */
 public enum DataScopeViewTypeEnum implements BaseEnum {

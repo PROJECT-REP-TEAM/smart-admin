@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * 性别枚举类
  *
- * @author listen
+ * @author 胡克
  * @date 2019/09/24 16:50
  */
 @AllArgsConstructor

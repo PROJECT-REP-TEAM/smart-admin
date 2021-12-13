@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.operatelog.domain.dto;
+package net.lab1024.smartadmin.service.module.support.operatelog.core;
 
 import lombok.Builder;
 import lombok.Data;
@@ -9,19 +9,19 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
-* @Description:    日志配置DTO
-* @Author:         sbq
-* @CreateDate:     2019/8/3 8:54
+* @Description:    配置
+* @Author:         卓大
+* @CreateDate:     2021/8/3 21:54
 * @Version:        1.0
 */
 @Data
 @Builder
-public class OperateLogConfigDTO {
+public class OperateLogConfig {
 
     /**
      * 用户信息
      */
-    private Function<HttpServletRequest, OperateLogUserDTO> userFunction;
+    private Function<HttpServletRequest, OperateLogUser> userFunction;
     /**
      * 是否启用
      */

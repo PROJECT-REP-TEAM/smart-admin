@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.system.employee;
+package net.lab1024.smartadmin.service.module.system.employee.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * 员工dao接口
  *
- * @author lidoudou
+ * @author 李开云
  * @date 2017年12月19日下午1:36:30
  */
 @Mapper

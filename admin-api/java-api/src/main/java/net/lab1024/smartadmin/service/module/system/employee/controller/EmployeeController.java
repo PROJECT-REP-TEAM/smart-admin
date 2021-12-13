@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.system.employee;
+package net.lab1024.smartadmin.service.module.system.employee.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

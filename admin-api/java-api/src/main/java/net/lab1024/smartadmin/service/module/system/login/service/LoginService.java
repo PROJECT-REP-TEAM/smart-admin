@@ -9,7 +9,7 @@ import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
+import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginForm;

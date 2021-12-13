@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 /**
  * 员工实体类
  *
- * @author lidoudou
+ * @author 李开云
  * @date 2017年12月19日下午1:34:48
  */
 @Data

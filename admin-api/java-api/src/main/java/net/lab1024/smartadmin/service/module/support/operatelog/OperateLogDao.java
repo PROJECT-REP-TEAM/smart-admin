@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.module.support.operatelog;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogQueryForm;
+import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogQueryForm;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;

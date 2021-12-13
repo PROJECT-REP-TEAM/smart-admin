@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 /**
  * 分类类型 枚举
  *
- * @author listen
+ * @author 胡克
  * @date 2021/08/05 15:26
  */
 @AllArgsConstructor

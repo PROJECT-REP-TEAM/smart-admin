@@ -10,7 +10,7 @@ import net.lab1024.smartadmin.service.module.system.department.domain.form.Depar
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentTreeVO;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import net.lab1024.smartadmin.service.module.system.department.manager.DepartmentCacheManager;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
+import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

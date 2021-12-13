@@ -10,7 +10,7 @@ import java.util.function.Function;
 /**
  * [  ]
  *
- * @author yandanyang
+ * @author 罗伊
  * @date 2021/10/9 19:10
  */
 public class RepeatSubmitCaffeineTicket extends AbstractRepeatSubmitTicket {

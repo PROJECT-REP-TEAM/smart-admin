@@ -35,7 +35,7 @@
 import { defineComponent, ref, computed } from "vue";
 import SubMenu from "./sub-menu.vue";
 import { router } from "/@/router/index";
-import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
+import { MENU_TYPE_ENUM } from "/@/constants/system/menu";
 import { RouteRecord, useRoute } from "vue-router";
 
 export default defineComponent({

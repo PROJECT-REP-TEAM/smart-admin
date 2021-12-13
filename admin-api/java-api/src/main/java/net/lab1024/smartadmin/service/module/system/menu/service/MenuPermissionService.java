@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 菜单权限控制
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/8/5 17:14
  */
 @Service(SecurityMetadataSource.PRIVILEGE_CHECK_NAME)

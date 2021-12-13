@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 /**
  * url上传文件 DTO 类
  *
- * @author listen
+ * @author 胡克
  * @date 2020年3月16日 10:14:54
  */
 @Data

@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScop
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
 import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
+import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDataScopeDao;
@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 /**
  * [  ]
  *
- * @author yandanyang
+ * @author 罗伊
  * @date 2019/4/28 0028 下午 15:56
  */
 @Service

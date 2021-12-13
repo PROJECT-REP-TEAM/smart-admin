@@ -5,7 +5,7 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.module.support.reload.dao.ReloadItemDao;
 import net.lab1024.smartadmin.service.module.support.reload.dao.ReloadResultDao;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemEntity;
-import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemUpdateDTO;
+import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadForm;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemVO;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,15 +47,15 @@ public class ReloadService {
     /**
      * 通过标签更新标识符
      *
-     * @param updateDTO
+     * @param reloadForm
      * @return
      */
-    public ResponseDTO<String> updateByTag(ReloadItemUpdateDTO updateDTO) {
-        ReloadItemEntity reloadItemEntity = reloadItemDao.selectById(updateDTO.getTag());
+    public ResponseDTO<String> updateByTag(ReloadForm reloadForm) {
+        ReloadItemEntity reloadItemEntity = reloadItemDao.selectById(reloadForm.getTag());
         if (null == reloadItemEntity) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
-        reloadItemEntity.setIdentification(updateDTO.getIdentification());
+        reloadItemEntity.setIdentification(reloadForm.getIdentification());
         reloadItemEntity.setUpdateTime(new Timestamp(System.currentTimeMillis()));
         reloadItemDao.updateById(reloadItemEntity);
         return ResponseDTO.ok();

@@ -7,7 +7,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 /**
  * 文件服务 文件夹位置类型枚举类
  *
- * @author listen
+ * @author 胡克
  * @date 2019年10月11日 15:34:47
  */
 @AllArgsConstructor
@@ -28,10 +28,6 @@ public enum FileFolderTypeEnum implements BaseEnum {
      */
     public static final String FOLDER_PRIVATE = "private";
 
-    /**
-     * 文件夹格式
-     */
-    public static final String FOLDER_FORMAT = "folder";
 
     public static final String INFO = "1:通用";
 

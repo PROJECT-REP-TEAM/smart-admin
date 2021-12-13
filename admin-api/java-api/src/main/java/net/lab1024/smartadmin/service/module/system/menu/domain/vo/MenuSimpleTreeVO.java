@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 简易的菜单VO
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/7/30 17:41
  */
 @Data

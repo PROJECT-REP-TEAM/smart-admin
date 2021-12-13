@@ -7,7 +7,7 @@ import java.text.NumberFormat;
 /**
  * 全局 BigDecimal 工具类
  *
- * @author listen
+ * @author 胡克
  * @date 2018/01/17 13:54
  */
 public class SmartBigDecimalUtil {

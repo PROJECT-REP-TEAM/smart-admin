@@ -29,7 +29,7 @@ public class GoodsController extends SystemBaseController {
     @Autowired
     private GoodsService goodsService;
 
-    @ApiOperation("添加商品 by listen")
+    @ApiOperation("添加商品 by 胡克")
     @PostMapping("/goods/add")
     public ResponseDTO<String> add(@RequestBody @Valid GoodsAddForm addForm) {
         RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
@@ -38,7 +38,7 @@ public class GoodsController extends SystemBaseController {
         return goodsService.add(addForm);
     }
 
-    @ApiOperation("更新商品 by listen")
+    @ApiOperation("更新商品 by 胡克")
     @PostMapping("/goods/update")
     public ResponseDTO<String> update(@RequestBody @Valid GoodsUpdateForm updateForm) {
         RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
@@ -47,7 +47,7 @@ public class GoodsController extends SystemBaseController {
         return goodsService.update(updateForm);
     }
 
-    @ApiOperation("删除 by listen")
+    @ApiOperation("删除 by 胡克")
     @PostMapping("/goods/del")
     public ResponseDTO<String> del(@RequestBody @Valid GoodsDelForm delForm) {
         RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
@@ -56,7 +56,7 @@ public class GoodsController extends SystemBaseController {
         return goodsService.del(delForm);
     }
 
-    @ApiOperation("分页查询 by listen")
+    @ApiOperation("分页查询 by 胡克")
     @PostMapping("/goods/query")
     public ResponseDTO<PageResult<GoodsAdminVO>> query(@RequestBody @Valid GoodsQuery queryForm) {
         return goodsService.query(queryForm);

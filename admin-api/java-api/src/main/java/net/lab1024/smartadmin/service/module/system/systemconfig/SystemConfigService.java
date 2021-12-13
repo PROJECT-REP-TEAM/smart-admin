@@ -35,7 +35,7 @@ public class SystemConfigService {
     /**
      * 一个简单的系统配置缓存
      */
-    private final ConcurrentHashMap<String, SystemConfigEntity> CONFIG_CACHE = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<String, SystemConfigEntity> configCache = new ConcurrentHashMap<>();
 
     @Autowired
     private SystemConfigDao systemConfigDao;
@@ -50,26 +50,25 @@ public class SystemConfigService {
      */
     @PostConstruct
     private void initConfigCache() {
-        CONFIG_CACHE.clear();
+        configCache.clear();
         List<SystemConfigEntity> entityList = systemConfigDao.selectList(null);
         if (CollectionUtils.isEmpty(entityList)) {
             return;
         }
-        entityList.forEach(entity -> this.CONFIG_CACHE.put(entity.getConfigKey().toLowerCase(), entity));
-        log.info("################# 系统配置缓存初始化完毕:{} ###################", CONFIG_CACHE.size());
+        entityList.forEach(entity -> this.configCache.put(entity.getConfigKey().toLowerCase(), entity));
+        log.info("################# 系统配置缓存初始化完毕:{} ###################", configCache.size());
     }
 
     /**
      * 刷新系统设置缓存
      */
     private void refreshConfigCache(Long configId) {
-        Optional<SystemConfigEntity> optional = this.CONFIG_CACHE.values().stream().filter(e -> Objects.equals(configId, e.getConfigId())).findFirst();
         // 重新查询 加入缓存
         SystemConfigEntity configEntity = systemConfigDao.selectById(configId);
         if (null == configEntity) {
             return;
         }
-        this.CONFIG_CACHE.put(configEntity.getConfigKey().toLowerCase(), configEntity);
+        this.configCache.put(configEntity.getConfigKey().toLowerCase(), configEntity);
     }
 
     /**
@@ -105,7 +104,7 @@ public class SystemConfigService {
         boolean check = SmartBaseEnumUtil.checkEnum(configKey, SystemConfigKeyEnum.class);
         Assert.isTrue(check, "config key error");
 
-        SystemConfigEntity entity = this.CONFIG_CACHE.get(configKey);
+        SystemConfigEntity entity = this.configCache.get(configKey);
         Assert.notNull(entity, "缺少系统配置[" + configKey + "]");
 
         return SmartBeanUtil.copy(entity, SystemConfigVO.class);

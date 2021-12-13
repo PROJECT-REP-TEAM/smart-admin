@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.operatelog.domain.dto;
+package net.lab1024.smartadmin.service.module.support.operatelog.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +12,7 @@ import java.util.Date;
  * @author 罗伊
  */
 @Data
-public class OperateLogDTO {
+public class OperateLogVO {
 
     @ApiModelProperty("主键")
     private Long id;

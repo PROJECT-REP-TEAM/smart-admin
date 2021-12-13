@@ -12,7 +12,7 @@ import java.util.Objects;
 /**
  * 枚举类接口
  *
- * @author listen
+ * @author 胡克
  * @date 2018-07-17 下午 3:52
  */
 public interface BaseEnum {

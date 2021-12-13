@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * t_reload_result 数据表 实体类
  *
- * @author listen
+ * @author 胡克
  * @date 2018/02/10 09:29
  */
 @Data

@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
  * @author 开云
  */
 @Data
-public class ReloadItemUpdateDTO {
+public class ReloadForm {
 
     @ApiModelProperty("标签")
     @NotBlank(message = "标签不能为空")

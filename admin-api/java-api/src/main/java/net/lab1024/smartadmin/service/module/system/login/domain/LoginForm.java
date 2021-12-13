@@ -12,13 +12,13 @@ import javax.validation.constraints.Pattern;
 /**
  * 登录
  *
- * @author lidoudou
+ * @author 李开云
  * @date 2017年12月19日上午11:49:46
  */
 @Data
 public class LoginForm extends CaptchaForm {
 
-    @ApiModelProperty(example = "sa")
+    @ApiModelProperty(example = "admin")
     @NotBlank(message = "登录名不能为空")
     @Length(max = 30, message = "登录账号最多30字符")
     private String loginName;

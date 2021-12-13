@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
 /**
  * 枚举类字段属性的 自定义 swagger 注解
  *
- * @author listen
+ * @author 胡克
  * @date 2019/05/16 15:18
  */
 @Target({ElementType.FIELD})

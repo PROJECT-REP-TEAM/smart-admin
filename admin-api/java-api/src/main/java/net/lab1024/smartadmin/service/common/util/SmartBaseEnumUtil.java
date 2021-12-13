@@ -14,7 +14,7 @@ import java.util.stream.Stream;
 /**
  * 枚举工具类
  *
- * @author listen
+ * @author 胡克
  * @date 2017/10/10 18:17
  */
 public class SmartBaseEnumUtil {
@@ -27,7 +27,7 @@ public class SmartBaseEnumUtil {
      * @param value     参数
      * @param enumClass 枚举类必须实现BaseEnum接口
      * @return boolean
-     * @Author listen
+     * @Author 胡克
      */
     public static boolean checkEnum(Object value, Class<? extends BaseEnum> enumClass) {
         if (null == value) {
@@ -76,7 +76,7 @@ public class SmartBaseEnumUtil {
      * @param value     参数
      * @param enumClass 枚举类必须实现BaseEnum接口
      * @return BaseEnum 无匹配值返回null
-     * @Author listen
+     * @Author 胡克
      */
     public static <T extends BaseEnum> T getEnumByValue(Object value, Class<T> enumClass) {
         if (null == value) {
@@ -94,7 +94,7 @@ public class SmartBaseEnumUtil {
      * @param desc      参数描述
      * @param enumClass 枚举类必须实现BaseEnum接口
      * @return BaseEnum 无匹配值返回null
-     * @Author listen
+     * @Author 胡克
      */
     public static <T extends BaseEnum> T getEnumByDesc(String desc, Class<T> enumClass) {
         return Stream.of(enumClass.getEnumConstants())

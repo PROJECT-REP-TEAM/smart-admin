@@ -20,7 +20,7 @@ import java.util.Properties;
 /**
  * [ mybaits sql 拦截 ]
  *
- * @author yandanyang
+ * @author 罗伊
  * @date
  */
 @Intercepts({@Signature(type = org.apache.ibatis.executor.Executor.class, method = "query", args = {MappedStatement.class, Object.class, RowBounds.class, ResultHandler.class})})

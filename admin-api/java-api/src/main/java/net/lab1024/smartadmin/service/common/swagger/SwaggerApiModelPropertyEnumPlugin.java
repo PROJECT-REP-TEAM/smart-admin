@@ -20,7 +20,7 @@ import static springfox.documentation.schema.Annotations.findPropertyAnnotation;
  * swagger 用于说明枚举类字段说明
  * SWAGGER_PLUGIN_ORDER+1 是将此配置放在原来的后面执行
  *
- * @author listen
+ * @author 胡克
  * @date 2019年5月16日 15:36:56
  */
 @Component

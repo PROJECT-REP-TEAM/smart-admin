@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 /**
  * 菜单类型枚举
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/7/29 15:30
  */
 public enum MenuTypeEnum implements BaseEnum {

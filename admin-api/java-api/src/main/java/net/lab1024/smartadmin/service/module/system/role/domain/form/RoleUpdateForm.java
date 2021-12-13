@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 /**
  * 角色更新修改DTO
  *
- * @author listen
+ * @author 胡克
  * @date 2017/12/28 09:40
  */
 @Data

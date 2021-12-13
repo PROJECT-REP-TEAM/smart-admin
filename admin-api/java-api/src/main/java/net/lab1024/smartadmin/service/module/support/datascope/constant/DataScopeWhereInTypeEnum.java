@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 /**
  * [  ]
  *
- * @author yandanyang
+ * @author 罗伊
  * @date 2019/5/8 0008 下午 16:00
  */
 public enum DataScopeWhereInTypeEnum implements BaseEnum {

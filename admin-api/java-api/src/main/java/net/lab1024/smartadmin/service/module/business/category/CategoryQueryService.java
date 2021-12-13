@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
-import net.lab1024.smartadmin.service.constant.CommonConst;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.category.domain.dto.CategorySimpleDTO;
 import org.apache.commons.collections4.CollectionUtils;
@@ -24,6 +23,8 @@ import java.util.stream.Collectors;
 @Service
 @Slf4j
 public class CategoryQueryService {
+
+    private static final Long DEFAULT_CATEGORY_PARENT_ID = 0L;
 
     @Autowired
     private CategoryDao categoryDao;
@@ -167,7 +168,7 @@ public class CategoryQueryService {
         // 父级始终放在第一位
         parentCategoryList.add(0, categoryEntity);
         Long parentId = categoryEntity.getParentId();
-        if (Objects.equals(CommonConst.DEFAULT_PARENT_ID, parentId)) {
+        if (Objects.equals(DEFAULT_CATEGORY_PARENT_ID, parentId)) {
             return parentCategoryList;
         }
         parentCategoryList.addAll(0, this.queryCategoryAndParent(parentId));

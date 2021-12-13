@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.operatelog.domain.dto;
+package net.lab1024.smartadmin.service.module.support.operatelog.domain;
 
 import net.lab1024.smartadmin.service.common.domain.PageParam;
 import io.swagger.annotations.ApiModelProperty;

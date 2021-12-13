@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 /**
  * 验证工具类
  *
- * @author listen
+ * @author 胡克
  * @date 2017/11/06 10:54
  */
 public class SmartVerificationUtil {

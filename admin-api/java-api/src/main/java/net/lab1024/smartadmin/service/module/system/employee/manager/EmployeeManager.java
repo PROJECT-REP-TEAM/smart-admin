@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.system.employee.manager;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
+import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 /**
  * 员工 manager
  *
- * @author Turbolisten
+ * @author Turbo胡克
  * @date 2021/7/28 19:15
  */
 @Service

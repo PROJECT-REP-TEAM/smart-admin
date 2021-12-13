@@ -14,7 +14,7 @@ import java.lang.annotation.Target;
  * 自定义的属性校验注解
  * 为了方便与校验属性的值是否为合法的枚举值
  *
- * @author listen
+ * @author 胡克
  * @date 2017/11/11 15:31
  */
 @Target(ElementType.FIELD)

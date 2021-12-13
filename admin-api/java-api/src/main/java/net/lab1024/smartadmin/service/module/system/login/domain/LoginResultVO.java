@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * 员工登录结果 VO
  *
- * @author listen
+ * @author 胡克
  * @date 2021年07月21日 上午07:06:31
  */
 @Data

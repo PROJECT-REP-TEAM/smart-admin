@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.system.menu.service;
 
 import com.google.common.collect.Lists;
-import net.lab1024.smartadmin.service.constant.CommonConst;
+import net.lab1024.smartadmin.service.module.system.menu.constant.MenuConst;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuAddForm
 import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuUpdateForm;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
-import net.lab1024.smartadmin.service.module.system.menu.domain.vo.RequestUrlVO;
+import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuUrlVO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 /**
  * 菜单
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/7/29 16:11
  */
 @Service
@@ -40,7 +40,7 @@ public class MenuService {
     private MenuEmployeeService menuEmployeeService;
 
     @Autowired
-    private RequestUrlService requestUrlService;
+    private MenuUrlService menuUrlService;
 
     /**
      * 添加菜单
@@ -174,7 +174,7 @@ public class MenuService {
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, disabledFlag, null);
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuVO> filterMenuVOList = this.filterNoParentMenu(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuVO> filterMenuVOList = this.filterNoParentMenu(parentMap, MenuConst.DEFAULT_MENU_PARENT_ID);
         return filterMenuVOList;
     }
 
@@ -218,7 +218,7 @@ public class MenuService {
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, null, menuTypeList);
         //根据ParentId进行分组
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuTreeVO> menuTreeVOList = this.buildMenuTree(parentMap, MenuConst.DEFAULT_MENU_PARENT_ID);
         return ResponseDTO.ok(menuTreeVOList);
     }
 
@@ -274,8 +274,8 @@ public class MenuService {
      *
      * @return
      */
-    public ResponseDTO<List<RequestUrlVO>> getPrivilegeUrlDTOList() {
-        List<RequestUrlVO> privilegeUrlList = requestUrlService.getPrivilegeList();
+    public ResponseDTO<List<MenuUrlVO>> getAllUrlList() {
+        List<MenuUrlVO> privilegeUrlList = menuUrlService.getMenuUrlList();
         return ResponseDTO.ok(privilegeUrlList);
     }
 }

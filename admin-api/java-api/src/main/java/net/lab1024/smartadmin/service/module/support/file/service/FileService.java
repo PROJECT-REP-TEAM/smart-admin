@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
@@ -13,11 +12,12 @@ import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
-import net.lab1024.smartadmin.service.module.support.file.dao.FileDao;
-import net.lab1024.smartadmin.service.module.support.file.domain.entity.FileEntity;
+import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.module.support.file.constant.FileFolderTypeEnum;
+import net.lab1024.smartadmin.service.module.support.file.dao.FileDao;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileMetadataDTO;
+import net.lab1024.smartadmin.service.module.support.file.domain.entity.FileEntity;
 import net.lab1024.smartadmin.service.module.support.file.domain.form.FileQueryForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.form.FileUrlUploadForm;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
@@ -70,12 +70,12 @@ public class FileService {
     /**
      * 文件上传服务：通过 url 上传
      *
-     * @param urlUploadDTO
+     * @param urlUploadForm
      * @return
      */
-    public ResponseDTO<FileUploadVO> fileUpload(FileUrlUploadForm urlUploadDTO) {
+    public ResponseDTO<FileUploadVO> fileUpload(FileUrlUploadForm urlUploadForm) {
         try {
-            URL url = new URL(urlUploadDTO.getFileUrl());
+            URL url = new URL(urlUploadForm.getFileUrl());
             URLConnection urlConnection = url.openConnection();
             // 获取文件格式
             String contentType = urlConnection.getContentType();
@@ -83,7 +83,7 @@ public class FileService {
             // 生成文件key
             String fileKey = fileStorageService.generateFileNameByType(fileType);
             MockMultipartFile file = new MockMultipartFile(fileKey, fileKey, contentType, urlConnection.getInputStream());
-            return this.fileUpload(file, urlUploadDTO.getFolder(), urlUploadDTO.getUserId(), urlUploadDTO.getUserName());
+            return this.fileUpload(file, urlUploadForm.getFolder(), urlUploadForm.getUserId(), urlUploadForm.getUserName());
         } catch (IOException e) {
             return ResponseDTO.error(SystemErrorCode.SYSTEM_ERROR, "上传失败");
         }
@@ -96,7 +96,7 @@ public class FileService {
      * @param folderType 文件夹类型
      * @return
      */
-    public ResponseDTO<FileUploadVO> fileUpload(MultipartFile file, Integer folderType, Long userId, String userName) {
+    private ResponseDTO<FileUploadVO> fileUpload(MultipartFile file, Integer folderType, Long userId, String userName) {
         FileFolderTypeEnum folderTypeEnum = SmartBaseEnumUtil.getEnumByValue(folderType, FileFolderTypeEnum.class);
         if (null == folderTypeEnum) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "文件夹错误");

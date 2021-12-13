@@ -5,7 +5,7 @@ import io.swagger.annotations.ApiOperation;
 import net.lab1024.smartadmin.service.common.controller.SupportBaseController;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
-import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemUpdateDTO;
+import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadForm;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadItemVO;
 import net.lab1024.smartadmin.service.module.support.reload.domain.ReloadResultVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,7 @@ public class ReloadController extends SupportBaseController {
 
     @ApiOperation(value = "通过tag更新标识 by 开云")
     @PostMapping("/reload/update")
-    public ResponseDTO<String> updateByTag(@RequestBody @Valid ReloadItemUpdateDTO updateDTO) {
-        return reloadService.updateByTag(updateDTO);
+    public ResponseDTO<String> updateByTag(@RequestBody @Valid ReloadForm reloadForm) {
+        return reloadService.updateByTag(reloadForm);
     }
 }

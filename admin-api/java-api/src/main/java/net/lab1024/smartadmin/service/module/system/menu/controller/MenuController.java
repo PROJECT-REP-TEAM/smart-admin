@@ -12,7 +12,7 @@ import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuAddForm
 import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuUpdateForm;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
-import net.lab1024.smartadmin.service.module.system.menu.domain.vo.RequestUrlVO;
+import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuUrlVO;
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuService;
 
 import javax.validation.Valid;
@@ -70,7 +70,7 @@ public class MenuController extends SystemBaseController {
 
     @ApiOperation(value = "获取所有请求路径 @author zhuoda")
     @GetMapping("/menu/getAllUrl")
-    public ResponseDTO<List<RequestUrlVO>> getAllUrl() {
-        return menuService.getPrivilegeUrlDTOList();
+    public ResponseDTO<List<MenuUrlVO>> getAllUrl() {
+        return menuService.getAllUrlList();
     }
 }

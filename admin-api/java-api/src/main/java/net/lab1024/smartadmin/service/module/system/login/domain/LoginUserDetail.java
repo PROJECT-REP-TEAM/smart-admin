@@ -9,7 +9,7 @@ import java.util.Collection;
 /**
  * 员工登陆BO
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/8/4 11:15
  */
 @Data

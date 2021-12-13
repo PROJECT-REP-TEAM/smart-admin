@@ -1,15 +1,13 @@
-package net.lab1024.smartadmin.service.module.support.operatelog.domain.dto;
+package net.lab1024.smartadmin.service.module.support.operatelog.core;
 
 import lombok.Data;
 
 /**
 * @Description:    用户信息
-* @Author:         sbq
-* @CreateDate:     2019/8/2 10:41
-* @Version:        1.0
+* @Author:         zhuoda
 */
 @Data
-public class OperateLogUserDTO {
+public class OperateLogUser {
 
     /**
      * 用户id

@@ -1,10 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.operatelog.annoation;
+package net.lab1024.smartadmin.service.module.support.operatelog.core;
 
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import net.lab1024.smartadmin.service.module.support.operatelog.OperateLogDao;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogConfigDTO;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.dto.OperateLogUserDTO;
+import net.lab1024.smartadmin.service.module.support.operatelog.annoation.OperateLog;
 import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
 import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import io.swagger.annotations.Api;
@@ -44,7 +43,7 @@ public class OperateLogAspect {
     @Autowired
     private ApplicationContext applicationContext;
 
-    private OperateLogConfigDTO smartLogConfig;
+    private OperateLogConfig operateLogConfig;
 
     /**
      * 线程池
@@ -54,9 +53,9 @@ public class OperateLogAspect {
     /**
      * 构造方法
      */
-    public OperateLogAspect(OperateLogConfigDTO operateLogConfigDTO) {
-        smartLogConfig = operateLogConfigDTO;
-        this.initThread(smartLogConfig);
+    public OperateLogAspect(OperateLogConfig operateLogConfig) {
+        this.operateLogConfig = operateLogConfig;
+        this.initThread(this.operateLogConfig);
     }
 
     @Pointcut(pointCut)
@@ -76,7 +75,7 @@ public class OperateLogAspect {
     /**
      * 初始化线程池
      */
-    private void initThread(OperateLogConfigDTO configDTO) {
+    private void initThread(OperateLogConfig configDTO) {
         int corePoolSize = Runtime.getRuntime().availableProcessors();
         if (null != configDTO.getCorePoolSize()) {
             corePoolSize = configDTO.getCorePoolSize();
@@ -118,7 +117,6 @@ public class OperateLogAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
         OperateLog classAnnotation = AnnotationUtils.findAnnotation(method.getDeclaringClass(), OperateLog.class);
-
         if (method != null) {
             return classAnnotation;
         }
@@ -180,7 +178,7 @@ public class OperateLogAspect {
             return;
         }
         //设置用户信息
-        OperateLogUserDTO user = smartLogConfig.getUserFunction().apply(request);
+        OperateLogUser user = operateLogConfig.getUserFunction().apply(request);
         if (user == null) {
             return;
         }
@@ -239,10 +237,10 @@ public class OperateLogAspect {
      * @return
      */
     private Boolean isOpen() {
-        if (smartLogConfig.getOpenSupplier() == null) {
+        if (operateLogConfig.getOpenSupplier() == null) {
             return Boolean.TRUE;
         }
-        return smartLogConfig.getOpenSupplier().get();
+        return operateLogConfig.getOpenSupplier().get();
     }
 
     /**
@@ -252,10 +250,10 @@ public class OperateLogAspect {
      * @return
      */
     private Boolean filterUrl(String url) {
-        if (smartLogConfig.getFilterFunction() == null) {
+        if (operateLogConfig.getFilterFunction() == null) {
             return Boolean.FALSE;
         }
-        return smartLogConfig.getFilterFunction().apply(url);
+        return operateLogConfig.getFilterFunction().apply(url);
     }
 
     /**
@@ -265,7 +263,7 @@ public class OperateLogAspect {
      * @return
      */
     private Boolean saveLog(OperateLogEntity operateLogEntity) {
-        if (smartLogConfig.getSaveFunction() == null) {
+        if (operateLogConfig.getSaveFunction() == null) {
             BaseMapper mapper = applicationContext.getBean(OperateLogDao.class);
             if (mapper == null) {
                 return false;
@@ -273,7 +271,7 @@ public class OperateLogAspect {
             mapper.insert(operateLogEntity);
             return true;
         }
-        return smartLogConfig.getSaveFunction().apply(operateLogEntity);
+        return operateLogConfig.getSaveFunction().apply(operateLogEntity);
     }
 
 }

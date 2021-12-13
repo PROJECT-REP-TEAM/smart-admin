@@ -6,11 +6,11 @@ import lombok.Data;
 /**
  * Description
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/9/1 20:15
  */
 @Data
-public class RequestUrlVO {
+public class MenuUrlVO {
 
     @ApiModelProperty("注释说明")
     private String comment;

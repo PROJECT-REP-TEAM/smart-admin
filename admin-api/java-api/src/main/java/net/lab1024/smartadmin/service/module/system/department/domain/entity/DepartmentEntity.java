@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * 部门实体类
  * t_department 数据表
  *
- * @author listen
+ * @author 胡克
  * @date 2017/12/19 10:45
  */
 @Data

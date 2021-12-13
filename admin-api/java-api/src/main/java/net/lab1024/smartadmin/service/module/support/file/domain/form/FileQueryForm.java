@@ -9,10 +9,8 @@ import net.lab1024.smartadmin.service.module.support.file.constant.FileFolderTyp
 import org.hibernate.validator.constraints.Length;
 
 /**
- * @Description: 文件信息查询dto
- * @Author: sbq
- * @CreateDate: 2019/7/3 17:38
- * @Version: 1.0
+ * @Description: 文件信息查询
+ * @Author: zhuoda
  */
 @Data
 public class FileQueryForm extends PageParam {

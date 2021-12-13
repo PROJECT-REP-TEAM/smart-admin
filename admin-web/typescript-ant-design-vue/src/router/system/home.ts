@@ -4,11 +4,11 @@
  * @Author: zhuoda
  * @Date: 2021-08-20 15:06:57
  * @LastEditors: zhuoda
- * @LastEditTime: 2021-08-25 21:02:29
+ * @LastEditTime: 2021-12-13
  */
 import { RouteRecordRaw } from 'vue-router';
 import SmartLayout from '/@/layout/smart-layout.vue';
-import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu';
 
 export const homeRouters: Array<RouteRecordRaw> = [
   {

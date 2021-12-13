@@ -16,14 +16,13 @@ import net.lab1024.smartadmin.service.module.support.repeatsubmit.annoation.Repe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 /**
  * @Description: 文件服务
- * @Author: 1024lab
+ * @Author: zhuoda
  */
 @RestController
 @Api(tags = {SwaggerTagConst.Support.SUPPORT_FILE})
@@ -32,31 +31,25 @@ public class FileController extends SupportBaseController {
     @Autowired
     private FileService fileService;
 
-    @ApiOperation(value = "文件上传 by listen", notes = FileFolderTypeEnum.INFO)
-    @PostMapping("/file/upload/{folder}")
-    public ResponseDTO<FileUploadVO> upload(MultipartFile file, @PathVariable Integer folder) {
-        return fileService.fileUpload(file, folder, null, null);
-    }
-
-    @ApiOperation(value = "文件上传，通过url上传 by listen", notes = FileFolderTypeEnum.INFO)
+    @ApiOperation(value = "文件上传，通过url上传 by 胡克", notes = FileFolderTypeEnum.INFO)
     @PostMapping("/file/upload/url")
     public ResponseDTO<FileUploadVO> uploadByUrl(@RequestBody @Valid FileUrlUploadForm uploadForm) {
         return fileService.fileUpload(uploadForm);
     }
 
-    @ApiOperation("获取文件URL：根据fileKey by listen")
+    @ApiOperation("获取文件URL：根据fileKey by 胡克")
     @GetMapping("/file/url")
     public ResponseDTO<String> getUrl(@RequestParam String fileKey) {
         return fileService.getFileUrl(fileKey);
     }
 
-    @ApiOperation(value = "文件分页查询 by listen")
+    @ApiOperation(value = "文件分页查询 by 胡克")
     @PostMapping("/file/query")
     public ResponseDTO<PageResult<FileVO>> queryListByPage(@RequestBody @Valid FileQueryForm queryForm) {
         return fileService.queryListByPage(queryForm);
     }
 
-    @ApiOperation(value = "下载文件流（根据fileKey） by listen")
+    @ApiOperation(value = "下载文件流（根据fileKey） by 胡克")
     @GetMapping("/file/downLoad")
     public ResponseEntity<Object> downLoad(@RequestParam String fileKey, HttpServletRequest request) {
         String ua = request.getHeader("User-Agent");
@@ -64,7 +57,7 @@ public class FileController extends SupportBaseController {
     }
 
     @RepeatSubmit(1000)
-    @ApiOperation("删除文件（根据fileKey） by listen")
+    @ApiOperation("删除文件（根据fileKey） by 胡克")
     @GetMapping("/file/delete")
     public ResponseDTO<String> deleteByFileKey(@RequestParam String fileKey) {
         return fileService.deleteByFileKey(fileKey);

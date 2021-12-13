@@ -27,7 +27,7 @@ public class SmartCollectionUtil {
      * @param list  集合
      * @param func  执行方法
      * @param limit 每次执行数量
-     * @author listen
+     * @author 胡克
      */
     public static <T> void batchExecute(List<T> list, Function<List<T>, Object> func, int limit) {
         if (CollectionUtils.isEmpty(list)) {
@@ -52,7 +52,7 @@ public class SmartCollectionUtil {
      * @param list  集合
      * @param func  执行方法
      * @param limit 每次执行数量
-     * @author listen
+     * @author 胡克
      */
     public static <T, R> void batchExecute(List<T> list, R obj, BiFunction<List<T>, R, Object> func, int limit) {
         if (CollectionUtils.isEmpty(list)) {

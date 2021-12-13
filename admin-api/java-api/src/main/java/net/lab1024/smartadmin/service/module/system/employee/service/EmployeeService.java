@@ -11,7 +11,7 @@ import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
 import net.lab1024.smartadmin.service.module.system.department.manager.DepartmentCacheManager;
-import net.lab1024.smartadmin.service.module.system.employee.EmployeeDao;
+import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.employee.domain.form.*;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /**
  * 员工管理
  *
- * @author yandanyang
+ * @author 罗伊
  * @date 2021年01月21日上午11:54:52
  */
 @Service

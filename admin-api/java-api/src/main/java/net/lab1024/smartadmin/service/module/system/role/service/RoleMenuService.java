@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
-import net.lab1024.smartadmin.service.constant.CommonConst;
+import net.lab1024.smartadmin.service.module.system.menu.constant.MenuConst;
 import net.lab1024.smartadmin.service.module.system.menu.dao.MenuDao;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuSimpleTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 /**
  * 角色-菜单
  *
- * @author lihaifan
+ * @author 李善逸
  * @date 2021/7/30 17:13
  */
 @Service
@@ -85,7 +85,7 @@ public class RoleMenuService {
         //查询菜单权限
         List<MenuVO> menuVOList = menuDao.queryMenuList(Boolean.FALSE, Boolean.FALSE, null);
         Map<Long, List<MenuVO>> parentMap = menuVOList.stream().collect(Collectors.groupingBy(MenuVO::getParentId, Collectors.toList()));
-        List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, CommonConst.DEFAULT_PARENT_ID);
+        List<MenuSimpleTreeVO> menuTreeList = this.buildMenuTree(parentMap, MenuConst.DEFAULT_MENU_PARENT_ID);
         res.setMenuTreeList(menuTreeList);
         return ResponseDTO.ok(res);
     }

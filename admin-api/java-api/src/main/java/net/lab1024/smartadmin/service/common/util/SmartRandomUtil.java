@@ -150,7 +150,7 @@ public class SmartRandomUtil extends RandomUtils {
      *
      * @param length
      * @return
-     * @author listen
+     * @author 胡克
      */
     public static String generateRandomString(int length) {
         final String SOURCES = WORD + NUM;
@@ -167,7 +167,7 @@ public class SmartRandomUtil extends RandomUtils {
      *
      * @param length
      * @return
-     * @author listen
+     * @author 胡克
      */
     public static String generateRandomNum(int length) {
         final String SOURCES = NUM;

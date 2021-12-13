@@ -8,7 +8,7 @@ import { MenuTreeVo } from '/@/api/system/menu/model/menu-tree-vo';
 import _ from 'lodash';
 import SmartLayout from '/@/layout/smart-layout.vue';
 import SmartParentView from '/@/layout/smart-parent-view.vue';
-import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu';
 
 const LOGIN_PAGE_NAME = 'Login';
 

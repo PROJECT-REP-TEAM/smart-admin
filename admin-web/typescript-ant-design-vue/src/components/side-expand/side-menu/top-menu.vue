@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 17:09:44
- * @LastEditTime: 2021-09-01
+ * @LastEditTime: 2021-12-13
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/top-menu.vue
@@ -38,7 +38,7 @@ import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { MenuTreeVo } from "/@/api/system/menu/model/menu-tree-vo";
 import { appDefaultConfig } from "/@/config/app-config";
-import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
+import { MENU_TYPE_ENUM } from "/@/constants/system/menu";
 import { router } from "/@/router";
 
 // ----------------------- 以下是字段定义 emits props ---------------------
