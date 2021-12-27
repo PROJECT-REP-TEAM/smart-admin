@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.module.support.reload.ReloadCommand;
 import net.lab1024.smartadmin.service.module.support.reload.core.SmartReloadManager;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,6 +18,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class SmartReloadConfig {
 
+    /**
+     * 间隔时间
+     */
+    @Value("${reload.interval-seconds}")
+    private Integer intervalSeconds;
+
     @Autowired
     private ReloadCommand reloadCommand;
 
@@ -25,7 +32,7 @@ public class SmartReloadConfig {
         /**
          * 创建 Reload Manager 调度器
          */
-        SmartReloadManager smartReloadManager = new SmartReloadManager(reloadCommand);
+        SmartReloadManager smartReloadManager = new SmartReloadManager(reloadCommand,intervalSeconds);
         return smartReloadManager;
     }
 }

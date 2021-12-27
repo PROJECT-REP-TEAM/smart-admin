@@ -24,11 +24,19 @@ public abstract class AbstractSmartReloadCommand {
     private SmartReloadManager smartReloadManager;
 
     /**
-     *
      * @return
      */
-    public void setReloadManager(SmartReloadManager smartReloadManager){
+    public void setReloadManager(SmartReloadManager smartReloadManager) {
         this.smartReloadManager = smartReloadManager;
+    }
+
+    public void init() {
+        List<SmartReloadItem> smartReloadItems = this.readReloadItem();
+        if (smartReloadItems != null) {
+            for (SmartReloadItem smartReloadItem : smartReloadItems) {
+                tagIdentifierMap.put(smartReloadItem.getTag(), smartReloadItem.getIdentification());
+            }
+        }
     }
 
 
@@ -51,26 +59,16 @@ public abstract class AbstractSmartReloadCommand {
 
     /**
      * 获取本地缓存tag标识
+     *
      * @return
      */
     public ConcurrentHashMap<String, String> getTagIdentifierMap() {
-        if (tagIdentifierMap != null) {
-            return tagIdentifierMap;
-        }
-        List<SmartReloadItem> smartReloadItemList = this.readReloadItem();
-        if (smartReloadItemList == null) {
-            return tagIdentifierMap;
-        }
-        for (SmartReloadItem smartReloadItem : smartReloadItemList) {
-            String tag = smartReloadItem.getTag();
-            String identification = smartReloadItem.getIdentification();
-            tagIdentifierMap.put(tag, identification);
-        }
         return tagIdentifierMap;
     }
 
     /**
      * 设置新的缓存标识
+     *
      * @param tag
      * @param identification
      */
@@ -79,13 +77,13 @@ public abstract class AbstractSmartReloadCommand {
     }
 
 
-
     /**
      * 获取重载对象
+     *
      * @return
      */
     public SmartReloadObject reloadObject(String tag) {
-        if(this.smartReloadManager == null){
+        if (this.smartReloadManager == null) {
             return null;
         }
         Map<String, SmartReloadObject> reloadObjectMap = smartReloadManager.reloadObjectMap();

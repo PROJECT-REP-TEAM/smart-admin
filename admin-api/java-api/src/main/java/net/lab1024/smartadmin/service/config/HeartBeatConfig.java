@@ -19,15 +19,15 @@ public class HeartBeatConfig {
     /**
      * 间隔时间
      */
-    @Value("${heart-beat.intervalTime}")
-    private Long intervalTime;
+    @Value("${heart-beat.interval-seconds}")
+    private Long intervalSeconds;
 
     @Autowired
     private IHeartBeatRecordHandler heartBeatRecordHandler;
 
     @Bean
     public HeartBeatManager heartBeatManager() {
-        return new HeartBeatManager(intervalTime, heartBeatRecordHandler);
+        return new HeartBeatManager(intervalSeconds * 1000L, heartBeatRecordHandler);
     }
 
 

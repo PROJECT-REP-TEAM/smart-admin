@@ -13,9 +13,8 @@ import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * 
  * [ reload thread ]
- * 
+ *
  * @author
  * @date
  */
@@ -23,6 +22,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SmartReloadRunnable implements Runnable {
 
     private AbstractSmartReloadCommand abstractSmartReloadCommand;
+
+    private boolean isInit = false;
 
     public SmartReloadRunnable(AbstractSmartReloadCommand abstractSmartReloadCommand) {
         this.abstractSmartReloadCommand = abstractSmartReloadCommand;
@@ -41,6 +42,12 @@ public class SmartReloadRunnable implements Runnable {
      * 检测Identifier变化，执行reload
      */
     private void doTask() {
+        if (!isInit) {
+            this.abstractSmartReloadCommand.init();
+            isInit = true;
+            return;
+        }
+
         List<SmartReloadItem> smartReloadItemList = this.abstractSmartReloadCommand.readReloadItem();
         ConcurrentHashMap<String, String> tagIdentifierMap = this.abstractSmartReloadCommand.getTagIdentifierMap();
         for (SmartReloadItem smartReloadItem : smartReloadItemList) {

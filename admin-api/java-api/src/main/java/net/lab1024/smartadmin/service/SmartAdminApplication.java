@@ -22,6 +22,5 @@ public class SmartAdminApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SmartAdminApplication.class, args);
-        System.out.println("####################### smart-admin-2.0-service start #######################");
     }
 }

@@ -32,7 +32,7 @@ public class SmartReloadManager implements BeanPostProcessor {
 
     private ScheduledThreadPoolExecutor threadPoolExecutor;
 
-    public SmartReloadManager(AbstractSmartReloadCommand reloadCommand) {
+    public SmartReloadManager(AbstractSmartReloadCommand reloadCommand,int intervalSeconds) {
         this.threadPoolExecutor = new ScheduledThreadPoolExecutor(THREAD_COUNT, r -> {
             Thread t = new Thread(r, THREAD_NAME_PREFIX);
             if (!t.isDaemon()) {
@@ -40,7 +40,7 @@ public class SmartReloadManager implements BeanPostProcessor {
             }
             return t;
         });
-        this.threadPoolExecutor.scheduleWithFixedDelay(new SmartReloadRunnable(reloadCommand), 10, 20, TimeUnit.SECONDS);
+        this.threadPoolExecutor.scheduleWithFixedDelay(new SmartReloadRunnable(reloadCommand), 10, intervalSeconds, TimeUnit.SECONDS);
         reloadCommand.setReloadManager(this);
     }
 
