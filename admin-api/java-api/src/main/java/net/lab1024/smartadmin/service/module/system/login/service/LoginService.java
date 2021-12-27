@@ -57,10 +57,10 @@ public class LoginService {
      */
     public ResponseDTO<LoginResultVO> login(LoginForm loginForm) {
         // 校验 验证码
-        ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
-        if (!checkCaptcha.getOk()) {
-            return ResponseDTO.error(checkCaptcha);
-        }
+//        ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
+//        if (!checkCaptcha.getOk()) {
+//            return ResponseDTO.error(checkCaptcha);
+//        }
 
         /**
          * 验证账号和账号状态

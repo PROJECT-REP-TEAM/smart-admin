@@ -12,17 +12,22 @@
       <div class="welcome">
         <p>欢迎登录 SmartAdmin V2</p>
         <p class="desc">
-          SmartAdmin v2.x 是由河南·洛阳 1024创新实验室
-          团队研发的一套互联网企业级的通用型中后台前端解决方案！ 使用最新 SpringBoot 和
-          Vue3.2 Composition Api（支持TypeScript和JavaScript双版本）
-          ，开发出的一套简洁、易用的中后台解决方案，为广大开发者们节省时间！
-        </p>
-        <hr />
-        <p class="desc">
-          我们希望用一套漂亮优雅的代码和一套整洁高效的代码规范，让大家在这浮躁的代码世界里感受到一股把代码写好的清流！
-          同时对我们而言，这不仅是一套系统，也是我们团队的一次自我审视与成长。身为开发者，我们希望在一次次的披荆斩棘之后，能收获和留下些什么，这正是我们存在的意义！
+          SmartAdmin v2.x 是由 河南 · 洛阳 <strong>1024创新实验室</strong>
+          使用SpringBoot2.x 和
+          Vue3.2 Setup标签、 Composition Api (同时支持TypeScript和JavaScript双版本)
+          ，开发出的一套简洁、易用的中后台解决方案！
           <br />
-          保持谦逊，不断学习，热爱代码，热爱生活 !
+          <br />
+          <br />
+        <span class="setence"> 致每位伟大的开发者 ：
+            <br />
+         我们希望用一套漂亮优雅的代码和一套整洁高效的代码规范，让大家在这浮躁的代码世界里感受到一股把代码写好的清流 !
+         <br />
+         保持谦逊，不断学习，热爱代码，更热爱生活 !
+         <span class="author">1024创新实验室 ( 2021年 · 洛阳 ）</span>
+      </span> 
+    
+         
         </p>
       </div>
       <div class="app-qr-box">
@@ -32,7 +37,7 @@
         </div>
         <div class="app-qr">
           <img src="/images/1024lab-gzh.jpg" />
-          <span class="qr-desc"> 关注公众号 </span>
+          <span class="qr-desc"> 骚扰 卓大 微信 </span>
         </div>
       </div>
     </div>

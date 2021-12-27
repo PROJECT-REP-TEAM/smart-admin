@@ -41,7 +41,7 @@ public class EmployeeService {
 
     private static final String DEFAULT_PASSWORD = "123456";
 
-    private static final String PASSWORD_SALT_FORMAT = "smart_%_admin_$%^&*";
+    private static final String PASSWORD_SALT_FORMAT = "smart_%s_admin_$^&*";
 
     @Autowired
     private EmployeeDao employeeDao;
