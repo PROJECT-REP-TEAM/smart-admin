@@ -2,7 +2,7 @@
  * @Description: App
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-08-28
+ * @LastEditTime: 2021-12-29
  * @LastEditors: zhuoda
 -->
 <template>
@@ -28,7 +28,7 @@ const spinning = computed(() => spinStore.loading);
 async function getLoginInfo() {
   let token = useUserStore().getToken;
   if (!token) return;
-  const res = await loginApi.getLogin();
+  const res = await loginApi.getLoginInfo();
   useUserStore().setUserMenu(res.data);
 }
 

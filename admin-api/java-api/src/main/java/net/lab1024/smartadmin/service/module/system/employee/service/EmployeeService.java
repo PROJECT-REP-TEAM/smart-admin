@@ -7,6 +7,7 @@ import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
@@ -22,6 +23,8 @@ import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleEmployeeVO;
+import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
+import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +63,24 @@ public class EmployeeService {
 
     @Autowired
     private EmployeeCacheManager employeeCacheManager;
+
     @Autowired
     private DepartmentCacheManager departmentCacheManager;
+
+    @Autowired
+    private SystemConfigService systemConfigService;
+
+    /**
+     * 判断是否为超级管理员
+     *
+     * @param employeeId
+     * @return
+     */
+    public Boolean isAdministrator(Long employeeId) {
+        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigKeyEnum.ADMINISTRATOR_ID);
+        List<Long> administratorIdsList = SmartStringUtil.splitConverToLongList(systemConfigValue, ",");
+        return administratorIdsList.contains(employeeId);
+    }
 
     /**
      * 获取员工登录信息
@@ -70,15 +89,15 @@ public class EmployeeService {
      * @return
      */
     public RequestEmployee getById(Long employeeId) {
-        EmployeeEntity employeeEntity = employeeCacheManager.singleEmployeeCache(employeeId);
+        EmployeeEntity employeeEntity = employeeCacheManager.getEmployeeFromCache(employeeId);
         //获取员工角色缓存
-        List<Long> roleIdList = employeeCacheManager.singleEmployeeRoleCache(employeeId);
+        List<Long> roleIdList = employeeCacheManager.getEmployeeRoleIdListFromCache(employeeId);
         if (employeeEntity != null) {
-            Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
+            Boolean isAdministrator = this.isAdministrator(employeeId);
             RequestEmployee loginDTO = SmartBeanUtil.copy(employeeEntity, RequestEmployee.class);
             loginDTO.setEmployeeId(employeeId);
-            loginDTO.setIsSuperMan(isSuperman);
-            loginDTO.setRoleList(roleIdList);
+            loginDTO.setAdministratorFlag(isAdministrator);
+            loginDTO.setRoleIdList(roleIdList);
             return loginDTO;
         }
         return null;
@@ -90,19 +109,19 @@ public class EmployeeService {
      * @param employeeId
      * @return
      */
-    public LoginUserDetail getBoById(Long employeeId) {
-        EmployeeEntity employeeEntity = employeeCacheManager.singleEmployeeCache(employeeId);
+    public LoginUserDetail getDetailById(Long employeeId) {
+        EmployeeEntity employeeEntity = employeeCacheManager.getEmployeeFromCache(employeeId);
         //获取员工角色缓存
-        List<Long> roleIdList = employeeCacheManager.singleEmployeeRoleCache(employeeId);
+        List<Long> roleIdList = employeeCacheManager.getEmployeeRoleIdListFromCache(employeeId);
         if (employeeEntity == null) {
             return null;
         }
-        Boolean isSuperman = menuEmployeeService.isSuperman(employeeId);
-        LoginUserDetail loginDTO = SmartBeanUtil.copy(employeeEntity, LoginUserDetail.class);
-        loginDTO.setEmployeeId(employeeId);
-        loginDTO.setIsSuperMan(isSuperman);
-        loginDTO.setRoleList(roleIdList);
-        return loginDTO;
+        Boolean administratorFlag = this.isAdministrator(employeeId);
+        LoginUserDetail loginUserDetail = SmartBeanUtil.copy(employeeEntity, LoginUserDetail.class);
+        loginUserDetail.setEmployeeId(employeeId);
+        loginUserDetail.setAdministratorFlag(administratorFlag);
+        loginUserDetail.setRoleIdList(roleIdList);
+        return loginUserDetail;
     }
 
     /**
@@ -320,7 +339,7 @@ public class EmployeeService {
      * @return
      */
     public ResponseDTO<List<EmployeeVO>> getAllEmployeeByDepartmentId(Long departmentId, Boolean disabledFlag) {
-        List<EmployeeEntity> employeeEntityList = employeeCacheManager.departmentEmployeeCache(departmentId);
+        List<EmployeeEntity> employeeEntityList = employeeCacheManager.getDepartmentEmployeeListFromCache(departmentId);
         if (disabledFlag != null) {
             employeeEntityList = employeeEntityList.stream().filter(e -> e.getDisabledFlag().equals(disabledFlag)).collect(Collectors.toList());
         }
@@ -373,5 +392,14 @@ public class EmployeeService {
         employeeQueryForm.setDisabledFlag(disabledFlag);
         List<EmployeeVO> employeeList = employeeDao.queryEmployee(employeeQueryForm);
         return ResponseDTO.ok(employeeList);
+    }
+
+    /**
+     * 根据登录名获取员工
+     * @param loginName
+     * @return
+     */
+    public EmployeeEntity getByLoginName(String loginName) {
+        return employeeDao.getByLoginName(loginName,null);
     }
 }

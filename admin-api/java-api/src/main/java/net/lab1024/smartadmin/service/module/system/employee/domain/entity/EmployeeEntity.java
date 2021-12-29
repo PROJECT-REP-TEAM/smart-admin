@@ -56,6 +56,11 @@ public class EmployeeEntity {
     private Boolean disabledFlag;
 
     /**
+     * 是否被删除
+     */
+    private Boolean deletedFlag;
+
+    /**
      * 备注
      */
     private String remark;

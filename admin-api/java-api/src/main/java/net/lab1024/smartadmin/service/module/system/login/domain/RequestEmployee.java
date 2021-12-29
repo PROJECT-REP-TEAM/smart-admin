@@ -38,23 +38,11 @@ public class RequestEmployee implements RequestUser {
     @ApiModelProperty("部门名称")
     private String departmentName;
 
-    @ApiModelProperty("是否被禁用")
-    private Boolean disabledFlag;
-
-    @ApiModelProperty("是否离职")
-    private Boolean leaveFlag;
-
     @ApiModelProperty("是否为超管")
-    private Boolean isSuperMan;
+    private Boolean administratorFlag;
 
     @ApiModelProperty("角色列表")
-    private List<Long> roleList;
-
-    @ApiModelProperty("所在校区ID")
-    private Long schoolId;
-
-    @ApiModelProperty("所在校区名称")
-    private String schoolName;
+    private List<Long> roleIdList;
 
     @Override
     public Long requestUserId() {

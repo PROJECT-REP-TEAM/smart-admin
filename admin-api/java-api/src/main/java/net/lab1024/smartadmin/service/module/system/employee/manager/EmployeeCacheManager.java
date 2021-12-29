@@ -33,7 +33,7 @@ public class EmployeeCacheManager {
      *
      * @param employeeId
      */
-    @CacheEvict({CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE, CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE})
+    @CacheEvict({CacheModuleConst.Employee.EMPLOYEE_CACHE, CacheModuleConst.Employee.EMPLOYEE_ROLE_CACHE})
     public void clearCacheByEmployeeId(Long employeeId) {
         log.info("clear SINGLE_EMPLOYEE_CACHE and SINGLE_EMPLOYEE_ROLE_CACHE {}", employeeId);
     }
@@ -57,7 +57,7 @@ public class EmployeeCacheManager {
      * @return
      */
     @Cacheable(CacheModuleConst.Employee.DEPARTMENT_EMPLOYEE_CACHE)
-    public List<EmployeeEntity> departmentEmployeeCache(Long departmentId) {
+    public List<EmployeeEntity> getDepartmentEmployeeListFromCache(Long departmentId) {
         List<EmployeeEntity> employeeEntityList = employeeDao.selectByDepartmentId(departmentId,  false);
         return employeeEntityList;
     }
@@ -68,8 +68,8 @@ public class EmployeeCacheManager {
      * @param employeeId
      * @return
      */
-    @Cacheable(CacheModuleConst.Employee.SINGLE_EMPLOYEE_CACHE)
-    public EmployeeEntity singleEmployeeCache(Long employeeId) {
+    @Cacheable(CacheModuleConst.Employee.EMPLOYEE_CACHE)
+    public EmployeeEntity getEmployeeFromCache(Long employeeId) {
         EmployeeEntity employeeEntity = employeeDao.selectById(employeeId);
         if (null == employeeEntity) {
             return null;
@@ -81,13 +81,13 @@ public class EmployeeCacheManager {
     }
 
     /**
-     * 单个员工的缓存
+     * 单个员工的角色缓存
      *
      * @param employeeId
      * @return
      */
-    @Cacheable(CacheModuleConst.Employee.SINGLE_EMPLOYEE_ROLE_CACHE)
-    public List<Long> singleEmployeeRoleCache(Long employeeId) {
+    @Cacheable(CacheModuleConst.Employee.EMPLOYEE_ROLE_CACHE)
+    public List<Long> getEmployeeRoleIdListFromCache(Long employeeId) {
         List<Long> roleIdList = roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);
         if (CollectionUtils.isEmpty(roleIdList)) {
             return Lists.newArrayList();

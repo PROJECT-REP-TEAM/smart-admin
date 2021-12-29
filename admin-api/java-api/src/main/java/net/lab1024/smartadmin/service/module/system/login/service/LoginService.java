@@ -9,6 +9,7 @@ import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
+import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
@@ -31,10 +32,10 @@ import org.springframework.stereotype.Service;
 public class LoginService {
 
     @Autowired
-    private EmployeeDao employeeDao;
+    private EmployeeService employeeService;
 
     @Autowired
-    private DepartmentDao departmentDao;
+    private DepartmentService departmentService;
 
     @Autowired
     private JwtService jwtService;
@@ -57,15 +58,15 @@ public class LoginService {
      */
     public ResponseDTO<LoginResultVO> login(LoginForm loginForm) {
         // 校验 验证码
-//        ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
-//        if (!checkCaptcha.getOk()) {
-//            return ResponseDTO.error(checkCaptcha);
-//        }
+        ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
+        if (!checkCaptcha.getOk()) {
+            return ResponseDTO.error(checkCaptcha);
+        }
 
         /**
          * 验证账号和账号状态
          */
-        EmployeeEntity employeeEntity = employeeDao.getByLoginName(loginForm.getLoginName(), null);
+        EmployeeEntity employeeEntity = employeeService.getByLoginName(loginForm.getLoginName());
         if (null == employeeEntity) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "登录名不存在");
         }
@@ -90,7 +91,7 @@ public class LoginService {
         // 获取前端菜单以及功能权限
         MenuLoginBO menuLoginBORespDTO = menuEmployeeService.queryMenuTreeByEmployeeId(employeeEntity.getEmployeeId());
         // 查询部门
-        DepartmentEntity departmentEntity = departmentDao.selectById(employeeEntity.getDepartmentId());
+        DepartmentEntity departmentEntity = departmentService.getDepartmentById(employeeEntity.getDepartmentId());
         // 返回登录结果
         LoginResultVO loginResultDTO = SmartBeanUtil.copy(employeeEntity, LoginResultVO.class);
         loginResultDTO.setEmployeeId(employeeEntity.getEmployeeId());
@@ -100,7 +101,7 @@ public class LoginService {
         loginResultDTO.setPointsList(menuLoginBORespDTO.getPointsList());
         loginResultDTO.setDepartmentName(null == departmentEntity ? StringConst.EMPTY_STR : departmentEntity.getName());
         loginResultDTO.setToken(token);
-        loginResultDTO.setIsSuperMan(menuEmployeeService.isSuperman(employeeEntity.getEmployeeId()));
+        loginResultDTO.setAdministratorFlag(employeeService.isAdministrator(employeeEntity.getEmployeeId()));
 
         return ResponseDTO.ok(loginResultDTO);
     }
@@ -141,8 +142,8 @@ public class LoginService {
         loginDTO.setAllMenuList(menuLoginBORespDTO.getAllMenuList());
         loginDTO.setPointsList(menuLoginBORespDTO.getPointsList());
         //判断是否为超管
-        Boolean isSuperman = menuEmployeeService.isSuperman(loginDTO.getEmployeeId());
-        loginDTO.setIsSuperMan(isSuperman);
+        Boolean administratorFlag = employeeService.isAdministrator(loginDTO.getEmployeeId());
+        loginDTO.setAdministratorFlag(administratorFlag);
         return loginDTO;
     }
 

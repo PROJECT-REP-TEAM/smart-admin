@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-12-03 23:22:28
- * @LastEditTime: 2021-12-13
+ * @LastEditTime: 2021-12-29
  * @LastEditors: zhuoda
  * @Description:
 
@@ -12,22 +12,21 @@
       <div class="welcome">
         <p>欢迎登录 SmartAdmin V2</p>
         <p class="desc">
-          SmartAdmin v2.x 是由 河南 · 洛阳 <strong>1024创新实验室</strong>
-          使用SpringBoot2.x 和
-          Vue3.2 Setup标签、 Composition Api (同时支持TypeScript和JavaScript双版本)
+          SmartAdmin 是由 河南 · 洛阳 <strong>1024创新实验室（1024Lab）</strong>
+          使用SpringBoot2.x 和 Vue3.2 Setup标签、 Composition Api
+          (同时支持TypeScript和JavaScript双版本)
           ，开发出的一套简洁、易用的中后台解决方案！
           <br />
           <br />
-          <br />
-        <span class="setence"> 致每位伟大的开发者 ：
+          <span class="setence">
+            致伟大的开发者 ：
             <br />
-         我们希望用一套漂亮优雅的代码和一套整洁高效的代码规范，让大家在这浮躁的代码世界里感受到一股把代码写好的清流 !
-         <br />
-         保持谦逊，不断学习，热爱代码，更热爱生活 !
-         <span class="author">1024创新实验室 ( 2021年 · 洛阳 ）</span>
-      </span> 
-    
-         
+            我们希望用一套漂亮优雅的代码和一套整洁高效的代码规范，让大家在这浮躁的代码世界里感受到一股把代码写好的清流
+            !
+            <br />
+            保持谦逊，不断学习，热爱代码，更热爱生活 !
+            <span class="author">1024创新实验室 ( 2022年 · 洛阳 ）</span>
+          </span>
         </p>
       </div>
       <div class="app-qr-box">
@@ -37,7 +36,7 @@
         </div>
         <div class="app-qr">
           <img src="/images/1024lab-gzh.jpg" />
-          <span class="qr-desc"> 骚扰 卓大 微信 </span>
+          <span class="qr-desc"> 骚扰 卓大 （＞▽＜）</span>
         </div>
       </div>
     </div>
@@ -68,6 +67,10 @@
               src="/images/login-form-open-eyes.png"
             />
           </div>
+        </a-form-item>
+        <a-form-item name="loginName">
+          <a-input v-model:value.trim="loginForm.loginName" placeholder="请输入验证码" />
+          <img :src="captchaBase64Image" />
         </a-form-item>
         <a-form-item>
           <a-checkbox v-model:checked="rememberPwd">记住密码</a-checkbox>
@@ -103,6 +106,22 @@ import { SmartLoading } from "/@/components/smart-loading";
 import { saveTokenToCookie } from "/@/utils/cookie-util";
 import { smartSentry } from "/@/lib/smart-sentry";
 import { LoginForm } from "/@/api/system/login/model/login-model";
+
+//--------------------- 验证码 ---------------------------------
+const captchaBase64Image = ref<string>("");
+let captchaUUid = null;
+async function getCaptcha() {
+  try {
+    let captchaResult = await loginApi.getCaptcha();
+    captchaBase64Image.value = captchaResult.data.captchaBase64Image;
+    captchaUUid = captchaResult.data.captchaUUid;
+  } catch (e) {
+    smartSentry.captureException(e);
+  }
+}
+onMounted(getCaptcha);
+
+//--------------------- 登录表单 ---------------------------------
 
 const loginForm = reactive<LoginForm>({
   loginName: "",

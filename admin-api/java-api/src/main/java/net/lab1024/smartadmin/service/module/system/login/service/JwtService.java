@@ -71,13 +71,13 @@ public class JwtService {
             return null;
         }
         // 查询用户信息
-        LoginUserDetail loginInfo = employeeService.getBoById(employeeId);
+        LoginUserDetail loginInfo = employeeService.getDetailById(employeeId);
         if (loginInfo == null) {
             return null;
         }
-        if (loginInfo.getDisabledFlag() || loginInfo.getLeaveFlag()) {
-            return null;
-        }
+//        if (loginInfo.de() || loginInfo.get()) {
+//            return null;
+//        }
         return loginInfo;
     }
 

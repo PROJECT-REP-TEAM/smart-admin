@@ -18,14 +18,14 @@ public class CacheModuleConst {
         public static final String DEPARTMENT_EMPLOYEE_CACHE = "department_employee_cache";
 
         /**
-         * 单个员工的缓存
+         * 员工缓存
          */
-        public static final String SINGLE_EMPLOYEE_CACHE = "single_employee_cache";
+        public static final String EMPLOYEE_CACHE = "employee_cache";
 
         /**
-         * 单个员工角色
+         * 员工角色缓存
          */
-        public static final String SINGLE_EMPLOYEE_ROLE_CACHE = "single_employee_role_cache";
+        public static final String EMPLOYEE_ROLE_CACHE = "employee_role_cache";
     }
 
     public static class Department {
@@ -44,8 +44,6 @@ public class CacheModuleConst {
          * 某个部门以及下级的id列表
          */
         public static final String DEPARTMENT_SELF_CHILDREN_CACHE = "department_self_children_cache";
-
-        public static final String DEPARTMENT_SCHOOL_CACHE = "department_school_cache";
 
         public static final String DEPARTMENT_ROUTE_CACHE = "department_route_cache";
 

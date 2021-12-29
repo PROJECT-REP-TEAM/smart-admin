@@ -17,9 +17,9 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 public enum SystemConfigKeyEnum implements BaseEnum {
 
     /**
-     * 超管id
+     * 超管角色id集合
      */
-    EMPLOYEE_SUPERMAN("employee_superman", "超管id"),
+    ADMINISTRATOR_ID("administrator_id", "超管id集合"),
 
     /**
      * 本地上传路径前缀

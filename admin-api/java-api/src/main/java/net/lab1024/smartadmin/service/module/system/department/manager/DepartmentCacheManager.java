@@ -58,13 +58,6 @@ public class DepartmentCacheManager {
         log.info("clear DEPARTMENT_CACHE");
     }
 
-    /**
-     * 清除所有缓存
-     */
-    @CacheEvict(value = CacheModuleConst.Department.DEPARTMENT_SCHOOL_CACHE, allEntries = true)
-    public void clearDepartmentSchoolCache() {
-        log.info("clear DEPARTMENT_SCHOOL_CACHE");
-    }
 
     /**
      * 清除所有缓存
@@ -110,40 +103,6 @@ public class DepartmentCacheManager {
         return idList;
     }
 
-    /**
-     * 某个部门所属的分校信息
-     *
-     * @param departmentId
-     * @param schoolParentDepartmentId
-     * @return
-     */
-    @Cacheable(CacheModuleConst.Department.DEPARTMENT_SCHOOL_CACHE)
-    public DepartmentVO departmentSchoolCache(Long departmentId, Long schoolParentDepartmentId) {
-        List<DepartmentVO> departmentList = departmentDao.listAll();
-        // 递归寻找校区(第二级)
-        return this.findSchoolDepartmentId(departmentList, departmentId, schoolParentDepartmentId);
-    }
-
-    /**
-     * 寻找校区ID
-     *
-     * @param departmentList
-     * @param departmentId
-     * @return
-     */
-    private DepartmentVO findSchoolDepartmentId(List<DepartmentVO> departmentList, Long departmentId, Long schoolParentDepartmentId) {
-        Optional<DepartmentVO> findRes = departmentList.stream().filter(e -> e.getDepartmentId().equals(departmentId)).findFirst();
-        // 如果查询不到 或者自己本身为最顶级 返回null
-        if (!findRes.isPresent()) {
-            return null;
-        }
-        DepartmentVO departmentVO = findRes.get();
-        if (departmentVO.getParentId().equals(schoolParentDepartmentId)) {
-            return departmentVO;
-        }
-        // 若父级不为最顶级 进入递归
-        return this.findSchoolDepartmentId(departmentList, departmentVO.getParentId(), schoolParentDepartmentId);
-    }
 
     /**
      * 部门的路径名称

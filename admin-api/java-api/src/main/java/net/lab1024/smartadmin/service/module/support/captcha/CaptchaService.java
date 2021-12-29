@@ -67,7 +67,6 @@ public class CaptchaService {
         /**
          * 返回验证码对象
          * 图片 base64格式
-         * 默认有效时长 80s
          */
         CaptchaVO captchaVO = new CaptchaVO();
         captchaVO.setCaptchaUUid(uuid);

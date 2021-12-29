@@ -82,11 +82,11 @@ public class MenuEmployeeService {
         if (StringUtils.isBlank(perms)) {
             return false;
         }
-        Boolean isSuperman = loginInfoDTO.getIsSuperMan();
-        if (isSuperman) {
+        Boolean isAdministrator = loginInfoDTO.getAdministratorFlag();
+        if (isAdministrator) {
             return true;
         }
-        List<MenuVO> menuList = this.getMenuByRoleIdList(loginInfoDTO.getRoleList(), loginInfoDTO.getIsSuperMan());
+        List<MenuVO> menuList = this.getMenuByRoleIdList(loginInfoDTO.getRoleIdList(), loginInfoDTO.getAdministratorFlag());
         Optional<MenuVO> findRes = menuList.stream().filter(e -> {
             List<String> permsList = e.getPermsList();
             if (CollectionUtils.isEmpty(permsList)) {
@@ -97,17 +97,6 @@ public class MenuEmployeeService {
         return findRes.isPresent();
     }
 
-    /**
-     * 判断是否为超级管理员
-     *
-     * @param employeeId
-     * @return
-     */
-    public Boolean isSuperman(Long employeeId) {
-        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigKeyEnum.EMPLOYEE_SUPERMAN);
-        List<Long> superManIdsList = SmartStringUtil.splitConverToLongList(systemConfigValue, ",");
-        return superManIdsList.contains(employeeId);
-    }
 
     /**
      * 根据角色列表查询菜单列表
@@ -115,12 +104,12 @@ public class MenuEmployeeService {
      * @param roleIdList
      * @return
      */
-    private List<MenuVO> getMenuByRoleIdList(List<Long> roleIdList, Boolean isSuperman) {
+    private List<MenuVO> getMenuByRoleIdList(List<Long> roleIdList, Boolean isAdministoratr) {
         if (CollectionUtils.isEmpty(roleIdList)) {
             return Lists.newArrayList();
         }
         // 超管返回全部菜单权限
-        if (isSuperman) {
+        if (isAdministoratr) {
             return roleMenuListMap.get(SUPER_ROLE_ID);
         }
         List<MenuVO> menuVOList = Lists.newArrayList();
@@ -147,7 +136,7 @@ public class MenuEmployeeService {
         // 获取用户权限
         RequestEmployee requestEmployee = employeeService.getById(employeeId);
         // 获取角色菜单权限
-        List<MenuVO> menuVOList = this.getMenuByRoleIdList(requestEmployee.getRoleList(), requestEmployee.getIsSuperMan());
+        List<MenuVO> menuVOList = this.getMenuByRoleIdList(requestEmployee.getRoleIdList(), requestEmployee.getAdministratorFlag());
         // 角色菜单类型页面
         List<MenuVO> menuList = menuVOList.stream().filter(e -> e.getMenuType().equals(MenuTypeEnum.MENU.getValue())).collect(Collectors.toList());
         //获取菜单树

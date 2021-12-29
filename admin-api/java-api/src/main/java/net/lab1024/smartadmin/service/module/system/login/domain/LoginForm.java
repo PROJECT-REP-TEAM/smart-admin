@@ -16,7 +16,7 @@ import javax.validation.constraints.Pattern;
  * @date 2017年12月19日上午11:49:46
  */
 @Data
-public class LoginForm /*extends CaptchaForm*/ {
+public class LoginForm extends CaptchaForm {
 
     @ApiModelProperty(example = "admin")
     @NotBlank(message = "登录名不能为空")

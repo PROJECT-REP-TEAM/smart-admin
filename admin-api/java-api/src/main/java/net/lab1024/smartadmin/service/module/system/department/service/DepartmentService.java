@@ -140,9 +140,11 @@ public class DepartmentService {
         departmentCacheManager.clearDepartmentCache();
         departmentCacheManager.clearSelfAndChildrenIdCache();
         departmentCacheManager.clearTreeCache();
-        departmentCacheManager.clearDepartmentSchoolCache();
         departmentCacheManager.clearDepartmentRouteCache();
     }
 
 
+    public DepartmentEntity getDepartmentById(Long departmentId) {
+        return departmentDao.selectById(departmentId);
+    }
 }

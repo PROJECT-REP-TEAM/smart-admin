@@ -108,7 +108,7 @@ public class DataScopeViewService {
             return DataScopeViewTypeEnum.ME;
         }
 
-        if (menuEmployeeService.isSuperman(employeeId)) {
+        if (menuEmployeeService.isAdministrator(employeeId)) {
             return DataScopeViewTypeEnum.ALL;
         }
         List<Long> roleIdList = roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);
