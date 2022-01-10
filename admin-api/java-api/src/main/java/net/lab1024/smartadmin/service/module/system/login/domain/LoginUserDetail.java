@@ -27,7 +27,7 @@ public class LoginUserDetail extends RequestEmployee implements UserDetails {
 
     @Override
     public String getPassword() {
-        return this.getLoginPassword();
+        return this.loginPassword;
     }
 
     @Override

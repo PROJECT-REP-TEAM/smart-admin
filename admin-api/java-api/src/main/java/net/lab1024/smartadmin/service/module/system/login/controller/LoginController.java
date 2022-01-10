@@ -17,7 +17,7 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginForm;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
-import net.lab1024.smartadmin.service.module.system.login.domain.LoginResultVO;
+import net.lab1024.smartadmin.service.module.system.login.domain.LoginInfoVO;
 
 import javax.validation.Valid;
 
@@ -36,14 +36,14 @@ public class LoginController extends SystemBaseController {
     @NoNeedLogin
     @PostMapping("/login")
     @ApiOperation("登录 @author zhuoda")
-    public ResponseDTO<LoginResultVO> login(@Valid @RequestBody LoginForm loginDTO) {
+    public ResponseDTO<LoginInfoVO> login(@Valid @RequestBody LoginForm loginDTO) {
         return loginService.login(loginDTO);
     }
 
     @GetMapping("/login/getLoginInfo")
     @ApiOperation("获取登录信息  @author zhuoda")
     @NoValidPrivilege
-    public ResponseDTO<LoginResultVO> getLoginInfo() {
+    public ResponseDTO<LoginInfoVO> getLoginInfo() {
         RequestEmployee requestEmployee = SmartRequestUtil.getRequestEmployee();
         return ResponseDTO.ok(loginService.getLoginInfo(requestEmployee));
     }

@@ -14,10 +14,7 @@ import java.util.List;
  * @date 2021年07月21日 上午07:06:31
  */
 @Data
-public class LoginResultVO extends RequestEmployee {
-
-    @ApiModelProperty("token")
-    private String token;
+public class LoginInfoVO extends RequestEmployee {
 
     @ApiModelProperty("菜单树 用于渲染前端菜单")
     private List<MenuTreeVO> menuTree;

@@ -13,7 +13,7 @@ import lombok.Data;
 public class CaptchaVO {
 
     @ApiModelProperty("验证码唯一标识" )
-    private String captchaUUid;
+    private String captchaUuid;
 
     @ApiModelProperty("验证码Base64图片" )
     private String captchaBase64Image;

@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2021-12-29
+ * @LastEditTime: 2022-01-07
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/login/login.ts
@@ -26,7 +26,7 @@ export const loginApi = {
    * @param param
    */
   getCaptcha: () => {
-    return getRequest<ResponseModel<CaptchaVO>>('/login/getCaptcha');
+    return getRequest<ResponseModel<CaptchaVO>>('/system/login/getCaptcha');
   },
 
   /**

@@ -3,7 +3,7 @@ package net.lab1024.smartadmin.service.config;
 import net.lab1024.smartadmin.service.common.security.SecurityUrlMatchers;
 import net.lab1024.smartadmin.service.filter.SecurityTokenFilter;
 import net.lab1024.smartadmin.service.common.security.SecurityAuthenticationFailHandler;
-import net.lab1024.smartadmin.service.module.system.login.service.JwtService;
+import net.lab1024.smartadmin.service.module.system.login.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -41,7 +41,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 获取TOKEN 解析类
      */
     @Autowired
-    private JwtService loginTokenService;
+    private TokenService loginTokenService;
 
     /**
      * 跨域配置

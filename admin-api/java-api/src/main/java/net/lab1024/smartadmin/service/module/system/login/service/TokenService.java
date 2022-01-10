@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * [  ]
@@ -19,12 +20,12 @@ import java.util.Date;
  */
 @Slf4j
 @Service
-public class JwtService {
+public class TokenService {
 
     /**
-     * 默认 token 过期时间 1 天
+     * 默认 token 过期时间 7 天
      */
-    private static final int EXPIRE_SECONDS = 24 * 3600;
+    private static final long EXPIRE_SECONDS = 7* 24 * 3600;
 
     /**
      * 默认 jwt key
@@ -36,6 +37,8 @@ public class JwtService {
      */
     private static final String CLAIM_ID_KEY = "id";
 
+
+
     @Autowired
     private EmployeeService employeeService;
 
@@ -46,18 +49,17 @@ public class JwtService {
      * @return
      * @auther 胡克
      */
-    public String generateJwtToken(Long employeeId) {
+    public String generateToken(Long employeeId) {
         long nowTimeMilli = System.currentTimeMillis();
         Claims jwtClaims = Jwts.claims();
         jwtClaims.put(CLAIM_ID_KEY, employeeId);
         return Jwts.builder()
                 .setClaims(jwtClaims)
                 .setIssuedAt(new Date(nowTimeMilli))
-                .setExpiration(new Date(nowTimeMilli + EXPIRE_SECONDS * 1000))
+                .setExpiration(new Date(nowTimeMilli + EXPIRE_SECONDS * 1000L))
                 .signWith(SignatureAlgorithm.HS512, JWT_KEY)
                 .compact();
     }
-
 
     /**
      * 根据登陆token 获取员工信息BO
@@ -65,7 +67,7 @@ public class JwtService {
      * @param
      * @return
      */
-    public LoginUserDetail getEmployeeLoginBO(String token) {
+    public LoginUserDetail getLoginUserDetail(String token) {
         Long employeeId = decryptToken(token);
         if (employeeId == null) {
             return null;

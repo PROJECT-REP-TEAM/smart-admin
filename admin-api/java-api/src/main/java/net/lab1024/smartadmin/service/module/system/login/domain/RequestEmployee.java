@@ -6,16 +6,19 @@ import net.lab1024.smartadmin.service.common.domain.RequestUser;
 import net.lab1024.smartadmin.service.common.enumeration.GenderEnum;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
 
-import java.util.List;
+import java.util.Set;
 
 /**
- * 员工登录信息 DTO
+ * 员工请求信息
  *
- * @author 胡克
- * @date 2021年07月21日 上午07:06:31
+ * @author 卓大
+ * @date 2021年07月21日 晚上23:06:31
  */
 @Data
 public class RequestEmployee implements RequestUser {
+
+    @ApiModelProperty("token")
+    private String token;
 
     @ApiModelProperty("员工id")
     private Long employeeId;
@@ -41,8 +44,8 @@ public class RequestEmployee implements RequestUser {
     @ApiModelProperty("是否为超管")
     private Boolean administratorFlag;
 
-    @ApiModelProperty("角色列表")
-    private List<Long> roleIdList;
+    @ApiModelProperty("权限集合")
+    private Set<String> permissions;
 
     @Override
     public Long requestUserId() {

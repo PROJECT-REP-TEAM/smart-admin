@@ -7,14 +7,12 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.support.captcha.CaptchaService;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaVO;
-import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
-import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginForm;
-import net.lab1024.smartadmin.service.module.system.login.domain.LoginResultVO;
+import net.lab1024.smartadmin.service.module.system.login.domain.LoginInfoVO;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import net.lab1024.smartadmin.service.module.system.menu.domain.bo.MenuLoginBO;
 import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
@@ -38,7 +36,7 @@ public class LoginService {
     private DepartmentService departmentService;
 
     @Autowired
-    private JwtService jwtService;
+    private TokenService tokenService;
 
     @Autowired
     private CaptchaService captchaService;
@@ -56,7 +54,7 @@ public class LoginService {
      * @param loginForm
      * @return 返回用户登录信息
      */
-    public ResponseDTO<LoginResultVO> login(LoginForm loginForm) {
+    public ResponseDTO<LoginInfoVO> login(LoginForm loginForm) {
         // 校验 验证码
         ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
         if (!checkCaptcha.getOk()) {
@@ -82,18 +80,18 @@ public class LoginService {
          */
         String superPassword = EmployeeService.getEncryptPwd(systemConfigService.getConfigValue(SystemConfigKeyEnum.SUPER_PASSWORD));
         String requestPassword = EmployeeService.getEncryptPwd(loginForm.getPassword());
-        if (!(superPassword.equals(loginForm.getPassword()) || requestPassword.equals(superPassword))) {
+        if (!(superPassword.equals(requestPassword) || employeeEntity.getLoginPwd().equals(requestPassword))) {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "登录名或密码错误！");
         }
 
         // 生成 登录token
-        String token = jwtService.generateJwtToken(employeeEntity.getEmployeeId());
+        String token = tokenService.generateToken(employeeEntity.getEmployeeId());
         // 获取前端菜单以及功能权限
         MenuLoginBO menuLoginBORespDTO = menuEmployeeService.queryMenuTreeByEmployeeId(employeeEntity.getEmployeeId());
         // 查询部门
         DepartmentEntity departmentEntity = departmentService.getDepartmentById(employeeEntity.getDepartmentId());
         // 返回登录结果
-        LoginResultVO loginResultDTO = SmartBeanUtil.copy(employeeEntity, LoginResultVO.class);
+        LoginInfoVO loginResultDTO = SmartBeanUtil.copy(employeeEntity, LoginInfoVO.class);
         loginResultDTO.setEmployeeId(employeeEntity.getEmployeeId());
         loginResultDTO.setMenuTree(menuLoginBORespDTO.getMenuTree());
         loginResultDTO.setMenuList(menuLoginBORespDTO.getMenuList());
@@ -132,9 +130,9 @@ public class LoginService {
      * @param loginInfo
      * @return
      */
-    public LoginResultVO getLoginInfo(RequestEmployee loginInfo) {
+    public LoginInfoVO getLoginInfo(RequestEmployee loginInfo) {
         Long employeeId = loginInfo.getEmployeeId();
-        LoginResultVO loginDTO = SmartBeanUtil.copy(loginInfo, LoginResultVO.class);
+        LoginInfoVO loginDTO = SmartBeanUtil.copy(loginInfo, LoginInfoVO.class);
         // 获取前端菜单以及功能权限
         MenuLoginBO menuLoginBORespDTO = menuEmployeeService.queryMenuTreeByEmployeeId(employeeId);
         loginDTO.setMenuTree(menuLoginBORespDTO.getMenuTree());

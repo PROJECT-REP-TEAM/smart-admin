@@ -2,7 +2,6 @@ package net.lab1024.smartadmin.service.module.support.captcha;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import lombok.extern.slf4j.Slf4j;
-import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
 import net.lab1024.smartadmin.service.common.exception.BusinessException;
@@ -61,15 +60,16 @@ public class CaptchaService {
             log.error("generateCaptcha error:", e);
             throw new BusinessException("生成验证码错误");
         }
-        // uuid 唯一标识
-        String uuid = UUID.randomUUID().toString().replace("-", StringConst.EMPTY_STR);
 
         /**
          * 返回验证码对象
          * 图片 base64格式
          */
+        // uuid 唯一标识
+        String uuid = UUID.randomUUID().toString().replace("-", StringConst.EMPTY_STR);
+
         CaptchaVO captchaVO = new CaptchaVO();
-        captchaVO.setCaptchaUUid(uuid);
+        captchaVO.setCaptchaUuid(uuid);
         captchaVO.setCaptchaBase64Image("data:image/png;base64," + base64Code);
         redisService.set(buildCaptchaRedisKey(uuid), captchaText, EXPIRE_SECOND);
         return captchaVO;

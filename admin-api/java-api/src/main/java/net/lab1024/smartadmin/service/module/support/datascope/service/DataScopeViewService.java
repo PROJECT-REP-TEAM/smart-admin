@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeTypeEnum;
 import net.lab1024.smartadmin.service.module.support.datascope.constant.DataScopeViewTypeEnum;
+import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataScopeEntity;
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
@@ -42,7 +43,7 @@ public class DataScopeViewService {
     private DepartmentService departmentService;
 
     @Autowired
-    private MenuEmployeeService menuEmployeeService;
+    private EmployeeService employeeService;
 
     /**
      * 获取某人可以查看的所有人员信息
@@ -108,7 +109,7 @@ public class DataScopeViewService {
             return DataScopeViewTypeEnum.ME;
         }
 
-        if (menuEmployeeService.isAdministrator(employeeId)) {
+        if (employeeService.isAdministrator(employeeId)) {
             return DataScopeViewTypeEnum.ALL;
         }
         List<Long> roleIdList = roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);

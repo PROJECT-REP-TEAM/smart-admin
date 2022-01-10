@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.filter;
 
 import net.lab1024.smartadmin.service.common.constant.RequestHeaderConst;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginUserDetail;
-import net.lab1024.smartadmin.service.module.system.login.service.JwtService;
+import net.lab1024.smartadmin.service.module.system.login.service.TokenService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -26,10 +26,10 @@ import java.io.IOException;
 
 public class SecurityTokenFilter extends OncePerRequestFilter {
 
-    private JwtService loginTokenService;
+    private TokenService tokenService;
 
-    public SecurityTokenFilter(JwtService loginTokenService) {
-        this.loginTokenService = loginTokenService;
+    public SecurityTokenFilter(TokenService tokenService) {
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SecurityTokenFilter extends OncePerRequestFilter {
         }
         //清理spring security
         SecurityContextHolder.clearContext();
-        LoginUserDetail loginUserDetail = loginTokenService.getEmployeeLoginBO(xAccessToken);
+        LoginUserDetail loginUserDetail = tokenService.getLoginUserDetail(xAccessToken);
         if (null != loginUserDetail) {
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUserDetail, null, loginUserDetail.getAuthorities());
             authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));

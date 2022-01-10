@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-12-03 23:22:28
- * @LastEditTime: 2021-12-29
+ * @LastEditTime: 2022-01-07
  * @LastEditors: zhuoda
  * @Description:
 
@@ -14,7 +14,7 @@
         <p class="desc">
           SmartAdmin 是由 河南 · 洛阳 <strong>1024创新实验室（1024Lab）</strong>
           使用SpringBoot2.x 和 Vue3.2 Setup标签、 Composition Api
-          (同时支持TypeScript和JavaScript双版本)
+          (同时支持JavaScript和TypeScript双版本)
           ，开发出的一套简洁、易用的中后台解决方案！
           <br />
           <br />
@@ -36,7 +36,7 @@
         </div>
         <div class="app-qr">
           <img src="/images/1024lab-gzh.jpg" />
-          <span class="qr-desc"> 骚扰 卓大 （＞▽＜）</span>
+          <span class="qr-desc"> 扫码 骚扰卓大 :) </span>
         </div>
       </div>
     </div>
@@ -69,8 +69,12 @@
           </div>
         </a-form-item>
         <a-form-item name="loginName">
-          <a-input v-model:value.trim="loginForm.loginName" placeholder="请输入验证码" />
-          <img :src="captchaBase64Image" />
+          <a-input
+            class="captcha-input"
+            v-model:value.trim="loginForm.captchaCode"
+            placeholder="请输入验证码"
+          />
+          <img class="captcha-img" :src="captchaBase64Image" @click="getCaptcha" />
         </a-form-item>
         <a-form-item>
           <a-checkbox v-model:checked="rememberPwd">记住密码</a-checkbox>
@@ -107,30 +111,19 @@ import { saveTokenToCookie } from "/@/utils/cookie-util";
 import { smartSentry } from "/@/lib/smart-sentry";
 import { LoginForm } from "/@/api/system/login/model/login-model";
 
-//--------------------- 验证码 ---------------------------------
-const captchaBase64Image = ref<string>("");
-let captchaUUid = null;
-async function getCaptcha() {
-  try {
-    let captchaResult = await loginApi.getCaptcha();
-    captchaBase64Image.value = captchaResult.data.captchaBase64Image;
-    captchaUUid = captchaResult.data.captchaUUid;
-  } catch (e) {
-    smartSentry.captureException(e);
-  }
-}
-onMounted(getCaptcha);
-
 //--------------------- 登录表单 ---------------------------------
 
 const loginForm = reactive<LoginForm>({
   loginName: "",
   password: "",
+  captchaCode: "",
+  captchaUuid: "",
 });
 
 const rules = {
   loginName: [{ required: true, message: "用户名不能为空" }],
   password: [{ required: true, message: "密码不能为空" }],
+  captchaCode: [{ required: true, message: "验证码不能为空" }],
 };
 
 const showPassword = ref(false);
@@ -159,7 +152,6 @@ async function handleFinish() {
       const res = await loginApi.login(loginForm);
       useUserStore().setUserSession(res.data);
       saveTokenToCookie(res.data.token ? res.data.token : "");
-      // 存储用户菜单与权限
       message.success("登录成功");
       await router.push("/home");
     } catch (e) {
@@ -174,6 +166,15 @@ async function handleFinish() {
 function onShowPassword() {
   showPassword.value = !showPassword.value;
 }
+
+//--------------------- 验证码 ---------------------------------
+const captchaBase64Image = ref<string>("");
+async function getCaptcha() {
+  let captchaResult = await loginApi.getCaptcha();
+  captchaBase64Image.value = captchaResult.data.captchaBase64Image;
+  loginForm.captchaUuid = captchaResult.data.captchaUuid;
+}
+onMounted(getCaptcha);
 </script>
 <style lang="less" scoped>
 @import "./login.less";
