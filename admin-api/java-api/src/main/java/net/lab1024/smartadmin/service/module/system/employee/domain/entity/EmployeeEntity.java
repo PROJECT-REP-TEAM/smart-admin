@@ -51,12 +51,17 @@ public class EmployeeEntity {
     private Long departmentId;
 
     /**
-     * 是否被禁用
+     * 是否为超级管理员: 0 不是，1是
+     */
+    private Boolean administratorFlag;
+
+    /**
+     * 是否被禁用 0否1是
      */
     private Boolean disabledFlag;
 
     /**
-     * 是否被删除
+     * 是否删除0否 1是
      */
     private Boolean deletedFlag;
 

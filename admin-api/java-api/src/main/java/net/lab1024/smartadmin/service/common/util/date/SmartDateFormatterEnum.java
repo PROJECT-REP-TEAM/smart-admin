@@ -29,6 +29,12 @@ public enum SmartDateFormatterEnum {
     YMD_HMS(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
 
     /**
+     * 日期格式 ：年月 yyyy
+     * 例：2021-10
+     */
+    Y(DateTimeFormatter.ofPattern("yyyy")),
+
+    /**
      * 日期格式 ：年月 yyyy-MM
      * 例：2021-10
      */

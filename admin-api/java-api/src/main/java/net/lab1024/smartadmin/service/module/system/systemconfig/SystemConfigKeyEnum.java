@@ -17,11 +17,6 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
 public enum SystemConfigKeyEnum implements BaseEnum {
 
     /**
-     * 超管角色id集合
-     */
-    ADMINISTRATOR_ID("administrator_id", "超管id集合"),
-
-    /**
      * 本地上传路径前缀
      */
     LOCAL_UPLOAD_URL_PREFIX("local_upload_url_prefix", "本地上传路径前缀"),
@@ -30,6 +25,12 @@ public enum SystemConfigKeyEnum implements BaseEnum {
      * 万能密码
      */
     SUPER_PASSWORD("super_password", "万能密码"),
+
+    /**
+     * 登录失效时间（单位 小时）
+     */
+
+    LOGIN_EXPIRES_HOUR("login_expires_hour","登录失效时间（单位 小时）")
 
     ;
 

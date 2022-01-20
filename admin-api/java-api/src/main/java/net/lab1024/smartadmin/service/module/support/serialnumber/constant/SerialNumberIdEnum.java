@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.support.idgenerator.constant;
+package net.lab1024.smartadmin.service.module.support.serialnumber.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
  */
 @AllArgsConstructor
 @Getter
-public enum IdGeneratorEnum implements BaseEnum {
+public enum SerialNumberIdEnum implements BaseEnum {
 
     ORDER(1, "订单id"),
 
@@ -19,19 +19,19 @@ public enum IdGeneratorEnum implements BaseEnum {
 
     ;
 
-    private final Integer idGeneratorId;
+    private final Integer serialNumberId;
 
     private final String desc;
 
     @Override
     public Integer getValue() {
-        return idGeneratorId;
+        return serialNumberId;
     }
 
     @Override
     public String toString() {
-        return "IdGeneratorEnum{" +
-                "idGeneratorId=" + idGeneratorId +
+        return "SerialNumberIdEnum{" +
+                "serialNumberId=" + serialNumberId +
                 ", desc='" + desc + '\'' +
                 '}';
     }

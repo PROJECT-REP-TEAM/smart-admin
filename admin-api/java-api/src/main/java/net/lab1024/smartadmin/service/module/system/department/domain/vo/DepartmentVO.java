@@ -16,9 +16,6 @@ public class DepartmentVO {
     @ApiModelProperty("部门名称")
     private String name;
 
-    @ApiModelProperty("部门简称")
-    private String shortName;
-
     @ApiModelProperty("部门负责人姓名")
     private String managerName;
 

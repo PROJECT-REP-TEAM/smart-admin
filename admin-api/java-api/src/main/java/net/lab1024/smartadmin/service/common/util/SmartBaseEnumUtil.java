@@ -1,10 +1,8 @@
 package net.lab1024.smartadmin.service.common.util;
 
 import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
-import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiConsumer;

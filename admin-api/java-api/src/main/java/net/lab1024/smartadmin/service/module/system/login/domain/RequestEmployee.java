@@ -5,7 +5,9 @@ import lombok.Data;
 import net.lab1024.smartadmin.service.common.domain.RequestUser;
 import net.lab1024.smartadmin.service.common.enumeration.GenderEnum;
 import net.lab1024.smartadmin.service.common.swagger.ApiModelPropertyEnum;
+import net.lab1024.smartadmin.service.module.system.login.constant.LoginDeviceEnum;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -45,7 +47,7 @@ public class RequestEmployee implements RequestUser {
     private Boolean administratorFlag;
 
     @ApiModelProperty("权限集合")
-    private Set<String> permissions;
+    private Set<String> permissionList;
 
     @Override
     public Long requestUserId() {

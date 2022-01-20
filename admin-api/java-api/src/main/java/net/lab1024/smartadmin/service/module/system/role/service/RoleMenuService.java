@@ -1,14 +1,15 @@
 package net.lab1024.smartadmin.service.module.system.role.service;
 
 import com.google.common.collect.Lists;
+import io.jsonwebtoken.lang.Collections;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuConst;
 import net.lab1024.smartadmin.service.module.system.menu.dao.MenuDao;
+import net.lab1024.smartadmin.service.module.system.menu.domain.entity.MenuEntity;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuSimpleTreeVO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
-import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleMenuDao;
 import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntity;
@@ -19,6 +20,7 @@ import net.lab1024.smartadmin.service.module.system.role.manager.RoleMenuManager
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -40,8 +42,6 @@ public class RoleMenuService {
     private RoleMenuManager roleMenuManager;
     @Autowired
     private MenuDao menuDao;
-    @Autowired
-    private MenuEmployeeService menuEmployeeService;
 
     /**
      * 更新角色权限
@@ -65,10 +65,23 @@ public class RoleMenuService {
             roleMenuEntityList.add(roleMenuEntity);
         }
         roleMenuManager.updateRoleMenu(roleMenuUpdateForm.getRoleId(), roleMenuEntityList);
-        // 更新角色权限缓存
-        menuEmployeeService.initRoleMenuListMap();
         return ResponseDTO.ok();
     }
+
+    /**
+     * 根据角色id集合，查询其所有的菜单权限
+     * @param roleIdList
+     * @return
+     */
+    public List<MenuVO> getMenuList(List<Long> roleIdList) {
+        if (Collections.isEmpty(roleIdList)) {
+            return new ArrayList<>();
+        }
+
+        List<MenuEntity> menuEntityList = roleMenuDao.selectMenuListByRoleIdList(roleIdList);
+        return SmartBeanUtil.copyList(menuEntityList, MenuVO.class);
+    }
+
 
     /**
      * 获取角色关联菜单权限

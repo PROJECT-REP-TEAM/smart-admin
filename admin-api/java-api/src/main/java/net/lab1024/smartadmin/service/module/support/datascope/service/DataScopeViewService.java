@@ -9,7 +9,6 @@ import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleDataS
 import net.lab1024.smartadmin.service.module.system.department.service.DepartmentService;
 import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
-import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDataScopeDao;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
 import org.apache.commons.collections4.CollectionUtils;

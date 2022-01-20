@@ -9,7 +9,6 @@ import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
-import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleDao;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
@@ -35,7 +34,7 @@ import java.util.stream.Collectors;
  * @date 2019/4/3
  */
 @Service
-public class RoleEmployeeService  {
+public class RoleEmployeeService {
 
     @Autowired
     private RoleEmployeeDao roleEmployeeDao;
@@ -45,8 +44,6 @@ public class RoleEmployeeService  {
     private DepartmentDao departmentDao;
     @Autowired
     private RoleEmployeeManager roleEmployeeManager;
-    @Autowired
-    private EmployeeCacheManager employeeCacheManager;
 
     /**
      * 通过角色id，分页获取成员员工列表
@@ -86,7 +83,6 @@ public class RoleEmployeeService  {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         roleEmployeeDao.deleteByEmployeeIdRoleId(employeeId, roleId);
-        employeeCacheManager.clearCacheByEmployeeId(employeeId);
         return ResponseDTO.ok();
     }
 
@@ -98,9 +94,6 @@ public class RoleEmployeeService  {
      */
     public ResponseDTO<String> batchRemoveRoleEmployee(RoleEmployeeUpdateForm roleEmployeeUpdateForm) {
         roleEmployeeDao.batchDeleteEmployeeRole(roleEmployeeUpdateForm.getRoleId(), roleEmployeeUpdateForm.getEmployeeIdList());
-        for (Long employeeId : roleEmployeeUpdateForm.getEmployeeIdList()) {
-            employeeCacheManager.clearCacheByEmployeeId(employeeId);
-        }
         return ResponseDTO.ok();
     }
 
@@ -122,9 +115,6 @@ public class RoleEmployeeService  {
         }
         // 保存数据
         roleEmployeeManager.saveRoleEmployee(roleId, roleEmployeeList);
-        for (Long employeeId : employeeIdList) {
-            employeeCacheManager.clearCacheByEmployeeId(employeeId);
-        }
         return ResponseDTO.ok();
     }
 
@@ -134,12 +124,23 @@ public class RoleEmployeeService  {
      * @param employeeId
      * @return
      */
-    public ResponseDTO<List<RoleSelectedVO>> getRolesByEmployeeId(Long employeeId) {
+    public List<RoleSelectedVO> getRoleInfoListByEmployeeId(Long employeeId) {
         List<Long> roleIds = roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);
         List<RoleEntity> roleList = roleDao.selectList(null);
         List<RoleSelectedVO> result = SmartBeanUtil.copyList(roleList, RoleSelectedVO.class);
         result.stream().forEach(item -> item.setSelected(roleIds.contains(item.getRoleId())));
-        return ResponseDTO.ok(result);
+        return result;
     }
+
+    /**
+     * 根据员工id 查询角色id集合
+     *
+     * @param employeeId
+     * @return
+     */
+    public List<Long> getRoleIdList(Long employeeId) {
+        return roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);
+    }
+
 
 }

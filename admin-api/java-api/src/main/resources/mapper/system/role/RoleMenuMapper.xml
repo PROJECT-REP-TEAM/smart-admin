@@ -15,4 +15,20 @@
             resultType="net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleMenuEntity">
         select * from t_role_menu
     </select>
+
+    <select id="selectMenuListByRoleIdList"
+            resultType="net.lab1024.smartadmin.service.module.system.menu.domain.entity.MenuEntity">
+
+        SELECT
+        t_menu.*
+        FROM t_role_menu
+        left join t_menu on t_role_menu.menu_id = t_menu.menu_id
+        WHERE
+        t_role_menu.role_id IN
+        <foreach collection="roleIdList" open="(" separator="," close=")" item="id">
+          #{id}
+        </foreach>
+        ORDER BY t_menu.sort ASC
+
+    </select>
 </mapper>

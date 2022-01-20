@@ -1,24 +1,24 @@
 package net.lab1024.smartadmin.service.module.system.menu.service;
 
 import com.google.common.collect.Lists;
+import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
+import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
+import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.module.system.menu.constant.MenuConst;
+import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
+import net.lab1024.smartadmin.service.module.system.menu.dao.MenuDao;
+import net.lab1024.smartadmin.service.module.system.menu.domain.entity.MenuEntity;
+import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuAddForm;
+import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuBaseForm;
+import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuUpdateForm;
+import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuTreeVO;
+import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuUrlVO;
+import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
-import net.lab1024.smartadmin.service.common.code.SystemErrorCode;
-import net.lab1024.smartadmin.service.common.code.UserErrorCode;
-import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.module.system.menu.dao.MenuDao;
-import net.lab1024.smartadmin.service.module.system.menu.constant.MenuTypeEnum;
-import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuBaseForm;
-import net.lab1024.smartadmin.service.module.system.menu.domain.entity.MenuEntity;
-import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuAddForm;
-import net.lab1024.smartadmin.service.module.system.menu.domain.form.MenuUpdateForm;
-import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuTreeVO;
-import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
-import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuUrlVO;
-import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 
 import java.util.List;
 import java.util.Map;
@@ -35,9 +35,6 @@ public class MenuService {
 
     @Autowired
     private MenuDao menuDao;
-
-    @Autowired
-    private MenuEmployeeService menuEmployeeService;
 
     @Autowired
     private MenuUrlService menuUrlService;
@@ -60,13 +57,11 @@ public class MenuService {
         MenuEntity menuEntity = SmartBeanUtil.copy(menuAddForm, MenuEntity.class);
         // 处理接口权限
         List<String> permsList = menuAddForm.getPermsList();
-        if(!CollectionUtils.isEmpty(permsList)){
+        if (!CollectionUtils.isEmpty(permsList)) {
             String perms = StringUtils.join(permsList, ",");
             menuEntity.setPerms(perms);
         }
         menuDao.insert(menuEntity);
-        // 更新角色权限缓存
-        menuEmployeeService.initRoleMenuListMap();
         return ResponseDTO.ok();
     }
 
@@ -99,13 +94,11 @@ public class MenuService {
         MenuEntity menuEntity = SmartBeanUtil.copy(menuUpdateForm, MenuEntity.class);
         // 处理接口权限
         List<String> permsList = menuUpdateForm.getPermsList();
-        if(!CollectionUtils.isEmpty(permsList)){
+        if (!CollectionUtils.isEmpty(permsList)) {
             String perms = StringUtils.join(permsList, ",");
             menuEntity.setPerms(perms);
         }
         menuDao.updateById(menuEntity);
-        // 更新角色权限缓存
-        menuEmployeeService.initRoleMenuListMap();
         return ResponseDTO.ok();
     }
 
@@ -122,8 +115,6 @@ public class MenuService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR, "所选菜单不能为空");
         }
         menuDao.deleteByMenuIdList(menuIdList, employeeId, Boolean.TRUE);
-        // 更新角色权限缓存
-        menuEmployeeService.initRoleMenuListMap();
         return ResponseDTO.ok();
     }
 
@@ -193,7 +184,7 @@ public class MenuService {
         res.forEach(e -> {
             //处理接口权限
             String perms = e.getPerms();
-            if(!StringUtils.isBlank(perms)){
+            if (!StringUtils.isBlank(perms)) {
                 List<String> permsList = Lists.newArrayList(StringUtils.split(perms, ","));
                 e.setPermsList(permsList);
             }
@@ -235,7 +226,7 @@ public class MenuService {
         res.forEach(e -> {
             //处理接口权限
             String perms = e.getPerms();
-            if(!StringUtils.isBlank(perms)){
+            if (!StringUtils.isBlank(perms)) {
                 List<String> permsList = Lists.newArrayList(StringUtils.split(perms, ","));
                 e.setPermsList(permsList);
             }
@@ -262,7 +253,7 @@ public class MenuService {
         MenuVO menuVO = SmartBeanUtil.copy(selectMenu, MenuVO.class);
         //处理接口权限
         String perms = menuVO.getPerms();
-        if(!StringUtils.isBlank(perms)){
+        if (!StringUtils.isBlank(perms)) {
             List<String> permsList = Lists.newArrayList(StringUtils.split(perms, ","));
             menuVO.setPermsList(permsList);
         }

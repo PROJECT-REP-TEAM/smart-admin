@@ -47,8 +47,11 @@ public class MenuUrlService {
         ArrayList<MenuUrlVO> tempUrlList = new ArrayList<>();
 
         RequestMappingHandlerMapping mapping = applicationContext.getBean(RequestMappingHandlerMapping.class);
-        //获取url与类和方法的对应信息
+        // 获取url与类和方法的对应信息
         Map<RequestMappingInfo, HandlerMethod> map = mapping.getHandlerMethods();
+        // 校验是否存在相同的 controller和name
+        HashMap<String, HandlerMethod> sameNameMap = new HashMap<>();
+
         map.forEach((info, handlerMethod) -> {
             //只对Rest 服务进行权限验证
             RestController restAnnotation = AnnotationUtils.findAnnotation(handlerMethod.getMethod().getDeclaringClass(), RestController.class);
@@ -68,6 +71,12 @@ public class MenuUrlService {
             List<String> list = SmartStringUtil.splitConvertToList(className, "\\.");
             String controllerName = list.get(list.size() - 1);
             String name = controllerName + "." + methodName;
+
+            HandlerMethod sameNameHandlerMethod = sameNameMap.get(name);
+            if (sameNameHandlerMethod != null) {
+                throw new ExceptionInInitializerError("存在相同的Controller名字和方法名字，这样会导致权限的perms存在重复问题: " + handlerMethod + " : " + sameNameHandlerMethod);
+            }
+            sameNameMap.put(name, handlerMethod);
 
             ApiOperation apiOperation = handlerMethod.getMethod().getAnnotation(ApiOperation.class);
             String methodComment = null;

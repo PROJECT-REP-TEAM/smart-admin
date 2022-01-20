@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="net.lab1024.smartadmin.service.module.support.serialnumber.dao.SerialNumberDao">
+
+    <update id="updateLastNumberAndTime">
+        update t_serial_number
+        set
+        last_number = #{lastNumber},
+        last_time = #{lastTime}
+        where
+        serial_number_id = #{}
+
+    </update>
+
+    <!-- 查询最后生成记录 -->
+    <select id="selectForUpdate" resultType="net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberEntity">
+       select * from t_id_generator where id = #{id} for update
+    </select>
+
+</mapper>

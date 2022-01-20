@@ -67,6 +67,6 @@ public class RoleEmployeeController extends SystemBaseController {
     @ApiOperation(value = "获取员工所有选中的角色和所有角色 @author zhuoda")
     @GetMapping("/role/employee/getRoles/{employeeId}")
     public ResponseDTO<List<RoleSelectedVO>> getRoleByEmployeeId(@PathVariable Long employeeId) {
-        return roleEmployeeService.getRolesByEmployeeId(employeeId);
+        return ResponseDTO.ok(roleEmployeeService.getRoleInfoListByEmployeeId(employeeId));
     }
 }

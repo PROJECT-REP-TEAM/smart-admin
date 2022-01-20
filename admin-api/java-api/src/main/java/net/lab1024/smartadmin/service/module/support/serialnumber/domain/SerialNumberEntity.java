@@ -1,11 +1,11 @@
-package net.lab1024.smartadmin.service.module.support.idgenerator.domain;
+package net.lab1024.smartadmin.service.module.support.serialnumber.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
-import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorRuleTypeEnum;
+import net.lab1024.smartadmin.service.module.support.serialnumber.constant.SerialNumberIdEnum;
+import net.lab1024.smartadmin.service.module.support.serialnumber.constant.SerialNumberRuleTypeEnum;
 
 import java.time.LocalDateTime;
 
@@ -15,16 +15,16 @@ import java.time.LocalDateTime;
  * @Description:
  */
 @Data
-@TableName("t_id_generator")
-public class IdGeneratorEntity {
+@TableName("t_serial_number")
+public class SerialNumberEntity {
 
     /**
      * 主键id
      *
-     * @see IdGeneratorEnum
+     * @see SerialNumberIdEnum
      */
     @TableId(type = IdType.INPUT)
-    private Integer id;
+    private Integer serialNumberId;
 
     /**
      * 业务
@@ -32,21 +32,17 @@ public class IdGeneratorEntity {
     private String businessName;
 
     /**
-     * 前缀
+     * 格式
      */
-    private String prefix;
+    private String format;
 
     /**
      * 生成规则
      *
-     * @see IdGeneratorRuleTypeEnum
+     * @see SerialNumberRuleTypeEnum
      */
     private String ruleType;
 
-    /**
-     * 最低生成id长度
-     */
-    private Integer minLength;
 
     /**
      * 初始值

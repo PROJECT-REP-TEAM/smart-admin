@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import net.lab1024.smartadmin.service.common.annoation.NoNeedLogin;
-import net.lab1024.smartadmin.service.common.annoation.NoValidPrivilege;
+import net.lab1024.smartadmin.service.common.annoation.NoValidPermission;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.system.login.domain.LoginForm;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
-import net.lab1024.smartadmin.service.module.system.login.domain.LoginInfoVO;
+import net.lab1024.smartadmin.service.module.system.login.domain.LoginResultVO;
 
 import javax.validation.Valid;
 
@@ -36,23 +36,23 @@ public class LoginController extends SystemBaseController {
     @NoNeedLogin
     @PostMapping("/login")
     @ApiOperation("登录 @author zhuoda")
-    public ResponseDTO<LoginInfoVO> login(@Valid @RequestBody LoginForm loginDTO) {
+    public ResponseDTO<LoginResultVO> login(@Valid @RequestBody LoginForm loginDTO) {
         return loginService.login(loginDTO);
     }
 
-    @GetMapping("/login/getLoginInfo")
-    @ApiOperation("获取登录信息  @author zhuoda")
-    @NoValidPrivilege
-    public ResponseDTO<LoginInfoVO> getLoginInfo() {
+    @GetMapping("/login/getLoginResult")
+    @ApiOperation("获取登录结果信息  @author zhuoda")
+    @NoValidPermission
+    public ResponseDTO<LoginResultVO> getLoginResult() {
         RequestEmployee requestEmployee = SmartRequestUtil.getRequestEmployee();
-        return ResponseDTO.ok(loginService.getLoginInfo(requestEmployee));
+        return ResponseDTO.ok(loginService.getLoginResult(requestEmployee));
     }
 
     @ApiOperation("退出登陆  @author zhuoda")
     @GetMapping("/login/logout")
-    @NoValidPrivilege
+    @NoValidPermission
     public ResponseDTO<String> logout() {
-        return loginService.logoutByToken(SmartRequestUtil.getRequestEmployeeId());
+        return loginService.logoutByToken(SmartRequestUtil.getRequestEmployee());
     }
 
     @NoNeedLogin

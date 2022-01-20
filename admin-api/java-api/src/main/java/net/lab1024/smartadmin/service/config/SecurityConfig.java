@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.service.config;
 import net.lab1024.smartadmin.service.common.security.SecurityUrlMatchers;
 import net.lab1024.smartadmin.service.filter.SecurityTokenFilter;
 import net.lab1024.smartadmin.service.common.security.SecurityAuthenticationFailHandler;
+import net.lab1024.smartadmin.service.module.system.login.service.LoginService;
 import net.lab1024.smartadmin.service.module.system.login.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 获取TOKEN 解析类
      */
     @Autowired
-    private TokenService loginTokenService;
+    private LoginService loginService;
 
     /**
      * 跨域配置
@@ -82,7 +83,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         String [] authenticatedUrlArray = securityUrlMatchers.getAuthenticatedUrlArray();
         interceptUrlRegistry.antMatchers(authenticatedUrlArray).authenticated();
 
-        httpSecurity.addFilterBefore(new SecurityTokenFilter(loginTokenService), UsernamePasswordAuthenticationFilter.class);
+        httpSecurity.addFilterBefore(new SecurityTokenFilter(loginService), UsernamePasswordAuthenticationFilter.class);
         httpSecurity.addFilterBefore(corsFilter(), SecurityTokenFilter.class);
     }
 

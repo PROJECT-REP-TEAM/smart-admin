@@ -8,7 +8,7 @@ import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import net.lab1024.smartadmin.service.common.annoation.NoValidPrivilege;
+import net.lab1024.smartadmin.service.common.annoation.NoValidPermission;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
 import net.lab1024.smartadmin.service.module.system.employee.domain.form.*;
@@ -65,7 +65,7 @@ public class EmployeeController extends SystemBaseController {
 
     @ApiOperation(value = "修改密码 @author zhuoda")
     @PostMapping("/employee/update/password")
-    @NoValidPrivilege
+    @NoValidPermission
     public ResponseDTO<String> updatePassword(@Valid @RequestBody EmployeeUpdatePasswordForm updatePasswordForm) {
         updatePasswordForm.setEmployeeId(SmartRequestUtil.getRequestEmployeeId());
         return employeeService.updatePassword(updatePasswordForm);

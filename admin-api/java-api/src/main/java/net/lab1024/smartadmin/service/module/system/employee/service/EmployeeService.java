@@ -7,7 +7,6 @@ import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao;
 import net.lab1024.smartadmin.service.module.system.department.domain.entity.DepartmentEntity;
 import net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO;
@@ -16,15 +15,10 @@ import net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao;
 import net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity;
 import net.lab1024.smartadmin.service.module.system.employee.domain.form.*;
 import net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO;
-import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeCacheManager;
 import net.lab1024.smartadmin.service.module.system.employee.manager.EmployeeManager;
-import net.lab1024.smartadmin.service.module.system.login.domain.LoginUserDetail;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
-import net.lab1024.smartadmin.service.module.system.menu.service.MenuEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.dao.RoleEmployeeDao;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleEmployeeVO;
-import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
-import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,76 +47,19 @@ public class EmployeeService {
     private DepartmentDao departmentDao;
 
     @Autowired
-    private MenuEmployeeService menuEmployeeService;
-
-    @Autowired
     private EmployeeManager employeeManager;
 
     @Autowired
     private RoleEmployeeDao roleEmployeeDao;
 
     @Autowired
-    private EmployeeCacheManager employeeCacheManager;
-
-    @Autowired
     private DepartmentCacheManager departmentCacheManager;
 
-    @Autowired
-    private SystemConfigService systemConfigService;
 
-    /**
-     * 判断是否为超级管理员
-     *
-     * @param employeeId
-     * @return
-     */
-    public Boolean isAdministrator(Long employeeId) {
-        String systemConfigValue = systemConfigService.getConfigValue(SystemConfigKeyEnum.ADMINISTRATOR_ID);
-        List<Long> administratorIdsList = SmartStringUtil.splitConverToLongList(systemConfigValue, ",");
-        return administratorIdsList.contains(employeeId);
+    public EmployeeEntity getById(Long employeeId) {
+        return employeeDao.selectById(employeeId);
     }
 
-    /**
-     * 获取员工登录信息
-     *
-     * @param employeeId
-     * @return
-     */
-    public RequestEmployee getById(Long employeeId) {
-        EmployeeEntity employeeEntity = employeeCacheManager.getEmployeeFromCache(employeeId);
-        //获取员工角色缓存
-        List<Long> roleIdList = employeeCacheManager.getEmployeeRoleIdListFromCache(employeeId);
-        if (employeeEntity != null) {
-            Boolean isAdministrator = this.isAdministrator(employeeId);
-            RequestEmployee loginDTO = SmartBeanUtil.copy(employeeEntity, RequestEmployee.class);
-            loginDTO.setEmployeeId(employeeId);
-            loginDTO.setAdministratorFlag(isAdministrator);
-            loginDTO.setRoleIdList(roleIdList);
-            return loginDTO;
-        }
-        return null;
-    }
-
-    /**
-     * 获取员工登录信息
-     *
-     * @param employeeId
-     * @return
-     */
-    public LoginUserDetail getDetailById(Long employeeId) {
-        EmployeeEntity employeeEntity = employeeCacheManager.getEmployeeFromCache(employeeId);
-        //获取员工角色缓存
-        List<Long> roleIdList = employeeCacheManager.getEmployeeRoleIdListFromCache(employeeId);
-        if (employeeEntity == null) {
-            return null;
-        }
-        Boolean administratorFlag = this.isAdministrator(employeeId);
-        LoginUserDetail loginUserDetail = SmartBeanUtil.copy(employeeEntity, LoginUserDetail.class);
-        loginUserDetail.setEmployeeId(employeeId);
-        loginUserDetail.setAdministratorFlag(administratorFlag);
-        loginUserDetail.setRoleIdList(roleIdList);
-        return loginUserDetail;
-    }
 
     /**
      * 查询员工列表
@@ -190,7 +127,6 @@ public class EmployeeService {
 
         // 保存数据
         employeeManager.saveEmployee(entity, employeeAddForm.getRoleIdList());
-        employeeCacheManager.clearCacheByDepartmentId(departmentId);
 
         return ResponseDTO.ok();
     }
@@ -239,10 +175,6 @@ public class EmployeeService {
         // 更新数据
         employeeManager.updateEmployee(entity, employeeUpdateForm.getRoleIdList());
 
-        // 清除缓存
-        employeeCacheManager.clearCacheByEmployeeId(employeeId);
-        employeeCacheManager.clearCacheByDepartmentId(departmentId);
-
         return ResponseDTO.ok();
     }
 
@@ -262,8 +194,6 @@ public class EmployeeService {
         }
         employeeDao.updateDisableFlag(employeeId, !employeeEntity.getDisabledFlag());
 
-        employeeCacheManager.clearCacheByEmployeeId(employeeId);
-        employeeCacheManager.clearCacheByDepartmentId(employeeEntity.getDepartmentId());
         return ResponseDTO.ok();
     }
 
@@ -289,12 +219,6 @@ public class EmployeeService {
         }).collect(Collectors.toList());
         employeeManager.updateBatchById(updateList);
 
-        // 清除缓存
-        employeeEntityList.forEach(e -> {
-            employeeCacheManager.clearCacheByEmployeeId(e.getEmployeeId());
-            employeeCacheManager.clearCacheByDepartmentId(e.getDepartmentId());
-        });
-        employeeCacheManager.clearCacheByDepartmentId(batchUpdateDepartmentForm.getDepartmentId());
         return ResponseDTO.ok();
     }
 
@@ -339,7 +263,7 @@ public class EmployeeService {
      * @return
      */
     public ResponseDTO<List<EmployeeVO>> getAllEmployeeByDepartmentId(Long departmentId, Boolean disabledFlag) {
-        List<EmployeeEntity> employeeEntityList = employeeCacheManager.getDepartmentEmployeeListFromCache(departmentId);
+        List<EmployeeEntity> employeeEntityList = employeeDao.selectByDepartmentId(departmentId,  disabledFlag);
         if (disabledFlag != null) {
             employeeEntityList = employeeEntityList.stream().filter(e -> e.getDisabledFlag().equals(disabledFlag)).collect(Collectors.toList());
         }
@@ -396,10 +320,11 @@ public class EmployeeService {
 
     /**
      * 根据登录名获取员工
+     *
      * @param loginName
      * @return
      */
     public EmployeeEntity getByLoginName(String loginName) {
-        return employeeDao.getByLoginName(loginName,null);
+        return employeeDao.getByLoginName(loginName, null);
     }
 }

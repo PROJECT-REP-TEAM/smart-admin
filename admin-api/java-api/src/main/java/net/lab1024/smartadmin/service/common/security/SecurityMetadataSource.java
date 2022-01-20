@@ -1,6 +1,6 @@
 package net.lab1024.smartadmin.service.common.security;
 
-import net.lab1024.smartadmin.service.common.annoation.NoValidPrivilege;
+import net.lab1024.smartadmin.service.common.annoation.NoValidPermission;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.prepost.*;
@@ -14,9 +14,9 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
- * 此类用于默认给所有接口添加权限 @privilegeCheck.checkPermission('%s')
+ * 此类用于默认给所有接口添加权限 @employeePermissionService.checkPermission('%s')
  * %s 为类名.方法名
- * 和使用@PreAuthorize("@privilegeCheck.checkPermission('%s')") 效果一致
+ * 和使用@PreAuthorize("@employeePermissionService.checkPermission('%s')") 效果一致
  * 避免所有接口都添加一遍 减轻工作量
  *
  * @author 罗伊
@@ -24,9 +24,9 @@ import java.util.*;
  */
 public class SecurityMetadataSource extends PrePostAnnotationSecurityMetadataSource {
 
-    public static final String PRIVILEGE_CHECK_NAME = "privilegeCheck";
+    public static final String PRIVILEGE_CHECK_NAME = "employeePermissionService";
 
-    private static String EXPRESSION_FORMAT = "@privilegeCheck.checkPermission('%s')";
+    private static String EXPRESSION_FORMAT = "@employeePermissionService.checkPermission('%s')";
 
     private final PrePostInvocationAttributeFactory attributeFactory;
 
@@ -55,12 +55,12 @@ public class SecurityMetadataSource extends PrePostAnnotationSecurityMetadataSou
         }
 
         //是否需要权限
-        NoValidPrivilege methodNoValidPrivilege = method.getAnnotation(NoValidPrivilege.class);
-        if (methodNoValidPrivilege != null) {
+        NoValidPermission methodNoValidPermission = method.getAnnotation(NoValidPermission.class);
+        if (methodNoValidPermission != null) {
             return Collections.emptyList();
         }
-        NoValidPrivilege classNoValidPrivilege = targetClass.getAnnotation(NoValidPrivilege.class);
-        if (classNoValidPrivilege != null) {
+        NoValidPermission classNoValidPermission = targetClass.getAnnotation(NoValidPermission.class);
+        if (classNoValidPermission != null) {
             return Collections.emptyList();
         }
         //是否添加security原有注解

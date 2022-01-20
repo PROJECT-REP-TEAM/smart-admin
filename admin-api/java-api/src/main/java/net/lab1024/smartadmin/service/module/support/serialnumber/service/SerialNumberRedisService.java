@@ -1,11 +1,10 @@
-package net.lab1024.smartadmin.service.module.support.idgenerator.service;
+package net.lab1024.smartadmin.service.module.support.serialnumber.service;
 
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.exception.BusinessException;
 import net.lab1024.smartadmin.service.constant.RedisKeyConst;
-import net.lab1024.smartadmin.service.module.support.idgenerator.constant.IdGeneratorEnum;
-import net.lab1024.smartadmin.service.module.support.idgenerator.domain.IdGeneratorEntity;
 import net.lab1024.smartadmin.service.module.support.redis.RedisService;
+import net.lab1024.smartadmin.service.module.support.serialnumber.constant.SerialNumberIdEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -16,20 +15,18 @@ import java.util.List;
  */
 
 @Slf4j
-public class IdGeneratorRedisService extends IdGeneratorBaseService {
+public class SerialNumberRedisService extends SerialNumberBaseService {
 
     private static final int MAX_GET_LOCK_COUNT = 5;
 
     private static final long SLEEP_MILLISECONDS = 500L;
 
-    private static volatile long lastSleepMilliSeconds = SLEEP_MILLISECONDS;
-
     @Autowired
     private RedisService redisService;
 
     @Override
-    List<String> tryGenerator(IdGeneratorEnum idGeneratorEnum, int count) {
-        String lockKey = RedisKeyConst.Support.ID_GENERATOR + idGeneratorEnum.getValue();
+    List<String> tryGenerator(SerialNumberIdEnum serialNumberIdEnum, int count) {
+        String lockKey = RedisKeyConst.Support.SERIAL_NUMBER + serialNumberIdEnum.getValue();
         try {
             boolean lock = false;
             for (int i = 0; i < MAX_GET_LOCK_COUNT; i++) {
@@ -38,18 +35,15 @@ public class IdGeneratorRedisService extends IdGeneratorBaseService {
                     if (lock) {
                         break;
                     }
-                    Thread.sleep(Math.max(SLEEP_MILLISECONDS, lastSleepMilliSeconds));
+                    Thread.sleep(SLEEP_MILLISECONDS);
                 } catch (Throwable e) {
                     log.error(e.getMessage(), e);
                 }
             }
             if (!lock) {
-                throw new BusinessException("系统繁忙");
+                throw new BusinessException("SerialNumber 尝试5次，未能生成单号");
             }
-            long beginTime = System.currentTimeMillis();
-
-            List<String> list = generate(idGeneratorEnum, count);
-            lastSleepMilliSeconds = System.currentTimeMillis() - beginTime + 100;
+            List<String> list = generate(serialNumberIdEnum, count);
             return list;
         } catch (Throwable e) {
             log.error(e.getMessage(), e);

@@ -1,6 +1,8 @@
 package net.lab1024.smartadmin.service.module.system.role.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import net.lab1024.smartadmin.service.module.system.menu.domain.entity.MenuEntity;
+import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
@@ -30,6 +32,13 @@ public interface RoleMenuDao extends BaseMapper<RoleMenuEntity> {
      * @return
      */
     List<Long> queryMenuIdByRoleId(@Param("roleId") Long roleId);
+
+    /**
+     * 根据角色ID集合查询选择的菜单权限
+     * @param roleIdList
+     * @return
+     */
+    List<MenuEntity> selectMenuListByRoleIdList(@Param("roleIdList") List<Long> roleIdList);
 
     /**
      * 查询所有的菜单角色

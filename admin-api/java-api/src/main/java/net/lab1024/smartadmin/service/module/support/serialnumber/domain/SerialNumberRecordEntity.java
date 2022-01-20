@@ -1,8 +1,9 @@
-package net.lab1024.smartadmin.service.module.support.idgenerator.domain;
+package net.lab1024.smartadmin.service.module.support.serialnumber.domain;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,18 +14,30 @@ import java.time.LocalDateTime;
  * @Description:
  */
 @Data
-@TableName("t_id_generator_record")
-public class IdGeneratorRecordEntity {
+@Builder
+@TableName("t_serial_number_record")
+public class SerialNumberRecordEntity {
 
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long serialNumberRecordId;
 
-    private Integer generatorId;
+    private Integer serialNumberId;
 
-    private String time;
+    /**
+     * 最后更新值
+     */
+    private String recordDate;
 
+    /**
+     * 最后更新值
+     */
     private Long lastNumber;
 
+    private LocalDateTime lastTime;
+
+    /**
+     * 数量
+     */
     private Long count;
 
     private LocalDateTime updateTime;

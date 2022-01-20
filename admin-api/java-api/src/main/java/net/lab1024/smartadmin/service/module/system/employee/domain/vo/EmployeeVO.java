@@ -39,6 +39,9 @@ public class EmployeeVO {
     @ApiModelProperty("是否被禁用")
     private Boolean disabledFlag;
 
+    @ApiModelProperty("是否 超级管理员")
+    private Boolean administratorFlag;
+
     @ApiModelProperty("部门名称")
     private String departmentName;
 

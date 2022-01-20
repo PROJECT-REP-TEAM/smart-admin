@@ -3,7 +3,9 @@ package net.lab1024.smartadmin.service.module.system.login.domain;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.util.SmartVerificationUtil;
+import net.lab1024.smartadmin.service.common.validator.enumeration.CheckEnum;
 import net.lab1024.smartadmin.service.module.support.captcha.domain.CaptchaForm;
+import net.lab1024.smartadmin.service.module.system.login.constant.LoginDeviceEnum;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
@@ -30,5 +32,6 @@ public class LoginForm extends CaptchaForm {
 
     @ApiModelProperty(value = "登录终端")
     @Length(max = 30, message = "登录终端最多30字符")
-    private String loginTerminal;
+    @CheckEnum(value = LoginDeviceEnum.class, message = "此终端不允许登录")
+    private String loginDevice;
 }

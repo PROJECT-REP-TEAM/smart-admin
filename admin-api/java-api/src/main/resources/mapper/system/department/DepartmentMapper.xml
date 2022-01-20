@@ -9,7 +9,7 @@
         e.actual_name as managerName,
         pd.`name` as parentName
         FROM
-        t_department d
+        t_department
         left join t_employee e on d.manager_id= e.employee_id
         left join t_department pd on d.parent_id = pd.department_id
         order by sort desc
@@ -17,7 +17,7 @@
 
     <select id="countSubDepartment" resultType="java.lang.Integer">
         SELECT
-        count(1)
+        count(*)
         FROM
         t_department
         WHERE
