@@ -10,9 +10,8 @@ import net.lab1024.smartadmin.service.module.support.serialnumber.constant.Seria
 import java.time.LocalDateTime;
 
 /**
- * @Auther: 卓大
- * @Date: 2018/8/7 0007 13:33
- * @Description:
+ *
+ * @author 卓大
  */
 @Data
 @TableName("t_serial_number")

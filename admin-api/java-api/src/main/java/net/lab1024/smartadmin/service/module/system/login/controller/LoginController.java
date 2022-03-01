@@ -36,8 +36,8 @@ public class LoginController extends SystemBaseController {
     @NoNeedLogin
     @PostMapping("/login")
     @ApiOperation("登录 @author zhuoda")
-    public ResponseDTO<LoginResultVO> login(@Valid @RequestBody LoginForm loginDTO) {
-        return loginService.login(loginDTO);
+    public ResponseDTO<LoginResultVO> login(@Valid @RequestBody LoginForm loginForm) {
+        return loginService.login(loginForm);
     }
 
     @GetMapping("/login/getLoginResult")

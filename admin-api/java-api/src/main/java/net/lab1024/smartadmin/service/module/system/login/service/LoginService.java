@@ -64,7 +64,7 @@ public class LoginService {
      * @return 返回用户登录信息
      */
     public ResponseDTO<LoginResultVO> login(LoginForm loginForm) {
-        // 校验 验证码
+        // 校验 图形验证码
         ResponseDTO<String> checkCaptcha = captchaService.checkCaptcha(loginForm);
         if (!checkCaptcha.getOk()) {
             return ResponseDTO.error(checkCaptcha);
@@ -166,7 +166,7 @@ public class LoginService {
         // 查询用户信息
         LoginUserDetail loginUserDetail = loginUserDetailCache.get(requestUserId);
         if (loginUserDetail == null) {
-            // 查询数据库
+            // 查询员工信息
             EmployeeEntity employeeEntity = employeeService.getById(requestUserId);
             // 获取前端菜单以及功能权限
             loginUserDetail = SmartBeanUtil.copy(employeeEntity, LoginUserDetail.class);

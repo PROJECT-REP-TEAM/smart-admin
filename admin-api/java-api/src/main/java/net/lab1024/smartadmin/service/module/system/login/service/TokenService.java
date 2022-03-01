@@ -28,13 +28,7 @@ public class TokenService {
     private RedisService redisService;
 
     @Autowired
-    private EmployeeService employeeService;
-
-    @Autowired
     private SystemConfigService systemConfigService;
-
-    private ConcurrentMap<String, String> loginUserDetailCache = new ConcurrentLinkedHashMap.Builder<String, String>()
-            .maximumWeightedCapacity(1000).build();
 
     /**
      * 生成 TOKEN
@@ -55,9 +49,10 @@ public class TokenService {
      */
     public void saveToken(String token, String requestUserId, String device) {
         /**
-         * 1、检查：当前设备是类型是否登录过
-         * 2.1、 如果登录过，则移除token,然后加入redis
-         * 2.2、 如果没登录过，则加入redis,
+         * 第一步：检查：当前设备是类型是否登录过
+         * 第二步：
+         * 1）如果登录过，则移除token,然后加入redis
+         * 2）如果没登录过，则加入redis,
          */
 
         String deviceRedisKey = getDeviceRedisKey(requestUserId, device);
@@ -92,6 +87,11 @@ public class TokenService {
 
     }
 
+    /**
+     * 根据token 获取 user id
+     * @param token
+     * @return
+     */
     public Long getRequestUserId(String token) {
         String requestUserIdStr = redisService.get(getTokenRedisKey(token));
         if (requestUserIdStr == null) {

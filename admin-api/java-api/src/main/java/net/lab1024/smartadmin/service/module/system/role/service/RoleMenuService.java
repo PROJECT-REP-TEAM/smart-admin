@@ -1,7 +1,6 @@
 package net.lab1024.smartadmin.service.module.system.role.service;
 
 import com.google.common.collect.Lists;
-import io.jsonwebtoken.lang.Collections;
 import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
@@ -17,6 +16,7 @@ import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleMenuE
 import net.lab1024.smartadmin.service.module.system.role.domain.form.RoleMenuUpdateForm;
 import net.lab1024.smartadmin.service.module.system.role.domain.vo.RoleMenuTreeVO;
 import net.lab1024.smartadmin.service.module.system.role.manager.RoleMenuManager;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +74,7 @@ public class RoleMenuService {
      * @return
      */
     public List<MenuVO> getMenuList(List<Long> roleIdList) {
-        if (Collections.isEmpty(roleIdList)) {
+        if (CollectionUtils.isEmpty(roleIdList)) {
             return new ArrayList<>();
         }
 

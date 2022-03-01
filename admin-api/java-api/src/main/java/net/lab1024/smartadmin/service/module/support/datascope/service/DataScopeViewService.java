@@ -108,9 +108,6 @@ public class DataScopeViewService {
             return DataScopeViewTypeEnum.ME;
         }
 
-        if (employeeService.isAdministrator(employeeId)) {
-            return DataScopeViewTypeEnum.ALL;
-        }
         List<Long> roleIdList = roleEmployeeDao.selectRoleIdByEmployeeId(employeeId);
         //未设置角色 默认本人
         if (CollectionUtils.isEmpty(roleIdList)) {

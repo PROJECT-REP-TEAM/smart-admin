@@ -220,10 +220,10 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
         }
     }
 
-    protected void insertRecord(Integer idGeneratorId, String time, long lastNumber) {
+    protected void insertRecord(Integer serialNumberId, String time, long lastNumber) {
         SerialNumberRecordEntity recordEntity = new SerialNumberRecordEntity();
-        recordEntity.setGeneratorId(idGeneratorId);
-        recordEntity.setTime(time);
+        recordEntity.setSerialNumberId(serialNumberId);
+        recordEntity.setLastTime(time);
         recordEntity.setLastNumber(lastNumber);
         recordEntity.setCount(1L);
         serialNumberRecordDao.insert(recordEntity);

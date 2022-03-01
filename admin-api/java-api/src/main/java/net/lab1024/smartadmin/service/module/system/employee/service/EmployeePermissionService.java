@@ -1,13 +1,12 @@
 package net.lab1024.smartadmin.service.module.system.employee.service;
 
-import io.jsonwebtoken.lang.Collections;
 import net.lab1024.smartadmin.service.common.security.SecurityMetadataSource;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
-import net.lab1024.smartadmin.service.module.system.menu.domain.bo.MenuLoginBO;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuVO;
 import net.lab1024.smartadmin.service.module.system.role.service.RoleEmployeeService;
 import net.lab1024.smartadmin.service.module.system.role.service.RoleMenuService;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,7 +54,7 @@ public class EmployeePermissionService {
      */
     public List<MenuVO> getEmployeeMenuAndPointsList(Long employeeId) {
         List<Long> roleIdList = roleEmployeeService.getRoleIdList(employeeId);
-        if (Collections.isEmpty(roleIdList)) {
+        if (CollectionUtils.isEmpty(roleIdList)) {
             return new ArrayList<>();
         }
 
