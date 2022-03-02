@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
@@ -22,21 +23,24 @@ import java.time.LocalDateTime;
 @TableName("t_serial_number_record")
 public class SerialNumberRecordEntity {
 
-    @TableId(type = IdType.AUTO)
-    private Long serialNumberRecordId;
-
+    /**
+     * 单号id
+     */
     private Integer serialNumberId;
 
     /**
-     * 最后更新值
+     * 记录日期
      */
-    private String recordDate;
+    private LocalDate recordDate;
 
     /**
      * 最后更新值
      */
     private Long lastNumber;
 
+    /**
+     * 上次生成时间
+     */
     private LocalDateTime lastTime;
 
     /**

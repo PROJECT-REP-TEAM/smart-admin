@@ -33,5 +33,5 @@ public class LoginForm extends CaptchaForm {
     @ApiModelProperty(value = "登录终端")
     @Length(max = 30, message = "登录终端最多30字符")
     @CheckEnum(value = LoginDeviceEnum.class, message = "此终端不允许登录")
-    private String loginDevice;
+    private Integer loginDevice;
 }

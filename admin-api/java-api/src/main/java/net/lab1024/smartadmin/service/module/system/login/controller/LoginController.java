@@ -52,7 +52,7 @@ public class LoginController extends SystemBaseController {
     @GetMapping("/login/logout")
     @NoValidPermission
     public ResponseDTO<String> logout() {
-        return loginService.logoutByToken(SmartRequestUtil.getRequestEmployee());
+        return loginService.logout(SmartRequestUtil.getRequestEmployee());
     }
 
     @NoNeedLogin

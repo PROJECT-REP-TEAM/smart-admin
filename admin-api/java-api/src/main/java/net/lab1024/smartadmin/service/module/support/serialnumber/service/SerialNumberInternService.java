@@ -2,10 +2,15 @@ package net.lab1024.smartadmin.service.module.support.serialnumber.service;
 
 import com.google.common.collect.Interner;
 import com.google.common.collect.Interners;
-import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberBO;
+import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberEntity;
+import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberGenerateResultBO;
+import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberInfoBO;
+import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberLastGenerateBO;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zhuoda
@@ -15,30 +20,54 @@ import java.util.List;
 @Service
 public class SerialNumberInternService extends SerialNumberBaseService {
 
+    /**
+     * 按照 serialNumberId 进行锁
+     */
     private static final Interner<Integer> POOL = Interners.newWeakInterner();
 
-    @Override
-    List<Long> generateSerialNumberList(SerialNumberBO serialNumber, int count) {
-        synchronized (POOL.intern(serialNumber.getSerialNumberId())) {
-            List<Long> numberList = loopNumberList(serialNumber, count);
-            /**
-             *  更新主表：上次number和时间
-             *  为什么要在 同步块里执行呢？？
-             *  因为只有在这里才能保证是同步的操作数据库
-             */
-            serialNumberDao.updateLastNumberAndTime(serialNumber.getSerialNumberId(),
-                    serialNumber.getLastNumber(),
-                    serialNumber.getLastTime());
 
-            return numberList;
+    private ConcurrentHashMap<Integer, SerialNumberLastGenerateBO> serialNumberLastGenerateMap = new ConcurrentHashMap<>();
+
+    @PostConstruct
+    void initLastGenerate() {
+        List<SerialNumberEntity> serialNumberEntityList = serialNumberDao.selectList(null);
+        if (serialNumberEntityList == null) {
+            return;
         }
 
-        /**
-         * 更新记录
-         * 为什么操作记录 可以放在 同步块之外呢，因为是进行 c
-          */
+        for (SerialNumberEntity serialNumberEntity : serialNumberEntityList) {
+            SerialNumberLastGenerateBO lastGenerateBO = SerialNumberLastGenerateBO
+                    .builder()
+                    .serialNumberId(serialNumberEntity.getSerialNumberId())
+                    .lastNumber(serialNumberEntity.getLastNumber())
+                    .lastTime(serialNumberEntity.getLastTime())
+                    .build();
+            serialNumberLastGenerateMap.put(serialNumberEntity.getSerialNumberId(), lastGenerateBO);
+        }
+    }
 
+    @Override
+    List<String> generateSerialNumberList(SerialNumberInfoBO serialNumberInfo, int count) {
+        SerialNumberGenerateResultBO serialNumberGenerateResult = null;
+        synchronized (POOL.intern(serialNumberInfo.getSerialNumberId())) {
 
+            // 获取上次的生成结果
+            SerialNumberLastGenerateBO lastGenerateBO = serialNumberLastGenerateMap.get(serialNumberInfo.getSerialNumberId());
 
+            // 生成
+            serialNumberGenerateResult = super.loopNumberList(lastGenerateBO, serialNumberInfo, count);
+
+            // 将生成信息保存的内存和数据库
+            lastGenerateBO.setLastNumber(serialNumberGenerateResult.getLastNumber());
+            lastGenerateBO.setLastTime(serialNumberGenerateResult.getLastTime());
+            serialNumberDao.updateLastNumberAndTime(serialNumberInfo.getSerialNumberId(),
+                    serialNumberGenerateResult.getLastNumber(),
+                    serialNumberGenerateResult.getLastTime());
+
+            // 把生成过程保存到数据库里
+            super.saveRecord(serialNumberGenerateResult);
+        }
+
+        return formatNumberList(serialNumberGenerateResult, serialNumberInfo);
     }
 }

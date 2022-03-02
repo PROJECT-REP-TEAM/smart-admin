@@ -173,7 +173,13 @@ public class RedisService {
         }
     }
 
+    //============================ map =============================
+    public void mset(String key, String hashKey, Object value) {
+        redisHashOperations.put(key, hashKey, value);
+    }
 
-
+    public Object mget(String key, String hashKey) {
+        return redisHashOperations.get(key, hashKey);
+    }
 
 }

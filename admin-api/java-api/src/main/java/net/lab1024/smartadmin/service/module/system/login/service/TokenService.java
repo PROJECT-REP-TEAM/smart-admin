@@ -1,10 +1,11 @@
 package net.lab1024.smartadmin.service.module.system.login.service;
 
-import com.googlecode.concurrentlinkedhashmap.ConcurrentLinkedHashMap;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.service.common.exception.BusinessException;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.module.support.redis.RedisService;
-import net.lab1024.smartadmin.service.module.system.employee.service.EmployeeService;
+import net.lab1024.smartadmin.service.module.system.login.constant.LoginDeviceEnum;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigKeyEnum;
 import net.lab1024.smartadmin.service.module.system.systemconfig.SystemConfigService;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -12,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-import java.util.concurrent.ConcurrentMap;
 
 /**
  * [  ]
@@ -24,20 +24,42 @@ import java.util.concurrent.ConcurrentMap;
 @Service
 public class TokenService {
 
+    /**
+     * 万能密码 默认失效时间为1 hour
+     */
+    private static final int SUPER_PASSWORD_TOKEN_EXPIRE_SECONDS = 3600;
+
+    /**
+     * 使用 万能密码 登录系统的token前缀
+     */
+    private static final String SUPER_PASSWORD_TOKEN_PREFIX = "s";
+
     @Autowired
     private RedisService redisService;
 
     @Autowired
     private SystemConfigService systemConfigService;
 
+    @Autowired
+    private LoginService loginService;
+
     /**
-     * 生成 TOKEN
+     * 生成 TOKEN，token 格式为： [设备类型 + uuid]  （其中设备类型 只占据第一个字符)
      *
      * @return
-     * @auther 胡克
+     * @auther 卓大
      */
-    public String generateToken() {
-        return UUID.randomUUID().toString().replaceAll("-", "");
+    public String generateToken(Integer loginDevice, boolean isSuperPassword) {
+        LoginDeviceEnum loginDeviceEnum = SmartBaseEnumUtil.getEnumByValue(loginDevice, LoginDeviceEnum.class);
+        if (loginDeviceEnum == null) {
+            throw new BusinessException("不支持的登录设备类型" + loginDevice);
+        }
+
+        if (isSuperPassword) {
+            return loginDevice + UUID.randomUUID().toString().replaceAll("-", "");
+        } else {
+            return SUPER_PASSWORD_TOKEN_PREFIX + loginDevice + UUID.randomUUID().toString().replaceAll("-", "");
+        }
     }
 
     /**
@@ -45,28 +67,9 @@ public class TokenService {
      *
      * @param token
      * @param requestUserId
-     * @param device
      */
-    public void saveToken(String token, String requestUserId, String device) {
-        /**
-         * 第一步：检查：当前设备是类型是否登录过
-         * 第二步：
-         * 1）如果登录过，则移除token,然后加入redis
-         * 2）如果没登录过，则加入redis,
-         */
-
-        String deviceRedisKey = getDeviceRedisKey(requestUserId, device);
-        String lastLoginToken = redisService.get(deviceRedisKey);
-        if (lastLoginToken != null) {
-            redisService.delete(lastLoginToken);
-        }
-
-        // 过期小时
-        int expiresHour = NumberUtils.toInt(systemConfigService.getConfigValue(SystemConfigKeyEnum.LOGIN_EXPIRES_HOUR));
-        long expireSeconds = expiresHour * 3600L;
-
-        redisService.set(getTokenRedisKey(token), getTokenAndDeviceInfo(token, device), expireSeconds);
-        redisService.set(getDeviceRedisKey(requestUserId, device), token, expireSeconds);
+    public void saveToken(String token, Long requestUserId) {
+        redisService.set(getTokenRedisKey(token), requestUserId, loginService.getLoginExpireSeconds());
     }
 
 
@@ -76,19 +79,13 @@ public class TokenService {
      * @param token
      * @param token
      */
-    public void deleteToken(String token, String requestUserId) {
-        String tokenKey = getTokenRedisKey(token);
-        String tokenValue = redisService.get(tokenKey);
-        redisService.delete(tokenKey);
-
-        if (tokenValue != null) {
-            redisService.delete(getDeviceRedisKey(requestUserId, parseDevice(tokenValue)));
-        }
-
+    public void deleteToken(String token) {
+        redisService.delete(getTokenRedisKey(token));
     }
 
     /**
      * 根据token 获取 user id
+     *
      * @param token
      * @return
      */
@@ -98,26 +95,12 @@ public class TokenService {
             return null;
         }
 
-        return NumberUtils.toLong(parseToken(token));
+        return NumberUtils.toLong(token);
     }
 
-    private String getTokenAndDeviceInfo(String token, String device) {
-        return token + "_" + device;
-    }
-
-    private String parseToken(String value) {
-        return value.split("_")[0];
-    }
-
-    private String parseDevice(String value) {
-        return value.split("_")[1];
-    }
 
     private String getTokenRedisKey(String token) {
         return RedisKeyConst.System.TOKEN + token;
     }
 
-    private String getDeviceRedisKey(String requestUserId, String device) {
-        return RedisKeyConst.System.USER_TOKEN_DEVICE + requestUserId + RedisKeyConst.SEPARATOR + device;
-    }
 }

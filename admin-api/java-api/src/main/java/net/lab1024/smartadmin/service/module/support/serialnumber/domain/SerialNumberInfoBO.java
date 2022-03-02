@@ -1,28 +1,27 @@
 package net.lab1024.smartadmin.service.module.support.serialnumber.domain;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import net.lab1024.smartadmin.service.module.support.serialnumber.constant.SerialNumberIdEnum;
 import net.lab1024.smartadmin.service.module.support.serialnumber.constant.SerialNumberRuleTypeEnum;
 
-import java.time.LocalDateTime;
-
 /**
- *
- * @author 卓大
+ * @author zhuoda
+ * @Date 2022-01-11
  */
-@Data
-@TableName("t_serial_number")
-public class SerialNumberEntity {
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class SerialNumberInfoBO {
 
     /**
      * 主键id
      *
      * @see SerialNumberIdEnum
      */
-    @TableId(type = IdType.INPUT)
     private Integer serialNumberId;
 
     /**
@@ -59,16 +58,34 @@ public class SerialNumberEntity {
     private String remark;
 
     /**
-     * 上次产生的单号, 默认为空
+     * 规则枚举
      */
-    private Long lastNumber;
+    private SerialNumberRuleTypeEnum serialNumberRuleTypeEnum;
+
 
     /**
-     * 上次产生的单号时间
+     * 存在[nnnnnn]中 n 的数量
      */
-    private LocalDateTime lastTime;
+    private Integer numberCount;
 
-    private LocalDateTime updateTime;
+    /**
+     * [nnnnnn] 的格式（主要用于替换）
+     */
+    private String numberFormat;
 
-    private LocalDateTime createTime;
+    /**
+     * 是否存在年份
+     */
+    private Boolean haveYearFlag;
+
+    /**
+     * 是否存在月份
+     */
+    private Boolean haveMonthFlag;
+
+    /**
+     * 是否存在 月
+     */
+    private Boolean haveDayFlag;
+
 }

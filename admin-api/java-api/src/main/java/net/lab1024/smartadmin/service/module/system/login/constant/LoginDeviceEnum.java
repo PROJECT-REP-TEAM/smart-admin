@@ -8,20 +8,22 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
  */
 public enum LoginDeviceEnum implements BaseEnum {
 
-    PC("PC", "电脑端"),
-    
-    APP("App", "移动端");
+    PC(1, "电脑端"),
 
-    LoginDeviceEnum(String value, String desc) {
+    ANDROID(2, "安卓"),
+
+    APPLE(3, "苹果");
+
+    LoginDeviceEnum(Integer value, String desc) {
         this.value = value;
         this.desc = desc;
     }
 
-    private String value;
+    private Integer value;
     private String desc;
 
     @Override
-    public Object getValue() {
+    public Integer getValue() {
         return value;
     }
 

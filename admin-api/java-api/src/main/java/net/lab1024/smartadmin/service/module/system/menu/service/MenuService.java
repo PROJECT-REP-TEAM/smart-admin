@@ -269,4 +269,5 @@ public class MenuService {
         List<MenuUrlVO> privilegeUrlList = menuUrlService.getMenuUrlList();
         return ResponseDTO.ok(privilegeUrlList);
     }
+
 }

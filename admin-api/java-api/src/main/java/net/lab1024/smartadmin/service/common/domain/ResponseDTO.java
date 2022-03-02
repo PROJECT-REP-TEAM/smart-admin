@@ -3,6 +3,7 @@ package net.lab1024.smartadmin.service.common.domain;
 
 import lombok.Data;
 import net.lab1024.smartadmin.service.common.code.ErrorCode;
+import net.lab1024.smartadmin.service.common.code.UserErrorCode;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -59,6 +60,8 @@ public class ResponseDTO<T> {
         return new ResponseDTO<>(OK_CODE, null, true, msg, null);
     }
 
+    // -------------------------------------------- 错误码 --------------------------------------------
+
     public static <T> ResponseDTO<T> error(ErrorCode errorCode) {
         return new ResponseDTO<>(errorCode, false, null, null);
     }
@@ -77,6 +80,17 @@ public class ResponseDTO<T> {
 
     public static <T> ResponseDTO<T> errorData(ErrorCode errorCode, T data) {
         return new ResponseDTO<>(errorCode, false, null, data);
+    }
+
+    // -------------------------------------------- 最常用的 用户参数 错误码 --------------------------------------------
+
+    public static <T> ResponseDTO<T> userErrorParam() {
+        return new ResponseDTO<>(UserErrorCode.PARAM_ERROR, false, null, null);
+    }
+
+
+    public static <T> ResponseDTO<T> userErrorParam(String msg) {
+        return new ResponseDTO<>(UserErrorCode.PARAM_ERROR, false, msg, null);
     }
 
 }

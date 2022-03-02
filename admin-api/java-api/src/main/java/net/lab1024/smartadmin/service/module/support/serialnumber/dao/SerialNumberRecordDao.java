@@ -25,4 +25,15 @@ public interface SerialNumberRecordDao extends BaseMapper<SerialNumberRecordEnti
      * @return
      */
     Long selectRecordIdBySerialNumberIdAndDate(@Param("serialNumberId") Integer serialNumberId, @Param("recordDate") String recordDate);
+
+    /**
+     * 更新记录
+     *
+     * @param serialNumberId
+     * @param recordDate
+     * @param lastNumber
+     * @param count
+     * @return
+     */
+    Long updateRecord(@Param("serialNumberId") Integer serialNumberId, @Param("recordDate") LocalDate recordDate, @Param("lastNumber") Long lastNumber, @Param("count") int count);
 }

@@ -22,6 +22,8 @@ public class RedisKeyConst {
 
         public static final String SERIAL_NUMBER = LOCK + "serial-number:";
 
+        public static final String SERIAL_NUMBER_LAST_INFO = LOCK + "serial-number:last-info";
+
         // 验证码
         public static final String CAPTCHA = PROJECT + "captcha:";
 
