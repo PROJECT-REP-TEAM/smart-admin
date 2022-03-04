@@ -9,6 +9,7 @@ import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialN
 import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberInfoBO;
 import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberLastGenerateBO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  */
 
 @Slf4j
+@Service
 public class SerialNumberRedisService extends SerialNumberBaseService {
 
     private static final int MAX_GET_LOCK_COUNT = 5;

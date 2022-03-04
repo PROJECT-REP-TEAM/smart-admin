@@ -4,7 +4,7 @@
 
     <!-- 查询1个商品 -->
     <select id="selectOne"
-            resultType="net.lab1024.smartadmin.service.module.business.goods.domain.GoodsEntity">
+            resultType="net.lab1024.smartadmin.service.module.business.goods.domain.entity.GoodsEntity">
         SELECT * FROM t_goods
         <where>
             <if test="goodsName != null">
@@ -24,7 +24,7 @@
     </select>
 
     <!-- 分页 查询商品 -->
-    <select id="query" resultType="net.lab1024.smartadmin.service.module.business.goods.domain.GoodsAdminVO">
+    <select id="query" resultType="net.lab1024.smartadmin.service.module.business.goods.domain.vo.GoodsVO">
         SELECT * FROM t_goods
         <where>
             <if test="query.searchWord != null and query.searchWord !=''">

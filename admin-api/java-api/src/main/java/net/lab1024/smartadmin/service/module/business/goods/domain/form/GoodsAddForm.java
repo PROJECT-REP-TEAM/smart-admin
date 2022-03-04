@@ -1,7 +1,8 @@
-package net.lab1024.smartadmin.service.module.business.goods.domain;
+package net.lab1024.smartadmin.service.module.business.goods.domain.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import net.lab1024.smartadmin.service.module.business.goods.domain.GoodsBaseDTO;
 
 /**
  * 商品 添加 DTO

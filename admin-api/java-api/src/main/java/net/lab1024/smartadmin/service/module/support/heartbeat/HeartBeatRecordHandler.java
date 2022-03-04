@@ -31,7 +31,7 @@ public class HeartBeatRecordHandler implements IHeartBeatRecordHandler {
         if (heartBeatRecordOld == null) {
             heartBeatRecordDao.insertHeartBeat(heartBeatRecordEntity);
         } else {
-            heartBeatRecordDao.updateHeartBeatTimeById(heartBeatRecordOld.getId(), heartBeatRecordEntity.getHeartBeatTime());
+            heartBeatRecordDao.updateHeartBeatTimeById(heartBeatRecordOld.getHeartBeatRecordId(), heartBeatRecordEntity.getHeartBeatTime());
         }
     }
 

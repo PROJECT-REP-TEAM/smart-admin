@@ -8,13 +8,13 @@
         last_number = #{lastNumber},
         last_time = #{lastTime}
         where
-        serial_number_id = #{}
+        serial_number_id = #{serialNumberId}
 
     </update>
 
     <!-- 查询最后生成记录 -->
     <select id="selectForUpdate" resultType="net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberEntity">
-       select * from t_id_generator where id = #{id} for update
+       select * from t_serial_number where serial_number_id = #{serialNumberId} for update
     </select>
 
 </mapper>

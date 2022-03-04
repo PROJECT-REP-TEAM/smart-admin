@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.business.goods.domain;
+package net.lab1024.smartadmin.service.module.business.goods.domain.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
  * @date 2021/8/5 14:42
  */
 @Data
-public class GoodsQuery extends PageParam {
+public class GoodsQueryForm extends PageParam {
 
     @ApiModelPropertyEnum(desc = "商品类型|可选", value = GoodsTypeEnum.class)
     private Integer goodsType;

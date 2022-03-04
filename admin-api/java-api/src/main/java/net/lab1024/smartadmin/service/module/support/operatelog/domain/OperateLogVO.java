@@ -15,13 +15,13 @@ import java.util.Date;
 public class OperateLogVO {
 
     @ApiModelProperty("主键")
-    private Long id;
+    private Long operateLogId;
 
     @ApiModelProperty("用户id")
-    private Long userId;
+    private Long operateUserId;
 
     @ApiModelProperty("用户名称")
-    private String userName;
+    private String operateUserName;
 
     @ApiModelProperty("操作模块")
     private String module;
@@ -39,7 +39,7 @@ public class OperateLogVO {
     private String param;
 
     @ApiModelProperty("请求结果 0失败 1成功")
-    private Integer result;
+    private Integer successFlag;
 
     @ApiModelProperty("失败原因")
     private String failReason;

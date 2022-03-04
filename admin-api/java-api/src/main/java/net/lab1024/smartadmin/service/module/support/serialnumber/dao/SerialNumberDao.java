@@ -20,17 +20,17 @@ public interface SerialNumberDao extends BaseMapper<SerialNumberEntity> {
     /**
      * 排他锁查询
      *
-     * @param id
+     * @param serialNumberId
      * @return
      */
-    SerialNumberEntity selectForUpdate(@Param("id") Integer id);
+    SerialNumberEntity selectForUpdate(@Param("serialNumberId") Integer serialNumberId);
 
     /**
      * 更新上一次的 数值和时间
-     *
      * @param serialNumberId
+     * @param lastNumber
      * @param lastTime
      */
-    void updateLastNumberAndTime(@Param("Integer") Integer serialNumberId, @Param("lastNumber") Long lastNumber, @Param("lastTime") LocalDateTime lastTime);
+    void updateLastNumberAndTime(@Param("serialNumberId") Integer serialNumberId, @Param("lastNumber") Long lastNumber, @Param("lastTime") LocalDateTime lastTime);
 
 }

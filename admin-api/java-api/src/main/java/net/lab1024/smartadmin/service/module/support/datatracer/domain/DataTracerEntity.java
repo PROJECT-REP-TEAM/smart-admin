@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class DataTracerEntity {
 
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long dataTracerId;
     /**
      * 业务id
      */

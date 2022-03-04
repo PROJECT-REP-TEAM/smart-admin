@@ -21,7 +21,7 @@ public class FileEntity {
      * 主键id
      */
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long fileId;
 
     /**
      * 文件夹类型

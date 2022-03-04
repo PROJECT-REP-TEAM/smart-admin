@@ -2,7 +2,7 @@ package net.lab1024.smartadmin.service.module.business.goods;
 
 import com.google.common.collect.Lists;
 import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
-import net.lab1024.smartadmin.service.module.business.goods.domain.GoodsEntity;
+import net.lab1024.smartadmin.service.module.business.goods.domain.entity.GoodsEntity;
 import net.lab1024.smartadmin.service.module.support.datatracer.service.DataTracerFieldService;
 import net.lab1024.smartadmin.service.module.support.datatracer.service.DataTracerService;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerBusinessTypeEnum;

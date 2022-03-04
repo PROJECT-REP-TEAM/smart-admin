@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.business.goods;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import net.lab1024.smartadmin.service.module.business.goods.domain.GoodsEntity;
+import net.lab1024.smartadmin.service.module.business.goods.domain.entity.GoodsEntity;
 import org.springframework.stereotype.Service;
 
 /**

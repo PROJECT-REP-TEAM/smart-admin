@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 public class HeartBeatRecordVO {
 
-    private Integer id;
+    private Integer heartBeatRecordId;
 
     @ApiModelProperty("项目路径")
     private String projectPath;

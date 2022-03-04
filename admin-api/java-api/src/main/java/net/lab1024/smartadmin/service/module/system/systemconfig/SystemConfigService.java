@@ -9,6 +9,7 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
+import net.lab1024.smartadmin.service.constant.ReloadConst;
 import net.lab1024.smartadmin.service.module.support.reload.core.annoation.SmartReload;
 import net.lab1024.smartadmin.service.module.system.systemconfig.domain.*;
 import org.apache.commons.collections4.CollectionUtils;
@@ -19,7 +20,6 @@ import org.springframework.util.Assert;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -40,16 +40,16 @@ public class SystemConfigService {
     @Autowired
     private SystemConfigDao systemConfigDao;
 
-    @SmartReload("system_config")
+    @SmartReload(ReloadConst.SYSTEM_CONFIG_RELOAD)
     public void configReload(String param) {
-        this.initConfigCache();
+        this.loadConfigCache();
     }
 
     /**
      * 初始化系统设置缓存
      */
     @PostConstruct
-    private void initConfigCache() {
+    private void loadConfigCache() {
         configCache.clear();
         List<SystemConfigEntity> entityList = systemConfigDao.selectList(null);
         if (CollectionUtils.isEmpty(entityList)) {
@@ -148,7 +148,7 @@ public class SystemConfigService {
         systemConfigDao.insert(entity);
 
         // 刷新缓存
-        this.refreshConfigCache(entity.getConfigId());
+        this.refreshConfigCache(entity.getSystemConfigId());
         return ResponseDTO.ok();
     }
 
@@ -159,13 +159,13 @@ public class SystemConfigService {
      * @return
      */
     public ResponseDTO<String> updateSystemConfig(SystemConfigUpdateForm updateDTO) {
-        Long configId = updateDTO.getConfigId();
+        Long configId = updateDTO.getSystemConfigId();
         SystemConfigEntity entity = systemConfigDao.selectById(configId);
         if (null == entity) {
             return ResponseDTO.error(UserErrorCode.DATA_NOT_EXIST);
         }
         SystemConfigEntity alreadyEntity = systemConfigDao.selectByKey(updateDTO.getConfigKey());
-        if (null != alreadyEntity && !Objects.equals(configId, alreadyEntity.getConfigId())) {
+        if (null != alreadyEntity && !Objects.equals(configId, alreadyEntity.getSystemConfigId())) {
             return ResponseDTO.error(UserErrorCode.ALREADY_EXIST, "config key 已存在");
         }
 
@@ -192,9 +192,9 @@ public class SystemConfigService {
         }
 
         // 更新数据
-        Long configId = config.getConfigId();
+        Long configId = config.getSystemConfigId();
         SystemConfigEntity entity = new SystemConfigEntity();
-        entity.setConfigId(configId);
+        entity.setSystemConfigId(configId);
         entity.setConfigValue(value);
         systemConfigDao.updateById(entity);
 

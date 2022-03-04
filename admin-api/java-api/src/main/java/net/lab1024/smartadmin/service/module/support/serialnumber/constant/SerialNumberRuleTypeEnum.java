@@ -18,21 +18,23 @@ public enum SerialNumberRuleTypeEnum implements BaseEnum {
     /**
      * 没有周期
      */
-    NONE(StringConst.EMPTY_STR, "没有周期", null),
+    NONE(StringConst.EMPTY_STR,"", "没有周期", null),
     /**
      * 年周期
      */
-    YEAR("[yyyy]", "年", SmartDateFormatterEnum.Y),
+    YEAR("[yyyy]", "\\[yyyy\\]","年", SmartDateFormatterEnum.Y),
     /**
      * 月周期
      */
-    MONTH("[mm]", "年月", SmartDateFormatterEnum.YM),
+    MONTH("[mm]", "\\[mm\\]","年月", SmartDateFormatterEnum.YM),
     /**
      * 日周期
      */
-    DAY("[dd]", "年月日", SmartDateFormatterEnum.YMD);
+    DAY("[dd]", "\\[dd\\]","年月日", SmartDateFormatterEnum.YMD);
 
     private final String value;
+
+    private final String regex;
 
     private final String desc;
 

@@ -17,7 +17,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class SystemConfigUpdateForm extends SystemConfigAddForm {
 
-    @ApiModelProperty("configId")
-    @NotNull(message = "configId不能为空")
-    private Long configId;
+    @ApiModelProperty("systemConfigId")
+    @NotNull(message = "systemConfigId不能为空")
+    private Long systemConfigId;
 }

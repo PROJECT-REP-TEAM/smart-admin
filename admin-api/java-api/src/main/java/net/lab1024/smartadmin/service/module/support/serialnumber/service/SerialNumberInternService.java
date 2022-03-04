@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Date 2021-11-10
  */
 
-@Service
+
 public class SerialNumberInternService extends SerialNumberBaseService {
 
     /**

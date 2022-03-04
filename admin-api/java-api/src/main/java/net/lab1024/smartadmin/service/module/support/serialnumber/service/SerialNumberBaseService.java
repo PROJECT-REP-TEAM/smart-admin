@@ -42,7 +42,7 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
             return;
         }
         for (SerialNumberEntity serialNumberEntity : serialNumberEntityList) {
-            SerialNumberRuleTypeEnum ruleTypeEnum = SmartBaseEnumUtil.getEnumByValue(serialNumberEntity.getRuleType(), SerialNumberRuleTypeEnum.class);
+            SerialNumberRuleTypeEnum ruleTypeEnum = SmartBaseEnumUtil.getEnumByName(serialNumberEntity.getRuleType().toUpperCase(), SerialNumberRuleTypeEnum.class);
             if (ruleTypeEnum == null) {
                 throw new ExceptionInInitializerError("cannot find rule type , id : " + serialNumberEntity.getSerialNumberId());
             }
@@ -54,19 +54,23 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
                 throw new ExceptionInInitializerError("[nnn] 配置错误，请仔细查看 id : " + serialNumberEntity.getSerialNumberId());
             }
 
-            String numberFormat = format.substring(startIndex, endIndex + 2);
+            String numberFormat = format.substring(startIndex + 1, endIndex + 1);
 
             if (serialNumberEntity.getStepRandomRange() < 1) {
                 throw new ExceptionInInitializerError("random step range must greater than 1 " + serialNumberEntity.getSerialNumberId());
             }
 
             SerialNumberInfoBO serialNumberInfoBO = SerialNumberInfoBO.builder()
+                    .serialNumberId(serialNumberEntity.getSerialNumberId())
                     .serialNumberRuleTypeEnum(ruleTypeEnum)
+                    .initNumber(serialNumberEntity.getInitNumber())
+                    .format(serialNumberEntity.getFormat())
+                    .stepRandomRange(serialNumberEntity.getStepRandomRange())
                     .haveDayFlag(format.contains(SerialNumberRuleTypeEnum.DAY.getValue()))
                     .haveMonthFlag(format.contains(SerialNumberRuleTypeEnum.MONTH.getValue()))
                     .haveYearFlag(format.contains(SerialNumberRuleTypeEnum.YEAR.getValue()))
                     .numberCount(endIndex - startIndex)
-                    .numberFormat(numberFormat)
+                    .numberFormat("\\[" + numberFormat + "\\]")
                     .build();
 
             this.serialNumberMap.put(serialNumberEntity.getSerialNumberId(), serialNumberInfoBO);
@@ -94,22 +98,22 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
     /**
      * 循环生成 number 集合
      *
-     * @param lastGenerateBO
-     * @param serialNumberInfoBO
+     * @param lastGenerate
+     * @param serialNumberInfo
      * @param count
      * @return
      */
-    protected SerialNumberGenerateResultBO loopNumberList(SerialNumberLastGenerateBO lastGenerateBO, SerialNumberInfoBO serialNumberInfoBO, int count) {
-        long lastNumber = lastGenerateBO.getLastNumber();
+    protected SerialNumberGenerateResultBO loopNumberList(SerialNumberLastGenerateBO lastGenerate, SerialNumberInfoBO serialNumberInfo, int count) {
+        Long lastNumber = lastGenerate.getLastNumber();
         boolean isReset = false;
-        if (isResetInitNumber(lastGenerateBO, serialNumberInfoBO)) {
-            lastNumber = serialNumberInfoBO.getInitNumber();
+        if (isResetInitNumber(lastGenerate, serialNumberInfo)) {
+            lastNumber = serialNumberInfo.getInitNumber();
             isReset = true;
         }
 
         ArrayList<Long> numberList = Lists.newArrayListWithCapacity(count);
         for (int i = 0; i < count; i++) {
-            Integer stepRandomRange = serialNumberInfoBO.getStepRandomRange();
+            Integer stepRandomRange = serialNumberInfo.getStepRandomRange();
             if (stepRandomRange > 1) {
                 lastNumber = lastNumber + RandomUtils.nextInt(1, stepRandomRange + 1);
             } else {
@@ -121,6 +125,7 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
 
         return SerialNumberGenerateResultBO
                 .builder()
+                .serialNumberId(serialNumberInfo.getSerialNumberId())
                 .lastNumber(lastNumber)
                 .lastTime(LocalDateTime.now())
                 .numberList(numberList)
@@ -139,10 +144,12 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
         if (effectRows == null || effectRows == 0) {
             SerialNumberRecordEntity recordEntity = SerialNumberRecordEntity.builder()
                     .serialNumberId(resultBO.getSerialNumberId())
+                    .recordDate(LocalDate.now())
                     .lastTime(resultBO.getLastTime())
                     .lastNumber(resultBO.getLastNumber())
                     .count((long) resultBO.getNumberList().size())
                     .build();
+            serialNumberRecordDao.insert(recordEntity);
         }
 
     }
@@ -152,11 +159,16 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
      *
      * @return
      */
-    private boolean isResetInitNumber(SerialNumberLastGenerateBO lastGenerateBO, SerialNumberInfoBO serialNumberInfoBO) {
-        SerialNumberRuleTypeEnum serialNumberRuleTypeEnum = serialNumberInfoBO.getSerialNumberRuleTypeEnum();
-        int lastTimeYear = lastGenerateBO.getLastTime().getYear();
-        int lastTimeMonth = lastGenerateBO.getLastTime().getMonthValue();
-        int lastTimeDay = lastGenerateBO.getLastTime().getDayOfYear();
+    private boolean isResetInitNumber(SerialNumberLastGenerateBO lastGenerate, SerialNumberInfoBO serialNumberInfo) {
+        LocalDateTime lastTime = lastGenerate.getLastTime();
+        if (lastTime == null) {
+            return true;
+        }
+
+        SerialNumberRuleTypeEnum serialNumberRuleTypeEnum = serialNumberInfo.getSerialNumberRuleTypeEnum();
+        int lastTimeYear = lastTime.getYear();
+        int lastTimeMonth = lastTime.getMonthValue();
+        int lastTimeDay = lastTime.getDayOfYear();
 
         LocalDateTime now = LocalDateTime.now();
 
@@ -175,27 +187,27 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
     /**
      * 替换特殊rule，即替换[yyyy][mm][dd][nnn]等规则
      */
-    protected List<String> formatNumberList(SerialNumberGenerateResultBO resultBO, SerialNumberInfoBO serialNumberInfoBO) {
+    protected List<String> formatNumberList(SerialNumberGenerateResultBO generteResult, SerialNumberInfoBO serialNumberInfo) {
 
         /**
          * 第一步：替换年、月、日
          */
-        LocalDate lastTime = resultBO.getLastTime().toLocalDate();
+        LocalDate lastTime = generteResult.getLastTime().toLocalDate();
         String year = String.valueOf(lastTime.getYear());
         String month = lastTime.getMonthValue() > 9 ? String.valueOf(lastTime.getMonthValue()) : "0" + lastTime.getMonthValue();
         String day = lastTime.getDayOfMonth() > 9 ? String.valueOf(lastTime.getDayOfMonth()) : "0" + lastTime.getDayOfMonth();
 
         // 把年月日替换
-        String format = serialNumberInfoBO.getFormat();
+        String format = serialNumberInfo.getFormat();
 
-        if (serialNumberInfoBO.getHaveYearFlag()) {
-            format = format.replaceAll(SerialNumberRuleTypeEnum.YEAR.getValue(), year);
+        if (serialNumberInfo.getHaveYearFlag()) {
+            format = format.replaceAll(SerialNumberRuleTypeEnum.YEAR.getRegex(), year);
         }
-        if (serialNumberInfoBO.getHaveMonthFlag()) {
-            format = format.replaceAll(SerialNumberRuleTypeEnum.MONTH.getValue(), month);
+        if (serialNumberInfo.getHaveMonthFlag()) {
+            format = format.replaceAll(SerialNumberRuleTypeEnum.MONTH.getRegex(), month);
         }
-        if (serialNumberInfoBO.getHaveDayFlag()) {
-            format = format.replaceAll(SerialNumberRuleTypeEnum.DAY.getValue(), day);
+        if (serialNumberInfo.getHaveDayFlag()) {
+            format = format.replaceAll(SerialNumberRuleTypeEnum.DAY.getRegex(), day);
         }
 
 
@@ -203,20 +215,20 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
          * 第二步：替换数字
          */
 
-        List<String> numberList = Lists.newArrayListWithCapacity(resultBO.getNumberList().size());
-        for (Long number : resultBO.getNumberList()) {
+        List<String> numberList = Lists.newArrayListWithCapacity(generteResult.getNumberList().size());
+        for (Long number : generteResult.getNumberList()) {
             StringBuilder numberStringBuilder = new StringBuilder();
             int currentNumberCount = String.valueOf(number).length();
             //数量不够，前面补0
-            if (serialNumberInfoBO.getNumberCount() > currentNumberCount) {
-                int remain = serialNumberInfoBO.getNumberCount() - currentNumberCount;
+            if (serialNumberInfo.getNumberCount() > currentNumberCount) {
+                int remain = serialNumberInfo.getNumberCount() - currentNumberCount;
                 for (int i = 0; i < remain; i++) {
                     numberStringBuilder.append(0);
                 }
             }
             numberStringBuilder.append(number);
             //最终替换
-            String finalNumber = format.replaceAll(serialNumberInfoBO.getNumberFormat(), numberStringBuilder.toString());
+            String finalNumber = format.replaceAll(serialNumberInfo.getNumberFormat(), numberStringBuilder.toString());
             numberList.add(finalNumber);
         }
         return numberList;

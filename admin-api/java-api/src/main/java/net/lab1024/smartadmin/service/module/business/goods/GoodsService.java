@@ -9,7 +9,13 @@ import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
 import net.lab1024.smartadmin.service.module.business.category.CategoryQueryService;
 import net.lab1024.smartadmin.service.module.business.category.constant.CategoryTypeEnum;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
-import net.lab1024.smartadmin.service.module.business.goods.domain.*;
+import net.lab1024.smartadmin.service.module.business.goods.domain.GoodsBO;
+import net.lab1024.smartadmin.service.module.business.goods.domain.entity.GoodsEntity;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsAddForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsDeleteForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsQueryForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsUpdateForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.vo.GoodsVO;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerOperateTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,7 +81,7 @@ public class GoodsService {
         GoodsEntity originEntity = goodsDao.selectById(updateForm.getGoodsId());
         GoodsEntity goodsEntity = SmartBeanUtil.copy(updateForm, GoodsEntity.class);
         goodsDao.updateById(goodsEntity);
-        goodsDataTracerService.goodsUpdateRecord(originEntity,goodsEntity, LocalDateTime.now(), updateForm.getUpdateId(), updateForm.getUpdateName());
+        goodsDataTracerService.goodsUpdateRecord(originEntity, goodsEntity, LocalDateTime.now(), updateForm.getUpdateId(), updateForm.getUpdateName());
         return ResponseDTO.ok();
     }
 
@@ -116,7 +122,7 @@ public class GoodsService {
      * @param delForm
      * @return
      */
-    public ResponseDTO<String> del(GoodsDelForm delForm) {
+    public ResponseDTO<String> del(GoodsDeleteForm delForm) {
         // 批量更新删除状态
         List<GoodsEntity> goodsList = delForm.getGoodsIdList().stream().map(id -> {
             GoodsEntity goodsEntity = new GoodsEntity();
@@ -136,16 +142,16 @@ public class GoodsService {
      * @param queryForm
      * @return
      */
-    public ResponseDTO<PageResult<GoodsAdminVO>> query(GoodsQuery queryForm) {
+    public ResponseDTO<PageResult<GoodsVO>> query(GoodsQueryForm queryForm) {
         queryForm.setDeletedFlag(false);
         Page<?> page = SmartPageUtil.convert2PageQuery(queryForm);
-        List<GoodsAdminVO> list = goodsDao.query(page, queryForm);
-        PageResult<GoodsAdminVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
+        List<GoodsVO> list = goodsDao.query(page, queryForm);
+        PageResult<GoodsVO> pageResult = SmartPageUtil.convert2PageResult(page, list);
         if (pageResult.getEmptyFlag()) {
             return ResponseDTO.ok(pageResult);
         }
         // 查询分类名称
-        List<Long> categoryIdList = list.stream().map(GoodsAdminVO::getCategoryId).distinct().collect(Collectors.toList());
+        List<Long> categoryIdList = list.stream().map(GoodsVO::getCategoryId).distinct().collect(Collectors.toList());
         Map<Long, CategoryEntity> categoryMap = categoryQueryService.queryCategoryList(categoryIdList);
         list.forEach(e -> e.setCategoryName(categoryMap.get(e.getCategoryId()).getCategoryName()));
         return ResponseDTO.ok(pageResult);

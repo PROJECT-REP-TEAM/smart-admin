@@ -7,7 +7,11 @@ import net.lab1024.smartadmin.service.common.domain.PageResult;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartRequestUtil;
 import net.lab1024.smartadmin.service.constant.SwaggerTagConst;
-import net.lab1024.smartadmin.service.module.business.goods.domain.*;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsAddForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsDeleteForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsQueryForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.form.GoodsUpdateForm;
+import net.lab1024.smartadmin.service.module.business.goods.domain.vo.GoodsVO;
 import net.lab1024.smartadmin.service.module.system.login.domain.RequestEmployee;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +53,7 @@ public class GoodsController extends SystemBaseController {
 
     @ApiOperation("删除 by 胡克")
     @PostMapping("/goods/del")
-    public ResponseDTO<String> del(@RequestBody @Valid GoodsDelForm delForm) {
+    public ResponseDTO<String> del(@RequestBody @Valid GoodsDeleteForm delForm) {
         RequestEmployee employee = SmartRequestUtil.getRequestEmployee();
         delForm.setUpdateId(employee.getEmployeeId());
         delForm.setUpdateName(employee.getActualName());
@@ -58,7 +62,7 @@ public class GoodsController extends SystemBaseController {
 
     @ApiOperation("分页查询 by 胡克")
     @PostMapping("/goods/query")
-    public ResponseDTO<PageResult<GoodsAdminVO>> query(@RequestBody @Valid GoodsQuery queryForm) {
+    public ResponseDTO<PageResult<GoodsVO>> query(@RequestBody @Valid GoodsQueryForm queryForm) {
         return goodsService.query(queryForm);
     }
 }

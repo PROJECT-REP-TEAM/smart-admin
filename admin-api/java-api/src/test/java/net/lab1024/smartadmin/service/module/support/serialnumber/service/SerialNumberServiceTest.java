@@ -2,15 +2,19 @@ package net.lab1024.smartadmin.service.module.support.serialnumber.service;
 
 import net.lab1024.smartadmin.service.SmartAdminApplicationTest;
 import net.lab1024.smartadmin.service.module.support.serialnumber.constant.SerialNumberIdEnum;
+import org.junit.Assert;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.CountDownLatch;
 
 class SerialNumberServiceTest extends SmartAdminApplicationTest {
 
     @Autowired
-    private SerialNumberService generatorService;
+    private SerialNumberService serialNumberService;
 
     /**
      * id 生成测试
@@ -19,11 +23,16 @@ class SerialNumberServiceTest extends SmartAdminApplicationTest {
     void generateTest() throws InterruptedException {
 
         int thread = 10;
+        int length = 50;
+
+        CopyOnWriteArraySet<String> numberList = new CopyOnWriteArraySet<>();
         CountDownLatch countDownLatch = new CountDownLatch(thread);
 
+
         Runnable task = () -> {
-            for (int i = 0; i < 50; i++) {
-                String id = generatorService.generate(SerialNumberIdEnum.ORDER);
+            for (int i = 0; i < length; i++) {
+                String id = serialNumberService.generate(SerialNumberIdEnum.ORDER);
+                numberList.add(id);
                 System.out.println(countDownLatch.getCount() + "生成id->" + id);
             }
             countDownLatch.countDown();
@@ -33,6 +42,8 @@ class SerialNumberServiceTest extends SmartAdminApplicationTest {
             new Thread(task).start();
         }
 
+        Assert.assertEquals(thread * length, numberList.size());
+
         countDownLatch.await();
     }
 
@@ -40,11 +51,17 @@ class SerialNumberServiceTest extends SmartAdminApplicationTest {
     void generateManyTest() throws InterruptedException {
 
         int thread = 10;
+        int length = 50;
+        int count = 5;
+
+        CopyOnWriteArraySet<String> numberList = new CopyOnWriteArraySet<>();
         CountDownLatch countDownLatch = new CountDownLatch(thread);
 
         Runnable task = () -> {
-            for (int i = 0; i < 10; i++) {
-                System.out.println(countDownLatch.getCount() + "生成id->" + generatorService.generate(SerialNumberIdEnum.ORDER, 5));
+            for (int i = 0; i < length; i++) {
+                List<String> stringList = serialNumberService.generate(SerialNumberIdEnum.ORDER, count);
+                numberList.addAll(stringList);
+                System.out.println(countDownLatch.getCount() + "生成id->" + stringList);
             }
             countDownLatch.countDown();
         };
@@ -53,6 +70,7 @@ class SerialNumberServiceTest extends SmartAdminApplicationTest {
             new Thread(task).start();
         }
 
+        Assert.assertEquals(thread * length * count, numberList.size());
         countDownLatch.await();
     }
 }

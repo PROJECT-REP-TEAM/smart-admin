@@ -19,24 +19,24 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("t_user_operate_log")
+@TableName("t_operate_log")
 public class OperateLogEntity {
 
     /**
      * 主键id
      */
     @TableId(type = IdType.AUTO)
-    private Long id;
+    private Long operateLogId;
 
     /**
-     * 用户id
+     * 操作人id
      */
-    private Long userId;
+    private Long operateUserId;
 
     /**
-     * 用户名称
+     * 操作人名称
      */
-    private String userName;
+    private String operateUserName;
     /**
      * 操作模块
      */

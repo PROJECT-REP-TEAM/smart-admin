@@ -1,6 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.cache;
 
 import com.google.common.collect.Lists;
+import net.lab1024.smartadmin.service.constant.ReloadConst;
 import net.lab1024.smartadmin.service.module.support.reload.core.annoation.SmartReload;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.cache.caffeine.CaffeineCacheManager;
@@ -25,36 +26,39 @@ public class CacheService {
 
     /**
      * 获取所有缓存名称
+     *
      * @return
      */
-    public List<String> cacheNames(){
+    public List<String> cacheNames() {
         return Lists.newArrayList(caffeineCacheManager.getCacheNames());
     }
 
 
     /**
      * 移除某个key
+     *
      * @param cacheName
      */
-    @SmartReload("removeCache")
-    public void removeCache(String cacheName){
+    @SmartReload(ReloadConst.CACHE_SERVICE)
+    public void removeCache(String cacheName) {
         CaffeineCache cache = (CaffeineCache) caffeineCacheManager.getCache(cacheName);
-        if(cache != null){
+        if (cache != null) {
             cache.clear();
         }
     }
 
     /**
      * 某个缓存下的所有key
+     *
      * @param cacheName
      * @return
      */
-    public List<String> cacheKey(String cacheName){
+    public List<String> cacheKey(String cacheName) {
         CaffeineCache cache = (CaffeineCache) caffeineCacheManager.getCache(cacheName);
-        if(cache == null){
+        if (cache == null) {
             return Lists.newArrayList();
         }
         Set<Object> cacheKey = cache.getNativeCache().asMap().keySet();
-        return cacheKey.stream().map(e->e.toString()).collect(Collectors.toList());
+        return cacheKey.stream().map(e -> e.toString()).collect(Collectors.toList());
     }
 }

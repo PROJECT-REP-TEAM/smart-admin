@@ -15,7 +15,7 @@ import net.lab1024.smartadmin.service.module.support.file.constant.FileFolderTyp
 public class FileVO {
 
     @ApiModelProperty("主键")
-    private Long id;
+    private Long fileId;
 
     @ApiModelProperty("存储文件夹类型")
     @ApiModelPropertyEnum(FileFolderTypeEnum.class)

@@ -362,6 +362,7 @@
     </build>
 
     <profiles>
+        <!--开发环境-->
         <profile>
             <id>dev</id>
             <properties>
@@ -371,18 +372,21 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
+        <!--测试环境-->
         <profile>
-            <id>sit</id>
+            <id>test</id>
             <properties>
-                <profiles.active>sit</profiles.active>
+                <profiles.active>test</profiles.active>
             </properties>
         </profile>
+        <!--预发布环境-->
         <profile>
             <id>pre</id>
             <properties>
                 <profiles.active>pre</profiles.active>
             </properties>
         </profile>
+        <!--生产环境-->
         <profile>
             <id>prod</id>
             <properties>

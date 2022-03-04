@@ -133,7 +133,7 @@ public class FileService {
         fileEntity.setCreatorId(userId);
         fileEntity.setCreatorName(userName);
         fileDao.insert(fileEntity);
-        uploadVO.setFileId(fileEntity.getId());
+        uploadVO.setFileId(fileEntity.getFileId());
         // 添加缓存
         String redisKey = RedisKeyConst.Support.FILE_URL + uploadVO.getFileKey();
         redisService.set(redisKey, uploadVO.getFileUrl(), fileStorageService.cacheExpireSecond());

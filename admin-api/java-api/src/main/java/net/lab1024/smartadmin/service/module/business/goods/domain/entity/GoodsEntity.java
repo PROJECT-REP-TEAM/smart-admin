@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.business.goods.domain;
+package net.lab1024.smartadmin.service.module.business.goods.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;

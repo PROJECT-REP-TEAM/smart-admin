@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 public class SystemConfigEntity {
 
     @TableId(type = IdType.AUTO)
-    private Long configId;
+    private Long systemConfigId;
 
     /**
      * 参数key

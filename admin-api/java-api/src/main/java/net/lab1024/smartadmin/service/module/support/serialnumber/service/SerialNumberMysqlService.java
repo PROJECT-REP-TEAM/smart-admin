@@ -6,6 +6,7 @@ import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialN
 import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberGenerateResultBO;
 import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberInfoBO;
 import net.lab1024.smartadmin.service.module.support.serialnumber.domain.SerialNumberLastGenerateBO;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;

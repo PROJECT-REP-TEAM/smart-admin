@@ -1,4 +1,4 @@
-package net.lab1024.smartadmin.service.module.business.goods.domain;
+package net.lab1024.smartadmin.service.module.business.goods.domain.form;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.util.List;
  * @date 2021/8/5 14:42
  */
 @Data
-public class GoodsDelForm {
+public class GoodsDeleteForm {
 
     @ApiModelProperty("商品id集合")
     @NotEmpty(message = "商品id不能为空")

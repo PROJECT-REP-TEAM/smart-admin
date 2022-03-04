@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Data
 public class SystemConfigVO {
     @ApiModelProperty("主键")
-    private Long configId;
+    private Long systemConfigId;
 
     @ApiModelProperty("参数key")
     private String configKey;
