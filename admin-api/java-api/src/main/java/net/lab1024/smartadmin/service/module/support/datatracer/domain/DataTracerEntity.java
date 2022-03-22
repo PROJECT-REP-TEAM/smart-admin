@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
  * [  ]
  *
  * @author 罗伊
- * @date 2020/8/25 11:01
  */
 @Data
 @TableName("t_data_tracer")

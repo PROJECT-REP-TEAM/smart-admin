@@ -16,8 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author zhuoda
  * @Date 2021-11-10
  */
-
-
+@Service
 public class SerialNumberInternService extends SerialNumberBaseService {
 
     /**
@@ -28,9 +27,8 @@ public class SerialNumberInternService extends SerialNumberBaseService {
 
     private ConcurrentHashMap<Integer, SerialNumberLastGenerateBO> serialNumberLastGenerateMap = new ConcurrentHashMap<>();
 
-    @PostConstruct
-    void initLastGenerate() {
-        List<SerialNumberEntity> serialNumberEntityList = serialNumberDao.selectList(null);
+    @Override
+    public void initLastGenerateData(List<SerialNumberEntity> serialNumberEntityList) {
         if (serialNumberEntityList == null) {
             return;
         }
@@ -70,4 +68,6 @@ public class SerialNumberInternService extends SerialNumberBaseService {
 
         return formatNumberList(serialNumberGenerateResult, serialNumberInfo);
     }
+
+
 }

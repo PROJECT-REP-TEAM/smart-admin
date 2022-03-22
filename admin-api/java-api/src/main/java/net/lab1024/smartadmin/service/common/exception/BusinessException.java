@@ -6,7 +6,7 @@ import net.lab1024.smartadmin.service.common.code.ErrorCode;
  * [ 业务逻辑异常,全局异常拦截后统一返回ResponseCodeConst.SYSTEM_ERROR ]
  *
  * @author 罗伊
- * @date 2020/8/25 11:57
+ * @date 2020/8/25 21:57
  */
 public class BusinessException extends RuntimeException {
 

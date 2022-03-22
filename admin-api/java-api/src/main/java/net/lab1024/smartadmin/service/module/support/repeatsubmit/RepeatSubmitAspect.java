@@ -48,8 +48,8 @@ public class RepeatSubmitAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
 
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        String servletPath = attributes.getRequest().getServletPath();
-        String ticket = this.repeatSubmitTicket.getTicket(servletPath);
+        String ticketToken = attributes.getRequest().getServletPath();
+        String ticket = this.repeatSubmitTicket.getTicket(ticketToken);
         if (StringUtils.isEmpty(ticket)) {
             return point.proceed();
         }
@@ -58,7 +58,7 @@ public class RepeatSubmitAspect {
             Method method = ((MethodSignature) point.getSignature()).getMethod();
             RepeatSubmit annotation = method.getAnnotation(RepeatSubmit.class);
             int interval = Math.min(annotation.value(), RepeatSubmit.MAX_INTERVAL);
-            if (System.currentTimeMillis() < (long) timeStamp + interval) {
+            if (System.currentTimeMillis() < timeStamp + interval) {
                 // 提交频繁
                 return ResponseDTO.error(UserErrorCode.REPEAT_SUBMIT);
             }

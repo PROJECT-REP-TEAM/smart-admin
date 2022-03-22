@@ -1,11 +1,11 @@
 package net.lab1024.smartadmin.service.config;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import net.lab1024.smartadmin.service.common.util.date.SmartDateFormatterEnum;
-import net.lab1024.smartadmin.service.common.util.date.SmartLocalDateUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
@@ -27,10 +27,10 @@ public class DateConfig {
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer customizer() {
         return builder -> {
-            builder.deserializers(new LocalDateDeserializer(SmartDateFormatterEnum.YMD.getFormatter()));
-            builder.deserializers(new LocalDateTimeDeserializer(SmartDateFormatterEnum.YMD_HMS.getFormatter()));
-            builder.serializers(new LocalDateSerializer(SmartDateFormatterEnum.YMD.getFormatter()));
-            builder.serializers(new LocalDateTimeSerializer(SmartDateFormatterEnum.YMD_HMS.getFormatter()));
+            builder.deserializers(new LocalDateDeserializer(DatePattern.NORM_DATE_FORMAT.getDateTimeFormatter()));
+            builder.deserializers(new LocalDateTimeDeserializer(DatePattern.NORM_DATETIME_FORMAT.getDateTimeFormatter()));
+            builder.serializers(new LocalDateSerializer(DatePattern.NORM_DATE_FORMAT.getDateTimeFormatter()));
+            builder.serializers(new LocalDateTimeSerializer(DatePattern.NORM_DATETIME_FORMAT.getDateTimeFormatter()));
         };
     }
 
@@ -50,14 +50,12 @@ public class DateConfig {
             }
             LocalDateTime localDateTime;
             try {
-                localDateTime = SmartLocalDateUtil.parse(str, SmartDateFormatterEnum.YMD_HMS);
+                localDateTime = LocalDateTimeUtil.parse(str, DatePattern.NORM_DATETIME_FORMAT.getDateTimeFormatter());
             } catch (DateTimeParseException e) {
                 throw new RuntimeException("请输入正确的日期格式：yyyy-MM-dd HH:mm:ss");
             }
             return localDateTime;
         }
-
-
     }
 
 
@@ -76,7 +74,7 @@ public class DateConfig {
             }
             LocalDate localDate;
             try {
-                localDate = SmartLocalDateUtil.parseDate(str, SmartDateFormatterEnum.YMD);
+                localDate = LocalDateTimeUtil.parseDate(str, DatePattern.NORM_DATE_FORMAT.getDateTimeFormatter());
             } catch (DateTimeParseException e) {
                 throw new RuntimeException("请输入正确的日期格式：yyyy-MM-dd");
             }

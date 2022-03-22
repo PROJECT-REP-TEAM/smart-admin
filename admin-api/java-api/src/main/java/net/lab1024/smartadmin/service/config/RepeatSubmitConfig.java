@@ -15,15 +15,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RepeatSubmitConfig {
 
-//    @Autowired
-//    private ValueOperations<String, String> redisValueOperations;
-//
-//    @Bean
-//    public RepeatSubmitAspect repeatSubmitAspect() {
-//        RepeatSubmitRedisTicket redisTicket = new RepeatSubmitRedisTicket(redisValueOperations, this::ticket);
-//        return new RepeatSubmitAspect(redisTicket);
-//    }
-
 
     @Bean
     public RepeatSubmitAspect repeatSubmitAspect() {

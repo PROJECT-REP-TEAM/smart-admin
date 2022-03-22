@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * [  ]
+ * 操作记录
  *
  * @author 罗伊
  */
@@ -27,7 +27,6 @@ public class OperateLogService {
     /**
      * @author 罗伊
      * @description 分页查询
-     * @date 2019-05-15 11:32:14
      */
     public ResponseDTO<PageResult<OperateLogVO>> queryByPage(OperateLogQueryForm queryForm) {
         Page page = SmartPageUtil.convert2PageQuery(queryForm);
@@ -39,9 +38,8 @@ public class OperateLogService {
     /**
      * @author 罗伊
      * @description 添加
-     * @date 2019-05-15 11:32:14
      */
-    public ResponseDTO<String> add(OperateLogVO addDTO) {
+    public ResponseDTO<String> log(OperateLogVO addDTO) {
         OperateLogEntity entity = SmartBeanUtil.copy(addDTO, OperateLogEntity.class);
         operateLogDao.insert(entity);
         return ResponseDTO.ok();

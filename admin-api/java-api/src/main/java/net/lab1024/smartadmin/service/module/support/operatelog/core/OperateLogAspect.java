@@ -1,14 +1,14 @@
 package net.lab1024.smartadmin.service.module.support.operatelog.core;
 
+import cn.hutool.core.util.StrUtil;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import net.lab1024.smartadmin.service.module.support.operatelog.OperateLogDao;
-import net.lab1024.smartadmin.service.module.support.operatelog.annoation.OperateLog;
-import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.service.module.support.operatelog.OperateLogDao;
+import net.lab1024.smartadmin.service.module.support.operatelog.annoation.OperateLog;
+import net.lab1024.smartadmin.service.module.support.operatelog.domain.OperateLogEntity;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.AfterReturning;
@@ -135,7 +135,6 @@ public class OperateLogAspect {
         MethodSignature methodSignature = (MethodSignature) signature;
         Method method = methodSignature.getMethod();
         Api classAnnotation = AnnotationUtils.findAnnotation(method.getDeclaringClass(), Api.class);
-
         if (method != null) {
             return classAnnotation;
         }
@@ -186,32 +185,17 @@ public class OperateLogAspect {
         String className = joinPoint.getTarget().getClass().getName();
         String methodName = joinPoint.getSignature().getName();
         String operateMethod = className + "." + methodName;
-        Object[] args = joinPoint.getArgs();
-        StringBuilder sb = new StringBuilder();
-        for (Object obj : args) {
-            sb.append(obj.getClass().getSimpleName());
-            sb.append("[");
-            sb.append(JSON.toJSONString(obj));
-            sb.append("]");
-        }
-        String params = sb.toString();
+        String params = this.buildParams(joinPoint);
         String failReason = null;
         Boolean successFlag = true;
         if (e != null) {
             successFlag = false;
-            StringWriter sw = new StringWriter();
-            PrintWriter pw = new PrintWriter(sw, true);
-            e.printStackTrace(pw);
-            failReason = sw.toString();
-            pw.flush();
-            pw.close();
-            sw.flush();
-            sw.close();
+            failReason = getExceptionString(e);
         }
         OperateLogEntity operateLogEntity =
                 OperateLogEntity.builder()
-                        .userId(user.getUserId())
-                        .userName(user.getUserName())
+                        .operateUserId(user.getUserId())
+                        .operateUserName(user.getUserName())
                         .url(request.getRequestURI())
                         .method(operateMethod)
                         .param(params)
@@ -224,11 +208,31 @@ public class OperateLogAspect {
         Api api = this.getApi(joinPoint);
         if (api != null) {
             String[] tags = api.tags();
-            operateLogEntity.setModule(SmartStringUtil.join(tags, ","));
+            operateLogEntity.setModule(StrUtil.join(",", tags));
         }
         taskExecutor.execute(() -> {
             this.saveLog(operateLogEntity);
         });
+    }
+
+    private String buildParams(JoinPoint joinPoint) {
+        Object[] args = joinPoint.getArgs();
+        StringBuilder sb = new StringBuilder();
+        for (Object obj : args) {
+            sb.append(obj.getClass().getSimpleName());
+            sb.append("[");
+            sb.append(JSON.toJSONString(obj));
+            sb.append("]");
+        }
+        return sb.toString();
+    }
+
+    private String getExceptionString(Throwable e) {
+        StringWriter sw = new StringWriter();
+        try (PrintWriter pw = new PrintWriter(sw);) {
+            e.printStackTrace(pw);
+        }
+        return sw.toString();
     }
 
     /**

@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * 系统参数配置 t_system_config Dao层
  *
- * @author 1024lab
- * @date 2017-12-23 14:25
+ * @author zhuoda
  */
 @Component
 @Mapper

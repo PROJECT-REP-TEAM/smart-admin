@@ -20,11 +20,11 @@ public abstract class AbstractRepeatSubmitTicket {
 
     /**
      * 获取凭证
-     * @param servletPath
+     * @param ticketToken
      * @return
      */
-    public String getTicket(String servletPath){
-        return this.ticketFunction.apply(servletPath);
+    public String getTicket(String ticketToken){
+        return this.ticketFunction.apply(ticketToken);
     }
 
     /**

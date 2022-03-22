@@ -6,7 +6,6 @@ import lombok.Data;
  * [  ]
  *
  * @author 罗伊
- * @date 2020/8/25 17:23
  */
 @Data
 public class DataTracerExtraData {

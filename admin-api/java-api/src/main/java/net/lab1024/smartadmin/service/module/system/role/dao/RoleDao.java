@@ -10,7 +10,6 @@ import net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleEntit
  * [  ]
  *
  * @author 罗伊
- * @date 2019/3/27 0027 下午 13:00
  */
 @Mapper
 @Component

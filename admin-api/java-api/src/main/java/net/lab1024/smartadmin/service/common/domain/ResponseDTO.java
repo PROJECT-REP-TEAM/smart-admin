@@ -60,6 +60,17 @@ public class ResponseDTO<T> {
         return new ResponseDTO<>(OK_CODE, null, true, msg, null);
     }
 
+    // -------------------------------------------- 最常用的 用户参数 错误码 --------------------------------------------
+
+    public static <T> ResponseDTO<T> userErrorParam() {
+        return new ResponseDTO<>(UserErrorCode.PARAM_ERROR, false, null, null);
+    }
+
+
+    public static <T> ResponseDTO<T> userErrorParam(String msg) {
+        return new ResponseDTO<>(UserErrorCode.PARAM_ERROR, false, msg, null);
+    }
+
     // -------------------------------------------- 错误码 --------------------------------------------
 
     public static <T> ResponseDTO<T> error(ErrorCode errorCode) {
@@ -82,15 +93,6 @@ public class ResponseDTO<T> {
         return new ResponseDTO<>(errorCode, false, null, data);
     }
 
-    // -------------------------------------------- 最常用的 用户参数 错误码 --------------------------------------------
 
-    public static <T> ResponseDTO<T> userErrorParam() {
-        return new ResponseDTO<>(UserErrorCode.PARAM_ERROR, false, null, null);
-    }
-
-
-    public static <T> ResponseDTO<T> userErrorParam(String msg) {
-        return new ResponseDTO<>(UserErrorCode.PARAM_ERROR, false, msg, null);
-    }
 
 }

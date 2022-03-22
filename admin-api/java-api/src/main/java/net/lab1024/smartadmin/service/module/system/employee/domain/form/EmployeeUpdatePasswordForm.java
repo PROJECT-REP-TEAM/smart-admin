@@ -9,9 +9,6 @@ import javax.validation.constraints.Pattern;
 
 /**
  * 修改密码所需参数
- *
- * @author cyj
- * @date 2018-02-23 下午 4:53
  */
 @Data
 public class EmployeeUpdatePasswordForm {

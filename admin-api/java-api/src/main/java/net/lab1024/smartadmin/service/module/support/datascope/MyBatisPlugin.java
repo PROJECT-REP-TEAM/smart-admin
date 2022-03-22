@@ -1,7 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.datascope;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Maps;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.support.datascope.domain.DataScopeSqlConfig;
 import net.lab1024.smartadmin.service.module.support.datascope.service.DataScopeSqlConfigService;
 import org.apache.commons.lang3.StringUtils;
@@ -39,7 +39,7 @@ public class MyBatisPlugin implements Interceptor {
         BoundSql boundSql = mappedStatement.getBoundSql(parameter);
         String originalSql = boundSql.getSql().trim();
         String id = mappedStatement.getId();
-        List<String> methodStrList = SmartStringUtil.splitConvertToList(id, "\\.");
+        List<String> methodStrList = StrUtil.split(id, ".");
         String path = methodStrList.get(methodStrList.size() - 2) + "." + methodStrList.get(methodStrList.size() - 1);
         DataScopeSqlConfigService dataScopeSqlConfigService = this.dataScopeSqlConfigService();
         if (dataScopeSqlConfigService == null) {

@@ -1,10 +1,10 @@
 package net.lab1024.smartadmin.service.module.system.menu.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Sets;
 import io.swagger.annotations.ApiModelProperty;
 import io.swagger.annotations.ApiOperation;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.system.menu.domain.vo.MenuUrlVO;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +23,7 @@ import java.util.*;
 /**
  * 分离前后台权限URL
  *
- * @author lihaifan
- * @date 2021/9/1 20:14
+ * @author zhuoda
  */
 @Service
 public class MenuUrlService {
@@ -68,7 +67,7 @@ public class MenuUrlService {
             }
             String className = handlerMethod.getMethod().getDeclaringClass().getName();
             String methodName = handlerMethod.getMethod().getName();
-            List<String> list = SmartStringUtil.splitConvertToList(className, "\\.");
+            List<String> list = StrUtil.split(className, ".");
             String controllerName = list.get(list.size() - 1);
             String name = controllerName + "." + methodName;
 

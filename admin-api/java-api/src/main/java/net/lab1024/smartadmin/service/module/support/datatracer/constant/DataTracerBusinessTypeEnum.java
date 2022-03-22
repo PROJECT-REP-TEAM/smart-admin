@@ -9,7 +9,6 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
  * [ 数据业务类型 ]
  *
  * @author 罗伊
- * @date 2020/8/11 15:56
  */
 @AllArgsConstructor
 @Getter

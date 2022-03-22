@@ -20,7 +20,6 @@ import javax.validation.Valid;
  * [  ]
  *
  * @author 罗伊
- * @date 2020/8/25 11:00
  */
 
 @Api(tags = {SwaggerTagConst.Support.SUPPORT_DATA_TRACER})
@@ -30,7 +29,7 @@ public class DataTracerController extends SupportBaseController {
     @Autowired
     private DataTracerService dataTracerService;
 
-    @ApiOperation("分页查询业务操作日志 - by 胡克")
+    @ApiOperation("分页查询业务操作日志 - @author 胡克")
     @PostMapping("/data/tracer/log/query")
     public ResponseDTO<PageResult<DataTracerVO>> query(@Valid @RequestBody DataTracerQueryForm queryForm) {
         return dataTracerService.query(queryForm);

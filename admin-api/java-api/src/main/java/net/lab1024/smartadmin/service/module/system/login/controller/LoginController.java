@@ -55,9 +55,9 @@ public class LoginController extends SystemBaseController {
         return loginService.logout(SmartRequestUtil.getRequestEmployee());
     }
 
-    @NoNeedLogin
     @ApiOperation("获取验证码  @author zhuoda")
     @GetMapping("/login/getCaptcha")
+    @NoNeedLogin
     public ResponseDTO<CaptchaVO> getCaptcha() {
         return loginService.getCaptcha();
     }

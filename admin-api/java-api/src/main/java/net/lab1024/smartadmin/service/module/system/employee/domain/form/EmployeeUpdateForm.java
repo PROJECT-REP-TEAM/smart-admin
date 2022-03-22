@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
  * 更新员工
  *
  * @author 李开云
- * @date 2017年12月19日下午2:06:31
  */
 @Data
 public class EmployeeUpdateForm extends EmployeeAddForm {

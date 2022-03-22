@@ -19,8 +19,7 @@ import java.util.Set;
 /**
  * 员工权限校验
  *
- * @author 李善逸
- * @date 2021/8/5 17:14
+ * @author 卓大
  */
 @Service(SecurityMetadataSource.PRIVILEGE_CHECK_NAME)
 public class EmployeePermissionService {

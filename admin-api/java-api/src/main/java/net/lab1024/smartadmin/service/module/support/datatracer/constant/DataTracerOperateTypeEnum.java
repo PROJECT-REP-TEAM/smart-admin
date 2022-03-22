@@ -9,11 +9,8 @@ import net.lab1024.smartadmin.service.common.enumeration.BaseEnum;
  * [  ]
  *
  * @author 罗伊
- * @date 2020/8/25 17:04
  */
 public interface DataTracerOperateTypeEnum extends BaseEnum {
-
-    Integer INIT_CODE = 4;
 
     @AllArgsConstructor
     @Getter

@@ -10,8 +10,7 @@ import java.time.LocalDateTime;
 /**
  * 系统配置参数 实体类
  *
- * @author 1024lab
- * @date 2017-12-23 13:41
+ * @author zhuoda
  */
 @Data
 @TableName("t_system_config")

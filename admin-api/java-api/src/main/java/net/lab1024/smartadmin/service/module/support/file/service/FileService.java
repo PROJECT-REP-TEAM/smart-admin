@@ -1,5 +1,6 @@
 package net.lab1024.smartadmin.service.module.support.file.service;
 
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
@@ -11,7 +12,6 @@ import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
 import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
 import net.lab1024.smartadmin.service.common.util.SmartBeanUtil;
 import net.lab1024.smartadmin.service.common.util.SmartPageUtil;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.constant.RedisKeyConst;
 import net.lab1024.smartadmin.service.module.support.file.constant.FileFolderTypeEnum;
 import net.lab1024.smartadmin.service.module.support.file.dao.FileDao;
@@ -177,7 +177,7 @@ public class FileService {
             return ResponseDTO.error(UserErrorCode.PARAM_ERROR);
         }
         // 处理逗号分隔的字符串
-        String keyList = SmartStringUtil.splitConvertToList(fileKey, StringConst.SEPARATOR)
+        String keyList = StrUtil.split(fileKey, StringConst.SEPARATOR)
                                         .stream().map(this::getCacheUrl)
                                         .collect(Collectors.joining(StringConst.SEPARATOR));
         return ResponseDTO.ok(keyList);

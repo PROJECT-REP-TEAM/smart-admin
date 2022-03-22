@@ -75,7 +75,17 @@ public abstract class SerialNumberBaseService implements SerialNumberService {
 
             this.serialNumberMap.put(serialNumberEntity.getSerialNumberId(), serialNumberInfoBO);
         }
+
+        //初始化数据
+        initLastGenerateData(serialNumberEntityList);
     }
+
+    /**
+     * 初始化上次生成的数据
+     *
+     * @param serialNumberEntityList
+     */
+    public abstract void initLastGenerateData(List<SerialNumberEntity> serialNumberEntityList);
 
     @Override
     public String generate(SerialNumberIdEnum serialNumberIdEnum) {

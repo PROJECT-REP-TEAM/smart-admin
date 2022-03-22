@@ -49,4 +49,9 @@ public class SerialNumberMysqlService extends SerialNumberBaseService {
 
         return formatNumberList(serialNumberGenerateResult, serialNumberInfo);
     }
+
+    @Override
+    public void initLastGenerateData(List<SerialNumberEntity> serialNumberEntityList) {
+
+    }
 }

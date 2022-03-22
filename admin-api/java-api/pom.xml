@@ -29,6 +29,7 @@
         <kaptcha.version>2.3.2</kaptcha.version>
         <commons-io.version>20030203.000550</commons-io.version>
         <google-guava.version>30.1.1-jre</google-guava.version>
+        <hutool.version>5.7.22</hutool.version>
     </properties>
 
     <dependencies>
@@ -305,6 +306,12 @@
             <version>2.0</version>
         </dependency>
         <!--velocity end-->
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
 
     </dependencies>
 

@@ -1,20 +1,20 @@
 package net.lab1024.smartadmin.service.module.support.datatracer.service;
 
+import cn.hutool.core.date.DateUtil;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.google.common.base.CaseFormat;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.extern.slf4j.Slf4j;
+import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
+import net.lab1024.smartadmin.service.common.util.SmartBigDecimalUtil;
 import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldBigDecimal;
 import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldDoc;
 import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldEnum;
 import net.lab1024.smartadmin.service.module.support.datatracer.annoation.DataTracerFieldSql;
 import net.lab1024.smartadmin.service.module.support.datatracer.constant.DataTracerOperateTypeEnum;
-import net.lab1024.smartadmin.service.common.util.SmartBaseEnumUtil;
-import net.lab1024.smartadmin.service.common.util.SmartBigDecimalUtil;
-import net.lab1024.smartadmin.service.common.util.date.SmartDateFormatterEnum;
-import net.lab1024.smartadmin.service.common.util.date.SmartLocalDateUtil;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -276,14 +276,13 @@ public class DataTracerFieldService {
             return this.getRelateDisplayValue(fieldValue, dataTracerFieldSql);
         }
         if (fieldValue instanceof Date) {
-            LocalDateTime localDateTime = SmartLocalDateUtil.toLocalDateTime((Date) fieldValue);
-            return SmartLocalDateUtil.format(localDateTime, SmartDateFormatterEnum.YMD_HMS);
+            return DateUtil.formatDateTime((Date) fieldValue);
         }
         if (fieldValue instanceof LocalDateTime) {
-            return SmartLocalDateUtil.format((LocalDateTime) fieldValue, SmartDateFormatterEnum.YMD_HMS);
+            return LocalDateTimeUtil.formatNormal((LocalDateTime) fieldValue);
         }
         if (fieldValue instanceof LocalDate) {
-            return SmartLocalDateUtil.format((LocalDate) fieldValue, SmartDateFormatterEnum.YMD);
+            return LocalDateTimeUtil.formatNormal((LocalDate) fieldValue);
         }
         if (fieldValue instanceof BigDecimal) {
             DataTracerFieldBigDecimal dataTracerFieldBigDecimal = field.getAnnotation(DataTracerFieldBigDecimal.class);
@@ -368,25 +367,20 @@ public class DataTracerFieldService {
      */
     private boolean valid(Object oldObject, Object newObject) {
         if (oldObject == null && newObject == null) {
-            log.error("bean operate log: oldObject and newObject is null");
             return false;
         }
         if (oldObject == null && newObject != null) {
-            log.info("bean operate log: oldObject is null,new:" + newObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.SAVE.getDesc());
             return true;
         }
         if (oldObject != null && newObject == null) {
-            log.info("bean operate log: newObject is null,old:" + oldObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.DELETE.getDesc());
             return true;
         }
         if (oldObject != null && newObject != null) {
             String oldClass = oldObject.getClass().getName();
             String newClass = newObject.getClass().getName();
             if (oldClass.equals(newClass)) {
-                log.info("bean operate log: " + oldObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.UPDATE.getDesc());
                 return true;
             }
-            log.error("bean operate log: is different class:old:" + oldClass + " new:" + newClass);
             return false;
         }
         return true;
@@ -402,15 +396,12 @@ public class DataTracerFieldService {
      */
     private <T> boolean valid(List<T> oldObjectList, List<T> newObjectList) {
         if (CollectionUtils.isEmpty(oldObjectList) && CollectionUtils.isEmpty(newObjectList)) {
-            log.error("bean operate log: oldObjectList and newObject is null");
             return false;
         }
         if (CollectionUtils.isEmpty(oldObjectList) && CollectionUtils.isNotEmpty(newObjectList)) {
-            log.info("bean operate log: oldObjectList is null,new:" + newObjectList.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.SAVE.getDesc());
             return true;
         }
         if (CollectionUtils.isNotEmpty(oldObjectList) && CollectionUtils.isEmpty(newObjectList)) {
-            log.info("bean operate log: newObject is null,old:" + oldObjectList.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.DELETE.getDesc());
             return true;
         }
         if (CollectionUtils.isNotEmpty(oldObjectList) && CollectionUtils.isNotEmpty(newObjectList)) {
@@ -419,10 +410,8 @@ public class DataTracerFieldService {
             String oldClass = oldObject.getClass().getName();
             String newClass = newObject.getClass().getName();
             if (oldClass.equals(newClass)) {
-                log.info("bean operate log: " + oldObject.getClass().getName() + " " + DataTracerOperateTypeEnum.Common.UPDATE.getDesc());
                 return true;
             }
-            log.error("bean operate log: is different class:old:" + oldClass + " new:" + newClass);
             return false;
         }
         return true;

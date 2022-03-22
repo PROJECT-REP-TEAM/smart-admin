@@ -23,7 +23,6 @@ import java.util.List;
  * 用户角色管理路由
  *
  * @author 胡克
- * @date 2017/12/28 10:10
  */
 @Api(tags = {SwaggerTagConst.System.SYSTEM_ROLE_EMPLOYEE})
 @RestController

@@ -16,7 +16,6 @@ import java.util.List;
  * 员工dao接口
  *
  * @author 李开云
- * @date 2017年12月19日下午1:36:30
  */
 @Mapper
 @Component

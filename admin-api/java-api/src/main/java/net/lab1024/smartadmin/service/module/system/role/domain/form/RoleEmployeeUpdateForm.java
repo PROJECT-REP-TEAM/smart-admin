@@ -12,7 +12,6 @@ import java.util.List;
  * 角色员工 批量操作DTO
  *
  * @author 胡克
- * @date 2017/12/29 15:38
  */
 @Data
 public class RoleEmployeeUpdateForm {

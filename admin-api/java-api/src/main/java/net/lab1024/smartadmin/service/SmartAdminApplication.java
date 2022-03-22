@@ -9,9 +9,8 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
- * [ admin 项目启动类 ]
- *
- * @author 罗伊
+ * SmartAdmin 项目启动类
+ * @author 卓大
  */
 @SpringBootApplication
 @EnableCaching

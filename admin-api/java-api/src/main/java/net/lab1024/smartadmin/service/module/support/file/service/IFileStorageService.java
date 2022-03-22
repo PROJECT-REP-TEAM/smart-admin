@@ -1,8 +1,7 @@
 package net.lab1024.smartadmin.service.module.support.file.service;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import net.lab1024.smartadmin.service.common.domain.ResponseDTO;
-import net.lab1024.smartadmin.service.common.util.date.SmartDateFormatterEnum;
-import net.lab1024.smartadmin.service.common.util.date.SmartLocalDateUtil;
 import net.lab1024.smartadmin.service.module.support.file.domain.dto.FileDownloadDTO;
 import net.lab1024.smartadmin.service.module.support.file.domain.vo.FileUploadVO;
 import org.apache.commons.io.FileUtils;
@@ -86,7 +85,7 @@ public interface IFileStorageService {
      */
     default String generateFileNameByType(String fileType) {
         String uuid = UUID.randomUUID().toString().replaceAll("-", "");
-        String time = SmartLocalDateUtil.format(LocalDateTime.now(), SmartDateFormatterEnum.YMDHMS);
+        String time = LocalDateTimeUtil.formatNormal(LocalDateTime.now());
         return uuid + time + "." + fileType;
     }
 

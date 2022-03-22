@@ -18,9 +18,10 @@ public class RepeatSubmitCaffeineTicket extends AbstractRepeatSubmitTicket {
     /**
      * 限制缓存最大数量 超过后先放入的会自动移除
      * 默认缓存时间
+     * 初始大小为：100万
      */
     private static Cache<String, Long> cache = Caffeine.newBuilder()
-            .maximumSize(5000)
+            .maximumSize(100 * 10000)
             .expireAfterWrite(RepeatSubmit.MAX_INTERVAL, TimeUnit.MILLISECONDS).build();
 
 

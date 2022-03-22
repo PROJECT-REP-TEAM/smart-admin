@@ -7,7 +7,6 @@ import lombok.Data;
  * [  ]
  *
  * @author 罗伊
- * @date 2019/4/27 0027 下午 16:43
  */
 @Data
 public class RoleDataScopeVO {

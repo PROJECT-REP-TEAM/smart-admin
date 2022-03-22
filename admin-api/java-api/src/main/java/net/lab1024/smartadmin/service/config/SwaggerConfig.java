@@ -228,34 +228,6 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
                 .required(false)
                 .build();
 
-        Parameter agent = new ParameterBuilder().name(RequestHeaderConst.USER_AGENT)
-                .description("agent")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header").defaultValue("")
-                .required(false)
-                .build();
-
-        Parameter identity = new ParameterBuilder().name(RequestHeaderConst.USER_IDENTITY)
-                .description("用户唯一标识")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header").defaultValue("")
-                .required(false)
-                .build();
-
-        Parameter geo = new ParameterBuilder().name(RequestHeaderConst.USER_GEO)
-                .description("定位")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header").defaultValue("")
-                .required(false)
-                .build();
-
-        Parameter location = new ParameterBuilder().name(RequestHeaderConst.USER_LOCATION)
-                .description("位置")
-                .modelRef(new ModelRef("string"))
-                .parameterType("header").defaultValue("")
-                .required(false)
-                .build();
-
-        return Lists.newArrayList(token, agent, identity, geo, location);
+        return Lists.newArrayList(token);
     }
 }

@@ -1,9 +1,9 @@
 package net.lab1024.smartadmin.service.module.business.category;
 
+import cn.hutool.core.util.StrUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import net.lab1024.smartadmin.service.common.constant.StringConst;
-import net.lab1024.smartadmin.service.common.util.SmartStringUtil;
 import net.lab1024.smartadmin.service.module.business.category.domain.CategoryEntity;
 import net.lab1024.smartadmin.service.module.business.category.domain.dto.CategorySimpleDTO;
 import org.apache.commons.collections4.CollectionUtils;
@@ -185,7 +185,7 @@ public class CategoryQueryService {
         List<CategoryEntity> parentCategoryList = this.queryCategoryAndParent(categoryId);
         // 拼接父级类目名称 斜杠分隔返回
         List<String> nameList = parentCategoryList.stream().map(CategoryEntity::getCategoryName).collect(Collectors.toList());
-        return SmartStringUtil.join(nameList, StringConst.SEPARATOR_SLASH);
+        return StrUtil.join(StringConst.SEPARATOR_SLASH, nameList);
     }
 
     /**

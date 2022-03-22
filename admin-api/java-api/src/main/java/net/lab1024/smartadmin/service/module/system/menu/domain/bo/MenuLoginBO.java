@@ -10,7 +10,7 @@ import java.util.List;
  * 登陆时需要的菜单BO
  *
  * @author 李善逸
- * @date 2021/8/5 11:35
+ * @date 2021/8/5 21:35
  */
 @Data
 public class MenuLoginBO {
