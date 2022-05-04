@@ -1,0 +1,120 @@
+@import './element-reset.scss';
+
+body {
+}
+
+/**********************************  滚动条 **********************************/
+.smart-scroll {
+  scrollbar-color: #409eff;
+  scrollbar-width: thin;
+  -ms-overflow-style: none;
+  position: relative;
+  &::-webkit-scrollbar {
+    width: 3px;
+    height: 1px;
+  }
+  &::-webkit-scrollbar-thumb {
+    border-radius: 3px;
+    background: #409eff;
+  }
+  &::-webkit-scrollbar-track {
+    border-radius: 3px;
+    background: #409eff;
+  }
+}
+/**********************************  宽度 **********************************/
+.smart-width-100 {
+  width: 100%;
+}
+
+/**********************************  左间距 **********************************/
+.smart-margin-left5 {
+  margin-left: 5px;
+}
+
+.smart-margin-left10 {
+  margin-left: 10px;
+}
+
+.smart-margin-left15 {
+  margin-left: 15px;
+}
+
+.smart-margin-left20 {
+  margin-left: 20px;
+}
+
+/******************************** 右间距 ********************************/
+.smart-margin-right5 {
+  margin-left: 5px;
+}
+
+.smart-margin-right10 {
+  margin-left: 10px;
+}
+
+.smart-margin-right15 {
+  margin-left: 15px;
+}
+
+.smart-margin-right20 {
+  margin-left: 20px;
+}
+
+/******************************** 上间距 ********************************/
+.smart-margin-top5 {
+  margin-top: 5px;
+}
+
+.smart-margin-top10 {
+  margin-top: 10px;
+}
+/******************************** 下间距 ********************************/
+.smart-margin-bottom5 {
+  margin-bottom: 5px;
+}
+
+.smart-margin-bottom10 {
+  margin-bottom: 10px;
+}
+
+/******************************** 查询表格样式 ********************************/
+.smart-query-form {
+  background-color: #ffffff;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+}
+
+.smart-query-form-row:not(:first-child) {
+  margin-top: 8px;
+}
+
+.smart-query-form-row .smart-query-form-item {
+  margin-right: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.smart-query-table-page {
+  margin-top: 10px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.smart-table-tr-btn-group {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  .el-link {
+    margin-left: 8px;
+  }
+}
+/******************************** 查询表格样式 ********************************/
+.footer-box {
+  width: 100%;
+  border-top: 1px solid #e9e9e9;
+  padding: 10px 16px;
+  background: #fff;
+  text-align: right;
+  z-index: 1;
+}

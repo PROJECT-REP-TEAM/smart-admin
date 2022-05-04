@@ -1,0 +1,127 @@
+/**
+* 参考了阿里的ant design的样式颜色来修改：https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+*/
+
+@use 'sass:math';
+@use 'sass:map';
+
+@forward "element-plus/theme-chalk/src/common/var.scss" with (
+  $colors: 
+    (
+    'white': #ffffff,
+    'black': #000000,
+    'primary': (
+      'base': #1890ff,
+    ),
+    'success': (
+      'base': #52c41a,
+    ),
+    'warning': (
+      'base': #faad14,
+    ),
+    'danger': (
+      'base': #ff7875,
+    ),
+    'error': (
+      'base': #f5222d,
+    ),
+    'info': (
+      'base': #1890ff,
+    ),
+  ),
+$text-color:(
+    'primary': rgba(0, 0, 0, 0.85),
+    'regular': rgba(0, 0, 0, 0.80),
+    'secondary': rgba(0, 0, 0, 0.75),
+    'placeholder': rgba(0, 0, 0, 0.25),
+),
+$font-size:(
+    'large': 18px,
+    'medium': 16px,
+    'base': 13px,
+    'small': 13px,
+    'extra-small': 12px,
+  ),
+  $table:(
+    'row-hover-background-color': #e6f7ff,
+    'header-background-color': #f8f8f8,
+    ),
+  /****************************** pagination 分页 样式覆盖 ***********************************/
+  $pagination:(
+    'background-color': var(--el-color-white),
+    'font-color': var(--el-text-color-primary),
+    'border-radius': 3px,
+    'button-color': var(--el-text-color-primary),
+    'button-width': 35.5px,
+    'button-height': 28px,
+    'button-disabled-color': var(--el-text-color-placeholder),
+    'button-disabled-background-color': var(--el-color-white),
+    'hover-color': var(--el-color-primary),
+    'height-extra-small': 22px,
+    'line-height-extra-small': var(--el-pagination-height-extra-small),
+  )
+
+
+);
+@use "element-plus/theme-chalk/src/index.scss" as *;
+
+
+/****************************** button 样式覆盖 ***********************************/
+.el-button--small{
+    font-size: 13px;
+}
+
+.el-button--mini{
+    min-height: 26px;
+    font-size: 13px;
+    padding:4px 8px;
+}
+
+
+/****************************** checkbox 样式覆盖 ***********************************/
+.el-checkbox.el-checkbox--small{
+  height: 26px;
+}
+
+/****************************** table 样式覆盖 ***********************************/
+
+.el-table--small{
+    font-size: 13px;
+}
+
+.el-table--small .el-table__cell{
+    padding: 3px 0;
+}
+
+
+.el-table .cell{
+  line-height:26px;
+}
+.el-table__header-wrapper tbody td.el-table__cell, .el-table__footer-wrapper tbody td.el-table__cell{
+  background-color:rgb(248, 248, 248);
+  font-weight: bold;
+}
+
+/****************************** pagination 分页 样式覆盖 ***********************************/
+
+.el-pagination.is-background .el-pager li{
+    border: 1px solid #d9d9d9;
+    background-color:#ffffff;
+    font-weight: 500;
+}
+.el-pagination.is-background  .btn-next{
+    border: 1px solid #d9d9d9;
+    background-color:#ffffff;
+    font-weight: 500;
+}
+.el-pagination.is-background  .btn-prev{
+    border: 1px solid #d9d9d9;
+    background-color:#ffffff;
+    font-weight: 500;
+}
+
+.el-pagination.is-background .el-pager li:not(.disabled).active{
+    background-color:#ffffff;
+    border: 1px solid var(--el-color-primary);
+    color:var(--el-color-primary);
+}
