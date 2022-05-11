@@ -1,5 +1,5 @@
 import SmartLayout from '/@/layout/smart-layout.vue';
-import { MENU_TYPE_ENUM } from '/@/constants/system/menu-enum';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum.js';
 
 export const homeRouters = [
   {

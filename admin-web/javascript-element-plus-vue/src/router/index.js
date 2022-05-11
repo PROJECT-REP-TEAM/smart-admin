@@ -8,7 +8,7 @@ import {
   PAGE_NAME_LOGIN,
 } from '../constants/common';
 import { routerArray } from './routers';
-import { useUserStore } from '/@/store/modules/user';
+import { useUserStore } from '/@/store/modules/system/user';
 import { getTokenFromCookie } from '/@/lib/cookie-util';
 
 // 顶部页面加载进度条不显示spinner
@@ -26,6 +26,7 @@ router.beforeEach((to, from, next) => {
   // 进度条开启
   nProgress.start();
   next();
+  return;
   // 公共页面，任何时候都可以跳转
   if (
     to.name === PAGE_NAME_REGISTER ||
