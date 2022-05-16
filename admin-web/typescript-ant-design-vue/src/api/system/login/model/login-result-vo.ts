@@ -1,10 +1,10 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-18 20:02:35
- * @LastEditTime: 2021-12-29
- * @LastEditors: zhuoda
+ * @LastEditTime: 2022-05-16 20:36:09
+ * @LastEditors: LiHaiFan
  * @Description:
- * @FilePath: /smart-admin/src/api/system/login/model/login-result-vo.ts
+ * @FilePath: /typescript-ant-design-vue/src/api/system/login/model/login-result-vo.ts
  */
 
 import {MenuVo} from "/@/api/system/menu/model/menu-vo";
@@ -14,7 +14,7 @@ export interface LoginResultVo {
   /**
    * token
    */
-  token: string;
+  token?: string;
   /**
    * 员工id
    */

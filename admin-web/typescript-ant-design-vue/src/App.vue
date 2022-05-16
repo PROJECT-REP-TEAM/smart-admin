@@ -2,8 +2,8 @@
  * @Description: App
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-12-29
- * @LastEditors: zhuoda
+ * @LastEditTime: 2022-05-16 21:19:09
+ * @LastEditors: LiHaiFan
 -->
 <template>
   <a-config-provider :locale="zh_CN">
@@ -26,8 +26,6 @@ let spinStore = useSpinStore();
 const spinning = computed(() => spinStore.loading);
 
 async function getLoginInfo() {
-  console.log(12222222)
-  debugger
   let token = useUserStore().getToken;
   if (!token) return;
   const res = await loginApi.getLoginInfo();
@@ -41,7 +39,6 @@ function triggerReSize() {
   appConfigStore.setCurrentScreenWidth(document.body.clientWidth);
 }
 onMounted(() => {
-  debugger
   //获取登录信息
   getLoginInfo();
   //更新屏幕宽度
