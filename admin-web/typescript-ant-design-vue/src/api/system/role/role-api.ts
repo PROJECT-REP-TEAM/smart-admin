@@ -25,7 +25,7 @@ export const roleApi = {
    * @return {*}
    */
   queryAll: (): Promise<ResponseModel<RoleVo[]>> => {
-    return getRequest<ResponseModel<RoleVo[]>>('role/getAll');
+    return getRequest<ResponseModel<RoleVo[]>>('/admin/role/getAll');
   },
   /**
    * @description:添加角色
@@ -33,7 +33,7 @@ export const roleApi = {
    * @return {*}
    */
   addRole: (data: RoleAddDto) => {
-    return postRequest<ResponseModel<string>>('role/add', data);
+    return postRequest<ResponseModel<string>>('/admin/role/add', data);
   },
   /**
    * @description:更新角色
@@ -41,7 +41,7 @@ export const roleApi = {
    * @return {*}
    */
   updateRole: (data: RoleUpdateDto) => {
-    return postRequest<ResponseModel<string>>('role/update', data);
+    return postRequest<ResponseModel<string>>('/admin/role/update', data);
   },
   /**
    * @description: 删除角色
@@ -49,7 +49,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteRole: (roleId: number) => {
-    return getRequest<ResponseModel<string>>(`role/delete/${roleId}`);
+    return getRequest<ResponseModel<string>>(`/admin/role/delete/${roleId}`);
   },
   /**
    * @description: 批量设置某角色数据范围
@@ -57,7 +57,7 @@ export const roleApi = {
    * @return {*}
    */
   updateDataScope: (data: DataScopeBatchSetRoleDto) => {
-    return postRequest<ResponseModel<string>>('/dataScope/batchSet', data);
+    return postRequest<ResponseModel<string>>('/admin/role/dataScope/updateRoleDataScopeList', data);
   },
   /**
    * @description: 获取当前系统所配置的所有数据范围
@@ -65,7 +65,7 @@ export const roleApi = {
    * @return {*}
    */
   getDataScopeList: () => {
-    return getRequest<ResponseModel<DataScopeAndViewTypeVo[]>>('/dataScope/list');
+    return getRequest<ResponseModel<DataScopeAndViewTypeVo[]>>('/admin/dataScope/list');
   },
   /**
    * @description: 获取某角色所设置的数据范围
@@ -73,7 +73,7 @@ export const roleApi = {
    * @return {*}
    */
   getDataScopeByRoleId: (roleId: number) => {
-    return getRequest<ResponseModel<DataScopeSelectVo[]>>(`/dataScope/listByRole/${roleId}`);
+    return getRequest<ResponseModel<DataScopeSelectVo[]>>(`/admin/role/dataScope/getRoleDataScopeList/${roleId}`);
   },
   /**
    * @description: 获取角色成员-员工列表
@@ -81,7 +81,7 @@ export const roleApi = {
    * @return {*}
    */
   queryRoleEmployee: (params: RoleQueryDto) => {
-    return postRequest<ResponseModel<PageResultModel<EmployeeVo>>>('/role/listEmployee', params);
+    return postRequest<ResponseModel<PageResultModel<EmployeeVo>>>('/admin/role/listEmployee', params);
   },
   /**
    * @description: 从角色成员列表中移除员工
@@ -90,7 +90,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteEmployeeRole: (employeeId: number, roleId: number) => {
-    return getRequest<ResponseModel<string>>('/role/removeEmployee?employeeId=' + employeeId + '&roleId=' + roleId);
+    return getRequest<ResponseModel<string>>('/admin/role/removeEmployee?employeeId=' + employeeId + '&roleId=' + roleId);
   },
   /**
    * @description: 从角色成员列表中批量移除员工
@@ -98,7 +98,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteEmployeeList: (data: RoleEmployeeBatchDto) => {
-    return postRequest<ResponseModel<string>>('/role/removeEmployeeList', data);
+    return postRequest<ResponseModel<string>>('/admin/role/removeEmployeeList', data);
   },
   /**
    * @description: 根据角色id获取角色员工列表(无分页)
@@ -106,7 +106,7 @@ export const roleApi = {
    * @return {*}
    */
   getRoleAllEmployee: (roleId: number) => {
-    return getRequest<ResponseModel<EmployeeVo[]>>(`role/listAllEmployee/${roleId}`);
+    return getRequest<ResponseModel<EmployeeVo[]>>(`/admin/role/listAllEmployee/${roleId}`);
   },
   /**
    * @description: 角色成员列表中批量添加员工
@@ -114,6 +114,6 @@ export const roleApi = {
    * @return {*}
    */
   addRoleEmployeeList: (data: RoleEmployeeBatchDto) => {
-    return postRequest<ResponseModel<string>>('/role/addEmployeeList', data);
+    return postRequest<ResponseModel<string>>('/admin/role/addEmployeeList', data);
   },
 };

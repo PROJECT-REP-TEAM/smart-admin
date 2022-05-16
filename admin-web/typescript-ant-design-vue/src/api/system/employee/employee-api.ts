@@ -21,7 +21,7 @@ export const employeeApi = {
    * @return {*}
    */
   queryAll: (): Promise<ResponseModel<EmployeeVo[]>> => {
-    return getRequest<ResponseModel<EmployeeVo[]>>('/employee/queryAll');
+    return getRequest<ResponseModel<EmployeeVo[]>>('/admin/employee/queryAll');
   },
   /**
    * @description: 员工管理查询
@@ -29,7 +29,7 @@ export const employeeApi = {
    * @return {*}
    */
   queryEmployee: (params: EmployeeQueryDto): Promise<ResponseModel<PageResultModel<EmployeeVo>>> => {
-    return postRequest<ResponseModel<PageResultModel<EmployeeVo>>>('/employee/query', params);
+    return postRequest<ResponseModel<PageResultModel<EmployeeVo>>>('/admin/employee/query', params);
   },
   /**
    * @description: 添加员工
@@ -37,7 +37,7 @@ export const employeeApi = {
    * @return {*}
    */
   addEmployee: (params: EmployeeAddDto) => {
-    return postRequest<ResponseModel<string>>('/employee/add', params);
+    return postRequest<ResponseModel<string>>('/admin/employee/add', params);
   },
   /**
    * @description: 更新员工信息
@@ -45,7 +45,7 @@ export const employeeApi = {
    * @return {*}
    */
   updateEmployee: (params: EmployeeUpdateDto) => {
-    return postRequest<ResponseModel<string>>('/employee/update', params);
+    return postRequest<ResponseModel<string>>('/admin/employee/update', params);
   },
   /**
    * @description: 删除员工
@@ -53,7 +53,7 @@ export const employeeApi = {
    * @return {*}
    */
   deleteEmployee: (employeeId: number) => {
-    return getRequest<ResponseModel<string>>(`/employee/delete/${employeeId}`);
+    return getRequest<ResponseModel<string>>(`/admin/employee/delete/${employeeId}`);
   },
   /**
    * @description: 批量删除员工
@@ -61,7 +61,7 @@ export const employeeApi = {
    * @return {*}
    */
   batchDeleteEmployee: (employeeIdList: number[]) => {
-    return getRequest<ResponseModel<string>>(`/employee/update/batch/delete?employeeIdList=${employeeIdList}`);
+    return getRequest<ResponseModel<string>>(`/admin/employee/update/batch/delete?employeeIdList=${employeeIdList}`);
   },
   /**
    * @description: 批量调整员工部门
@@ -69,7 +69,7 @@ export const employeeApi = {
    * @return {*}
    */
   batchUpdateDepartmentEmployee: (updateDto: EmployeeDepartmentUpdateDto) => {
-    return postRequest<ResponseModel<string>>('/employee/update/batch/department', updateDto);
+    return postRequest<ResponseModel<string>>('/admin/employee/update/batch/department', updateDto);
   },
   /**
    * @description: 重置员工密码
@@ -77,7 +77,7 @@ export const employeeApi = {
    * @return {*}
    */
   resetPassword: (employeeId: number) => {
-    return getRequest<ResponseModel<string>>(`employee/update/pwd/reset/${employeeId}`);
+    return getRequest<ResponseModel<string>>(`/adminemployee/update/pwd/reset/${employeeId}`);
   },
   /**
    * @description: 更新员工禁用状态
@@ -85,7 +85,7 @@ export const employeeApi = {
    * @return {*}
    */
   updateDisabled: (employeeId: number) => {
-    return getRequest<ResponseModel<string>>(`employee/update/disabled/${employeeId}`);
+    return getRequest<ResponseModel<string>>(`/adminemployee/update/disabled/${employeeId}`);
   },
   /**
    * @description: 查询员工-根据校区id
@@ -93,10 +93,10 @@ export const employeeApi = {
    * @return {*}
    */
   querySchoolEmployee: (deptId: number) => {
-    return getRequest<ResponseModel<EmployeeVo[]>>(`/employee/query/school/${deptId}`);
+    return getRequest<ResponseModel<EmployeeVo[]>>(`/admin/employee/query/school/${deptId}`);
   },
   // 查询员工-根据部门id
   queryEmployeeByDeptId: (deptId: number) => {
-    return getRequest<ResponseModel<EmployeeVo[]>>(`/employee/query/dept/${deptId}`);
+    return getRequest<ResponseModel<EmployeeVo[]>>(`/admin/employee/query/dept/${deptId}`);
   },
 };

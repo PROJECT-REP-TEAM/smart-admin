@@ -17,7 +17,7 @@ export const homeApi = {
    * @return {*}
    */
   homeAmountStatistics: () => {
-    return getRequest<ResponseModel<HomeAmountStatisticsVo>>('/home/amount/statistics');
+    return getRequest<ResponseModel<HomeAmountStatisticsVo>>('/admin/home/amount/statistics');
   },
   /**
    * @description: 首页-待办信息 by zhuoda
@@ -25,6 +25,6 @@ export const homeApi = {
    * @return {*}
    */
   homeWaitHandle: () => {
-    return getRequest<ResponseModel<HomeWaitHandleVo>>('home/wait/handle');
+    return getRequest<ResponseModel<HomeWaitHandleVo>>('/admin/home/wait/handle');
   },
 };

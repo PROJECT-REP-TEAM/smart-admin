@@ -1,6 +1,6 @@
 /*
- * @Description: 
- * @version: 
+ * @Description:
+ * @version:
  * @Author: zhuoda
  * @Date: 2021-08-17 23:32:36
  * @LastEditors: zhuoda
@@ -14,6 +14,6 @@ export const fileApi = {
   // 文件上传 by zhuoda
   uploadUrl: '/file/upload',
   uploadFile: (param: any, folder: number) => {
-    return postRequest<ResponseModel<FileUploadVo>>(`/file/upload?folder=${folder}`, param);
+    return postRequest<ResponseModel<FileUploadVo>>(`/support/file/upload?folder=${folder}`, param);
   },
 };

@@ -15,24 +15,24 @@ import { getRequest, postRequest } from '/@/lib/axios';
 export const categoryApi = {
   // 添加类目 by zhuoda
   addCategory: (param: CategoryAddForm) => {
-    return postRequest<ResponseModel<string>>('/category/add', param);
+    return postRequest<ResponseModel<string>>('/admin/category/add', param);
   },
   // GET
   // 删除类目 by zhuoda
   deleteCategoryById: (categoryId: number) => {
-    return getRequest<ResponseModel<string>>(`/category/del/${categoryId}`);
+    return getRequest<ResponseModel<string>>(`/admin/category/del/${categoryId}`);
   },
   // 查询类目层级树 by zhuoda
   queryCategoryTree: (param: CategoryTreeQueryForm) => {
-    return postRequest<ResponseModel<CategoryTreeVo[]>>('/category/tree', param);
+    return postRequest<ResponseModel<CategoryTreeVo[]>>('/admin/category/tree', param);
   },
   // 更新类目 by zhuoda
   updateCategory: (param: CategoryUpdateForm) => {
-    return postRequest<ResponseModel<string>>('/category/update', param);
+    return postRequest<ResponseModel<string>>('/admin/category/update', param);
   },
   // 查询类目详情 by zhuoda
   getCategory: (categoryId: number) => {
     // POST /admin/clue/user/track/add
-    return getRequest<ResponseModel<string>>(`/category/${categoryId}`);
+    return getRequest<ResponseModel<string>>(`/admin/category/${categoryId}`);
   },
 };

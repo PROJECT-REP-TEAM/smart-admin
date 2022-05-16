@@ -3,7 +3,7 @@
  * @Date: 2021-08-26 10:36:54
  * @LastEditTime: 2021-08-30 10:28:15
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-list/index.vue
 -->
 <template>
@@ -12,11 +12,11 @@
       <a-button type="primary" size="small" @click="showOperateRoleModal">添加</a-button>
     </template>
     <a-menu mode="vertical" v-model:selectedKeys="selectedKeys">
-      <a-menu-item v-for="item in roleList" :key="item.id">
+      <a-menu-item v-for="item in roleList" :key="item.roleId">
         <a-popover placement="right">
           <template #content>
             <div style="display: flex; flex-direction: column">
-              <a-button type="text" @click="deleteRole(item.id)">删除</a-button>
+              <a-button type="text" @click="deleteRole(item.roleId)">删除</a-button>
               <a-button type="text" @click="showOperateRoleModal(item)">编辑</a-button>
             </div>
           </template>
@@ -54,8 +54,8 @@
   async function queryAllRole() {
     let res: ResponseModel<RoleVo[]> = await roleApi.queryAll();
     roleList.value = res.data;
-    if (!_.isEmpty(res.data) && res.data[0].id) {
-      selectedKeys.value = [res.data[0].id];
+    if (!_.isEmpty(res.data) && res.data[0].roleId) {
+      selectedKeys.value = [res.data[0].roleId];
     }
   }
   function showOperateRoleModal(role: RoleVo) {

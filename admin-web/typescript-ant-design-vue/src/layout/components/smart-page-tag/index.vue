@@ -205,18 +205,19 @@ export default defineComponent({
 
   /**  覆盖 ant design vue的 tabs 样式，变小一点 **/
 
-  .ant-tabs-line {
-    ::v-deep(.ant-tabs-bar) {
+  .ant-tabs {
+    ::v-deep(.ant-tabs-nav) {
       margin-bottom: 0px;
-      border-bottom: 0;
+      &::before{
+        border-bottom: 0;
+      }
     }
-
-    ::v-deep(.ant-tabs-nav .ant-tabs-tab) {
+    ::v-deep(.ant-tabs-nav-list .ant-tabs-tab) {
       padding: 5px 18px;
       margin: 0px 5px;
     }
 
-    ::v-deep(.ant-tabs-nav .ant-tabs-tab:hover) {
+    ::v-deep(.ant-tabs-nav-list .ant-tabs-tab:hover) {
       background-color: #e8f4ff;
 
       .smart-page-tag-close {
