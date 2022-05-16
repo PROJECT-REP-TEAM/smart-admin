@@ -61,6 +61,10 @@ export interface MenuAddForm {
    */
   path?: string;
   /**
+   * 权限字符串
+   */
+  permsIdentifier?: string;
+  /**
    * 接口权限
    */
   perms?: string;

@@ -73,11 +73,10 @@
 
 <script lang="ts" setup>
 import SmartFooter from "./components/smart-footer/index.vue";
-import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";
+import SmartHeaderUserSpace from "./components/smart-header/index.vue";
 import SideMenu from "/@/components/side-menu/index.vue";
 import { computed, onMounted, ref } from "vue";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
 import MenuLocationBreadcrumb from "/@/components/menu-location-breadcrumb/index.vue";
 import SmartPageTag from "./components/smart-page-tag/index.vue";
 import watermark from "/@/lib/smart-wartermark";

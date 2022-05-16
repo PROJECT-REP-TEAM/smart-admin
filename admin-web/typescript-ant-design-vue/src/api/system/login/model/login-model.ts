@@ -43,4 +43,9 @@ export interface LoginForm {
    * @memberof LoginForm
    */
   loginTerminal?: string;
+
+  /**
+   * 登录设备
+   */
+  loginDevice?: number;
 }

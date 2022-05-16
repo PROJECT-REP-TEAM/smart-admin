@@ -8,7 +8,7 @@
  */
 import { MenuTreeVo } from '@/api/system/login/login-model.ts';
 import { UserTagNav } from '/@/store/modules/model/UserTagNav';
-import { EmployeeLoginVo } from '/@/api/system/login/model/employee-login-vo';
+import { LoginResultVo } from '/@/api/system/login/model/login-result-vo';
 
 export interface UserState {
   /**
@@ -22,7 +22,7 @@ export interface UserState {
    * @param {*}
    * @return {*}
    */
-  userInfo: EmployeeLoginVo;
+  userInfo: LoginResultVo;
   /**
    * @description: 功能点权限列表
    * @param {*}

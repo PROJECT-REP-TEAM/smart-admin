@@ -6,7 +6,7 @@
  * @Description:
  * @FilePath: /smart-admin/src/api/system/login/login.ts
  */
-import { EmployeeLoginVo } from './model/employee-login-vo';
+import { LoginResultVo } from './model/login-result-vo';
 import { ResponseModel } from '/@/api/base-model/response-model';
 import { LoginForm } from './model/login-model';
 import { CaptchaVO } from './model/captcha-vo';
@@ -18,7 +18,7 @@ export const loginApi = {
    * @param param
    */
   login: (param: LoginForm) => {
-    return postRequest<ResponseModel<EmployeeLoginVo>>('/system/login', param);
+    return postRequest<ResponseModel<LoginResultVo>>('/admin/login', param);
   },
 
   /**
@@ -26,7 +26,7 @@ export const loginApi = {
    * @param param
    */
   getCaptcha: () => {
-    return getRequest<ResponseModel<CaptchaVO>>('/system/login/getCaptcha');
+    return getRequest<ResponseModel<CaptchaVO>>('/admin/login/getCaptcha');
   },
 
   /**
@@ -34,6 +34,6 @@ export const loginApi = {
    * @param param
    */
   getLoginInfo: () => {
-    return getRequest<ResponseModel<EmployeeLoginVo>>('/system/login/getLoginInfo');
+    return getRequest<ResponseModel<LoginResultVo>>('/admin/login/getLoginResult');
   },
 };

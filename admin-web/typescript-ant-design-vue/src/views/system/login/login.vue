@@ -109,6 +109,7 @@ import { useUserStore } from "/@/store/modules/system/user";
 import { SmartLoading } from "/@/components/smart-loading";
 import { saveTokenToCookie } from "/@/utils/cookie-util";
 import { smartSentry } from "/@/lib/smart-sentry";
+import { DEVICE_ENUM } from "/@/constants/system/device";
 import { LoginForm } from "/@/api/system/login/model/login-model";
 
 //--------------------- 登录表单 ---------------------------------
@@ -118,6 +119,7 @@ const loginForm = reactive<LoginForm>({
   password: "",
   captchaCode: "",
   captchaUuid: "",
+  loginDevice: DEVICE_ENUM.PC.value
 });
 
 const rules = {
@@ -133,7 +135,6 @@ const formRef = ref();
 const rememberPwd = ref(false);
 
 onMounted(() => {
-  console.log(route.query);
   document.onkeyup = (e) => {
     if (e.keyCode == 13) {
       handleFinish();

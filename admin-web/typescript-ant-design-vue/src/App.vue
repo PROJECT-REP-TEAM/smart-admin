@@ -26,10 +26,13 @@ let spinStore = useSpinStore();
 const spinning = computed(() => spinStore.loading);
 
 async function getLoginInfo() {
+  console.log(12222222)
+  debugger
   let token = useUserStore().getToken;
   if (!token) return;
   const res = await loginApi.getLoginInfo();
-  useUserStore().setUserMenu(res.data);
+  useUserStore().setMenuTree(res.data);
+  useUserStore().setPointsList(res.data);
 }
 
 // 更新屏幕宽度，以判断是否为isMobile模式，进行适配
@@ -38,6 +41,7 @@ function triggerReSize() {
   appConfigStore.setCurrentScreenWidth(document.body.clientWidth);
 }
 onMounted(() => {
+  debugger
   //获取登录信息
   getLoginInfo();
   //更新屏幕宽度

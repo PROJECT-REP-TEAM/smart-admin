@@ -3,7 +3,7 @@
  * @Date: 2021-08-11 11:52:11
  * @LastEditTime: 2021-09-01 20:55:06
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/api/system/menu/model/menu-vo.ts
  */
 /**
@@ -22,43 +22,43 @@ export interface MenuVo {
   /**
    * 是否缓存
    */
-  cacheFlag?: boolean;
+  cacheFlag: boolean;
   /**
    * 组件路径
    */
-  component?: string;
+  component: string;
   /**
    * 功能点关联菜单ID
    */
-  contextMenuId?: number;
+  contextMenuId: number;
   /**
    * 创建时间
    */
-  createTime?: string;
+  createTime: string;
   /**
    * 创建人
    */
-  createUser?: number;
+  createUser: number;
   /**
    * 禁用状态
    */
-  disabledFlag?: boolean;
+  disabledFlag: boolean;
   /**
    * 是否为外链
    */
-  frameFlag?: boolean;
+  frameFlag: boolean;
   /**
    * 菜单图标
    */
-  icon?: string;
+  icon: string;
   /**
    * 菜单ID
    */
-  menuId?: number;
+  menuId: number;
   /**
    * 菜单名称
    */
-  menuName?: string;
+  menuName: string;
   /**
    * 类型:  <br>  export const <br> MENU_TYPE_ENUM = <BR> {<br>&nbsp;&nbsp;CATALOG:{<br>&nbsp;&nbsp;&nbsp;&nbsp;value:1,<br>&nbsp;&nbsp;&nbsp;&nbsp;desc:\'目录\'<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;MENU:{<br>&nbsp;&nbsp;&nbsp;&nbsp;value:2,<br>&nbsp;&nbsp;&nbsp;&nbsp;desc:\'菜单\'<br>&nbsp;&nbsp;},<br>&nbsp;&nbsp;POINTS:{<br>&nbsp;&nbsp;&nbsp;&nbsp;value:3,<br>&nbsp;&nbsp;&nbsp;&nbsp;desc:\'功能点\'<br>&nbsp;&nbsp;}<br>} <br>
    */
@@ -66,23 +66,27 @@ export interface MenuVo {
   /**
    * 父菜单ID
    */
-  parentId?: number;
+  parentId: number;
   /**
    * 路由地址
    */
-  path?: string;
+  path: string;
+  /**
+   * 权限字符串
+   */
+  permsIdentifier: string;
   /**
    * 接口权限
    */
-  perms?: string;
+  perms: string;
   /**
    * 接口权限（拆分）
    */
-  permsList?: string[];
+  permsList: string[];
   /**
    * 显示顺序
    */
-  sort?: number;
+  sort: number;
   /**
    * 更新时间
    */

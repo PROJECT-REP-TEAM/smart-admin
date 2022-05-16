@@ -7,7 +7,7 @@
  */
 import Cookies from 'js-cookie';
 
-export const COOKIE_TOKEN_KEY = 'user_token';
+export const COOKIE_TOKEN_KEY = 'sa_user_token';
 
 export const clearAllCoolies = (): void => {
   Cookies.remove(COOKIE_TOKEN_KEY);

@@ -18,7 +18,7 @@ export const departmentApi = {
    * @return {*}
    */
   queryAllDepartment: (): Promise<ResponseModel<DepartmentVo[]>> => {
-    return getRequest<ResponseModel<Array<DepartmentVo>>>('/department/listAll');
+    return getRequest<ResponseModel<Array<DepartmentVo>>>('/admin/department/listAll');
   },
 
   /**
@@ -27,7 +27,7 @@ export const departmentApi = {
    * @return {*}
    */
   departmentTree: (): Promise<ResponseModel<DepartmentTreeVo[]>> => {
-    return getRequest<ResponseModel<Array<DepartmentTreeVo>>>('/department/treeList');
+    return getRequest<ResponseModel<Array<DepartmentTreeVo>>>('/admin/department/treeList');
   },
 
   /**
@@ -36,7 +36,7 @@ export const departmentApi = {
    * @return {*}
    */
   querySchoolDepartmentList: (): Promise<ResponseModel<DepartmentVo[]>> => {
-    return getRequest<ResponseModel<DepartmentVo[]>>('/department/querySchoolList');
+    return getRequest<ResponseModel<DepartmentVo[]>>('/admin/department/querySchoolList');
   },
 
   /**
@@ -45,7 +45,7 @@ export const departmentApi = {
    * @return {*}
    */
   addDepartment: (param: DepartmentCreateDto) => {
-    return postRequest<ResponseModel<String>>('/department/add', param);
+    return postRequest<ResponseModel<String>>('/admin/department/add', param);
   },
   /**
    * @description: 更新部门信息 by zhuoda
@@ -53,7 +53,7 @@ export const departmentApi = {
    * @return {*}
    */
   updateDepartment: (param: DepartmentCreateDto) => {
-    return postRequest<ResponseModel<String>>('/department/update', param);
+    return postRequest<ResponseModel<String>>('/admin/department/update', param);
   },
   /**
    * @description: 获取校区列表 by zhuoda
@@ -61,6 +61,6 @@ export const departmentApi = {
    * @return {*}
    */
   deleteDepartment: (deptId: number) => {
-    return getRequest<ResponseModel<String>>(`/department/delete/${deptId}`);
+    return getRequest<ResponseModel<String>>(`/admin/department/delete/${deptId}`);
   },
 };

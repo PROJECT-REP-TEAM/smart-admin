@@ -19,41 +19,41 @@ export const menuApi = {
    * 添加菜单
    */
   addMenu: (param: MenuAddForm) => {
-    return postRequest<ResponseModel<String>>('/menu/add', param);
+    return postRequest<ResponseModel<String>>('/admin/menu/add', param);
   },
 
   /**
    * 更新菜单
    */
   updateMenu: (param: MenuUpdateForm) => {
-    return postRequest<ResponseModel<String>>('/menu/update', param);
+    return postRequest<ResponseModel<String>>('/admin/menu/update', param);
   },
 
   /**
    * 批量删除菜单
    */
   batchDeleteMenu: (menuIdList: Array<number | undefined>) => {
-    return getRequest<ResponseModel<String>>(`/menu/batchDelete?menuIdList=${menuIdList}`);
+    return getRequest<ResponseModel<String>>(`/admin/menu/batchDelete?menuIdList=${menuIdList}`);
   },
 
   /**
    * 查询所有菜单列表
    */
   queryMenu: (): Promise<ResponseModel<MenuVo[]>> => {
-    return getRequest<ResponseModel<MenuVo[]>>('/menu/query');
+    return getRequest<ResponseModel<MenuVo[]>>('/admin/menu/query');
   },
 
   /**
    * 查询菜单树
    */
   queryMenuTree: (onlyMenu?: boolean): Promise<ResponseModel<MenuTreeVo[]>> => {
-    return getRequest<ResponseModel<MenuTreeVo[]>>(`/menu/tree?onlyMenu=${onlyMenu}`);
+    return getRequest<ResponseModel<MenuTreeVo[]>>(`/admin/menu/tree?onlyMenu=${onlyMenu}`);
   },
 
   /**
    * 获取所有请求路径
    */
   getAllUrl: () => {
-    return getRequest<ResponseModel<RequestUrlVo[]>>('/menu/getAllUrl');
+    return getRequest<ResponseModel<RequestUrlVo[]>>('/admin/menu/getAllUrl');
   },
 };

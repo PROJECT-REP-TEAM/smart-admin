@@ -121,30 +121,33 @@
       rowKey="menuId"
       :pagination="false"
     >
-      <template #type="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue("MENU_TYPE_ENUM", text) }}</span>
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'menuType'">
+          <span>{{ $smartEnumPlugin.getDescByValue("MENU_TYPE_ENUM", text) }}</span>
+        </template>
+
+        <template v-if="column.dataIndex === 'frameFlag'">
+          <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
+        </template>
+
+        <template v-if="column.dataIndex === 'cacheFlag'">
+          <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
+        </template>
+
+        <template v-if="column.dataIndex === 'disabledFlag'">
+          <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
+        </template>
+
+        <template v-if="column.dataIndex === 'icon'">
+          <component :is="$antIcons[text]" />
+        </template>
+
+        <template v-if="column.dataIndex === 'operate'">
+          <a-button type="link" size="small" @click="showDrawer(record)">编辑</a-button>
+          <a-button danger type="link" @click="singleDelete(record)">删除</a-button>
+        </template>
       </template>
 
-      <template #frameFlag="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
-      </template>
-
-      <template #cacheFlag="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
-      </template>
-
-      <template #disabledFlag="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
-      </template>
-
-      <template #icon="{ text }">
-        <component :is="$antIcons[text]" />
-      </template>
-
-      <template #operate="{ text, record }">
-        <a-button type="link" size="small" @click="showDrawer(record)">编辑</a-button>
-        <a-button danger type="link" @click="singleDelete(record)">删除</a-button>
-      </template>
     </a-table>
   </a-card>
 

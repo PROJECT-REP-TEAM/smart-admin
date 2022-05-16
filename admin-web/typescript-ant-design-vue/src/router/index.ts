@@ -21,8 +21,6 @@ export const router = createRouter({
 
 // ----------------------- 路由加载前 -----------------------
 router.beforeEach(async (to, from, next) => {
-  console.log(from.path);
-
   nProgress.configure({ showSpinner: false });
   if (to.meta.title) {
     nProgress.start();
@@ -60,6 +58,7 @@ router.beforeEach(async (to, from, next) => {
   let menuTree = useUserStore().getMenuTree || [];
   if (!_.isEmpty(menuTree)) {
     let routeList = buildRoutes(menuTree, 1, []);
+    console.log(routeList);
     routeList.forEach((e) => {
       router.addRoute(e);
     });
