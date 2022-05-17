@@ -41,7 +41,11 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="菜单图标" name="icon">
-              <a-input v-model:value="form.icon" placeholder="请输入菜单图标" />
+              <IconSelect @updateIcon="">
+                <template #iconSelect>
+                  <a-input v-model:value="form.icon" placeholder="请输入菜单图标" />
+                </template>
+              </IconSelect>
             </a-form-item>
           </a-col>
         </a-row>
@@ -160,6 +164,7 @@ import { ref, reactive, watch } from "vue";
 import type { MenuAddForm } from "/@/api/system/menu/model/menu-add-form";
 import { MENU_TYPE_ENUM } from "/@/constants/system/menu";
 import MenuTreeSelect from "./menu-tree-select.vue";
+import IconSelect from "/@/components/icon-select/index.vue";
 import { message } from "ant-design-vue";
 import { menuApi } from "/@/api/system/menu/menu-api";
 import { MenuUpdateForm } from "/@/api/system/menu/model/menu-update-form";
