@@ -41,7 +41,7 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="菜单图标" name="icon">
-              <IconSelect @updateIcon="">
+              <IconSelect @updateIcon="selectIcon">
                 <template #iconSelect>
                   <a-input v-model:value="form.icon" placeholder="请输入菜单图标" />
                 </template>
@@ -291,6 +291,10 @@ const onSubmit = async () => {
     useSpinStore().hide();
   }
 };
+
+function selectIcon(icon){
+  form.icon=icon;
+}
 
 // ----------------------- 以下是暴露的方法内容 ------------------------
 defineExpose({

@@ -1,10 +1,6 @@
 <template>
   <div>
-    <a-popover
-        :trigger="trigger"
-        placement="bottomLeft"
-        v-model="visible"
-    >
+    <a-popover placement="bottomLeft">
       <template #title>
         <a-input-search
             v-model="searchValue"
@@ -58,14 +54,6 @@ function filterIcon() {
     iconArr = iconArr.filter(item => item.toLowerCase().includes(this.searchValue.toLowerCase()) )
   }
 }
-let visible = ref(false);
-watch(
-    () => visible.value,
-    (newValue) => {
-      searchValue.value='';
-      iconArr = [...icons];
-    }
-);
 
 const emit = defineEmits<{
   (e: "updateIcon", value: String): void;
@@ -73,7 +61,6 @@ const emit = defineEmits<{
 
 function handleClick(icon: String) {
   emit('updateIcon',icon)
-  visible.value = false;
 }
 
 
