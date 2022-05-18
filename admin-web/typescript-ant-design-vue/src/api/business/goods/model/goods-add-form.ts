@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * @export
  * @interface GoodsAddDto
  */
@@ -35,12 +35,6 @@ export interface GoodsAddForm {
      */
     goodsType?: number;
     /**
-     * 商品分组:  <br>  export const <br> GOODS_GROUP_TYPE_ENUM =<br>
-     * @type {number}
-     * @memberof GoodsAddDto
-     */
-    groupType?: number;
-    /**
      * 商品价格
      * @type {number}
      * @memberof GoodsAddDto
@@ -52,12 +46,7 @@ export interface GoodsAddForm {
      * @memberof GoodsAddDto
      */
     shelvesFlag?: boolean;
-    /**
-     * 第三方商品id|可选
-     * @type {number}
-     * @memberof GoodsAddDto
-     */
-    thirdGoodsId?: number;
+
     /**
      * 备注|可选
      * @type {string}

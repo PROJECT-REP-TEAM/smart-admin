@@ -3,11 +3,11 @@
  * @Date: 2021-08-12 18:10:22
  * @LastEditTime: 2021-09-01 21:25:35
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/api/business/goods/model/goods-admin-vo.ts
  */
 /**
- * 
+ *
  * @export
  * @interface GoodsAdminVo
  */
@@ -25,7 +25,7 @@ export interface GoodsAdminVo {
      */
     coverPic?: string;
     /**
-     * 
+     *
      * @type {Date}
      * @memberof GoodsAdminVo
      */
@@ -55,19 +55,13 @@ export interface GoodsAdminVo {
      */
     goodsType: number;
     /**
-     * 商品分组:  <br>  export const <br> GOODS_GROUP_TYPE_ENUM  <br>
-     * @type {number}
-     * @memberof GoodsAdminVo
-     */
-    groupType: number;
-    /**
      * 商品价格
      * @type {number}
      * @memberof GoodsAdminVo
      */
     price?: number;
     /**
-     * 
+     *
      * @type {string}
      * @memberof GoodsAdminVo
      */
@@ -79,13 +73,7 @@ export interface GoodsAdminVo {
      */
     shelvesFlag?: boolean;
     /**
-     * 第三方商品id|可选
-     * @type {number}
-     * @memberof GoodsAdminVo
-     */
-    thirdGoodsId?: number;
-    /**
-     * 
+     *
      * @type {Date}
      * @memberof GoodsAdminVo
      */

@@ -52,13 +52,6 @@
           新建
         </a-button>
 
-        <!-- <a-button type="primary" size="small">
-          <template #icon>
-            <ExportOutlined />
-          </template>
-          批量导出
-        </a-button> -->
-
         <a-button @click="confirmBatchDelete" type="danger" size="small" :disabled="selectedRowKeyList.length == 0">
           <template #icon>
             <DeleteOutlined />
@@ -78,16 +71,18 @@
       :pagination="false"
       :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
     >
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'goodsType'">
+          <span>{{ $smartEnumPlugin.getDescByValue("GOODS_TYPE_ENUM", text) }}</span>
+        </template>
 
-      <template #goodsType="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue("GOODS_TYPE_ENUM", text) }}</span>
-      </template>
-
-      <template #shelvesFlag="{ text }">
-        <span>{{ text ? "上架" : "下架" }}</span>
-      </template>
-      <template #action="{ record }">
-        <a-button @click="addGoods(record)" type="link">编辑</a-button>
+        <template v-else-if="column.dataIndex === 'shelvesFlag'">
+          <span>{{ text ? "上架" : "下架" }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'action'">
+          <a-button @click="addGoods(record)" type="link">编辑</a-button>
+          <a-button @click="showDataTracer(record.goodsId)" type="link">操作记录</a-button>
+        </template>
       </template>
     </a-table>
 
@@ -108,11 +103,13 @@
     </div>
 
     <GoodsOperateModal ref="operateModal" @reloadList="ajaxQuery" />
+    <!-- 商品的操作记录 -->
+    <GoodsDataTracerList ref="dataTracerRef" />
   </a-card>
 </template>
 <script lang="ts" setup>
-import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import GoodsOperateModal from "./components/goods-operate-modal.vue";
+import GoodsDataTracerList from './components/goods-data-tracer-modal.vue';
 import { reactive, ref, onMounted } from "vue";
 import { message, Modal } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
@@ -135,7 +132,6 @@ const columns = reactive([
   {
     title: "商品类型",
     dataIndex: "goodsType",
-    slots: { customRender: "goodsType" },
   },
   {
     title: "商品名称",
@@ -148,7 +144,6 @@ const columns = reactive([
   {
     title: "商品状态",
     dataIndex: "shelvesFlag",
-    slots: { customRender: "shelvesFlag" },
   },
   {
     title: "备注",
@@ -162,7 +157,6 @@ const columns = reactive([
     title: "操作",
     dataIndex: "action",
     fixed: "right",
-    slots: { customRender: "action" },
   },
 ]);
 
@@ -180,6 +174,12 @@ const selectedRowKeyList = ref<Number[]>([]);
 const tableData = ref<GoodsAdminVo[]>([]);
 const total = ref<Number>(0);
 const operateModal = ref();
+const dataTracerRef = ref();
+
+// 显示操作记录弹窗
+function showDataTracer(goodsId: number) {
+  dataTracerRef.value.showDrawer(goodsId);
+}
 
 function onSelectChange(selectedRowKeys: Number[]) {
   selectedRowKeyList.value = selectedRowKeys;

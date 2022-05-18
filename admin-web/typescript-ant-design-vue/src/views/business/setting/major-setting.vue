@@ -1,7 +1,7 @@
 <template>
   <a-card size="small" :bordered="false" :hoverable="true">
     <category-tree-table
-      :category-type="CATEGORY_TYPE_ENUM.DEMO.value"
+      :category-type="CATEGORY_TYPE_ENUM.MAJOR.value"
     />
   </a-card>
 </template>

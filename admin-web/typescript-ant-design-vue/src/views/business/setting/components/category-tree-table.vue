@@ -22,15 +22,18 @@
       @expandedRowsChange="changeExand"
       :expanded-row-keys="expandedRowKeys"
     >
-      <template #action="{ record }">
-        <a-button @click="addCategory(record.categoryId)" type="link"
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'action'" >
+          <a-button @click="addCategory(record.categoryId)" type="link"
           >增加子分类</a-button
-        >
-        <a-button @click="addCategory(undefined, record)" type="link">编辑</a-button>
-        <a-button @click="confirmDeleteCategory(record.categoryId)" type="link"
+          >
+          <a-button @click="addCategory(undefined, record)" type="link">编辑</a-button>
+          <a-button @click="confirmDeleteCategory(record.categoryId)" type="link"
           >删除</a-button
-        >
+          >
+        </template>
       </template>
+
     </a-table>
     <CategoryOperateModal ref="operateModal" @reloadList="reloadList" />
   </a-card>
@@ -57,8 +60,8 @@ const columnNameList: CustomColumnName[] = [
     columnName: "商品分类",
   },
   {
-    categoryType: CATEGORY_TYPE_ENUM.DEMO.value,
-    columnName: "演示分类",
+    categoryType: CATEGORY_TYPE_ENUM.MAJOR.value,
+    columnName: "专业分类",
   }
 ];
 // ----------------------- 以下是计算属性 watch监听 ------------------------
@@ -83,7 +86,6 @@ const columns = reactive([
   {
     title: "操作",
     dataIndex: "action",
-    slots: { customRender: "action" },
   },
 ]);
 const operateModal = ref();
