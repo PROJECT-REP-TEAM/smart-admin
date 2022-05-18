@@ -31,7 +31,7 @@ export const FLAG_NUMBER_ENUM: SmartEnum<number> = {
   },
 };
 
-export const GenderEnum: SmartEnum<number> = {
+export const GENDER_ENUM: SmartEnum<number> = {
   UNKNOWN: {
     value: 0,
     desc: '未知',

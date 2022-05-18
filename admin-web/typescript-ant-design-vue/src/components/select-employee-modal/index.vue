@@ -3,7 +3,7 @@
  * @Date: 2021-08-30 14:38:05
  * @LastEditTime: 2021-08-30 15:14:06
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/components/select-employee-modal/index.vue
 -->
 <template>
@@ -45,7 +45,7 @@
       :columns="columns"
       :data-source="tableData"
       :pagination="false"
-      rowKey="id"
+      rowKey="employeeId"
       :scroll="{ y: 300 }"
     >
       <template #disabledFlag="{ text }">
@@ -165,7 +165,7 @@
       message.warning('请选择角色人员');
       return;
     }
-    let selectVoList = tableData.value.filter((e) => selectedRowKeyList.value.includes(e.id));
+    let selectVoList = tableData.value.filter((e) => selectedRowKeyList.value.includes(e.employeeId));
     emits('selectData', selectVoList);
     closeModal();
   }

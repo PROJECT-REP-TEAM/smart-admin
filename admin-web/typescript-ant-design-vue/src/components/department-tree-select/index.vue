@@ -10,7 +10,7 @@
   <a-tree-select
     :value="props.value"
     :treeData="treeData"
-    :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
+    :fieldNames="{ label: 'name', key: 'departmentId', value: 'departmentId' }"
     show-search
     style="width: 100%"
     :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
@@ -24,7 +24,6 @@
 <script setup lang="ts">
   import { onMounted, ref } from 'vue';
   import type { ResponseModel } from '/@/api/base-model/response-model';
-  import _ from 'lodash';
   import { departmentApi } from '/@/api/system/department/department-api';
   import { DepartmentTreeVo } from '/@/api/system/department/model/department-tree-vo';
   // ----------------------- 以下是字段定义 emits props ------------------------

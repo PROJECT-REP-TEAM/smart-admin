@@ -53,7 +53,7 @@ export const menuApi = {
   /**
    * 获取所有请求路径
    */
-  getAllUrl: () => {
-    return getRequest<ResponseModel<RequestUrlVo[]>>('/admin/menu/getAllUrl');
+  getAuthUrl: () => {
+    return getRequest<ResponseModel<RequestUrlVo[]>>('/admin/menu/auth/url');
   },
 };

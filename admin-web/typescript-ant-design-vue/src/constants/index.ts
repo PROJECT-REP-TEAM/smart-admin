@@ -9,11 +9,11 @@
 import goods from './business/goods';
 import menu from './system/menu';
 import category from './business/category';
-import { FLAG_NUMBER_ENUM, GenderEnum } from './common';
+import { FLAG_NUMBER_ENUM, GENDER_ENUM } from './common';
 
 export default {
   FLAG_NUMBER_ENUM,
-  GenderEnum,
+  GENDER_ENUM,
   ...goods,
   ...menu,
   ...category

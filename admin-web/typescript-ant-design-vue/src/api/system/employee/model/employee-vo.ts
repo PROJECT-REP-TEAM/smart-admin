@@ -13,59 +13,56 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { DepartmentSimpleVo } from '/@/api/system/department/model/department-simple-vo';
-
 export interface EmployeeVo {
-  /**
-   * 员工名称
-   */
-  actualName?: string;
-  /**
-   * 出生日期
-   */
-  birthday?: string;
-  /**
-   * 创建时间
-   */
-  createTime?: string;
-  /**
-   * 部门
-   */
-  department?: Array<DepartmentSimpleVo>;
-  /**
-   * 部门id
-   */
-  departmentId?: string;
-  /**
-   * 是否被禁用
-   */
-  disabledFlag?: boolean;
-  /**
-   * 邮箱
-   */
-  email?: string;
   /**
    * 主键id
    */
-  id: number;
-  /**
-   * 身份证
-   */
-  idCard?: string;
-  /**
-   * 是否离职
-   */
-  leaveFlag?: boolean;
+  employeeId: number;
   /**
    * 登录账号
    */
   loginName?: string;
   /**
-   * 别名
+   * 性别
    */
-  nickName?: string;
+  gender?: number;
+  /**
+   * 员工名称
+   */
+  actualName?: string;
   /**
    * 手机号码
    */
   phone?: string;
+  /**
+   * 部门id
+   */
+  departmentId?: number;
+
+  departmentName?: string
+  /**
+   * 是否被禁用
+   */
+  disabledFlag?: boolean;
+
+  /**
+   * 是否超管
+   */
+  administratorFlag?: boolean;
+  /**
+   * 创建时间
+   */
+  createTime?: string;
+
+  /**
+   * 角色列表
+   */
+  roleIdList?: Array<string>;
+
+  /**
+   * 角色名称列表
+   */
+  roleNameList?: Array<string>;
+
+
 }

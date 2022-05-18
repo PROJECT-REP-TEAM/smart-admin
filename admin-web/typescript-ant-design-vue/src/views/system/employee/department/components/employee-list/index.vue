@@ -3,7 +3,7 @@
  * @Date: 2021-08-14 16:23:30
  * @LastEditTime: 2021-08-26 10:18:56
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/department/components/employee-list/index.vue
 -->
 <template>
@@ -48,17 +48,20 @@
       :pagination="false"
       :scroll="{ y: 250 }"
     >
-      <template #disabledFlag="{ text }">
-        <span>{{ text ? '禁用' : '启用' }}</span>
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'disabledFlag'" >
+          <span>{{ text ? '禁用' : '启用' }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'gender'">
+          <span>{{ $smartEnumPlugin.getDescByValue('GENDER_ENUM', text) }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'operate'">
+          <a-button type="link" size="small" @click="showDrawer(record)">编辑</a-button>
+          <a-button type="link" size="small" @click="resetPassword(record.id)">重置密码</a-button>
+          <a-button type="link" @click="updateDisabled(record.id, record.disabledFlag)">{{ record.disabledFlag ? '启用' : '禁用' }}</a-button>
+        </template>
       </template>
-      <template #gender="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue('GENDER_ENUM', text) }}</span>
-      </template>
-      <template #operate="{ record }">
-        <a-button type="link" size="small" @click="showDrawer(record)">编辑</a-button>
-        <a-button type="link" size="small" @click="resetPassword(record.id)">重置密码</a-button>
-        <a-button type="link" @click="updateDisabled(record.id, record.disabledFlag)">{{ record.disabledFlag ? '启用' : '禁用' }}</a-button>
-      </template>
+
     </a-table>
     <div class="smart-query-table-page">
       <a-pagination
@@ -115,7 +118,6 @@
     {
       title: '性别',
       dataIndex: 'gender',
-      slots: { customRender: 'gender' },
     },
     {
       title: '登录账号',
@@ -124,11 +126,10 @@
     {
       title: '状态',
       dataIndex: 'disabledFlag',
-      slots: { customRender: 'disabledFlag' },
     },
     {
       title: '操作',
-      slots: { customRender: 'operate' },
+      dataIndex: 'operate',
       width: 300,
     },
   ];

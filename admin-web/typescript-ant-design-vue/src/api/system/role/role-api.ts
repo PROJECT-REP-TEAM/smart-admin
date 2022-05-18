@@ -81,7 +81,7 @@ export const roleApi = {
    * @return {*}
    */
   queryRoleEmployee: (params: RoleQueryDto) => {
-    return postRequest<ResponseModel<PageResultModel<EmployeeVo>>>('/admin/role/listEmployee', params);
+    return postRequest<ResponseModel<PageResultModel<EmployeeVo>>>('/admin/role/employee/queryEmployee', params);
   },
   /**
    * @description: 从角色成员列表中移除员工
@@ -90,7 +90,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteEmployeeRole: (employeeId: number, roleId: number) => {
-    return getRequest<ResponseModel<string>>('/admin/role/removeEmployee?employeeId=' + employeeId + '&roleId=' + roleId);
+    return getRequest<ResponseModel<string>>('/admin/role/employee/removeEmployee?employeeId=' + employeeId + '&roleId=' + roleId);
   },
   /**
    * @description: 从角色成员列表中批量移除员工
@@ -98,7 +98,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteEmployeeList: (data: RoleEmployeeBatchDto) => {
-    return postRequest<ResponseModel<string>>('/admin/role/removeEmployeeList', data);
+    return postRequest<ResponseModel<string>>('/admin/role/employee/batchRemoveRoleEmployee', data);
   },
   /**
    * @description: 根据角色id获取角色员工列表(无分页)
@@ -106,7 +106,7 @@ export const roleApi = {
    * @return {*}
    */
   getRoleAllEmployee: (roleId: number) => {
-    return getRequest<ResponseModel<EmployeeVo[]>>(`/admin/role/listAllEmployee/${roleId}`);
+    return getRequest<ResponseModel<EmployeeVo[]>>(`/admin/role/employee/getAllEmployeeByRoleId/${roleId}`);
   },
   /**
    * @description: 角色成员列表中批量添加员工
@@ -114,6 +114,6 @@ export const roleApi = {
    * @return {*}
    */
   addRoleEmployeeList: (data: RoleEmployeeBatchDto) => {
-    return postRequest<ResponseModel<string>>('/admin/role/addEmployeeList', data);
+    return postRequest<ResponseModel<string>>('/admin/role/employee/batchAddRoleEmployee', data);
   },
 };

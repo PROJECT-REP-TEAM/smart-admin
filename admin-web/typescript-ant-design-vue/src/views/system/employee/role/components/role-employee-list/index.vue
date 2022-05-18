@@ -3,7 +3,7 @@
  * @Date: 2021-08-30 10:52:22
  * @LastEditTime: 2021-08-30 15:20:03
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-employee-list/index.vue
 -->
 <template>
@@ -24,15 +24,18 @@
       rowKey="id"
       :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
     >
-      <template #disabledFlag="{ text }">
-        <span>{{ text ? '禁用' : '启用' }}</span>
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'disabledFlag'" >
+          <span>{{ text ? '禁用' : '启用' }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'gender'">
+          <span>{{ $smartEnumPlugin.getDescByValue('GENDER_ENUM', text) }}</span>
+        </template>
+        <template v-else-if="column.dataIndex === 'operate'">
+          <a @click="deleteEmployeeRole(record.employeeId)">移除</a>
+        </template>
       </template>
-      <template #gender="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue('GENDER_ENUM', text) }}</span>
-      </template>
-      <template #operate="{ record }">
-        <a @click="deleteEmployeeRole(record.id)">移除</a>
-      </template>
+
     </a-table>
     <div class="smart-query-table-page">
       <a-pagination
@@ -78,7 +81,6 @@
     {
       title: '性别',
       dataIndex: 'gender',
-      slots: { customRender: 'gender' },
     },
     {
       title: '登录账号',
@@ -87,11 +89,10 @@
     {
       title: '状态',
       dataIndex: 'disabledFlag',
-      slots: { customRender: 'disabledFlag' },
     },
     {
       title: '操作',
-      slots: { customRender: 'operate' },
+      dataIndex:'operate',
       width: 150,
     },
   ]);
@@ -102,7 +103,7 @@
     pageNum: 1,
     pageSize: PAGE_SIZE,
     roleId: undefined,
-    roleName: undefined,
+    keywords: undefined,
   };
   const queryForm = reactive<RoleQueryDto>({ ...defaultQueryForm });
   const total = ref<number>(0);
@@ -187,7 +188,7 @@
   }
   async function addRoleEmployee() {
     let res = await roleApi.getRoleAllEmployee(selectRoleId.value);
-    let selectedIdList = res.data.map((e) => e.id) || [];
+    let selectedIdList = res.data.map((e) => e.employeeId) || [];
     selectEmployeeModal.value.showModal(selectedIdList);
   }
   async function selectData(list: EmployeeVo[]) {
@@ -198,7 +199,7 @@
     useSpinStore().show();
     try {
       let params: RoleEmployeeBatchDto = {
-        employeeIdList: list.map((e) => e.id),
+        employeeIdList: list.map((e) => e.employeeId),
         roleId: selectRoleId.value,
       };
       await roleApi.addRoleEmployeeList(params);

@@ -3,7 +3,7 @@
  * @Date: 2021-08-16 15:06:33
  * @LastEditTime: 2021-09-01
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/department/components/operate-employee-modal/index.vue
 -->
 <template>
@@ -90,7 +90,7 @@ import { roleApi } from "/@/api/system/role/role-api";
 import { ResponseModel } from "/@/api/base-model/response-model";
 import { RoleVo } from "/@/api/system/role/model/role-vo";
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
-import { GenderEnum } from "/@/constants/common";
+import { GENDER_ENUM } from "/@/constants/common";
 // ----------------------- 以下是字段定义 emits props ---------------------
 const departmentTreeSelect = ref();
 // emit
@@ -106,7 +106,7 @@ const formDefault: EmployeeUpdateDto & EmployeeAddDto = {
   actualName: undefined,
   departmentId: undefined,
   disabledFlag: 0,
-  gender: GenderEnum.MAN.value,
+  gender: GENDER_ENUM.MAN.value,
   loginName: undefined,
   phone: undefined,
   roleIdList: undefined,

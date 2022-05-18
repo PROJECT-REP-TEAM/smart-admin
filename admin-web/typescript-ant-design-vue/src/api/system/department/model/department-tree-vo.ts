@@ -6,6 +6,8 @@
  * @Description:
  * @FilePath: /smart-admin/src/api/system/department/model/department-tree-vo.ts
  */
+import {DepartmentVo} from "/@/api/system/department/model/department-vo";
+
 /**
  * The version of the OpenAPI document: 1.0.0
  *
@@ -15,49 +17,18 @@
  * Do not edit the class manually.
  */
 
-export interface DepartmentTreeVo {
+export interface DepartmentTreeVo extends DepartmentVo {
   /**
    * 子部门
    */
   children?: Array<DepartmentTreeVo>;
-  /**
-   * 部门id
-   */
-  id: number;
-  /**
-   * 部门负责人id
-   */
-  managerId?: number;
-  /**
-   * 部门负责人姓名
-   */
-  managerName?: string;
-  /**
-   * 部门名称
-   */
-  name: string;
+
   /**
    * 同级下一个元素id
    */
   nextId?: number;
   /**
-   * 父级部门id
-   */
-  parentId?: number;
-  /**
-   * 父级部门名称
-   */
-  parentName?: string;
-  /**
    * 同级上一个元素id
    */
   preId?: number;
-  /**
-   * 部门简称
-   */
-  shortName?: string;
-  /**
-   * 排序
-   */
-  sort?: number;
 }

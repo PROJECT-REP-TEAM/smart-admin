@@ -128,7 +128,7 @@
         </a-row>
         <a-row :gutter="16">
           <a-col :span="12">
-            <a-form-item label="接口权限" name="permsList">
+            <a-form-item label="接口权限(saAuth模式)" name="permsList">
               <!-- <a-input v-model:value="form.perms" placeholder="请输入权限字符" /> -->
               <a-select
                 v-model:value="form.permsList"
@@ -221,7 +221,7 @@ const visible = ref(false);
 watch(visible, (e) => {
   if (e) {
     queryMenuTree();
-    getAllUrl();
+    getAuthUrl();
   }
 });
 // ----------------------- 以下是生命周期 ------------------------
@@ -240,8 +240,8 @@ async function queryMenuTree() {
   menuTreeData.value = res.data;
 }
 
-async function getAllUrl() {
-  let res = await menuApi.getAllUrl();
+async function getAuthUrl() {
+  let res = await menuApi.getAuthUrl();
   allUrlData.value = res.data;
 }
 

@@ -3,7 +3,7 @@
  * @Date: 2021-08-12 17:34:00
  * @LastEditTime: 2021-08-30 09:00:45
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/department/components/department-tree/index.vue
 -->
 <template>
@@ -13,9 +13,8 @@
       v-if="!_.isEmpty(treeData)"
       v-model:selectedKeys="selectedKeys"
       v-model:checkedKeys="checkedKeys"
-      class="tree"
       :treeData="treeData"
-      :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
+      :fieldNames="{ title: 'name', key: 'departmentId', value: 'departmentId' }"
       style="width: 100%; overflow-x: auto"
       :style="[!height ? '' : { height: `${height}px`, overflowY: 'auto' }]"
       :showLine="!props.checkable"
@@ -31,7 +30,7 @@
             <div style="display: flex; flex-direction: column">
               <a-button type="text" @click="addDepartment(item.dataRef)">添加下级</a-button>
               <a-button type="text" @click="updateDepartment(item.dataRef)">修改</a-button>
-              <a-button type="text" v-if="item.id != topDeptId" @click="deleteDepartment(item.id)">删除</a-button>
+              <a-button type="text" v-if="item.departmentId != topDeptId" @click="deleteDepartment(item.departmentId)">删除</a-button>
             </div>
           </template>
           {{ item.name }}
@@ -60,7 +59,6 @@
   const operateDepartmentModal = ref();
   const keywords = ref<string>('');
   const selectedKeys = ref<number[]>([]);
-  // const expandedKeys = ref<number[]>([]);
   const checkedKeys = ref<number[]>([]);
   const departmentList = ref<DepartmentVo[]>([]);
   const treeData = ref<DepartmentTreeVo[]>([]);
@@ -116,27 +114,19 @@
     treeData.value = buildDepartmentTree(data, 0);
     // 构建id-info集合
     data.forEach((e) => {
-      idInfoMap.value.set(e.id, e);
+      idInfoMap.value.set(e.departmentId, e);
     });
     if (!_.isEmpty(treeData.value)) {
       let topData = treeData.value[0];
       // 默认最顶级ID为列表中返回的第一条数据的ID
-      topDeptId.value = topData.id;
-      // selectedKeys.value = [topData.id];
-      // 默认选中的部门下级为列表中返回的第一条数据的children
-      // selectDeptChild.value = topData.children;
-      // 默认面包屑
-      // breadcrumb.value = [topData.name];
-      // if (_.isEmpty(expandedKeys.value)) {
-      //   expandedKeys.value = [topData.id];
-      // }
+      topDeptId.value = topData.departmentId;
     }
   }
   // 构建部门树
   function buildDepartmentTree(data: DepartmentVo[], parentId: number) {
     let treeData: DepartmentTreeVo[] = data.filter((e) => e.parentId == parentId) || [];
     treeData.forEach((e) => {
-      e.children = buildDepartmentTree(data, e.id);
+      e.children = buildDepartmentTree(data, e.departmentId);
     });
     return treeData;
   }
@@ -156,37 +146,36 @@
     let filterDepartmentList: DepartmentVo[] = [];
     // 循环筛选出的部门 构建部门树
     filterDepartmenet.forEach((e) => {
-      recursionFilterDepartment(filterDepartmentList, e.id, false);
+      recursionFilterDepartment(filterDepartmentList, e.departmentId, false);
     });
     // 构建树形结构
     treeData.value = buildDepartmentTree(filterDepartmentList, 0);
   }
-  function selectTree(id: number) {
-    selectedKeys.value = [id];
+  function selectTree(departmentId: number) {
+    selectedKeys.value = [departmentId];
     treeSelectChange(selectedKeys.value);
   }
   // 树选中
-  function treeSelectChange(idList: number[]) {
+  function treeSelectChange(departmentIdList: number[]) {
     // 初始化
     breadcrumb.value = [];
     // 初始选中的部门下级
     selectDeptChild.value = [];
-    if (_.isEmpty(idList)) {
+    if (_.isEmpty(departmentIdList)) {
       return;
     }
-    let id = idList[0];
+    let departmentId = departmentIdList[0];
     // 寻找选择的下级
-    selectDeptChild.value = departmentList.value.filter((e) => e.parentId == id);
+    selectDeptChild.value = departmentList.value.filter((e) => e.parentId == departmentId);
     // 构建面包屑
     let filterDepartmentList: DepartmentVo[] = [];
-    recursionFilterDepartment(filterDepartmentList, id, true);
+    recursionFilterDepartment(filterDepartmentList, departmentId, true);
     breadcrumb.value = filterDepartmentList.map((e) => e.name);
-    // expandedKeys.value = filterDepartmentList.map((e) => e.id);
   }
   // 根据ID递归筛选部门
-  function recursionFilterDepartment(resList: DepartmentVo[], id: number, unshift: boolean) {
-    let info = idInfoMap.value.get(id);
-    if (!info || resList.some((e) => e.id == id)) {
+  function recursionFilterDepartment(resList: DepartmentVo[], departmentId: number, unshift: boolean) {
+    let info = idInfoMap.value.get(departmentId);
+    if (!info || resList.some((e) => e.departmentId == departmentId)) {
       return;
     }
     if (unshift) {
@@ -201,11 +190,11 @@
   // 添加编辑部门
   function addDepartment(e: any) {
     let data: DepartmentVo = {
-      id: 0,
+      departmentId: 0,
       name: '',
-      parentId: e.id,
+      parentId: e.departmentId,
     };
-    operateId.value = e.id;
+    operateId.value = e.departmentId;
     operateDepartmentModal.value.showModal(data);
   }
   function updateDepartment(e: any) {
@@ -261,7 +250,7 @@
 <style scoped lang="less">
   .tree-container {
     height: 100%;
-    .tree {
+    /deep/.ant-tree {
       margin-top: 10px;
     }
   }

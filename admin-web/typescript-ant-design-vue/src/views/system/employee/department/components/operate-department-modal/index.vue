@@ -3,7 +3,7 @@
  * @Date: 2021-08-16 08:52:38
  * @LastEditTime: 2021-08-25 09:57:26
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/department/components/operate-department-modal/index.vue
 -->
 <template>
@@ -17,7 +17,7 @@
       </a-form-item>
       <a-form-item label="部门负责人" name="managerId">
         <a-select v-model:value="form.managerId" show-search placeholder="请选择部门负责人" optionFilterProp="title">
-          <a-select-option v-for="item in employeeList" :key="item.id" :title="item.actualName">{{ item.actualName }}</a-select-option>
+          <a-select-option v-for="item in employeeList" :key="item.employeeId" :title="item.actualName">{{ item.actualName }}</a-select-option>
         </a-select>
       </a-form-item>
     </a-form>
@@ -42,11 +42,11 @@
   const formRef = ref();
   const departmentTreeSelect = ref();
   const defaultOperateParams: DepartmentCreateDto & DepartmentUpdateDto = {
-    id: undefined,
+    departmentId: undefined,
     managerId: undefined,
     name: undefined,
     parentId: undefined,
-    shortName: undefined,
+    sort:0
   };
   let form = reactive<DepartmentCreateDto & DepartmentUpdateDto>({ ...defaultOperateParams });
   const rules = {
@@ -101,7 +101,7 @@
   async function updateDepartment() {
     useSpinStore().show();
     try {
-      if(form.parentId == form.id){
+      if(form.parentId == form.departmentId){
         message.warning("上级菜单不能为自己");
         return;
       }
@@ -132,7 +132,7 @@
       message.error('参数验证错误，请仔细填写表单数据!');
       return;
     }
-    if (form.id) {
+    if (form.departmentId) {
       updateDepartment();
     } else {
       addDepartment();

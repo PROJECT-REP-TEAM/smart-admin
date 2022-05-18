@@ -10,7 +10,7 @@
   <a-tree-select
     :value="props.value"
     :treeData="treeData"
-    :replaceFields="{ title: 'menuName', key: 'menuId', value: 'menuId' }"
+    :fieldNames="{ label: 'menuName', key: 'menuId', value: 'menuId' }"
     show-search
     style="width: 100%"
     :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"

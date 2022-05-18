@@ -19,7 +19,7 @@ export interface DepartmentVo {
   /**
    * 部门id
    */
-  id: number;
+  departmentId: number;
   /**
    * 部门负责人id
    */
@@ -33,25 +33,9 @@ export interface DepartmentVo {
    */
   name: string;
   /**
-   * 同级下一个元素id
-   */
-  nextId?: number;
-  /**
    * 父级部门id
    */
   parentId?: number;
-  /**
-   * 父级部门名称
-   */
-  parentName?: string;
-  /**
-   * 同级上一个元素id
-   */
-  preId?: number;
-  /**
-   * 部门简称
-   */
-  shortName?: string;
   /**
    * 排序
    */
