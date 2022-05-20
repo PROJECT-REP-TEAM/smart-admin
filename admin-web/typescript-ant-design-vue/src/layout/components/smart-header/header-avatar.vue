@@ -3,8 +3,8 @@
  * @Date: 2021-08-03 10:27:11
  * @LastEditTime: 2021-08-28 16:48:50
  * @LastEditors: zhuoda
- * @Description: 
- * @FilePath: /smart-admin/src/layout/components/smart-header-user-space/header-avatar.vue
+ * @Description:
+ * @FilePath: /smart-admin/src/layout/components/smart-header/header-avatar.vue
 -->
 
 <template>

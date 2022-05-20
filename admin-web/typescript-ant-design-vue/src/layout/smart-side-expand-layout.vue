@@ -3,7 +3,7 @@
  * @Date: 2021-08-25 16:52:23
  * @LastEditTime: 2021-08-28
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/layout/smart-side-expand-layout.vue
 -->
 <template>
@@ -60,7 +60,7 @@
 <script setup lang="ts">
 import ExpandSideMenu from "/@/components/side-expand/side-menu/index.vue";
 import SmartFooter from "./components/smart-footer/index.vue";
-import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";
+import SmartHeaderUserSpace from "./components/smart-header/index.vue";
 import { ref, onMounted } from "vue";
 import MenuLocationBreadcrumb from "/@/components/menu-location-breadcrumb/index.vue";
 import SmartPageTag from "./components/smart-page-tag/index.vue";
