@@ -4,78 +4,78 @@
  * @LastEditTime: 2021-09-01 21:25:35
  * @LastEditors: zhuoda
  * @Description:
- * @FilePath: /smart-admin/src/api/business/goods/model/goods-admin-vo.ts
+ * @FilePath: /smart-admin/src/api/business/goods/model/goods-vo.ts
  */
 /**
  *
  * @export
- * @interface GoodsAdminVo
+ * @interface GoodsVo
  */
-export interface GoodsAdminVo {
+export interface GoodsVo {
     /**
      * 商品分类
      * @type {number}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     categoryId?: number;
     /**
      * 商品封面
      * @type {string}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     coverPic?: string;
     /**
      *
      * @type {Date}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     createTime?: Date;
     /**
      * 商品id
      * @type {number}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     goodsId: number;
     /**
      * 商品简介
      * @type {string}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     goodsIntro?: string;
     /**
      * 商品名称
      * @type {string}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     goodsName?: string;
     /**
      * 商品类型|可选:  <br>  export const <br> GOODS_TYPE_ENUM <br>
      * @type {number}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     goodsType: number;
     /**
      * 商品价格
      * @type {number}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     price?: number;
     /**
      *
      * @type {string}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     remark?: string;
     /**
      * 上架状态
      * @type {boolean}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     shelvesFlag?: boolean;
     /**
      *
      * @type {Date}
-     * @memberof GoodsAdminVo
+     * @memberof GoodsVo
      */
     updateTime?: Date;
 }

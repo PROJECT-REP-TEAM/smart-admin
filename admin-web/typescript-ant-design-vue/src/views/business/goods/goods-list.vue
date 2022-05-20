@@ -115,8 +115,8 @@ import { message, Modal } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
 import { goodsApi } from "/@/api/business/goods/goods-api";
 import type { ResponseModel } from "/@/api/base-model/response-model";
-import { GoodsAdminVo } from "/@/api/business/goods/model/goods-admin-vo";
-import { GoodsQueryDto } from "/@/api/business/goods/model/goods-query-dto";
+import { GoodsVo } from "/@/api/business/goods/model/goods-vo";
+import { GoodsQueryForm } from "/@/api/business/goods/model/goods-query-form";
 import { GoodsDelDto } from "/@/api/business/goods/model/goods-del-dto";
 import { PageResultModel } from "/@/api/base-model/page-result-model";
 import { GoodsUpdateForm } from "/@/api/business/goods/model/goods-update-form";
@@ -160,7 +160,7 @@ const columns = reactive([
   },
 ]);
 
-const queryFormState: GoodsQueryDto = {
+const queryFormState: GoodsQueryForm = {
   searchWord: "",
   categoryId: undefined,
   shelvesFlag: undefined,
@@ -168,10 +168,10 @@ const queryFormState: GoodsQueryDto = {
   pageNum: 1,
   pageSize: 10,
 };
-const queryForm = reactive<GoodsQueryDto>({ ...queryFormState });
+const queryForm = reactive<GoodsQueryForm>({ ...queryFormState });
 const tableLoading = ref<Boolean>(false);
 const selectedRowKeyList = ref<Number[]>([]);
-const tableData = ref<GoodsAdminVo[]>([]);
+const tableData = ref<GoodsVo[]>([]);
 const total = ref<Number>(0);
 const operateModal = ref();
 const dataTracerRef = ref();
@@ -193,7 +193,7 @@ async function ajaxQuery (){
   try {
     tableLoading.value = true;
     let responseModel: ResponseModel<
-      PageResultModel<GoodsAdminVo>
+      PageResultModel<GoodsVo>
     > = await goodsApi.queryGoodsList(queryForm);
     const list = responseModel.data.list;
     total.value = responseModel.data.total;

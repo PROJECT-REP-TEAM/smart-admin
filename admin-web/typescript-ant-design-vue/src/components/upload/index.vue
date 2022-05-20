@@ -1,6 +1,6 @@
 <!--
- * @Description: 
- * @version: 
+ * @Description:
+ * @version:
  * @Author: zhuoda
  * @Date: 2021-08-12 17:34:23
  * @LastEditors: zhuoda
@@ -34,11 +34,11 @@
 <script lang="ts" setup>
 import { ref, computed } from "vue";
 import { message } from "ant-design-vue";
-import { fileApi } from "/@/api/business/file/file-api";
+import { fileApi } from "/@/api/support/file/file-api";
 import { useUserStore } from "/@/store/modules/system/user";
 import { useSpinStore } from "/@/store/modules/system/spin";
 import { ResponseModel } from "/@/api/base-model/response-model";
-import { FileUploadVo } from "/@/api/business/file/model/file-upload-vo";
+import { FileUploadVo } from "/@/api/support/file/model/file-upload-vo";
 import { FILE_FOLDER_TYPE_ENUM } from "/@/constants/business/file";
 // =========== 计算属性 获取token =============
 const getToken = computed(() => {

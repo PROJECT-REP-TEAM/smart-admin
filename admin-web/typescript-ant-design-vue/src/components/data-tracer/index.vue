@@ -36,9 +36,9 @@ import { reactive, onMounted, ref, watch } from 'vue';
 import type { ResponseModel } from '/@/api/base-model/response-model';
 import { PageResultModel } from '/@/api/base-model/page-result-model';
 import { PAGE_SIZE_OPTIONS, PAGE_SIZE } from '/@/constants/common';
-import { DataTracerQueryForm } from '/@/api/business/data-tracer/model/data-tracer-query-form';
-import { DataTracerVo } from '/@/api/business/data-tracer/model/data-tracer-vo';
-import { dataTracerApi } from '/@/api/business/data-tracer/data-tracer-api';
+import { DataTracerQueryForm } from '/@/api/support/data-tracer/model/data-tracer-query-form';
+import { DataTracerVo } from '/@/api/support/data-tracer/model/data-tracer-vo';
+import { dataTracerApi } from '/@/api/support/data-tracer/data-tracer-api';
 import { smartSentry } from '/@/lib/smart-sentry';
 
 const props = defineProps<{

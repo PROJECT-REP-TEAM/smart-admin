@@ -5,55 +5,55 @@ import {
 /**
  *
  * @export
- * @interface GoodsQueryDto
+ * @interface GoodsQueryForm
  */
-export interface GoodsQueryDto {
+export interface GoodsQueryForm {
     /**
      * 商品分类
      * @type {number}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     categoryId?: number;
     /**
      * 商品类型|可选:  <br>  export const <br> GOODS_TYPE_ENUM <br>
      * @type {number}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     goodsType?: number;
     /**
      * 商品分组:  <br>  export const <br> GOODS_GROUP_TYPE_ENUM <br>
      * @type {number}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     groupType?: number;
     /**
      * 页码(不能为空)
      * @type {number}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     pageNum: number;
     /**
      * 每页数量(不能为空)
      * @type {number}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     pageSize: number;
     /**
      * 搜索词
      * @type {string}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     searchWord?: string;
     /**
      * 上架状态
      * @type {boolean}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     shelvesFlag?: boolean | string;
     /**
      * 排序字段集合
      * @type {Array<SortItemDto>}
-     * @memberof GoodsQueryDto
+     * @memberof GoodsQueryForm
      */
     sortItemList?: Array<SortItemModel>;
 }

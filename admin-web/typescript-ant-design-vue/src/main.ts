@@ -17,11 +17,12 @@ import lodash from 'lodash';
 import moment from 'moment';
 import 'moment/dist/locale/zh-cn';
 import App from './App.vue';
+import JsonViewer from 'vue-json-viewer';
 
 moment.locale('zh-cn');
 
 let vueApp = createApp(App);
-let app = vueApp.use(router).use(store).use(Antd).use(smartEnumPlugin, constantsInfo);
+let app = vueApp.use(router).use(store).use(Antd).use(JsonViewer).use(smartEnumPlugin, constantsInfo);
 
 // 注册图标组件
 Object.keys(antIcons).forEach((key) => {
