@@ -54,14 +54,16 @@
 import { onMounted, ref } from 'vue';
 import watermark from '/@/lib/smart-wartermark';
 import { useUserStore } from '/@/store/modules/user';
+import { computed } from '@vue/reactivity';
 // ----------------------- 以下是字段定义 emits props ---------------------
 const windowHeight = window.innerHeight;
 const collapsed = ref(false);
 
 // ----------------------- 以下是计算属性 watch监听 ------------------------
+const userInfo = computed(() => useUserStore().getUserInfo);
 // ----------------------- 以下是生命周期 ---------------------------------
 onMounted(() => {
-  watermark.set("smartAdminLayoutContent", useUserStore().userInfo.actualName);
+  watermark.set("smartAdminLayoutContent", userInfo.value.actualName);
 });
 // ----------------------- 以下是方法 ------------------------------------
 const backTopTarget = () => {

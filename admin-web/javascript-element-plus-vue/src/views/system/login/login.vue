@@ -94,11 +94,13 @@
 </template>
 <script setup>
 import { ElMessage } from "element-plus";
-import { onMounted, reactive, ref} from 'vue';
-import { useRouter } from "vue-router";
+import { onMounted, onUnmounted, reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useSpinStore } from "/@/store/modules/spin";
 import { useUserStore } from "/@/store/modules/user";
 import { saveTokenToCookie } from "/@/lib/cookie-util";
+import { loginApi } from "/@/api/system/login";
+import { DEVICE_ENUM } from '/@/constants/system/device';
 
 let browserWarn = ref(false);
 onMounted(browserCheck);
@@ -109,7 +111,7 @@ function browserCheck() {
   // 判断是否Opera浏览器
   let isOpera = userAgent.indexOf("Opera") > -1;
   // 判断是否IE浏览器
-  let isIE = userAgent.indexOf("compatible") > -1 && serAgent.indexOf("MSIE") > -1 && !isOpera;
+  let isIE = userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !isOpera;
   // 判断是否Safari浏览器
   let isSafari = userAgent.indexOf("Safari") > -1 && userAgent.indexOf("Chrome") == -1;
   if (isSafari) {
@@ -124,35 +126,64 @@ function browserCheck() {
 const loginForm = reactive({
   loginName: "",
   password: "",
+  captchaCode: "",
+  captchaUuid: "",
+  loginDevice: DEVICE_ENUM.PC.value
 });
 const rules = {
   loginName: [{ required: true, message: "用户名不能为空" }],
   password: [{ required: true, message: "密码不能为空" }],
+  captchaCode: [{ required: true, message: "验证码不能为空" }],
 };
-const rememberPwd = ref(false);
-const showPwd = ref(false);
+const showPassword = ref(false);
 const router = useRouter();
+const route = useRoute();
 const formRef = ref();
+const rememberPwd = ref(false);
+
+
+onMounted(() => {
+  document.onkeyup = (e) => {
+    if (e.keyCode == 13) {
+      handleFinish();
+    }
+  };
+});
+
+onUnmounted(() => {
+  document.onkeyup = null;
+});
 
 async function handleFinish() {
   formRef.value.validate().then(async () => {
     try {
       useSpinStore().show();
-      // useUserStore().setUserSession(res.data);
-      // saveTokenToCookie(res.data.token ? res.data.token : "");
+      const res = await loginApi.login(loginForm);
+      useUserStore().setUserSession(res.data);
+      saveTokenToCookie(res.data.token ? res.data.token : "");
       // 存储用户菜单与权限
       ElMessage.success("登录成功");
       await router.push("/home");
     } catch (e) {
       console.log(e);
+      await getCaptcha();
     } finally {
       useSpinStore().hide();
     }
   });
 }
-function onShowPwd() {
-  showPwd.value = !showPwd.value;
+function onShowPassword() {
+  showPassword.value = !showPassword.value;
 }
+//--------------------- 验证码 ---------------------------------
+const captchaBase64Image = ref("");
+async function getCaptcha() {
+  let captchaResult = await loginApi.getCaptcha();
+  captchaBase64Image.value = captchaResult.data.captchaBase64Image;
+  loginForm.captchaUuid = captchaResult.data.captchaUuid;
+  loginForm.captchaCode = "";
+}
+onMounted(getCaptcha);
 </script>
 <style lang="scss" scoped>
 @import "./login.scss";
