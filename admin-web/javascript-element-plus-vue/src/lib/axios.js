@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useUserStore } from "/@/store/modules/system/user";
+import { useUserStore } from "/@/store/modules/user";
 import { smartSentry } from "/@/lib/smart-sentry";
 import { router } from "../router";
 import { ElMessage } from 'element-plus'

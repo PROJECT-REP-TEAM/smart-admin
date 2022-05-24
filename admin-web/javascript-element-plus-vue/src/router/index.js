@@ -8,7 +8,7 @@ import {
   PAGE_NAME_LOGIN,
 } from '../constants/common';
 import { routerArray } from './routers';
-import { useUserStore } from '/@/store/modules/system/user';
+import { useUserStore } from '/@/store/modules/user';
 import { getTokenFromCookie } from '/@/lib/cookie-util';
 
 // 顶部页面加载进度条不显示spinner
