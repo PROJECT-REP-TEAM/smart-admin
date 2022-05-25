@@ -13,6 +13,32 @@ import { localClear } from '/@/utils/local-util';
 import { MENU_TYPE_ENUM } from '/@/constants/system/menu';
 import { MenuVo } from '/@/api/system/menu/model/menu-vo';
 
+// 构建菜单上级ID列表map 方便左侧菜单选中
+function buildMenuParentIdListMap() {
+  useUserStore().menuParentIdListMap = new Map();
+  let menuTree = useUserStore().getMenuTree;
+  recursionMenuTree(menuTree || [], []);
+}
+// 递归
+function recursionMenuTree(menuList: Array<MenuTreeVo>, parentMenuList: Array<Record<string, string>>) {
+  for (const e of menuList) {
+    // 顶级parentMenuList清空
+    if (e.parentId == 0) {
+      parentMenuList = [];
+    }
+    let menuIdStr = e.menuId.toString();
+    let cloneParentMenuList = _.cloneDeep(parentMenuList);
+    if (!_.isEmpty(e.children) && e.menuName) {
+      // 递归
+      cloneParentMenuList.push({ name: menuIdStr, title: e.menuName });
+      recursionMenuTree(e.children || [], cloneParentMenuList);
+    } else {
+      useUserStore().menuParentIdListMap?.set(menuIdStr, cloneParentMenuList);
+    }
+  }
+}
+
+
 export const useUserStore = defineStore({
   id: 'userStore',
   state: (): UserState => ({
@@ -21,6 +47,7 @@ export const useUserStore = defineStore({
     menuTree: [],
     tagNav: [],
     userInfo: {},
+    menuParentIdListMap: new Map(),
     keepAliveIncludes: [],
   }),
   getters: {
@@ -58,6 +85,12 @@ export const useUserStore = defineStore({
       }
       return state.pointsList;
     },
+    getMenuParentIdListMap(state: UserState): Map<string, Array<Record<string, string>>> | undefined {
+      if (_.isEmpty(state.menuParentIdListMap)) {
+        buildMenuParentIdListMap();
+      }
+      return state.menuParentIdListMap;
+    },
     getTagNav(state: UserState): Array<UserTagNav> | undefined {
       if (_.isEmpty(state.tagNav)) {
         let localTagNav = localRead(localKey.USER_TAG_NAV) || '';
@@ -86,6 +119,7 @@ export const useUserStore = defineStore({
       this.setPointsList(data);
       this.setMenuTree(data);
       this.userInfo = data;
+      buildMenuParentIdListMap();
       localSave(localKey.USER_INFO, JSON.stringify(data));
     },
     setPointsList(data: LoginResultVo): void {

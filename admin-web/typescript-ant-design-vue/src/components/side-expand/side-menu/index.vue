@@ -3,7 +3,7 @@
  * @Date: 2021-08-25 17:07:41
  * @LastEditTime: 2021-08-28 16:46:25
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/index.vue
 -->
 <template>
@@ -22,8 +22,8 @@
   import { MenuTreeVo } from '/@/api/system/menu/model/menu-tree-vo';
   import { ref } from 'vue';
   // ----------------------- 以下是字段定义 emits props ---------------------
-  defineProps<{
-    value?: number;
+  const props = defineProps<{
+    collapsed?: boolean;
   }>();
   defineEmits<{
     (e: 'update:value'): void;
@@ -37,7 +37,13 @@
     }
     return {};
   });
-  const showRecursionMenu = computed(() => selectedMenu.value && selectedMenu.value.children && selectedMenu.value.children.some((e) => e.visibleFlag));
+  const showRecursionMenu = computed(
+      () =>
+          !props.collapsed &&
+          selectedMenu.value &&
+          selectedMenu.value.children &&
+          selectedMenu.value.children.some((e) => e.visibleFlag)
+  );
   // ----------------------- 以下是生命周期 ---------------------------------
 
   // ----------------------- 以下是方法 ------------------------------------

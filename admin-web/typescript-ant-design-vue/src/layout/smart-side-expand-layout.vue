@@ -15,7 +15,7 @@
       :collapsed="collapsed"
       :trigger="null"
     >
-      <expand-side-menu />
+      <expand-side-menu :collapsed="collapsed"/>
     </a-layout-sider>
 
     <!--
@@ -33,6 +33,12 @@
       <a-layout-header class="smart-layout-header">
         <a-row justify="space-between" class="smart-layout-header-user">
           <a-col class="smart-layout-header-left">
+            <menu-unfold-outlined v-if="collapsed"
+                                  class="collapsed-button"
+                                  @click="() => (collapsed = !collapsed)" />
+            <menu-fold-outlined v-else
+                                class="collapsed-button"
+                                @click="() => (collapsed = !collapsed)" />
             <span class="location-breadcrumb">
               <menu-location-breadcrumb />
             </span>

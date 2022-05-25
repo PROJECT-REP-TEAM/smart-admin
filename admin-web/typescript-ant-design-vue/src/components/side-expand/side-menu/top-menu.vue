@@ -3,7 +3,7 @@
  * @Date: 2021-08-25 17:09:44
  * @LastEditTime: 2021-12-13
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/top-menu.vue
 -->
 <template>
@@ -40,6 +40,7 @@ import { MenuTreeVo } from "/@/api/system/menu/model/menu-tree-vo";
 import { appDefaultConfig } from "/@/config/app-config";
 import { MENU_TYPE_ENUM } from "/@/constants/system/menu";
 import { router } from "/@/router";
+import { useUserStore } from '/@/store/modules/system/user';
 
 // ----------------------- 以下是字段定义 emits props ---------------------
 
@@ -50,13 +51,21 @@ const collapsed = ref<boolean>(false);
 const selectedMenu = ref<MenuTreeVo>();
 let currentRoute = useRoute();
 // ----------------------- 以下是计算属性 watch监听 ------------------------
+
+const parentMenuList = computed(() => {
+  let currentName = currentRoute.name;
+  if (!currentName || typeof currentName !== 'string') {
+    return [];
+  }
+  let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
+  return menuParentIdListMap?.get(currentName) || [];
+});
+
 const selectedKeys = computed(() => {
   if (selectedMenu.value) {
     return [selectedMenu.value.menuId.toString()];
   }
-  return (currentRoute.meta.parentMenuList || []).map(
-    (e: Record<string, string>) => e.name
-  );
+  return parentMenuList.value.map((e: Record<string, string>) => e.name);
 });
 watch(
   currentRoute,
