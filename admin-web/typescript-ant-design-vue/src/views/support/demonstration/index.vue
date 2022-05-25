@@ -44,6 +44,17 @@
                     @change="changeFile" />
       <json-viewer :value="attachment" copyable boxed sort class="smart-margin-top10"/>
     </a-card>
+
+    <a-card title="富文本编辑器" class="smart-margin-top10">
+      <SmartWangeditor ref="smartWangeditor" v-model="content"></SmartWangeditor>
+      <div class="smart-margin-top10">
+      <textarea
+          v-model="content"
+          readonly
+          style="width: 100%; height: 200px; outline: none"
+      ></textarea>
+      </div>
+    </a-card>
   </div>
 
 
@@ -58,6 +69,7 @@ import SmartBooleanSelect from '/@/components/smart-boolean-select/index.vue';
 import SmartUpload from '/@/components/smart-upload/index.vue';
 import { FILE_FOLDER_TYPE_ENUM } from '/@/constants/business/file';
 import {FileUploadVo} from "/@/api/support/file/model/file-upload-vo";
+import SmartWangeditor from '/@/components/smart-wangeditor/index.vue';
 import _ from 'lodash';
 
 const area = ref<SmartAreaOption[]>([]);
@@ -80,6 +92,12 @@ let selectArea = reactive<SmartAreaOption>({});
 let goodsType = ref();
 let trueFalse = ref();
 let attachment = reactive<FileUploadVo>({});
+let smartWangeditor = ref();
+let content = ref("<p>我是默认内容</p>");
+
+function getContent(){
+  content.value = smartWangeditor.value.getInstanceHtml();
+}
 
 function changeFile(fileList: any) {
   attachment = fileList;
