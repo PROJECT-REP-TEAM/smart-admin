@@ -3,13 +3,13 @@
  * @Date: 2021-08-30 09:14:55
  * @LastEditTime: 2021-08-30 10:50:53
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-data-scope/index.vue
 -->
 <template>
   <div>
     <div class="btn-group">
-      <a-button class="button-style" type="primary" @click="updateDataScope"> 保存 </a-button>
+      <a-button v-privilege="'system:role:dataScope:update'" class="button-style" type="primary" @click="updateDataScope"> 保存 </a-button>
       <a-button class="button-style" @click="getDataScope"> 刷新 </a-button>
     </div>
     <a-row class="header">

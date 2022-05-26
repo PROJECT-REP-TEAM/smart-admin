@@ -3,14 +3,14 @@
  * @Date: 2021-08-28 11:46:46
  * @LastEditTime: 2021-08-30 10:54:12
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-tree/index.vue
 -->
 <template>
   <div>
     <div class="tree-header">
       <p>设置角色对应的功能操作、后台管理权限</p>
-      <a-button v-if="selectRoleId" type="primary" @click="saveChange"> 保存 </a-button>
+      <a-button v-privilege="'system:role:menu:update'" v-if="selectRoleId" type="primary" @click="saveChange"> 保存 </a-button>
     </div>
     <!--CheckboxGroup 功能权限勾选部分 start-->
     <RoleTreeCheckbox :tree="tree" />

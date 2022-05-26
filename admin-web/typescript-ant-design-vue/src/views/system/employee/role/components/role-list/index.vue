@@ -9,15 +9,15 @@
 <template>
   <a-card title="角色列表" class="role-container" style="padding: 0">
     <template #extra>
-      <a-button type="primary" size="small" @click="showOperateRoleModal">添加</a-button>
+      <a-button v-privilege="'system:role:add'" type="primary" size="small" @click="showOperateRoleModal">添加</a-button>
     </template>
     <a-menu mode="vertical" v-model:selectedKeys="selectedKeys">
       <a-menu-item v-for="item in roleList" :key="item.roleId">
         <a-popover placement="right">
           <template #content>
             <div style="display: flex; flex-direction: column">
-              <a-button type="text" @click="deleteRole(item.roleId)">删除</a-button>
-              <a-button type="text" @click="showOperateRoleModal(item)">编辑</a-button>
+              <a-button v-privilege="'system:role:delete'" type="text" @click="deleteRole(item.roleId)">删除</a-button>
+              <a-button v-privilege="'system:role:update'" type="text" @click="showOperateRoleModal(item)">编辑</a-button>
             </div>
           </template>
           {{ item.roleName }}

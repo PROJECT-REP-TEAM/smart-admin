@@ -11,8 +11,8 @@
     <div class="header">
       <p>管理拥有当前角色权限的人员列表</p>
       <div>
-        <a-button class="button-style" v-if="selectRoleId" type="primary" @click="addRoleEmployee">添加成员</a-button>
-        <a-button class="button-style" v-if="selectRoleId" type="primary" danger @click="batchDelete">批量移除</a-button>
+        <a-button v-privilege="'system:role:employee:add'" class="button-style" v-if="selectRoleId" type="primary" @click="addRoleEmployee">添加成员</a-button>
+        <a-button v-privilege="'system:role:employee:batch:delete'" class="button-style" v-if="selectRoleId" type="primary" danger @click="batchDelete">批量移除</a-button>
       </div>
     </div>
     <a-table
@@ -32,7 +32,7 @@
           <span>{{ $smartEnumPlugin.getDescByValue('GENDER_ENUM', text) }}</span>
         </template>
         <template v-else-if="column.dataIndex === 'operate'">
-          <a @click="deleteEmployeeRole(record.employeeId)">移除</a>
+          <a v-privilege="'system:role:employee:delete'" @click="deleteEmployeeRole(record.employeeId)">移除</a>
         </template>
       </template>
 
