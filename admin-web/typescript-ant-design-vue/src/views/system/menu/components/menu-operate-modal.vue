@@ -117,7 +117,7 @@
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item label="功能点名称" name="menuName">
-              <a-input v-model:value="form.menuName" placeholder="请输入菜单名称" />
+              <a-input v-model:value="form.menuName" placeholder="请输入功能点名称" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -128,18 +128,8 @@
         </a-row>
         <a-row :gutter="16">
           <a-col :span="12">
-            <a-form-item label="接口权限(saAuth模式)" name="permsList">
-              <!-- <a-input v-model:value="form.perms" placeholder="请输入权限字符" /> -->
-              <a-select
-                v-model:value="form.permsList"
-                mode="multiple"
-                style="width: 100%"
-                placeholder="请选择接口权限"
-              >
-                <a-select-option v-for="item in allUrlData" :key="item.name">{{
-                  item.url
-                }}</a-select-option>
-              </a-select>
+            <a-form-item label="权限字符" name="permsIdentifier">
+               <a-input v-model:value="form.permsIdentifier" placeholder="请输入权限字符" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -151,6 +141,23 @@
             </a-form-item>
           </a-col>
         </a-row>
+        <a-row :gutter="16">
+          <a-col :span="12">
+            <a-form-item label="接口权限(saAuth模式)" name="permsList">
+              <a-select
+                  v-model:value="form.permsList"
+                  mode="multiple"
+                  style="width: 100%"
+                  placeholder="请选择接口权限"
+              >
+                <a-select-option v-for="item in allUrlData" :key="item.name">{{
+                    item.url
+                  }}</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+        </a-row>
+
       </template>
     </a-form>
     <div class="footer">
@@ -192,6 +199,7 @@ const formDefault: MenuUpdateForm & MenuAddForm = {
   icon: undefined,
   parentId: undefined,
   path: undefined,
+  permsIdentifier: undefined,
   permsList: undefined,
   sort: undefined,
   visibleFlag: true,
@@ -212,7 +220,7 @@ const rules = {
     { required: true, message: "路由地址不能为空" },
     { max: 100, message: "路由地址不能大于100个字符", trigger: "blur" },
   ],
-  permsList: [{ required: true, message: "权限字符不能为空" }],
+  permsIdentifier: [{ required: true, message: "权限字符不能为空" }],
 };
 // 是否展示抽屉
 const visible = ref(false);

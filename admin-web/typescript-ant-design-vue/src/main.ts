@@ -11,6 +11,7 @@ import { store } from '/@/store/index';
 import Antd from 'ant-design-vue';
 import './theme/index.less';
 import constantsInfo from '/@/constants/index';
+import privilegePlugin from '/@/plugins/privilege-plugin';
 import smartEnumPlugin from '/@/plugins/smart-enums-plugin';
 import * as antIcons from '@ant-design/icons-vue';
 import lodash from 'lodash';
@@ -22,7 +23,7 @@ import JsonViewer from 'vue-json-viewer';
 moment.locale('zh-cn');
 
 let vueApp = createApp(App);
-let app = vueApp.use(router).use(store).use(Antd).use(JsonViewer).use(smartEnumPlugin, constantsInfo);
+let app = vueApp.use(router).use(store).use(Antd).use(JsonViewer).use(smartEnumPlugin, constantsInfo).use(privilegePlugin);
 
 // 注册图标组件
 Object.keys(antIcons).forEach((key) => {
