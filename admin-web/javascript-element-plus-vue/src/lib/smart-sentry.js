@@ -21,7 +21,7 @@ export const smartSentry = {
     ) {
       return;
     }
-    Sentry.captureException(error);
+    // Sentry.captureException(error);
   },
   setUser: (userInfo) => {
     let user = lodash.cloneDeep(userInfo);

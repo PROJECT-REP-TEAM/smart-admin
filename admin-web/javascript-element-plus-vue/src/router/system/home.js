@@ -22,7 +22,7 @@ export const homeRouters = [
           icon: 'HomeOutlined',
           parentMenuList: [{ name: '_home', title: '首页' }],
         },
-        component: () => import('/@/views/business/home/index.vue'),
+        component: () => import('/@/views/system/home/index.vue'),
       },
     ],
   },

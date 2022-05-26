@@ -6,6 +6,7 @@ import _ from 'lodash';
 import { appDefaultConfig } from '/@/config/app-config';
 import { localClear } from '/@/lib/local-util';
 import { smartSentry } from '/@/lib/smart-sentry';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu-enum';
 
 // 构建菜单上级ID列表map 方便左侧菜单选中
 function buildMenuParentIdListMap() {
@@ -13,6 +14,7 @@ function buildMenuParentIdListMap() {
   let menuTree = useUserStore().getMenuTree;
   recursionMenuTree(menuTree || [], []);
 }
+
 // 递归
 function recursionMenuTree(menuList, parentMenuList) {
   for (const e of menuList) {
@@ -26,7 +28,7 @@ function recursionMenuTree(menuList, parentMenuList) {
       parentMenuList.push({ name: menuIdStr, title: e.menuName });
       recursionMenuTree(e.children || [], parentMenuList);
     } else {
-      useUserStore().menuParentIdListMap?.set(menuIdStr, parentMenuList);
+      useUserStore().menuParentIdListMap.set(menuIdStr, parentMenuList);
     }
   }
 }
@@ -38,10 +40,10 @@ export const useUserStore = defineStore({
     pointsList: [],
     menuTree: [],
     menuList: [],
-    allMenuList: [],
     tagNav: [],
     userInfo: {},
     menuParentIdListMap: new Map(),
+    keepAliveIncludes: [],
   }),
   getters: {
     getToken(state) {
@@ -70,13 +72,6 @@ export const useUserStore = defineStore({
         state.menuList = userInfo.menuList;
       }
       return state.menuList;
-    },
-    getAllMenuList(state) {
-      let userInfo = this.getUserInfo;
-      if (_.isEmpty(state.allMenuList) && !_.isEmpty(userInfo)) {
-        state.allMenuList = userInfo.allMenuList;
-      }
-      return state.allMenuList;
     },
     getPointList(state) {
       let userInfo = this.getUserInfo;
@@ -109,28 +104,52 @@ export const useUserStore = defineStore({
       //清空本地数据以后直接刷新
       localClear();
       clearAllCoolies();
-      this.tagNav = [];
       this.pointsList = [];
       this.menuTree = [];
-      this.menuList = [];
-      this.allMenuList = [];
+      this.tagNav = [];
       this.userInfo = {};
       this.menuParentIdListMap = new Map();
       smartSentry.clearUser();
     },
     setUserSession(data) {
       this.token = data.token;
-      this.pointsList = data.pointsList;
-      this.menuTree = data.menuTree;
-      this.menuList = data.menuList;
-      this.allMenuList = data.allMenuList;
+      this.setPointsList(data);
+      this.setMenuTree(data);
       this.userInfo = data;
-      localSave(localKey.USER_INFO, JSON.stringify(data));
       buildMenuParentIdListMap();
+      localSave(localKey.USER_INFO, JSON.stringify(data));
       smartSentry.setUser(data);
     },
-    setToken(token) {
-      this.token = token;
+    setPointsList(data) {
+      if (_.isEmpty(data.menuList)) {
+        return;
+      }
+      this.pointsList = data.menuList.filter((e) => MENU_TYPE_ENUM.POINTS.value == e.menuType && e.permsIdentifier).map((e) => e.permsIdentifier);
+      localSave(localKey.USER_POINTS, JSON.stringify(this.pointsList));
+    },
+    setMenuTree(data) {
+      if (_.isEmpty(data.menuList)) {
+        return;
+      }
+      let rootMenu = data.menuList?.filter((e) => e.parentId == 0);
+      if (_.isEmpty(rootMenu)) {
+        return;
+      }
+      this.menuTree = [...rootMenu];
+      this.buildMenuTree(data.menuList, this.menuTree);
+      localSave(localKey.USER_MENU, JSON.stringify(this.menuTree));
+    },
+    buildMenuTree(menuList, menuTreeList) {
+      if (_.isEmpty(menuTreeList)) {
+        return;
+      }
+      for (let treeElement of menuTreeList) {
+        let children = menuList.filter((e) => e.parentId == treeElement.menuId);
+        if (_.isEmpty(children)) {
+          continue;
+        }
+        treeElement.children = [...children];
+      }
     },
     setTagNav(route, from) {
       if (_.isEmpty(this.getTagNav)) this.tagNav = [];
@@ -206,6 +225,39 @@ export const useUserStore = defineStore({
         }
       }
       this.closeTagNav(route.name, false);
+    },
+    // 加入缓存
+    pushKeepAliveIncludes(val) {
+      if (!val) {
+        return;
+      }
+      if (!this.keepAliveIncludes) {
+        this.keepAliveIncludes = [];
+      }
+      if (this.keepAliveIncludes.length < 30) {
+        let number = this.keepAliveIncludes.findIndex((e) => e === val);
+        if (number === -1) {
+          this.keepAliveIncludes.push(val);
+        }
+      }
+    },
+    // 删除缓存
+    deleteKeepAliveIncludes(val) {
+      if (!this.keepAliveIncludes || !val) {
+        return;
+      }
+      let number = this.keepAliveIncludes.findIndex((e) => e === val);
+      if (number !== -1) {
+        this.keepAliveIncludes.splice(number, 1);
+      }
+    },
+    // 清空缓存
+    clearKeepAliveIncludes(val) {
+      if (!val || !this.keepAliveIncludes?.includes(val)) {
+        this.keepAliveIncludes = [];
+        return;
+      }
+      this.keepAliveIncludes = [val];
     },
   },
 });
