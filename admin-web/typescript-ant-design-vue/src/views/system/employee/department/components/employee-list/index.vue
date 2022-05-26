@@ -18,7 +18,7 @@
         </a-radio-group>
         <a-input-search v-model:value="params.keyword" placeholder="请输入姓名/手机号" @search="queryEmployee">
           <template #enterButton>
-            <a-button  style="margin-left: 8px"  type="primary">
+            <a-button v-privilege="'system:employee:query'" style="margin-left: 8px"  type="primary">
               <template #icon>
                 <ReloadOutlined />
               </template>
@@ -35,15 +35,16 @@
       </div>
     </div>
     <div class="btn-group">
-      <a-button class="btn" type="primary" @click="showDrawer()">添加成员</a-button>
-      <a-button class="btn" @click="updateEmployeeDepartment">调整部门</a-button>
-      <a-button class="btn" @click="batchDelete">批量删除</a-button>
+      <a-button v-privilege="'system:employee:add'" class="btn" type="primary" @click="showDrawer()">添加成员</a-button>
+      <a-button v-privilege="'system:employee:department:update'" class="btn" @click="updateEmployeeDepartment">调整部门</a-button>
+      <a-button v-privilege="'system:employee:delete'" class="btn" @click="batchDelete">批量删除</a-button>
     </div>
 
     <a-table
       :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
       size="small"
       :columns="columns"
+      rowKey="employeeId"
       :data-source="tableData"
       :pagination="false"
       :scroll="{ y: 250 }"
@@ -56,9 +57,9 @@
           <span>{{ $smartEnumPlugin.getDescByValue('GENDER_ENUM', text) }}</span>
         </template>
         <template v-else-if="column.dataIndex === 'operate'">
-          <a-button type="link" size="small" @click="showDrawer(record)">编辑</a-button>
-          <a-button type="link" size="small" @click="resetPassword(record.id)">重置密码</a-button>
-          <a-button type="link" @click="updateDisabled(record.id, record.disabledFlag)">{{ record.disabledFlag ? '启用' : '禁用' }}</a-button>
+          <a-button v-privilege="'system:employee:update'" type="link" size="small" @click="showDrawer(record)">编辑</a-button>
+          <a-button v-privilege="'system:employee:password:reset'" type="link" size="small" @click="resetPassword(record.employeeId)">重置密码</a-button>
+          <a-button v-privilege="'system:employee:disabled'" type="link" @click="updateDisabled(record.employeeId, record.disabledFlag)">{{ record.disabledFlag ? '启用' : '禁用' }}</a-button>
         </template>
       </template>
 
@@ -249,7 +250,7 @@
       return;
     }
     const actualNameArray = selectedRows.value.map((e) => e.actualName);
-    const employeeIdArray = selectedRows.value.map((e) => e.id);
+    const employeeIdArray = selectedRows.value.map((e) => e.employeeId);
     Modal.confirm({
       title: '确定要删除如下员工吗?',
       icon: createVNode(ExclamationCircleOutlined),
@@ -280,7 +281,7 @@
       message.warning('请选择要调整部门的员工');
       return;
     }
-    const employeeIdArray = selectedRows.value.map((e) => e.id);
+    const employeeIdArray = selectedRows.value.map((e) => e.employeeId);
     updateEmployeeDepartmentModal.value.showModal(employeeIdArray);
   }
   // ----------------------- 以下是暴露的方法内容 ----------------------------

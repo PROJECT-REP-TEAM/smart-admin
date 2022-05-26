@@ -28,9 +28,9 @@
         <a-popover placement="right">
           <template #content>
             <div style="display: flex; flex-direction: column">
-              <a-button type="text" @click="addDepartment(item.dataRef)">添加下级</a-button>
-              <a-button type="text" @click="updateDepartment(item.dataRef)">修改</a-button>
-              <a-button type="text" v-if="item.departmentId != topDeptId" @click="deleteDepartment(item.departmentId)">删除</a-button>
+              <a-button v-privilege="'system:department:add'" type="text" @click="addDepartment(item.dataRef)">添加下级</a-button>
+              <a-button v-privilege="'system:department:update'" type="text" @click="updateDepartment(item.dataRef)">修改</a-button>
+              <a-button v-privilege="'system:department:delete'" type="text" v-if="item.departmentId != topDeptId" @click="deleteDepartment(item.departmentId)">删除</a-button>
             </div>
           </template>
           {{ item.name }}

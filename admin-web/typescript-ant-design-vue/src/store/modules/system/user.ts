@@ -62,7 +62,6 @@ export const useUserStore = defineStore({
         let localUserInfo = localRead(localKey.USER_INFO) || '';
         state.userInfo = localUserInfo ? JSON.parse(localUserInfo) : {};
       }
-      console.log(state.userInfo);
       return state.userInfo;
     },
     getMenuTree(state: UserState): Array<MenuTreeVo> | undefined {
