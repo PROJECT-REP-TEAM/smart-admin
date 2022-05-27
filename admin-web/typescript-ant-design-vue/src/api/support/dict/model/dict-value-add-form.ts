@@ -14,6 +14,10 @@ export interface DictValueAddForm {
      * value名称
      */
     valueName?: string;
+    /**
+     * 排序
+     */
+    sort?: number;
 
     /**
      * value备注
