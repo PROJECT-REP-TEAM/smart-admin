@@ -47,7 +47,7 @@
       size="small"
       :dataSource="tableData"
       :columns="columns"
-      rowKey="goodsId"
+      rowKey="operateLogId"
       :pagination="false"
       :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
     >
