@@ -8,6 +8,9 @@
  */
 import menu from './system/menu-enum';
 import device from './system/device';
+import category from './business/category';
+import goods from './business/goods';
+import dataTracer from './business/goods';
 import { FLAG_NUMBER_ENUM, GENDER_ENUM } from './common';
 
 export default {
@@ -15,4 +18,7 @@ export default {
   GENDER_ENUM,
   ...device,
   ...menu,
+  ...category,
+  ...goods,
+  ...dataTracer
 };
