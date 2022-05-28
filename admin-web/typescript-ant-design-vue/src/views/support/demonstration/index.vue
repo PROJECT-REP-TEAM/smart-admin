@@ -46,7 +46,7 @@
     </a-card>
 
     <a-card title="富文本编辑器" class="smart-margin-top10">
-      <SmartWangeditor ref="smartWangeditor" v-model="content"></SmartWangeditor>
+      <SmartWangeditor  ref="smartWangeditor" v-model="content"></SmartWangeditor>
       <div class="smart-margin-top10">
       <textarea
           v-model="content"

@@ -9,7 +9,7 @@
 <template>
   <a-drawer
     :maskClosable="false"
-    :title="form.id ? '编辑' : '添加'"
+    :title="form.employeeId ? '编辑' : '添加'"
     :width="600"
     :visible="visible"
     :body-style="{ paddingBottom: '80px' }"
@@ -56,7 +56,7 @@
         >
           <a-select-option
             v-for="item in roleList"
-            :key="item.id"
+            :key="item.roleId"
             :title="item.roleName"
             >{{ item.roleName }}</a-select-option
           >
@@ -66,7 +66,7 @@
     <div class="footer">
       <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
       <a-button
-        v-if="!form.id"
+        v-if="!form.employeeId"
         type="primary"
         style="margin-right: 8px"
         @click="onSubmit(true)"
@@ -102,7 +102,7 @@ const emit = defineEmits<{
 const formRef = ref();
 const roleList = ref<RoleVo[]>([]);
 const formDefault: EmployeeUpdateDto & EmployeeAddDto = {
-  id: undefined,
+  employeeId: undefined,
   actualName: undefined,
   departmentId: undefined,
   disabledFlag: 0,
@@ -185,12 +185,12 @@ async function onSubmit(keepAdding: boolean) {
   }
   useSpinStore().show();
   try {
-    if (form.id) {
+    if (form.employeeId) {
       await employeeApi.updateEmployee(form);
     } else {
       await employeeApi.addEmployee(form);
     }
-    message.success(`${form.id ? "修改" : "添加"}成功`);
+    message.success(`${form.employeeId ? "修改" : "添加"}成功`);
     if (keepAdding) {
       reset();
     } else {

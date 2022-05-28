@@ -15,7 +15,7 @@
     <a-list class="department-list" :data-source="props.selectDeptChild">
       <template #renderItem="{ item }">
         <a-list-item>
-          <div class="department-item" @click="selectTree(item.id)">
+          <div class="department-item" @click="selectTree(item.departmentId)">
             {{ item.name }}
           <RightOutlined />
           </div>

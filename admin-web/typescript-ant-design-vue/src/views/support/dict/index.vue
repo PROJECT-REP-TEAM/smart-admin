@@ -1,0 +1,202 @@
+<template>
+  <a-form class="smart-query-form">
+    <a-row class="smart-query-form-row">
+      <a-form-item label="关键字" class="smart-query-form-item">
+        <a-input
+          style="width: 300px"
+          v-model:value="queryForm.searchWord"
+          placeholder="关键字"
+        />
+      </a-form-item>
+
+      <a-form-item class="smart-query-form-item smart-margin-left10">
+        <a-button type="primary" @click="ajaxQuery">
+          <template #icon>
+            <ReloadOutlined />
+          </template>
+          查询
+        </a-button>
+        <a-button @click="resetQuery">
+          <template #icon>
+            <SearchOutlined />
+          </template>
+          重置
+        </a-button>
+      </a-form-item>
+    </a-row>
+  </a-form>
+
+  <a-card size="small" :bordered="false" :hoverable="true">
+    <a-row class="smart-table-btn-block">
+      <div class="smart-table-operate-block">
+        <a-button @click="addOrUpdateKey" type="primary" size="small">
+          <template #icon>
+            <PlusOutlined />
+          </template>
+          新建
+        </a-button>
+
+        <a-button @click="confirmBatchDelete" type="danger" size="small" :disabled="selectedRowKeyList.length == 0">
+          <template #icon>
+            <DeleteOutlined />
+          </template>
+          批量删除
+        </a-button>
+      </div>
+      <div class="smart-table-setting-block"></div>
+    </a-row>
+
+    <a-table
+      :scroll="{ x: 1300 }"
+      size="small"
+      :dataSource="tableData"
+      :columns="columns"
+      rowKey="dictKeyId"
+      :pagination="false"
+      :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
+    >
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'keyCode'">
+          <a @click="showValueList(record.dictKeyId)">{{ record.keyCode }}</a>
+        </template>
+        <template v-else-if="column.dataIndex === 'action'">
+          <a-button @click="addOrUpdateKey(record)" type="link">编辑</a-button>
+        </template>
+      </template>
+    </a-table>
+
+    <div class="smart-query-table-page">
+      <a-pagination
+        showSizeChanger
+        showQuickJumper
+        show-less-items
+        :pageSizeOptions="PAGE_SIZE_OPTIONS"
+        :defaultPageSize="queryForm.pageSize"
+        v-model:current="queryForm.pageNum"
+        v-model:pageSize="queryForm.pageSize"
+        :total="total"
+        @change="ajaxQuery"
+        @showSizeChange="ajaxQuery"
+        :show-total="(total) => `共${total}条`"
+      />
+    </div>
+
+    <DictKeyOperateModal ref="operateModal" @reloadList="ajaxQuery" />
+    <!-- 值列表 -->
+    <DictValueModal ref="dictValueModal" />
+  </a-card>
+</template>
+<script lang="ts" setup>
+import DictKeyOperateModal from "./components/dict-key-operate-modal.vue";
+import DictValueModal from "./components/dict-value-modal.vue";
+import { reactive, ref, onMounted } from "vue";
+import { message, Modal } from "ant-design-vue";
+import { useSpinStore } from "/@/store/modules/system/spin";
+import { dictApi } from "/@/api/support/dict/dict-api";
+import type { ResponseModel } from "/@/api/base-model/response-model";
+import { PageResultModel } from "/@/api/base-model/page-result-model";
+import { PAGE_SIZE_OPTIONS } from "/@/constants/common";
+import {DictKeyQueryForm} from "/@/api/support/dict/model/dict-key-query-form";
+import {DictKeyVo} from "/@/api/support/dict/model/dict-key-vo";
+import {DictKeyUpdateForm} from "/@/api/support/dict/model/dict-key-update-form";
+
+const columns = reactive([
+  {
+    title: "ID",
+    width: 90,
+    dataIndex: "dictKeyId",
+  },
+  {
+    title: "编码",
+    dataIndex: "keyCode",
+  },
+  {
+    title: "名称",
+    dataIndex: "keyName",
+  },
+  {
+    title: "备注",
+    dataIndex: "remark",
+  },
+  {
+    title: "操作",
+    dataIndex: "action",
+    fixed: "right",
+  },
+]);
+
+const queryFormState: DictKeyQueryForm = {
+  searchWord: "",
+  pageNum: 1,
+  pageSize: 10,
+};
+const queryForm = reactive<DictKeyQueryForm>({ ...queryFormState });
+const tableLoading = ref<Boolean>(false);
+const selectedRowKeyList = ref<number[]>([]);
+const tableData = ref<DictKeyVo[]>([]);
+const total = ref<Number>(0);
+const operateModal = ref();
+const dictValueModal = ref();
+
+// 显示操作记录弹窗
+function showValueList(dictKeyId: number) {
+  dictValueModal.value.showModal(dictKeyId);
+}
+
+function onSelectChange(selectedRowKeys: number[]) {
+  selectedRowKeyList.value = selectedRowKeys;
+}
+
+function resetQuery() {
+  Object.assign(queryForm, queryFormState);
+  ajaxQuery();
+}
+async function ajaxQuery (){
+  try {
+    tableLoading.value = true;
+    let responseModel: ResponseModel<
+      PageResultModel<DictKeyVo>
+    > = await dictApi.keyQuery(queryForm);
+    const list = responseModel.data.list;
+    total.value = responseModel.data.total;
+    tableData.value = list;
+  } catch (e) {
+    console.log(e);
+  } finally {
+    tableLoading.value = false;
+  }
+};
+
+function confirmBatchDelete() {
+  Modal.confirm({
+    title: "提示",
+    content: "确定要删除选中Key吗?",
+    okText: "删除",
+    okType: "danger",
+    onOk() {
+      batchDelete();
+    },
+    cancelText: "取消",
+    onCancel() {},
+  });
+}
+
+const batchDelete = async () => {
+  try {
+    useSpinStore().show();
+    await dictApi.keyDelete(selectedRowKeyList.value);
+    message.success("删除成功");
+    ajaxQuery();
+  } catch (e) {
+    console.log(e);
+  } finally {
+    useSpinStore().hide();
+  }
+};
+
+function addOrUpdateKey(rowData?: DictKeyUpdateForm) {
+  operateModal.value.showModal(rowData);
+}
+
+onMounted(ajaxQuery);
+</script>

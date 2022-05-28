@@ -38,7 +38,7 @@ export interface EmployeeUpdateDto {
   /**
    * 员工id
    */
-  id?: number;
+  employeeId?: number;
   /**
    * 登录账号
    */

@@ -29,7 +29,7 @@
       </a-form-item>
 
       <a-form-item class="smart-query-form-item smart-margin-left10">
-        <a-button type="primary" @click="query">
+        <a-button v-privilege="'system:menu:query'" type="primary" @click="query">
           <template #icon>
             <ReloadOutlined />
           </template>
@@ -87,15 +87,14 @@
   <a-card size="small" :bordered="false" :hoverable="true">
     <a-row class="smart-table-btn-block">
       <div class="smart-table-operate-block">
-        <a-button type="primary" size="small" @click="showDrawer">
+        <a-button v-privilege="'system:menu:add'" type="primary" size="small" @click="showDrawer">
           <template #icon>
             <PlusOutlined />
           </template>
           添加菜单
         </a-button>
 
-        <a-button
-          type="primary"
+        <a-button v-privilege="'system:menu:delete'" type="primary"
           danger
           size="small"
           @click="batchDelete"
@@ -143,8 +142,8 @@
         </template>
 
         <template v-if="column.dataIndex === 'operate'">
-          <a-button type="link" size="small" @click="showDrawer(record)">编辑</a-button>
-          <a-button danger type="link" @click="singleDelete(record)">删除</a-button>
+          <a-button v-privilege="'system:menu:update'" type="link" size="small" @click="showDrawer(record)">编辑</a-button>
+          <a-button v-privilege="'system:menu:delete'" danger type="link" @click="singleDelete(record)">删除</a-button>
         </template>
       </template>
 
