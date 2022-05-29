@@ -11,6 +11,7 @@ import device from './system/device';
 import category from './business/category';
 import goods from './business/goods';
 import dataTracer from './business/goods';
+import file from './business/file';
 import { FLAG_NUMBER_ENUM, GENDER_ENUM } from './common';
 
 export default {
@@ -20,5 +21,6 @@ export default {
   ...menu,
   ...category,
   ...goods,
-  ...dataTracer
+  ...dataTracer,
+  ...file
 };

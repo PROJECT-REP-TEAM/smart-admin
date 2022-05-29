@@ -20,7 +20,10 @@
     "pinia": "^2.0.13",
     "vue": "^3.2.25",
     "vue-router": "^4.0.15",
-    "vuex": "^4.0.2"
+    "vuex": "^4.0.2",
+    "vue-json-viewer": "^3.0.4",
+    "@wangeditor/editor": "^5.0.1",
+    "@wangeditor/editor-for-vue": "^5.1.11"
   },
   "devDependencies": {
     "@vitejs/plugin-legacy": "^1.8.2",

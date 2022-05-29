@@ -10,11 +10,13 @@ import lodash from 'lodash';
 import smartEnumPlugin from '/@/plugins/smart-enums-plugin';
 import constantsInfo from "/@/constants/index";
 import locale from 'element-plus/lib/locale/lang/zh-cn'
+import JsonViewer from 'vue-json-viewer';
 
 let vueApp = createApp(App);
 let app = vueApp
   .use(router)
   .use(store)
+  .use(JsonViewer)
   .use(ElementPlus, { locale })
   .use(smartEnumPlugin, constantsInfo);
 // 注册图标组件

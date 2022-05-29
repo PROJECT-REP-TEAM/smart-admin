@@ -15,7 +15,6 @@
     :clearable='true'
     :size='size'
     @change='handleChange'
-    @deselect='handleChange'
     :disabled='disabled'
     no-data-text="暂无数据"
   >
