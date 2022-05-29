@@ -9,9 +9,14 @@ import * as icons from '@element-plus/icons';
 import lodash from 'lodash';
 import smartEnumPlugin from '/@/plugins/smart-enums-plugin';
 import constantsInfo from "/@/constants/index";
+import locale from 'element-plus/lib/locale/lang/zh-cn'
 
 let vueApp = createApp(App);
-let app = vueApp.use(router).use(store).use(ElementPlus).use(smartEnumPlugin, constantsInfo);
+let app = vueApp
+  .use(router)
+  .use(store)
+  .use(ElementPlus, { locale })
+  .use(smartEnumPlugin, constantsInfo);
 // 注册图标组件
 Object.keys(icons).forEach((key) => {
   app.component(key, icons[key]);

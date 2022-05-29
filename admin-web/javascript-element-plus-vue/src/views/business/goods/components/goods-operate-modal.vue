@@ -40,7 +40,7 @@
         <el-input-number
           style='width: 100%'
           placeholder='请输入商品价格'
-          v-model:value='form.price'
+          v-model='form.price'
           :min='0'
           :max='9999'
         />
@@ -49,7 +49,7 @@
         <el-input
           style='width: 100%'
           placeholder='请输入备注'
-          v-model:value='form.remark'
+          v-model='form.remark'
         />
       </el-form-item>
     </el-form>

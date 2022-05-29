@@ -28,14 +28,13 @@
   <el-card shadow='hover'>
     <el-row class='smart-table-btn-block'>
       <div class='smart-table-operate-block'>
-        <el-button @click='addGoods' type='primary' size='small' icon='“Plus”'>新建</el-button>
+        <el-button @click='addGoods' type='primary' size='small' icon='Plus'>新建</el-button>
         <el-button @click='confirmBatchDelete' type='danger' size='small' :disabled='selectedRowKeys.length == 0'
-                   icon='“Delete”'
+                   icon='Delete'
         >批量删除
         </el-button
         >
       </div>
-      <div class='smart-table-setting-block'></div>
     </el-row>
 
     <el-table

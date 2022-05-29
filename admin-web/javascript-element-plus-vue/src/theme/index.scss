@@ -130,6 +130,18 @@ body {
     margin-left: 8px;
   }
 }
+.smart-table-btn-block {
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .smart-table-operate-block {
+    .el-btn {
+      margin-right: 12px;
+    }
+  }
+}
+
 /******************************** 查询表格样式 ********************************/
 .footer-box {
   width: 100%;
