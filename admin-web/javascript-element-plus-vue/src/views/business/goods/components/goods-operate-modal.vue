@@ -12,7 +12,7 @@
       :label-col='{ span: 5 }'
       :wrapper-col='{ span: 12 }'
     >
-      <el-form-item label='商品类型' name='goodsType'>
+      <el-form-item label='商品类型' prop='goodsType'>
         <smart-enum-select
           style='width: 100%'
           v-model:value='form.goodsType'
@@ -20,23 +20,23 @@
           enum-name='GOODS_TYPE_ENUM'
         />
       </el-form-item>
-      <el-form-item label='商品分类' name='categoryId'>
+      <el-form-item label='商品分类' prop='categoryId'>
         <category-tree
           v-model:value='form.categoryId'
           placeholder='请选择商品分类'
           :categoryType='CATEGORY_TYPE_ENUM.GOODS.value'
         />
       </el-form-item>
-      <el-form-item label='商品名称' name='goodsName'>
+      <el-form-item label='商品名称' prop='goodsName'>
         <el-input v-model='form.goodsName' placeholder='请输入商品名称' />
       </el-form-item>
-      <el-form-item label='商品状态' name='shelvesFlag'>
+      <el-form-item label='商品状态' prop='shelvesFlag'>
         <el-radio-group v-model='form.shelvesFlag'>
           <el-radio :label='true'>上架</el-radio>
           <el-radio :label='false'>下架</el-radio>
         </el-radio-group>
       </el-form-item>
-      <el-form-item label='商品价格' name='price'>
+      <el-form-item label='商品价格' prop='price'>
         <el-input-number
           style='width: 100%'
           placeholder='请输入商品价格'
@@ -45,7 +45,7 @@
           :max='9999'
         />
       </el-form-item>
-      <el-form-item label='备注' name='remark'>
+      <el-form-item label='备注' prop='remark'>
         <el-input
           style='width: 100%'
           placeholder='请输入备注'

@@ -62,7 +62,7 @@ export const useUserStore = defineStore({
     getMenuTree(state) {
       let userInfo = this.getUserInfo;
       if (_.isEmpty(state.menuTree) && !_.isEmpty(userInfo)) {
-        state.menuTree = userInfo.menuTree;
+        this.setMenuTree(userInfo);
       }
       return state.menuTree;
     },
