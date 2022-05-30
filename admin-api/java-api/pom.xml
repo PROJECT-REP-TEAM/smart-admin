@@ -343,7 +343,7 @@
                 <directory>src/main/resources/${profiles.active}</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>*.properties</include>
+                    <include>*.yaml</include>
                 </includes>
             </resource>
 

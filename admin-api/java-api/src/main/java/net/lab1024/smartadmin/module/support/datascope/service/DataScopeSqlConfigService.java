@@ -48,7 +48,7 @@ public class DataScopeSqlConfigService {
     @Autowired
     private DataScopeViewService dataScopeViewService;
 
-    @Value("${swagger.packAge}")
+    @Value("${swagger.package}")
     private String scanPackage;
 
     @Autowired
