@@ -17,9 +17,9 @@
       <el-table-column prop='categoryName' :label='columnName'></el-table-column>
       <el-table-column prop='action' label='操作'>
         <template #default='scope'>
-          <el-button @click="addCategory(scope.row.categoryId)" type="link">增加子分类</el-button>
-          <el-button @click="addCategory(undefined, scope.row)" type="link">编辑</el-button>
-          <el-button @click="confirmDeleteCategory(scope.row.categoryId)" type="link">删除</el-button>
+          <el-button @click="addCategory(scope.row.categoryId)" link type='primary'>增加子分类</el-button>
+          <el-button @click="addCategory(undefined, scope.row)" link type='primary'>编辑</el-button>
+          <el-button @click="confirmDeleteCategory(scope.row.categoryId)" link type='primary'>删除</el-button>
         </template>
       </el-table-column>
     </el-table>
