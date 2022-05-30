@@ -32,6 +32,7 @@ import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -80,9 +81,9 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
     private String version;
 
     /**
-     * service url
+     * team url
      */
-    private String serviceUrl;
+    private String teamUrl;
 
     /**
      * controller 包路径
@@ -111,12 +112,12 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
 
     @Override
     public void setEnvironment(Environment environment) {
-        this.apiGroupName = environment.getProperty("swagger.apiGroupName");
+        this.apiGroupName = environment.getProperty("swagger.api-group-name");
         this.title = environment.getProperty("swagger.title");
         this.description = environment.getProperty("swagger.description");
         this.version = environment.getProperty("swagger.version");
-        this.serviceUrl = environment.getProperty("swagger.serviceUrl");
-        this.packAge = environment.getProperty("swagger.packAge");
+        this.teamUrl = environment.getProperty("swagger.team-url");
+        this.packAge = environment.getProperty("swagger.package");
         this.host = environment.getProperty("swagger.host");
     }
 
@@ -160,6 +161,7 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
 
         // 请求类型过滤规则
         Predicate<RequestHandler> controllerPredicate = getControllerPredicate();
+
         // controller 包路径
         Predicate<RequestHandler> controllerPackage = RequestHandlerSelectors.basePackage(packAge);
 
@@ -170,7 +172,7 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
                 .apis(controllerPackage)
                 .apis(controllerPredicate)
                 .paths(PathSelectors.any())
-                .build().apiInfo(this.serviceApiInfo())
+                .build().apiInfo(this.apiInfo())
                 .globalOperationParameters(parameterList);
 
         if (StringUtils.isNotBlank(host)) {
@@ -178,7 +180,6 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
         }
 
         return docket;
-
     }
 
     private Predicate<RequestHandler> getControllerPredicate() {
@@ -200,12 +201,13 @@ public class SwaggerConfig implements EnvironmentAware, BeanDefinitionRegistryPo
         return Predicates.and(RequestHandlerSelectors.withClassAnnotation(RestController.class), methodPredicate);
     }
 
-    private ApiInfo serviceApiInfo() {
+    private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title(title)
                 .description(description)
                 .version(version)
-                .termsOfServiceUrl(serviceUrl)
+                .termsOfServiceUrl(teamUrl)
+                .contact(new Contact("1024lab", teamUrl, "smartadmin@1024lab.net"))
                 .build();
     }
 

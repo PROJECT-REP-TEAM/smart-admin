@@ -80,7 +80,6 @@ public class NoticeController extends SystemBaseController {
         return noticeService.send(id, SmartRequestUtil.getRequestEmployeeId());
     }
 
-    @NoValidPermission
     @ApiOperation(value = "读取消息", notes = "@author 罗伊")
     @GetMapping("/notice/read/{id}")
     public ResponseDTO<NoticeDetailVO> read(@PathVariable("id") Long id) {
