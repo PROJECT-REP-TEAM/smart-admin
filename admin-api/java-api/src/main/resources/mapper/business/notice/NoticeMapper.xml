@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.lab1024.smartadmin.service.module.business.notice.dao.NoticeDao">
+<mapper namespace="net.lab1024.smartadmin.module.business.notice.dao.NoticeDao">
 
-    <select id="queryByPage" resultType="net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO">
+    <select id="queryByPage" resultType="net.lab1024.smartadmin.module.business.notice.domain.vo.NoticeVO">
         select
             n.id,
             n.title,
@@ -31,7 +31,7 @@
 
 
 
-    <select id="queryUnreadByPage" resultType="net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeVO">
+    <select id="queryUnreadByPage" resultType="net.lab1024.smartadmin.module.business.notice.domain.vo.NoticeVO">
         select
         n.id,
         n.title,
@@ -47,7 +47,7 @@
     </select>
 
 
-    <select id="queryReceiveByPage" resultType="net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReceiveForm">
+    <select id="queryReceiveByPage" resultType="net.lab1024.smartadmin.module.business.notice.domain.dto.NoticeReceiveForm">
        select
         n.id,
         n.title,
@@ -79,7 +79,7 @@
 
 
 
-    <select id="detail" resultType="net.lab1024.smartadmin.service.module.business.notice.domain.vo.NoticeDetailVO">
+    <select id="detail" resultType="net.lab1024.smartadmin.module.business.notice.domain.vo.NoticeDetailVO">
         select
         n.id,
         n.title,
@@ -117,7 +117,7 @@
         from t_notice where send_status = #{sendStatus}
     </select>
 
-    <select id="readCount" resultType="net.lab1024.smartadmin.service.module.business.notice.domain.dto.NoticeReadCountDTO">
+    <select id="readCount" resultType="net.lab1024.smartadmin.module.business.notice.domain.dto.NoticeReadCountDTO">
         SELECT
         nrr.employee_id,
         count(1) as readCount

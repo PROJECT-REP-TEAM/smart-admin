@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.lab1024.smartadmin.service.module.system.role.dao.RoleMenuDao">
+<mapper namespace="net.lab1024.smartadmin.module.system.role.dao.RoleMenuDao">
     <delete id="deleteByRoleId">
         delete
         from t_role_menu
@@ -12,12 +12,12 @@
         where role_id = #{roleId}
     </select>
     <select id="queryAllRoleMenu"
-            resultType="net.lab1024.smartadmin.service.module.system.role.domain.entity.RoleMenuEntity">
+            resultType="net.lab1024.smartadmin.module.system.role.domain.entity.RoleMenuEntity">
         select * from t_role_menu
     </select>
 
     <select id="selectMenuListByRoleIdList"
-            resultType="net.lab1024.smartadmin.service.module.system.menu.domain.entity.MenuEntity">
+            resultType="net.lab1024.smartadmin.module.system.menu.domain.entity.MenuEntity">
 
         SELECT
         t_menu.*

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.lab1024.smartadmin.service.module.system.employee.dao.EmployeeDao">
+<mapper namespace="net.lab1024.smartadmin.module.system.employee.dao.EmployeeDao">
 
-    <select id="queryEmployee" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+    <select id="queryEmployee" resultType="net.lab1024.smartadmin.module.system.employee.domain.vo.EmployeeVO">
         SELECT
         e.*,
         d.name AS departmentName
@@ -33,7 +33,7 @@
     </update>
 
 
-    <select id="getByLoginName" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+    <select id="getByLoginName" resultType="net.lab1024.smartadmin.module.system.employee.domain.entity.EmployeeEntity">
         SELECT *
         FROM t_employee
         <where>
@@ -44,7 +44,7 @@
         </where>
     </select>
 
-    <select id="getByActualName" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+    <select id="getByActualName" resultType="net.lab1024.smartadmin.module.system.employee.domain.entity.EmployeeEntity">
         SELECT *
         FROM t_employee
         <where>
@@ -56,7 +56,7 @@
     </select>
 
 
-    <select id="getByPhone" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+    <select id="getByPhone" resultType="net.lab1024.smartadmin.module.system.employee.domain.entity.EmployeeEntity">
         SELECT *
         FROM t_employee
         <where>
@@ -68,7 +68,7 @@
     </select>
 
 
-    <select id="listAll" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+    <select id="listAll" resultType="net.lab1024.smartadmin.module.system.employee.domain.vo.EmployeeVO">
         SELECT *
         FROM t_employee
         ORDER BY create_time DESC
@@ -85,7 +85,7 @@
 
 
     <select id="selectByDepartmentId"
-            resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+            resultType="net.lab1024.smartadmin.module.system.employee.domain.entity.EmployeeEntity">
         SELECT *
         FROM t_employee
         <where>
@@ -98,7 +98,7 @@
     </select>
 
     <select id="selectByActualName"
-            resultType="net.lab1024.smartadmin.service.module.system.employee.domain.entity.EmployeeEntity">
+            resultType="net.lab1024.smartadmin.module.system.employee.domain.entity.EmployeeEntity">
         SELECT * FROM t_employee
         <where>
             actual_name = #{actualName}
@@ -150,7 +150,7 @@
         ORDER BY create_time DESC
     </select>
 
-    <select id="getEmployeeByIds" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+    <select id="getEmployeeByIds" resultType="net.lab1024.smartadmin.module.system.employee.domain.vo.EmployeeVO">
         SELECT * FROM t_employee
         where employee_id IN
         <foreach collection="employeeIds" item="item" open="(" close=")" separator=",">
@@ -160,7 +160,7 @@
     </select>
 
 
-    <select id="getEmployeeById" resultType="net.lab1024.smartadmin.service.module.system.employee.domain.vo.EmployeeVO">
+    <select id="getEmployeeById" resultType="net.lab1024.smartadmin.module.system.employee.domain.vo.EmployeeVO">
         SELECT e.*,
                d.name AS departmentName
         FROM t_employee e

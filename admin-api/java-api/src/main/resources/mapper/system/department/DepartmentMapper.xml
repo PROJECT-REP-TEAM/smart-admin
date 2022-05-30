@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="net.lab1024.smartadmin.service.module.system.department.dao.DepartmentDao">
+<mapper namespace="net.lab1024.smartadmin.module.system.department.dao.DepartmentDao">
 
 
-    <select id="listAll" resultType="net.lab1024.smartadmin.service.module.system.department.domain.vo.DepartmentVO">
+    <select id="listAll" resultType="net.lab1024.smartadmin.module.system.department.domain.vo.DepartmentVO">
         SELECT
         d.*,
         e.actual_name as managerName,
