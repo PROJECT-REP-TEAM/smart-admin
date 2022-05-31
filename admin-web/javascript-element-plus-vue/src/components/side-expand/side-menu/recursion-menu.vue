@@ -18,7 +18,7 @@
         <template v-if="item.visibleFlag">
           <template v-if="$lodash.isEmpty(item.children)">
             <el-menu-item :index="item.path">
-<!--              <component style="width: 20px; margin-right: 3px" :is="$icons[item.icon]" />-->
+              <component style="width: 20px; margin-right: 3px" :is="$icons[item.icon]" />
               {{ item.menuName }}
             </el-menu-item>
           </template>

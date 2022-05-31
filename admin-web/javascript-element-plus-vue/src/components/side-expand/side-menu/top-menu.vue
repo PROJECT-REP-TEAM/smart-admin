@@ -17,7 +17,7 @@
       <template v-for="item in props.menuTree" :key="item.menuId">
         <template v-if="item.visibleFlag">
           <el-menu-item :index="item.menuId" @click="selectMenu(item)">
-<!--            <component style="width: 20px; margin-right: 3px" :is="$icons[item.icon]" />-->
+            <component style="width: 20px; margin-right: 3px" :is="$icons[item.icon]" />
             {{ item.menuName }}
           </el-menu-item>
         </template>
