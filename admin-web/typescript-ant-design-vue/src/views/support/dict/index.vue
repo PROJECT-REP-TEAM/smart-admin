@@ -42,6 +42,13 @@
           </template>
           批量删除
         </a-button>
+
+        <a-button @click="cacheRefresh" type="primary" size="small">
+          <template #icon>
+            <cloud-sync-outlined />
+          </template>
+          缓存刷新
+        </a-button>
       </div>
       <div class="smart-table-setting-block"></div>
     </a-row>
@@ -167,6 +174,18 @@ async function ajaxQuery (){
   }
 };
 
+async function cacheRefresh() {
+  try {
+    useSpinStore().show();
+    await dictApi.cacheRefresh();
+    message.success("缓存刷新成功");
+    ajaxQuery();
+  } catch (e) {
+    console.log(e);
+  } finally {
+    useSpinStore().hide();
+  }
+}
 function confirmBatchDelete() {
   Modal.confirm({
     title: "提示",

@@ -108,7 +108,6 @@ import { message } from "ant-design-vue";
 import { useUserStore } from "/@/store/modules/system/user";
 import { SmartLoading } from "/@/components/smart-loading";
 import { saveTokenToCookie } from "/@/utils/cookie-util";
-import { smartSentry } from "/@/lib/smart-sentry";
 import { DEVICE_ENUM } from "/@/constants/system/device";
 import { LoginForm } from "/@/api/system/login/model/login-model";
 
@@ -156,8 +155,7 @@ async function handleFinish() {
       message.success("登录成功");
       await router.push("/home");
     } catch (e) {
-      console.log(e);
-      smartSentry.captureException(e);
+      getCaptcha();
     } finally {
       SmartLoading.hide();
     }
@@ -171,9 +169,18 @@ function onShowPassword() {
 //--------------------- 验证码 ---------------------------------
 const captchaBase64Image = ref<string>("");
 async function getCaptcha() {
-  let captchaResult = await loginApi.getCaptcha();
-  captchaBase64Image.value = captchaResult.data.captchaBase64Image;
-  loginForm.captchaUuid = captchaResult.data.captchaUuid;
+  try {
+    SmartLoading.show();
+    let captchaResult = await loginApi.getCaptcha();
+    captchaBase64Image.value = captchaResult.data.captchaBase64Image;
+    loginForm.captchaUuid = captchaResult.data.captchaUuid;
+  } catch (e) {
+    console.log(e);
+  } finally {
+    SmartLoading.hide();
+  }
+
+
 }
 onMounted(getCaptcha);
 </script>

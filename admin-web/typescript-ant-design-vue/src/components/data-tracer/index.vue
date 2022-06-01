@@ -39,7 +39,6 @@ import { PAGE_SIZE_OPTIONS, PAGE_SIZE } from '/@/constants/common';
 import { DataTracerQueryForm } from '/@/api/support/data-tracer/model/data-tracer-query-form';
 import { DataTracerVo } from '/@/api/support/data-tracer/model/data-tracer-vo';
 import { dataTracerApi } from '/@/api/support/data-tracer/data-tracer-api';
-import { smartSentry } from '/@/lib/smart-sentry';
 
 const props = defineProps<{
   businessId: number;
@@ -90,8 +89,6 @@ async function ajaxQuery() {
     total.value = responseModel.data.total;
     tableData.value = list;
   } catch (e) {
-    console.log(e);
-    smartSentry.captureException(e);
   } finally {
     tableLoading.value = false;
   }
