@@ -3,7 +3,7 @@
     <el-card title="地区选择" class="smart-margin-top10">
       <smart-area-cascader type="province_city_district"
                            :width="200"
-                           v-model="area"
+                           v-model:value="area"
                            @change="changeArea" />
       <json-viewer :value="selectArea" copyable boxed sort class="smart-margin-top10" />
     </el-card>

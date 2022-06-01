@@ -1,6 +1,6 @@
 <template>
   <el-drawer
-    :width='720'
+    :size='720'
     v-model='visible'
     @close='onClose'
   >

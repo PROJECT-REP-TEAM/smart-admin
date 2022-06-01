@@ -1,0 +1,97 @@
+server:
+  servlet:
+    context-path: /
+  port: 10086
+  tomcat:
+    basedir: /home/logs/smart-admin/tomcat-logs
+    accesslog:
+      enabled: true
+      pattern: '%t %{X-Forwarded-For}i %a "%r" %s %D (%D ms)'
+spring:
+  profiles:
+    active: @profiles.active@
+  jackson:
+    serialization:
+      write-enums-using-to-string: true
+      write-dates-as-timestamps: false
+    deserialization:
+      read-enums-using-to-string: true
+      fail-on-unknown-properties: false
+    default-property-inclusion: always
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+  datasource:
+    url: jdbc:p6spy:mysql://127.0.0.1:11024/smart_admin_v2?autoReconnect=true&useServerPreparedStmts=false&rewriteBatchedStatements=true&characterEncoding=UTF-8&useSSL=false&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: 11024Lab
+    initial-size: 2
+    min-idle: 10
+    max-active: 50
+    max-wait: 60000
+    time-between-eviction-runs-millis: 60000
+    min-evictable-idle-time-millis: 300000
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    filters: stat
+    druid:
+      username: druid
+      password: 123456
+      login:
+        enabled: false
+      service:
+        scanner: net.lab1024.smartadmin.module..*Service.*
+  redis:
+    database: 1
+    host: 127.0.0.1
+    lettuce:
+      pool:
+        max-active: 100
+        min-idle: 5
+        max-idle: 10
+        max-wait: 30000ms
+    port: 6379
+    timeout: 10000ms
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 30MB
+      max-request-size: 30MB
+  cache:
+    type: caffeine
+project:
+  name: smart-admin
+  module: net.lab1024.smartadmin.module
+swagger:
+  api-group-name: smart-admin
+  title: SmartAdmin
+  description: SmartAdmin 2.0 热爱代码 热爱生活 ! 永远年轻 永远前行 !
+  version: 2.0
+  package: net.lab1024.smartadmin.module
+  team-url: https://www.1024lab.net
+  tag-class: net.lab1024.smartadmin.constant.SwaggerTagConst
+  host: 127.0.0.1:${server.port}
+http:
+  pool:
+    max-total: 20
+    connect-timeout: 50000
+    read-timeout: 50000
+    write-timeout: 50000
+    keep-alive: 300000
+file:
+  storage:
+    mode: local
+    local:
+      path: /home/upload/
+    cloud:
+      region: oss-cn-qingdao
+      endpoint: oss-cn-qingdao.aliyuncs.com
+      bucket-name: smart-admin-sit
+      access-key: xxxx
+      secret-key: xxxx
+      url:
+        expire: 7200000
+        public: https://${file.storage.cloud.bucket-name}.${file.storage.cloud.endpoint}/
+access-control-allow-origin: '*'
+heart-beat:
+  interval-seconds: 60
+reload:
+  interval-seconds: 300

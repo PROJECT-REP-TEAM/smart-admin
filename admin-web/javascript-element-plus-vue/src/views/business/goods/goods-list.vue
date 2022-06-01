@@ -64,8 +64,8 @@
       <el-table-column prop='createTime' label='创建时间'></el-table-column>
       <el-table-column fixed='right' label='操作'>
         <template #default='scope'>
-          <el-button @click='addGoods(scope.row)' type='link'>编辑</el-button>
-          <el-button @click='showDataTracer(scope.row.goodsId)' type='link'>操作记录</el-button>
+          <el-button @click='addGoods(scope.row)' link type='primary'>编辑</el-button>
+          <el-button @click='showDataTracer(scope.row.goodsId)' link type='primary'>操作记录</el-button>
         </template>
       </el-table-column>
     </el-table>

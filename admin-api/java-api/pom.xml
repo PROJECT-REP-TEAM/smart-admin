@@ -28,7 +28,17 @@
         <okhttp.version>4.2.2</okhttp.version>
         <kaptcha.version>2.3.2</kaptcha.version>
         <commons-io.version>20030203.000550</commons-io.version>
+        <commons-collections.version>4.4</commons-collections.version>
         <google-guava.version>30.1.1-jre</google-guava.version>
+        <google-linkedhashmap.version>1.4.2</google-linkedhashmap.version>
+        <spring-mock.version>2.0.8</spring-mock.version>
+        <reflections.version>0.9.11</reflections.version>
+        <aws-java-sdk.version>1.11.842</aws-java-sdk.version>
+        <xerces.version>2.12.0</xerces.version>
+        <poi-scratchpad.version>4.1.1</poi-scratchpad.version>
+        <ooxml-schemas.version>1.3</ooxml-schemas.version>
+        <apache-velocity.version>1.7</apache-velocity.version>
+        <velocity-engine.version>2.0</velocity-engine.version>
         <hutool.version>5.7.22</hutool.version>
     </properties>
 
@@ -118,7 +128,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-mock</artifactId>
-            <version>2.0.8</version>
+            <version>${spring-mock.version}</version>
         </dependency>
 
         <dependency>
@@ -240,13 +250,13 @@
         <dependency>
             <groupId>com.googlecode.concurrentlinkedhashmap</groupId>
             <artifactId>concurrentlinkedhashmap-lru</artifactId>
-            <version>1.4.2</version>
+            <version>${google-linkedhashmap.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.reflections</groupId>
             <artifactId>reflections</artifactId>
-            <version>0.9.11</version>
+            <version>${reflections.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>guava</artifactId>
@@ -259,13 +269,13 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
+            <version>${commons-collections.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.842</version>
+            <version>${aws-java-sdk.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-logging</artifactId>
@@ -278,32 +288,32 @@
         <dependency>
             <groupId>xerces</groupId>
             <artifactId>xercesImpl</artifactId>
-            <version>2.12.0</version>
+            <version>${xerces.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-scratchpad</artifactId>
-            <version>4.1.1</version>
+            <version>${poi-scratchpad.version}</version>
         </dependency>
 
         <!-- Word 需要使用 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>ooxml-schemas</artifactId>
-            <version>1.3</version>
+            <version>${ooxml-schemas.version}</version>
         </dependency>
 
         <!--velocity begin-->
         <dependency>
             <artifactId>velocity</artifactId>
             <groupId>org.apache.velocity</groupId>
-            <version>1.7</version>
+            <version>${apache-velocity.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.velocity</groupId>
             <artifactId>velocity-engine-core</artifactId>
-            <version>2.0</version>
+            <version>${velocity-engine.version}</version>
         </dependency>
         <!--velocity end-->
 
@@ -333,7 +343,7 @@
                 <directory>src/main/resources/${profiles.active}</directory>
                 <filtering>true</filtering>
                 <includes>
-                    <include>*.properties</include>
+                    <include>*.yaml</include>
                 </includes>
             </resource>
 

@@ -9,8 +9,6 @@
       ref='formRef'
       :model='form'
       :rules='rules'
-      :label-col='{ span: 5 }'
-      :wrapper-col='{ span: 12 }'
     >
       <el-form-item label='商品类型' prop='goodsType'>
         <smart-enum-select
