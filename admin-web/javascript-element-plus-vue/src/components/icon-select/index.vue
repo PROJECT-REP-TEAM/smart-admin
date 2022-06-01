@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-popover placement='bottom-start' :width='245'>
+    <el-popover placement='bottom-start' :width='264'>
       <!--      <template #title>-->
       <!--        <el-input-->
       <!--          v-model='searchValue'-->
@@ -66,7 +66,7 @@
 
 <style scoped lang='scss'>
   .icon-box {
-    overflow: auto;
+    overflow-y: auto;
     font-size: 20px;
     width: 250px;
     height: 230px;
@@ -85,10 +85,10 @@
     text-align: center;
     border-radius: 6px;
     border: 1px solid #ccc;
+    line-height: 40px;
 
     .more-icon {
       font-size: 14px;
-      margin: 5px;
     }
 
   }

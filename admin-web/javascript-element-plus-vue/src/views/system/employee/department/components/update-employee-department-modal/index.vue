@@ -1,0 +1,80 @@
+<!--
+ * @Author: zhuoda
+ * @Date: 2021-08-17 11:03:34
+ * @LastEditTime: 2021-08-19 16:57:53
+ * @LastEditors: zhuoda
+ * @Description:
+ * @FilePath: /smart-admin/src/views/system/employee/department/components/update-employee-department-modal/index.vue
+-->
+<template>
+  <el-dialog v-model="visible" title="调整部门" destroy-on-close>
+    <DepartmentTree ref="departmentTree" :height="400" :showMenu="false" />
+    <template #footer>
+      <el-button @click="closeModal">取消</el-button>
+      <el-button type="primary" @click="handleOk">提交</el-button>
+    </template>
+  </el-dialog>
+</template>
+<script setup>
+  import _ from 'lodash';
+  import { nextTick, ref } from 'vue';
+  import DepartmentTree from '../department-tree/index.vue';
+  import { employeeApi } from '/@/api/system/employee-api';
+  import { useSpinStore } from '/@/store/modules/spin';
+  import { ElMessage } from 'element-plus';
+  // ----------------------- 以下是字段定义 emits props ---------------------
+  // 子组件
+  const departmentTree = ref();
+  // emit
+  const emit = defineEmits(['refresh']);
+  const employeeIdList = ref([]);
+  const visible = ref(false);
+  // ----------------------- 以下是计算属性 watch监听 ------------------------
+
+  // ----------------------- 以下是生命周期 ---------------------------------
+
+  // ----------------------- 以下是方法 ------------------------------------
+  async function showModal(selectEmployeeId) {
+    employeeIdList.value = selectEmployeeId;
+    visible.value = true;
+    await nextTick(() => {
+      // 打开窗口时候初始化数据
+      departmentTree.value.selectedKeys = [];
+      departmentTree.value.queryDepartmentTree();
+    });
+  }
+  function closeModal() {
+    departmentTree.value.selectedKeys = [];
+    visible.value = false;
+  }
+  async function handleOk() {
+    useSpinStore().show();
+    try {
+      if (_.isEmpty(employeeIdList.value)) {
+        ElMessage.warning('请选择要调整的员工');
+        return;
+      }
+      if (_.isEmpty(departmentTree.value.selectedKeys)) {
+        ElMessage.warning('请选择要调整的部门');
+        return;
+      }
+      let departmentId = departmentTree.value.selectedKeys[0];
+      let params = {
+        employeeIdList: employeeIdList.value,
+        departmentId: departmentId,
+      };
+      await employeeApi.batchUpdateDepartmentEmployee(params);
+      ElMessage.success('操作成功');
+      emit('reloadList');
+      closeModal();
+    } catch (error) {
+      console.log(error);
+    } finally {
+      useSpinStore().hide();
+    }
+  }
+  // ----------------------- 以下是暴露的方法内容 ----------------------------
+  defineExpose({
+    showModal,
+  });
+</script>

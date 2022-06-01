@@ -21,7 +21,7 @@
 
       <el-form-item label='启用' class='smart-query-form-item'>
         <smart-enum-select
-          :width='80'
+          :width='100'
           enum-name='FLAG_NUMBER_ENUM'
           v-model:value='queryForm.disabledFlag'
           @change='disabledFlagChange'
@@ -49,7 +49,7 @@
     <el-row class='smart-query-form-row' v-show='moreQueryConditionFlag'>
       <el-form-item label='外链' class='smart-query-form-item'>
         <smart-enum-select
-          :width='80'
+          :width='100'
           enum-name='FLAG_NUMBER_ENUM'
           v-model:value='queryForm.frameFlag'
           @change='disabledFlagChange'
@@ -58,7 +58,7 @@
 
       <el-form-item label='缓存' class='smart-query-form-item'>
         <smart-enum-select
-          :width='80'
+          :width='100'
           enum-name='FLAG_NUMBER_ENUM'
           v-model:value='queryForm.cacheFlag'
           @change='disabledFlagChange'
@@ -67,7 +67,7 @@
 
       <el-form-item label='显示' class='smart-query-form-item'>
         <smart-enum-select
-          :width='80'
+          :width='100'
           enum-name='FLAG_NUMBER_ENUM'
           v-model:value='queryForm.visibleFlag'
           @change='disabledFlagChange'

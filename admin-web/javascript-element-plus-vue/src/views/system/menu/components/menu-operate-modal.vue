@@ -41,7 +41,7 @@
             <el-form-item label='菜单图标' prop='icon'>
               <IconSelect @updateIcon='selectIcon'>
                 <template #iconSelect>
-                  <el-input v-model='form.icon' placeholder='请输入菜单图标' />
+                  <el-input v-model='form.icon' placeholder='请输入菜单图标'/>
                 </template>
               </IconSelect>
             </el-form-item>
@@ -148,12 +148,12 @@
                 style='width: 100%'
                 placeholder='请选择接口权限'
               >
-                <el-select-option v-for='item in allUrlData'
+                <el-option v-for='item in allUrlData'
                                   :key='item.name'
                                   :value='item.name'
                                   :label='item.url'>
                   {{ item.url }}
-                </el-select-option>
+                </el-option>
               </el-select>
             </el-form-item>
           </el-col>

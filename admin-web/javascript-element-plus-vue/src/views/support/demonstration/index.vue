@@ -119,7 +119,3 @@ function changeArea(value) {
 defineExpose({});
 
 </script>
-
-<style scoped  lang="less">
-
-</style>
