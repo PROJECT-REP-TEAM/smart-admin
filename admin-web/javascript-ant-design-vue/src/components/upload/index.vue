@@ -4,7 +4,7 @@
  * @Author: zhuoda
  * @Date: 2021-08-12 17:34:23
  * @LastEditors: zhuoda
- * @LastEditTime: 2021-09-01 21:03:33
+ * @LastEditTime: 2022-06-02
 -->
 <template>
   <div class="clearfix">
@@ -44,41 +44,52 @@ const getToken = computed(() => {
 });
 
 // ========================
-interface UploadProps {
-  value?: string;
-  buttonText?: string;
-  showUploadBtn?: boolean;
-  defaultFileList?: any;
-  multiple?: boolean;
-  maxUploadSize?: number; // 最多上传文件数量
-  accept?: string; // 上传的文件类型
-  maxSize?: number;
-  folder?: number; //文件上传类型
-  fileList?: Array<FileUploadVo>;
-}
-
-const props = withDefaults(defineProps<UploadProps>(), {
-  value: undefined,
-  buttonText: "点击上传附件",
-  showUploadBtn: true,
-  defaultFileList: [],
-  multiple: false,
-  maxUploadSize: 10,
-  maxSize: 10,
-  accept: "",
-  folder: FILE_FOLDER_TYPE_ENUM.COMMON.value,
+const props = defineProps({
+  value: String,
+  buttonText: {
+    type: String,
+    default: "点击上传附件",
+  },
+  showUploadBtn: {
+    type: Boolean,
+    default: true,
+  },
+  defaultFileList: {
+    type: Array,
+    default: () => [],
+  },
+  multiple: {
+    type: Boolean,
+    default: false,
+  },
+  // 最多上传文件数量
+  maxUploadSize: {
+    type: Number,
+    default: 10,
+  },
+  maxSize: {
+    type: Number,
+    default: 10,
+  },
+  // 上传的文件类型
+  accept: {
+    type: String,
+    default: "",
+  },
+  // 文件上传类型
+  folder: {
+    type: Number,
+    default: FILE_FOLDER_TYPE_ENUM.COMMON.value,
+  },
 });
 
-const emit = defineEmits<{
-  (e: "update:value", value: any): void;
-  (e: "change", value: any): void;
-}>();
+const emit = defineEmits(["update:value", "change"]);
 
 // 重新修改图片展示字段
 const files = computed(() => {
   let res = [];
-  if (props.fileList && props.fileList.length > 0) {
-    props.fileList.forEach((element) => {
+  if (props.defaultFileList && props.defaultFileList.length > 0) {
+    props.defaultFileList.forEach((element) => {
       element.url = element.fileUrl;
       res.push(element);
     });
@@ -91,16 +102,13 @@ const previewVisible = ref<boolean>(false);
 const fileList = ref(files.value);
 const previewUrl = ref<string>("");
 
-const customRequest = async (options: any) => {
+const customRequest = async (options) => {
   useSpinStore().show();
   try {
     console.log(options);
     const formData = new FormData();
     formData.append("file", options.file);
-    let res = await fileApi.uploadFile(
-      formData,
-      props.folder
-    );
+    let res = await fileApi.uploadFile(formData, props.folder);
     let file = res.data;
     file.url = file.fileUrl;
     fileList.value.push(file);
@@ -112,7 +120,7 @@ const customRequest = async (options: any) => {
   }
 };
 
-function handleChange(info: any) {
+function handleChange(info) {
   let fileStatus: string = info.file.status;
   let file = info.file;
   if (fileStatus == "removed") {
@@ -138,7 +146,7 @@ function beforeUpload(file) {
 function handleCancel() {
   previewVisible.value = false;
 }
-const handlePreview = async (file: any) => {
+const handlePreview = async (file) => {
   previewUrl.value = file.url || file.preview;
   previewVisible.value = true;
 };

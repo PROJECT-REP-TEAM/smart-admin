@@ -110,7 +110,7 @@
     <GoodsOperateModal ref="operateModal" @reloadList="ajaxQuery" />
   </a-card>
 </template>
-<script lang="ts" setup>
+<script  setup>
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import GoodsOperateModal from "./components/goods-operate-modal.vue";
 import { reactive, ref, onMounted } from "vue";

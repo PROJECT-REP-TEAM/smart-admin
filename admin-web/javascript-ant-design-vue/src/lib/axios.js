@@ -1,8 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { useUserStore } from '@/store/modules/system/user';
+import { useUserStore } from '/@/store/modules/system/user';
 import { message } from 'ant-design-vue';
 import { clearAllCoolies } from '/@/utils/cookie-util';
-import { smartSentry } from '/@/lib/smart-sentry';
 
 const TOKEN_HEADER = 'x-access-token';
 
@@ -111,6 +110,6 @@ export const download = function (fileName, url, params) {
       link.click();
     })
     .catch((error) => {
-      smartSentry.captureException(error);
+      throw error;
     });
 };

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-12 16:11:06
- * @LastEditTime: 2021-08-30 11:16:27
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description: 角色
  * @FilePath: /smart-admin/src/views/system/employee/role/index.vue
@@ -18,18 +18,17 @@
     </a-row>
   </div>
 </template>
-<script setup lang="ts">
+<script setup>
 import _ from "lodash";
 import { computed, provide, ref } from "vue";
 import RoleList from "./components/role-list/index.vue";
 import RoleSetting from "./components/role-setting/index.vue";
 // ----------------------- 以下是字段定义 emits props ---------------------
-defineProps<{
-  value;
-}>();
-defineEmits<{
-  (e: "update:value");
-}>();
+defineProps({
+  value: Object,
+});
+defineEmits("update:value");
+
 let roleList = ref();
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 const selectRoleId = computed(() => {

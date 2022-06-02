@@ -13,7 +13,7 @@
   </a-space>
 </template>
 
-<script lang="ts">
+<script >
 import HeaderAvatar from "./header-avatar.vue";
 import HeaderNotice from "./header-notice.vue";
 import I18nSelector from "./i18n-selector.vue";

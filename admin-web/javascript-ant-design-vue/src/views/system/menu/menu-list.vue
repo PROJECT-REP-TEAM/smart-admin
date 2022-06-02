@@ -150,7 +150,7 @@
 
   <MenuOperateModal ref="menuOperateModal" @reloadList="query" />
 </template>
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref, onMounted, computed, createVNode } from "vue";
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import { menuApi } from "/@/api/system/menu/menu-api";
@@ -162,11 +162,9 @@ import { ColumnProps } from "ant-design-vue/es/table/interface";
 import { SmartLoading } from "/@/components/smart-loading";
 import { columns } from "./menu-list-table-columns";
 
-type Key = ColumnProps["key"];
-
 const menuOperateModal = ref();
 
-function filterQueryForm(menuList, queryForm){
+function filterQueryForm(menuList, queryForm) {
   if (!menuList || menuList.length === 0) {
     return [];
   }
@@ -238,7 +236,7 @@ function isMenuExistMenuType(menu, menuType) {
   return false;
 }
 
-function isMenuExistKeywords(menu, keywords?: string) {
+function isMenuExistKeywords(menu, keywords) {
   if (!keywords) {
     return true;
   }
@@ -259,7 +257,7 @@ function isMenuExistKeywords(menu, keywords?: string) {
   return false;
 }
 
-function findTopMenuArray(menuList){
+function findTopMenuArray(menuList) {
   let topMenuList = [];
   const menuIdSet = new Set();
   for (const menu of menuList) {
@@ -285,8 +283,8 @@ const queryFormState = {
   disabledFlag: undefined,
 };
 const queryForm = reactive({ ...queryFormState });
-const moreQueryConditionFlag = ref<Boolean>(false);
-const tableLoading = ref<Boolean>(false);
+const moreQueryConditionFlag = ref < Boolean > false;
+const tableLoading = ref < Boolean > false;
 
 const tableData = ref([]);
 
@@ -326,15 +324,15 @@ function recursiveMenuTree(menuList, parentArray) {
 
 onMounted(query);
 
-const disabledFlagChange = (value: string | string[] | number | number[]) => {
+const disabledFlagChange = (value) => {
   console.log(1, value);
 };
 
 //-------------- 多选操作
-const selectedRowKeys = ref<Key[]>([]);
+const selectedRowKeys = ref([]);
 let selectedRows = [];
 const hasSelected = computed(() => selectedRowKeys.value.length > 0);
-function onSelectChange(keyArray: Key[], selectRows) {
+function onSelectChange(keyArray, selectRows) {
   selectedRowKeys.value = keyArray;
   selectedRows = selectRows;
 }
@@ -365,7 +363,7 @@ function confirmBatchDelete(menuArray) {
     onCancel() {},
   });
 
-  async function requestDatchDelete(menuIdList: Array<number | undefined>) {
+  async function requestDatchDelete(menuIdList) {
     SmartLoading.show();
     try {
       await menuApi.batchDeleteMenu(menuIdList);

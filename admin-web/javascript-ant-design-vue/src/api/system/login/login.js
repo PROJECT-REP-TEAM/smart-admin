@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2021-08-18 20:04:05
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/login/login.ts
@@ -14,14 +14,22 @@ export const loginApi = {
    * @param param
    */
   login: (param) => {
-    return postRequest('/system/login', param);
+    return postRequest('/admin/login', param);
+  },
+
+  /**
+   * 获取验证码
+   * @param param
+   */
+  getCaptcha: () => {
+    return getRequest('/admin/login/getCaptcha');
   },
 
   /**
    * 获取登录信息
    * @param param
    */
-  getLogin: () => {
-    return getRequest('/system/login/get');
+  getLoginInfo: () => {
+    return getRequest('/admin/login/getLoginResult');
   },
 };

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-24 16:35:45
- * @LastEditTime: 2021-08-24 17:58:19
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/home/components/gauge.vue
@@ -9,21 +9,20 @@
 <template>
   <div class="gauge-main" id="main"></div>
 </template>
-<script setup lang="ts">
+<script setup>
 import * as echarts from "echarts/core";
 import { GaugeChart } from "echarts/charts";
 import { CanvasRenderer } from "echarts/renderers";
 import { onMounted, watch } from "@vue/runtime-core";
 import { reactive } from "vue";
 // ----------------------- 以下是字段定义 emits props ---------------------
-const props = withDefaults(
-  defineProps<{
-    percent: number;
-  }>(),
-  {
-    percent: 0,
-  }
-);
+const props = withDefaults({
+  percent: {
+    type: Numner,
+  },
+  percent: 0,
+});
+
 let option = reactive({});
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 watch(

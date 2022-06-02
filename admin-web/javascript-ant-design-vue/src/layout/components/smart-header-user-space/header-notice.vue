@@ -49,7 +49,7 @@
   </a-dropdown>
 </template>
 
-<script lang="ts">
+<script >
 import {defineComponent, ref} from "vue";
 import { BellOutlined } from '@ant-design/icons-vue';
 

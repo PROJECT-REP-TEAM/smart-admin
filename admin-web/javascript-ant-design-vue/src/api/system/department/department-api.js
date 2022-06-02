@@ -1,16 +1,15 @@
 /*
- * @Author: zhuoda
+ * author：zhuoda: zhuoda
  * @Date: 2021-08-12 17:56:25
- * @LastEditTime: 2021-08-16 10:45:05
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
- * @FilePath: /smart-admin/src/api/system/department/department-api.ts
  */
 import { getRequest, postRequest } from '/@/lib/axios';
 
 export const departmentApi = {
   /**
-   * @description: 查询部门列表
+   * @description: 查询部门列表 author：zhuoda
    * @param {*}
    * @return {*}
    */
@@ -19,7 +18,7 @@ export const departmentApi = {
   },
 
   /**
-   * @description: 查询部门树形列表
+   * @description: 查询部门树形列表 author：zhuoda
    * @param {*}
    * @return {*}
    */
@@ -28,7 +27,7 @@ export const departmentApi = {
   },
 
   /**
-   * @description: 获取校区列表 by zhuoda
+   * @description: 获取校区列表 author：zhuoda
    * @param {*}
    * @return {*}
    */
@@ -37,7 +36,7 @@ export const departmentApi = {
   },
 
   /**
-   * @description: 添加部门 by zhuoda
+   * @description: 添加部门 author：zhuoda
    * @param {*}
    * @return {*}
    */
@@ -45,7 +44,7 @@ export const departmentApi = {
     return postRequest('/department/add', param);
   },
   /**
-   * @description: 更新部门信息 by zhuoda
+   * @description: 更新部门信息 author：zhuoda
    * @param {*}
    * @return {*}
    */
@@ -53,7 +52,7 @@ export const departmentApi = {
     return postRequest('/department/update', param);
   },
   /**
-   * @description: 获取校区列表 by zhuoda
+   * @description: 获取校区列表 author：zhuoda
    * @param {*}
    * @return {*}
    */

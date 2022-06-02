@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2021-09-01
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/home/index.vue
@@ -54,45 +54,31 @@
       <a-card title="待办事项">
         <div class="content large wait-handle">
           <p>
-            <a-tag color="#108ee9">审批</a-tag> 有{{
-              0
-            }}个审批待审核
+            <a-tag color="#108ee9">审批</a-tag> 有{{ 0 }}个审批待审核
             <a>查看更多></a>
           </p>
           <p>
-            <a-tag color="#f50">退款</a-tag> 有{{
-              0
-            }}个退款被驳回
+            <a-tag color="#f50">退款</a-tag> 有{{ 0 }}个退款被驳回
             <a>查看更多></a>
           </p>
           <p>
-            <a-tag color="#2db7f5">缺陷</a-tag> 有{{
-              0
-            }}个缺陷被找到
+            <a-tag color="#2db7f5">缺陷</a-tag> 有{{ 0 }}个缺陷被找到
             <a>查看更多></a>
           </p>
           <p>
-            <a-tag color="#d3adf7">尾款</a-tag> 有{{
-              0
-            }}元尾款待收回
+            <a-tag color="#d3adf7">尾款</a-tag> 有{{ 0 }}元尾款待收回
             <a>查看更多></a>
           </p>
           <p>
-            <a-tag color="#87d068">合同</a-tag> 有{{
-              0
-            }}个合同工客户已签署
+            <a-tag color="#87d068">合同</a-tag> 有{{ 0 }}个合同工客户已签署
             <a>查看更多></a>
           </p>
           <p>
-            <a-tag color="#108ee9">问题</a-tag> 有{{
-              0
-            }}个问题被驳回
+            <a-tag color="#108ee9">问题</a-tag> 有{{ 0 }}个问题被驳回
             <a>查看更多></a>
           </p>
           <p>
-            <a-tag color="#f50">能量</a-tag> 有{{
-              0
-            }}个能量被收取
+            <a-tag color="#f50">能量</a-tag> 有{{ 0 }}个能量被收取
             <a>查看更多></a>
           </p>
         </div>
@@ -168,7 +154,7 @@
     </a-col>
   </a-row>
 </template>
-<script setup lang="ts">
+<script setup>
 import { computed, reactive, ref } from "vue";
 import { LocationQueryRaw, useRouter } from "vue-router";
 import Gauge from "./components/gauge.vue";
@@ -239,7 +225,7 @@ for (let index = 0; index < nameList.length; index++) {
     comment: commentList[index % commentList.length],
   });
 }
-function enterDetail(path: string, query?: LocationQueryRaw) {
+function enterDetail(path, query) {
   router.push({ path, query });
 }
 // ----------------------- 以下是暴露的方法内容 ----------------------------

@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-12 18:23:56
- * @LastEditTime: 2021-08-18
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
 -->
 <template>
@@ -22,29 +22,29 @@
   </a-select>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, watch, onMounted } from "vue";
 import { employeeApi } from "/@/api/system/employee/employee-api";
 
 // =========== 属性定义 和 事件方法暴露 =============
-interface EmployeeSelectProps {
-  placeholder?: string;
-  value?: number;
-  width: string;
-  size?: string;
-}
 
-const props = withDefaults(defineProps<EmployeeSelectProps>(), {
-  value: undefined,
-  placeholder: "请选择",
-  width: "100%",
-  size: "default",
+const props = defineProps({
+  value: Number,
+  placeholder: {
+    type: String,
+    default: "请选择",
+  },
+  width: {
+    type: String,
+    default: "100%",
+  },
+  size: {
+    type: String,
+    default: "default",
+  },
 });
 
-const emit = defineEmits<{
-  (e: "update:value", value: any): void;
-  (e: "change", value: any): void;
-}>();
+const emit = defineEmits(["update:value", "change"]);
 
 // =========== 业务逻辑 =============
 
@@ -71,7 +71,7 @@ watch(
   }
 );
 
-function handleChange(value: any): void {
+function handleChange(value) {
   emit("update:value", value);
   emit("change", value);
 }

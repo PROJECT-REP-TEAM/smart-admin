@@ -71,7 +71,7 @@
   </a-layout>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import SmartFooter from "./components/smart-footer/index.vue";
 import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";
 import SideMenu from "/@/components/side-menu/index.vue";

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-16 15:06:33
- * @LastEditTime: 2021-09-01
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/department/components/operate-employee-modal/index.vue
@@ -76,7 +76,7 @@
     </div>
   </a-drawer>
 </template>
-<script setup lang="ts">
+<script setup>
 import { message } from "ant-design-vue";
 import _ from "lodash";
 import { nextTick, reactive, ref } from "vue";
@@ -90,9 +90,7 @@ import { GenderEnum } from "/@/constants/common";
 // ----------------------- 以下是字段定义 emits props ---------------------
 const departmentTreeSelect = ref();
 // emit
-const emit = defineEmits<{
-  (e: "reloadList");
-}>();
+const emit = defineEmits("reloadList");
 
 // 组件ref
 const formRef = ref();
@@ -160,20 +158,24 @@ function onClose() {
   visible.value = false;
 }
 
-function validateForm(formRef: { validate: () => Promise<any> }) {
-  return new Promise<boolean>((resolve) => {
-    formRef
-      .validate()
-      .then(() => {
-        resolve(true);
-      })
-      .catch(() => {
-        resolve(false);
-      });
-  });
+function validateForm(formRef) {
+  return (
+    new Promise() <
+    boolean >
+    ((resolve) => {
+      formRef
+        .validate()
+        .then(() => {
+          resolve(true);
+        })
+        .catch(() => {
+          resolve(false);
+        });
+    })
+  );
 }
 
-async function onSubmit(keepAdding: boolean) {
+async function onSubmit(keepAdding) {
   let validateFormRes = await validateForm(formRef.value);
   if (!validateFormRes) {
     message.error("参数验证错误，请仔细填写表单数据!");

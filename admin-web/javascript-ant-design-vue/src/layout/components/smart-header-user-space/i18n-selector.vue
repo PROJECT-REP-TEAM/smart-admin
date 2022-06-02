@@ -20,7 +20,7 @@
   </a-dropdown>
 
 </template>
-<script lang="ts">
+<script >
 import {defineComponent} from "vue";
 import { GlobalOutlined } from '@ant-design/icons-vue';
 

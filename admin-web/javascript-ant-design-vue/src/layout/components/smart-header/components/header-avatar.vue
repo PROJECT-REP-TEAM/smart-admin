@@ -29,7 +29,7 @@
   </a-dropdown>
 </template>
 
-<script lang="ts" setup>
+<script  setup>
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";

@@ -5,9 +5,9 @@ import 'nprogress/nprogress.css';
 import { clearAllCoolies, getTokenFromCookie } from '/@/utils/cookie-util';
 import { useUserStore } from '/@/store/modules/system/user';
 import _ from 'lodash';
-import SmartLayout from '@/layout/smart-layout.vue';
-import SmartParentView from '@/layout/smart-parent-view.vue';
-import { MENU_TYPE_ENUM } from '@/constants/system/menu/menu-enum';
+import SmartLayout from '/@/layout/smart-layout.vue';
+import SmartParentView from '/@/layout/smart-parent-view.vue';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum';
 
 const LOGIN_PAGE_NAME = 'Login';
 
@@ -72,7 +72,7 @@ router.afterEach(() => {
 });
 
 // ----------------------- 构建router对象 -----------------------
-function buildRoutes(menuList, level, parentMenuList) {
+function buildRoutes (menuList, level, parentMenuList) {
   const resList = [];
   // 获取所有vue组件
   const modules = import.meta.glob('../views/**/**.vue');

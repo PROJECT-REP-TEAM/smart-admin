@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-12
- * @LastEditTime: 2021-08-18
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
 -->
 <template>
@@ -17,30 +17,28 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, watch, onMounted } from "vue";
-import { categoryApi } from "@/api/business/category/category-api";
+import { categoryApi } from "/@/api/business/category/category-api";
 
 // ========================
-interface CategoryTreeSelectProps {
-  placeholder?: string;
-  value?: string | number;
-  categoryType?: number; // 分组类型 CATEGORY_TYPE_ENUM
-  width: string;
-}
 
-const props = withDefaults(defineProps<CategoryTreeSelectProps>(), {
-  value: undefined,
-  placeholder: "请选择",
-  categoryType: undefined,
-  width: "100%",
+const props = defineProps({
+  value: Number,
+  placeholder: {
+    type: String,
+    default: "请选择",
+  },
+  categoryType: Number,
+  width: {
+    type: String,
+    default: "100%",
+  },
 });
 
-const emit = defineEmits<{
-  (e: "update:value", value);
-  (e: "change", value);
-}>();
-const categoryTree = ref<[]>([]);
+const emit = defineEmits(["update:value", "change"]);
+const categoryTree = ref([]);
+
 // ======================== 逻辑
 
 async function queryCategoryTree() {
@@ -52,9 +50,7 @@ async function queryCategoryTree() {
     let param = {
       categoryType: props.categoryType,
     };
-    let resp = await categoryApi.queryCategoryTree(
-      param
-    );
+    let resp = await categoryApi.queryCategoryTree(param);
     categoryTree.value = resp.data;
   } catch (e) {
     console.log(e);
@@ -81,7 +77,7 @@ watch(
   }
 );
 
-function handleChange(value: any): void {
+function handleChange(value) {
   emit("update:value", value);
   emit("change", value);
 }

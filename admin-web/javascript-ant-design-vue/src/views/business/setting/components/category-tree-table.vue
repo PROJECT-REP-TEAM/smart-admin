@@ -35,7 +35,7 @@
     <CategoryOperateModal ref="operateModal" @reloadList="reloadList" />
   </a-card>
 </template>
-<script lang="ts" setup>
+<script setup>
 import { reactive, ref, onMounted, computed } from "vue";
 import { Modal, message } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
@@ -51,7 +51,7 @@ const columnNameList = [
   {
     categoryType: CATEGORY_TYPE_ENUM.DEMO.value,
     columnName: "演示分类",
-  }
+  },
 ];
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 const columName = computed(() => {
@@ -60,11 +60,9 @@ const columName = computed(() => {
 });
 
 // ----------------------- 定义的props ------------------------
-interface CategoryTreeProps {
-  categoryType:number; // 分组类型
-}
-const props = withDefaults(defineProps<CategoryTreeProps>(), {
-  categoryType: undefined,
+const props = defineProps({
+  // 分组类型
+  categoryType: Number,
 });
 
 const columns = reactive([
@@ -82,7 +80,7 @@ const operateModal = ref();
 const tableLoading = ref(false);
 const tableData = ref([]);
 
-const expandedRowKeys = ref<number[]>([]);
+const expandedRowKeys = ref([]);
 // ----------------------- 以下是方法 ------------------------
 async function queryList() {
   try {

@@ -1,38 +1,25 @@
 .login-container {
   width: 100%;
   height: 100%;
-  background: url(/images/login-bg.png) no-repeat center;
+  background: url(/@/assets/images/login/login-bg.jpg) no-repeat center;
   background-size: cover;
-
-  .logo-box {
-    margin: auto;
-    width: 60%;
-    .logo {
-      width: 180px;
-      height: 40px;
-      align-self: start;
-      margin-top: 54px;
-    }
-  }
-
-  .login-box {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: auto;
-    width: 60%;
-    height: calc(100% - 94px);
-  }
-
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .box-item {
+    width: 434px;
+    height: 570px;
+    &.desc {
+      background: #003b94;
+      border-radius: 12px 0px 0px 12px;
+      box-shadow: 0px 16px 73px 8px rgba(203, 203, 203, 0.2);
+      padding: 23px 25px;
+    }
     &.login {
       background: #ffffff;
-      border-radius: 6px;
-      padding: 60px 42px;
+      border-radius: 0px 12px 12px 0px;
+      padding: 34px 42px;
       position: relative;
-      width: 434px;
-      height: 540px;
-      box-shadow: 0px 8px 16px 2px rgba(15, 65, 249, 0.04);
     }
     .login-qr {
       position: absolute;
@@ -41,9 +28,14 @@
       width: 66px;
       height: 66px;
     }
+    .logo {
+      width: 180px;
+      height: 42px;
+      align-self: start;
+    }
     .welcome {
-      margin-top: 44px;
-      font-size: 42px;
+      margin-top: 12px;
+      font-size: 26px;
       font-weight: bold;
       color: #ffffff;
       p {
@@ -52,28 +44,50 @@
       .desc {
         font-size: 14px;
         font-weight: 500;
-        margin: 5px 0 0;
-      }
-    }
-    .login-person {
-      .img-box {
-        width: 312px;
-        height: 312px;
-        text-align: center;
-        line-height: 312px;
-        > img {
-          width: 290px;
-          height: 257px;
-          opacity: 1;
+        margin: 40px 0 60px 0;
+
+        .setence {
+          font-size: 12px;
+          text-decoration: underline;
+          font-style: italic;
+        }
+        .author {
+          float: right;
+          font-size: 12px;
+          margin-top: 10px;
+          text-decoration: underline;
+          font-style: italic;
         }
       }
-
-      .qr-desc {
-        margin-top: 3px;
-        font-size: 14px;
-        text-align: center;
-        color: #ffffff;
-        opacity: 0.3;
+    }
+    .app-qr-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      margin-top: 20px;
+      .app-qr {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        > img {
+          width: 112px;
+          height: 112px;
+        }
+        .qr-desc {
+          display: flex;
+          align-items: center;
+          margin-top: 11px;
+          font-size: 12px;
+          font-weight: 500;
+          text-align: center;
+          color: #ffffff;
+          > img {
+            width: 15px;
+            height: 18px;
+            margin-right: 9px;
+          }
+        }
       }
     }
     .login-title {
@@ -84,6 +98,14 @@
     }
     .login-form {
       margin-top: 37px;
+
+      .captcha-input {
+        width: 60%;
+      }
+
+      .captcha-img {
+        cursor: pointer;
+      }
     }
     .ant-input,
     .ant-input-affix-wrapper {
@@ -117,7 +139,7 @@
   }
 
   .more {
-    margin-top: 50px;
+    margin-top: 30px;
     .title-box {
       display: flex;
       align-items: center;

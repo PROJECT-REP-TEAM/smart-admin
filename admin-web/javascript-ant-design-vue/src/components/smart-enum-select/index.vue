@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-08-28 15:31:50
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
 -->
 <template>
@@ -27,30 +27,31 @@
   </a-select>
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { ref, watch } from "vue";
 
 // ========================
-interface SmartEnumSelectProps {
-  enumName: string;
-  value?: string | number | string[] | number[];
-  width?: number;
-  size?: string;
-  placeholder?: string;
-  disabled?: boolean;
-}
-
-const props = withDefaults(defineProps<SmartEnumSelectProps>(), {
-  enumName: undefined,
-  value: undefined,
-  width: 100,
-  placeholder: "请选择",
+const props = defineProps({
+  enumName: String,
+  value: Number,
+  width: {
+    type: Number,
+    default: 100,
+  },
+  placeholder: {
+    type: String,
+    default: "请选择",
+  },
+  size: {
+    type: String,
+    default: "default",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
-
-const emit = defineEmits<{
-  (e: "update:value", value: any): void;
-  (e: "change", value: any): void;
-}>();
+const emit = defineEmits(["update:value", "change"]);
 
 // ======================== 逻辑
 
@@ -64,7 +65,7 @@ watch(
   }
 );
 
-function handleChange(value: any): void {
+function handleChange(value) {
   emit("update:value", value);
   emit("change", value);
 }

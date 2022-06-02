@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-08-27
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
 -->
 <template>
@@ -22,10 +22,10 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { defineComponent, ref } from "vue";
 
-const dataSource: string[] = ["选项一", "选项二"];
+const dataSource = ["选项一", "选项二"];
 
 export default defineComponent({
   name: "HeaderSearch",
@@ -33,7 +33,7 @@ export default defineComponent({
   setup(props, { emit }) {
     const searchMode = ref(false);
 
-    const input = ref<HTMLElement | null>(null);
+    const input = (ref < HTMLElement) | (null > null);
     const enterSearchMode = () => {
       searchMode.value = true;
       emit("active", true);

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-28 10:07:48
- * @LastEditTime: 2021-08-28
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/operate-role-modal/index.vue
@@ -37,17 +37,15 @@
     </div>
   </a-modal>
 </template>
-<script setup lang="ts">
+<script setup>
 import { message } from "ant-design-vue";
 import { reactive, ref } from "vue";
 import { roleApi } from "/@/api/system/role/role-api";
 import { useSpinStore } from "/@/store/modules/system/spin";
 // ----------------------- 以下是字段定义 emits props ---------------------
-let emits = defineEmits<{
-  (e: "reloadList");
-}>();
+let emits = defineEmits("reloadList");
 const formRef = ref();
-const modalVisible = ref<boolean>(false);
+const modalVisible = ref < boolean > false;
 const formDefault = {
   id: undefined,
   remark: undefined,

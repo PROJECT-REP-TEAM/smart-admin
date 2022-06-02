@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2021-08-26
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/sub-menu.vue
@@ -29,14 +29,12 @@
     </template>
   </a-sub-menu>
 </template>
-<script setup lang="ts">
+<script setup>
 // ----------------------- 以下是字段定义 emits props ---------------------
-let props = defineProps<{
-  menuInfo:any;
-}>();
-let emits = defineEmits<{
-  (e: "turnToPage", value);
-}>();
+let props = defineProps({
+  menuInfo: Array,
+});
+const emits = defineEmits(["turnToPage"]);
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 
 // ----------------------- 以下是生命周期 ---------------------------------
