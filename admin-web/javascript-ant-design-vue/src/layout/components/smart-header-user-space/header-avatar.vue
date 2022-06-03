@@ -24,7 +24,7 @@
     </template>
   </a-dropdown>
 </template>
-<script setup lang="ts">
+<script setup >
 import { computed, ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 import { useRouter } from "vue-router";

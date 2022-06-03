@@ -57,7 +57,7 @@
     </a-layout>
   </a-layout>
 </template>
-<script setup lang="ts">
+<script setup >
 import ExpandSideMenu from "/@/components/side-expand/side-menu/index.vue";
 import SmartFooter from "./components/smart-footer/index.vue";
 import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";

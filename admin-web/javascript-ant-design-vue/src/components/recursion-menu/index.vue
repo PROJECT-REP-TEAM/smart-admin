@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-17 19:09:40
- * @LastEditTime: 2021-08-27
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/components/recursion-menu/index.vue
@@ -31,12 +31,12 @@
     </template>
   </a-menu>
 </template>
-<script lang="ts">
+<script>
 import { defineComponent, ref, computed } from "vue";
 import SubMenu from "./sub-menu.vue";
 import { router } from "/@/router/index";
 import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
-import { RouteRecord, useRoute } from "vue-router";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   name: "RecursionMenu",
@@ -56,7 +56,7 @@ export default defineComponent({
     },
   },
   setup(prop, context) {
-    const collapsed = ref<boolean>(false);
+    const collapsed = ref < boolean > false;
     let currentRoute = useRoute();
     const toggleCollapsed = () => {
       collapsed.value = !collapsed.value;
@@ -73,13 +73,11 @@ export default defineComponent({
     });
 
     const openKeys = computed(() => {
-      return (currentRoute.meta.parentMenuList || []).map(
-        (e: Record<string, string>) => e.name
-      );
+      return (currentRoute.meta.parentMenuList || []).map((e) => e.name);
     });
 
     // 页面跳转
-    const turnToPage = (route: RouteRecord | string) => {
+    const turnToPage = (route) => {
       console.log(route);
       let { name, params, query } = {};
       if (typeof route === "string") {

@@ -5,7 +5,7 @@
     />
   </a-card>
 </template>
-<script lang="ts" setup>
+<script  setup>
 import CategoryTreeTable from "./components/category-tree-table.vue";
 import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category";
 </script>

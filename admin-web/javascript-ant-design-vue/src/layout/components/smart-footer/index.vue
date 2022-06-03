@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script lang="ts" setup>
+<script  setup>
 import { computed } from "vue";
 import { useProjectConfigStore } from "/@/store/modules/system/project-config";
 

@@ -4,7 +4,7 @@
  * @Author: zhuoda
  * @Date: 2021-09-01 20:58:51
  * @LastEditors: zhuoda
- * @LastEditTime: 2021-09-01 20:58:52
+ * @LastEditTime: 2022-06-02
 -->
 <template>
   <a-modal
@@ -28,7 +28,7 @@
     </a-form>
   </a-modal>
 </template>
-<script setup lang="ts">
+<script setup>
 import { ref, reactive } from "vue";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
@@ -38,9 +38,7 @@ import { categoryApi } from "/@/api/business/category/category-api";
 
 // ----------------------- 以下是字段定义 emits props ------------------------
 // emit
-const emit = defineEmits<{
-  (e: "reloadList",parentId?:number);
-}>();
+const emit = defineEmits("reloadList");
 
 //  组件
 const formRef = ref();
@@ -62,11 +60,7 @@ const visible = ref(false);
 // ----------------------- 以下是生命周期 ------------------------
 
 // ----------------------- 以下是方法 ------------------------
-function showModal(
-  categoryType,
-  parentId,
-  rowData
-) {
+function showModal(categoryType, parentId, rowData) {
   Object.assign(form, formDefault);
   form.categoryType = categoryType;
   form.parentId = parentId;
@@ -93,7 +87,7 @@ function onSubmit() {
           await categoryApi.addCategory(form);
         }
         message.success(`${form.categoryId ? "修改" : "添加"}成功`);
-        emit("reloadList",form.parentId);
+        emit("reloadList", form.parentId);
         onClose();
       } catch (error) {
         console.log(error);
@@ -101,7 +95,7 @@ function onSubmit() {
         useSpinStore().hide();
       }
     })
-    .catch((error: ValidateErrorEntity) => {
+    .catch((error) => {
       console.log("error", error);
       message.error("参数验证错误，请仔细填写表单数据!");
     });

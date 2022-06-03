@@ -2,7 +2,7 @@
  * @Description: 地区级联选择
  * @Author: zhuoda
  * @Date: 2021-08-17
- * @LastEditTime: 2021-08-18
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
 -->
 
@@ -18,7 +18,7 @@
   />
 </template>
 
-<script lang="ts" setup>
+<script setup>
 import { PROVINCE_CITY_DISTRICT } from "./province-city-district";
 import { PROVINCE_CITY } from "./province-city";
 import { ref, toRaw, watch } from "vue";
@@ -29,26 +29,28 @@ const TYPE_PROVINCE_CITY_DISTRICT = "province_city_district";
 const TYPE_PROVINCE_CITY = "province_city";
 import { SmartAreaOption } from "./smart-area-option";
 
-interface SmartAreaCascaderProps {
-  // 类型
-  type: string;
-  value: SmartAreaOption[];
-  width: string;
-  size?: string;
-  placeholder?: string;
-}
+  const props = defineProps({
+    type: String,
+    value: Number,
+    width: {
+      type: String,
+      default: '200px',
+    },
+    placeholder: {
+      type: String,
+      default: '请选择地区',
+    },
+    size: {
+      type: String,
+      default: 'default',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  });
 
-const props = withDefaults(defineProps<SmartAreaCascaderProps>(), {
-  size: "default",
-  value: undefined,
-  width: "200px",
-  placeholder: "请选择地区",
-});
-
-const emit = defineEmits<{
-  (e: "update:value", value);
-  (e: "change", value, selectedOptions);
-}>();
+  const emit = defineEmits(['update:value', 'change']);
 
 // ============ 组件业务 ============
 const areaOptionData =
@@ -74,12 +76,12 @@ watch(
   }
 );
 
-function handleChange(value: number[], selectedOptions: SmartAreaOption[]): void {
+function handleChange(value, selectedOptions){
   emit("update:value", toRaw(selectedOptions));
   emit("change", value, toRaw(selectedOptions));
 }
 
-const filter = (inputValue: string, path: SmartAreaOption[]) => {
+const filter = (inputValue, path) => {
   return path.some(
     (option) => option.label.toLowerCase().indexOf(inputValue.toLowerCase()) > -1
   );

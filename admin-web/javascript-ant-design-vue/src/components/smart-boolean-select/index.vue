@@ -1,3 +1,10 @@
+<!--
+ * @Description: 
+ * @Author: zhuoda
+ * @Date: 2021-11-05
+ * @LastEditTime: 2022-06-02
+ * @LastEditors: zhuoda
+-->
 <template>
   <a-select
     v-model:value="selectValue"
@@ -19,30 +26,34 @@
   </a-select>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import _ from "lodash";
 import { ref, watch } from "vue";
 
-interface SmartBooleanSelectProps {
-  value?: boolean;
-  width: number;
-  size?: string;
-  placeholder?: string;
-}
-
-const props = withDefaults(defineProps<SmartBooleanSelectProps>(), {
-  value: undefined,
-  width: 100,
-  placeholder: "请选择",
+const props = defineProps({
+  value: Number,
+  width: {
+    type: Number,
+    default: 100,
+  },
+  placeholder: {
+    type: String,
+    default: "请选择",
+  },
+  size: {
+    type: String,
+    default: "default",
+  },
+  disabled: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const emit = defineEmits<{
-  (e: "update:value", value);
-  (e: "change", value);
-}>();
+const emit = defineEmits(["update:value", "change"]);
 
-function convertBoolean2number(value: null | boolean | undefined): null | number {
-  let result: null | number = null;
+function convertBoolean2number(value) {
+  let result = null;
   if (_.isNaN(value) || _.isNull(value) || _.isUndefined(value)) {
     result = null;
   } else {
@@ -50,9 +61,6 @@ function convertBoolean2number(value: null | boolean | undefined): null | number
   }
   return result;
 }
-
-const selectValue = ref<any>(convertBoolean2number(props.value));
-
 // 箭头value变化
 watch(
   () => props.value,

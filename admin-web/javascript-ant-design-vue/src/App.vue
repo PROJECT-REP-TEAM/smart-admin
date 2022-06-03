@@ -2,7 +2,7 @@
  * @Description: App
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-08-28
+ * @LastEditTime: 2022-06-02
  * @LastEditors: zhuoda
 -->
 <template>
@@ -14,7 +14,7 @@
   </a-config-provider>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
 import { onMounted, computed } from "vue";
 import { loginApi } from "./api/system/login/login";

@@ -12,7 +12,7 @@
   <!--左侧展开菜单 模式-->
   <smart-side-expand-layout v-if="layout === 'side-expand'" />
 </template>
-<script setup lang="ts">
+<script setup >
 import { computed } from "vue";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import SmartSideLayout from "/@/layout/smart-side-layout.vue";

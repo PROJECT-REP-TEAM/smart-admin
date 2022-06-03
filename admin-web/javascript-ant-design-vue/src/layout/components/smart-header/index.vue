@@ -54,7 +54,7 @@
   </a-layout-header>
 </template>
 
-<script lang="ts">
+<script >
 import HeaderSearch from "./components/header-search.vue";
 import HeaderNotice from "./components/header-notice.vue";
 import HeaderAvatar from "./components/header-avatar.vue";

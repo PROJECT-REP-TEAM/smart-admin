@@ -51,7 +51,7 @@
   </a-row>
 </template>
 
-<script lang="ts">
+<script>
 import { computed, defineComponent, ref } from "vue";
 import { CloseOutlined, AppstoreOutlined } from "@ant-design/icons-vue";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
@@ -79,7 +79,7 @@ export default defineComponent({
       let currentRoute = useRoute();
       return currentRoute.name;
     });
-    const selectTab = (name: string) => {
+    const selectTab = (name) => {
       // 寻找tag
       let tag = tagNav.value.find((e) => e.menuName == name);
       if (!tag) {
@@ -88,7 +88,7 @@ export default defineComponent({
       }
       router.push({ name, query: tag.menuQuery });
     };
-    const closeByMenu = (closeAll: boolean) => {
+    const closeByMenu = (closeAll) => {
       let find = tagNav.value.find((e) => e.menuName == selectedKey.value);
       if (!find || closeAll) {
         closeTag(null, true);

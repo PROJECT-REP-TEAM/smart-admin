@@ -2,8 +2,8 @@
  * @Description: vite配置
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-11-02 22:48:22
- * @LastEditors: lidoudou
+ * @LastEditTime: 2022-06-02
+ * @LastEditors: zhuoda
  */
 import { resolve } from 'path';
 import vue from '@vitejs/plugin-vue';
@@ -11,7 +11,7 @@ import vue from '@vitejs/plugin-vue';
 const pathResolve = (dir) => {
   return resolve(__dirname, '.', dir);
 };
-
+console.log(23);
 export default {
   base: process.env.NODE_ENV === 'production' ? '/manages/' : '/',
   root: process.cwd(),
@@ -25,11 +25,6 @@ export default {
       // 绝对路径重命名：/@/xxxx => src/xxxx
       {
         find: /\/@\//,
-        replacement: pathResolve('src') + '/',
-      },
-      // // 绝对路径重命名：@/xxxx => src/xxxx
-      {
-        find: /@\//,
         replacement: pathResolve('src') + '/',
       },
       {
@@ -49,12 +44,6 @@ export default {
     exclude: ['vue-demi'],
   },
   build: {
-    terserOptions: {
-      compress: {
-        keep_infinity: true,
-        drop_console: true,
-      },
-    },
     brotliSize: false,
     chunkSizeWarningLimit: 2000,
   },
@@ -62,7 +51,7 @@ export default {
     preprocessorOptions: {
       less: {
         modifyVars: {
-          hack: `true; @import (reference) "${resolve('/@/theme/index.less')}";`,
+          hack: `true; @import (reference) "${resolve('src/theme/index.less')}";`,
         },
         javascriptEnabled: true,
       },

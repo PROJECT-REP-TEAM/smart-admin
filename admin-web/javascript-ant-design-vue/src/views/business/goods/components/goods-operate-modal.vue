@@ -72,7 +72,7 @@
     </div>
   </a-drawer>
 </template>
-<script setup lang="ts">
+<script setup>
 import { ref, nextTick, reactive, createVNode } from "vue";
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import CategoryTree from "/@/components/category-tree-select/index.vue";
@@ -86,9 +86,7 @@ import { goodsApi } from "/@/api/business/goods/goods-api";
 
 // ----------------------- 以下是字段定义 emits props ------------------------
 // emit
-const emit = defineEmits<{
-  (e: "reloadList");
-}>();
+const emit = defineEmits("reloadList");
 
 // 组件ref
 const formRef = ref();
@@ -152,7 +150,7 @@ function onSubmit() {
         useSpinStore().hide();
       }
     })
-    .catch((error: ValidateErrorEntity) => {
+    .catch((error) => {
       console.log("error", error);
       message.error("参数验证错误，请仔细填写表单数据!");
     });
