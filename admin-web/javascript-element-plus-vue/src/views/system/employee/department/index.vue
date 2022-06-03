@@ -10,12 +10,12 @@
   <div class='height100'>
     <el-row :gutter='16' class='height100'>
       <el-col :span='6'>
-        <DepartmentTree ref='departmentTree' />
+        <DepartmentTree ref='departmentTree' :showMenu='true'/>
       </el-col>
       <el-col :span='18' class='height100'>
         <div class='employee-box height100'>
-          <ChildDepartmentList style='flex-grow: 1' :breadcrumb='breadcrumb' :selectDeptChild='selectDeptChild' />
-          <EmployeeList class='employee' :departmentId='selectDeptId' />
+          <ChildDepartmentList style='flex-grow: 1' :breadcrumb='breadcrumb' :selectedDepartmentChildren='selectedDepartmentChildren' />
+          <EmployeeList class='employee' :departmentId='selectDepartmentId' />
         </div>
       </el-col>
     </el-row>
@@ -37,16 +37,15 @@
     }
     return [];
   });
-  const selectDeptChild = computed(() => {
+  const selectedDepartmentChildren = computed(() => {
     if (departmentTree.value) {
-      return departmentTree.value.selectDeptChild;
+      return departmentTree.value.selectedDepartmentChildren;
     }
     return [];
   });
-  const selectDeptId = computed(() => {
+  const selectDepartmentId = computed(() => {
     if (departmentTree.value) {
-      let selectedKeys = departmentTree.value.selectedKeys;
-      return _.isEmpty(selectedKeys) ? null : selectedKeys[0];
+      return departmentTree.value.selectedKey;
     }
     return null;
   });

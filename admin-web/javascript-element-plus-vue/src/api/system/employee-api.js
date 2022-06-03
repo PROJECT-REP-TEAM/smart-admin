@@ -70,7 +70,7 @@ export const employeeApi = {
    * @return {*}
    */
   resetPassword: (employeeId) => {
-    return getRequest(`/adminemployee/update/pwd/reset/${employeeId}`);
+    return getRequest(`/admin/employee/update/password/reset/${employeeId}`);
   },
   /**
    * @description: 更新员工禁用状态
@@ -78,7 +78,7 @@ export const employeeApi = {
    * @return {*}
    */
   updateDisabled: (employeeId) => {
-    return getRequest(`/adminemployee/update/disabled/${employeeId}`);
+    return getRequest(`/admin/employee/update/disabled/${employeeId}`);
   },
   /**
    * @description: 查询员工-根据校区id

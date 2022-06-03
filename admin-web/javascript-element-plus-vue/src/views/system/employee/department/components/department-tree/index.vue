@@ -54,7 +54,7 @@
       </template>
     </el-tree>
     <!-- 添加编辑部门弹窗 -->
-    <OperateDepartmentModal ref="operateDepartmentModal" @reload="reload" />
+    <OperateDepartmentModal ref="operateDepartmentModal" @reload="refresh" />
   </el-card>
 </template>
 <script setup>
@@ -104,8 +104,8 @@
   // 刷新
   async function refresh() {
     await queryDepartmentTree();
-    if (currentSelectedDpartmentId.value) {
-      selectTree(currentSelectedDpartmentId.value);
+    if (currentSelectedDepartmentId.value) {
+      selectTree(currentSelectedDepartmentId.value);
     }
   }
 
@@ -159,7 +159,7 @@
   const tree = ref();
   const selectedKey = ref();
   const breadcrumb = ref([]);
-  const currentSelectedDpartmentId = ref();
+  const currentSelectedDepartmentId = ref();
   const selectedDepartmentChildren = ref([]);
 
   departmentEmitter.on('selectTree', selectTree);
@@ -218,10 +218,10 @@
       return;
     }
     // 筛选出名称符合的部门
-    let filterDepartmenet = originData.filter((e) => e.name.indexOf(keywords.value) > -1);
+    let filterDepartment = originData.filter((e) => e.name.indexOf(keywords.value) > -1);
     let filterDepartmentList = [];
     // 循环筛选出的部门 构建部门树
-    filterDepartmenet.forEach((e) => {
+    filterDepartment.forEach((e) => {
       recursionFilterDepartment(filterDepartmentList, e.departmentId, false);
     });
 
@@ -254,12 +254,12 @@
       name: '',
       parentId: e.departmentId,
     };
-    currentSelectedDpartmentId.value = e.departmentId;
+    currentSelectedDepartmentId.value = e.departmentId;
     operateDepartmentModal.value.showModal(data);
   }
   // 编辑
   function updateDepartment(e) {
-    currentSelectedDpartmentId.value = e.departmentId;
+    currentSelectedDepartmentId.value = e.departmentId;
     operateDepartmentModal.value.showModal(e);
   }
 

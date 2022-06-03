@@ -232,7 +232,7 @@
       try {
         await employeeApi.resetPassword(employeeId);
         ElMessage.success('重置成功');
-        queryEmployee();
+        await queryEmployee();
       } catch (error) {
         console.log(error);
         smartSentry.captureException(error);

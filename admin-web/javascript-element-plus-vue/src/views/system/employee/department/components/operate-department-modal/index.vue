@@ -33,6 +33,7 @@
   import { nextTick, reactive, ref } from 'vue';
   import { departmentApi } from '/@/api/system/department-api';
   import DepartmentTreeSelect from '/@/components/department-tree-select/index.vue';
+  import EmployeeSelect from '/@/components/employee-select/index.vue'
   import { employeeApi } from '/@/api/system/employee-api';
   import { useSpinStore } from '/@/store/modules/spin';
   import { ElMessage } from 'element-plus';

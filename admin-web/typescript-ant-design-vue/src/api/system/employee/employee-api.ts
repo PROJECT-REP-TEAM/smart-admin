@@ -69,7 +69,7 @@ export const employeeApi = {
    * @return {*}
    */
   resetPassword: (employeeId: number) => {
-    return getRequest<ResponseModel<string>>(`/adminemployee/update/pwd/reset/${employeeId}`);
+    return getRequest<ResponseModel<string>>(`/admin/employee/update/password/reset/${employeeId}`);
   },
   /**
    * @description: 更新员工禁用状态
@@ -77,6 +77,6 @@ export const employeeApi = {
    * @return {*}
    */
   updateDisabled: (employeeId: number) => {
-    return getRequest<ResponseModel<string>>(`/adminemployee/update/disabled/${employeeId}`);
+    return getRequest<ResponseModel<string>>(`/admin/employee/update/disabled/${employeeId}`);
   },
 };

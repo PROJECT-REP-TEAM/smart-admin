@@ -44,7 +44,7 @@
     });
   }
   function closeModal() {
-    departmentTree.value.selectedKeys = [];
+    departmentTree.value.selectedKey = [];
     visible.value = false;
   }
   async function handleOk() {
@@ -54,11 +54,11 @@
         ElMessage.warning('请选择要调整的员工');
         return;
       }
-      if (_.isEmpty(departmentTree.value.selectedKeys)) {
+      let departmentId = departmentTree.value.selectedKey;
+      if (!departmentId) {
         ElMessage.warning('请选择要调整的部门');
         return;
       }
-      let departmentId = departmentTree.value.selectedKeys[0];
       let params = {
         employeeIdList: employeeIdList.value,
         departmentId: departmentId,

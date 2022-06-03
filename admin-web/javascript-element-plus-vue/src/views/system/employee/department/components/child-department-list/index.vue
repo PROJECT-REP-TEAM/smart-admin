@@ -13,8 +13,8 @@
     </el-breadcrumb>
     <div class="department-list-box">下级部门</div>
     <div class="department-list">
-      <el-empty v-if="$lodash.isEmpty(props.selectDeptChild)" description="暂无数据" :image-size="40"></el-empty>
-      <div v-else class="department-item" v-for="item in props.selectDeptChild" @click="selectTree(item.departmentId)">
+      <el-empty v-if="$lodash.isEmpty(props.selectedDepartmentChildren)" description="暂无数据" :image-size="40"></el-empty>
+      <div v-else class="department-item" v-for="item in props.selectedDepartmentChildren" :key='item.departmentId' @click="selectTree(item.departmentId)">
         {{ item.name }}
         <el-icon><arrow-right /></el-icon>
       </div>
@@ -28,7 +28,7 @@
     // 部门面包屑
     breadcrumb: Array,
     // 选中部门的孩子
-    selectDeptChild: Array,
+    selectedDepartmentChildren: Array,
   });
   // ----------------------- 以下是计算属性 watch监听 ------------------------
 
