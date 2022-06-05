@@ -1,10 +1,10 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-12 16:09:09
- * @LastEditTime: 2021-08-17 11:01:09
- * @LastEditors: zhuoda
+ * @LastEditTime: 2022-06-05 23:03:10
+ * @LastEditors: LiHaiFan
  * @Description: 部门
- * @FilePath: /smart-admin/src/views/system/employee/department/index.vue
+ * @FilePath: \typescript-ant-design-vue\src\views\system\employee\department\index.vue
 -->
 <template>
   <div class="height100">

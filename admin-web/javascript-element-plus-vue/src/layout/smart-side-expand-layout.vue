@@ -47,7 +47,7 @@
         <smart-footer />
       </el-footer>
 
-      <el-backtop :visibilityHeight='80' />
+      <el-backtop :visibility-height="80" />
     </el-container>
   </el-container>
 </template>

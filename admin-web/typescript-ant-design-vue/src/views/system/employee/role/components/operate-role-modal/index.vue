@@ -1,10 +1,10 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-28 10:07:48
- * @LastEditTime: 2021-08-28
- * @LastEditors: zhuoda
+ * @LastEditTime: 2022-06-05 22:54:13
+ * @LastEditors: LiHaiFan
  * @Description: 
- * @FilePath: /smart-admin/src/views/system/employee/role/components/operate-role-modal/index.vue
+ * @FilePath: \typescript-ant-design-vue\src\views\system\employee\role\components\operate-role-modal\index.vue
 -->
 <template>
   <a-modal
@@ -53,7 +53,7 @@ const formRef = ref();
 const modalVisible = ref<boolean>(false);
 type RoleFormType = RoleAddDto & RoleUpdateDto;
 const formDefault: RoleFormType = {
-  id: undefined,
+  roleId: undefined,
   remark: undefined,
   roleName: undefined,
 };
@@ -83,12 +83,12 @@ async function operateRule() {
     .then(async () => {
       useSpinStore().show();
       try {
-        if (form.id) {
+        if (form.roleId) {
           await roleApi.updateRole(form);
         } else {
           await roleApi.addRole(form);
         }
-        message.info(`${form.id ? "编辑" : "添加"}成功`);
+        message.info(`${form.roleId ? "编辑" : "添加"}成功`);
         emits("reloadList");
         onClose();
       } catch (e) {

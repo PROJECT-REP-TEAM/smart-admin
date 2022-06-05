@@ -3,32 +3,37 @@
  * @version:
  * @Author: lidoudou
  * @Date: 2021-08-27 17:55:48
- * @LastEditors: qq:23983208
- * @LastEditTime: 2022-03-09 16:02:18
+ * @LastEditors: LiHaiFan
+ * @LastEditTime: 2022-06-05 17:27:05
 -->
 <template>
-  <el-card size='small'
-           :bordered='false'>
-    <el-table size='small'
-              :data='tableData'
-              :rowKey='(record,index)=>{return index}'
-              bordered>
-      <el-table-column prop='createTime' label='操作时间' width='150'></el-table-column>
-      <el-table-column prop='operatorName' label='操作人' width='80'></el-table-column>
-      <el-table-column prop='operateTypeDesc' label='操作类型' width='80'></el-table-column>
-      <el-table-column prop='operateContent' label='操作备注'></el-table-column>
+  <el-card size="small" :bordered="false">
+    <el-table
+      size="small"
+      :data="tableData"
+      :rowKey="
+        (record, index) => {
+          return index;
+        }
+      "
+      bordered
+    >
+      <el-table-column prop="createTime" label="操作时间" width="150"></el-table-column>
+      <el-table-column prop="operatorName" label="操作人" width="80"></el-table-column>
+      <el-table-column prop="operateTypeDesc" label="操作类型" width="80"></el-table-column>
+      <el-table-column prop="operateContent" label="操作备注"></el-table-column>
     </el-table>
 
-    <div class='smart-query-table-page'>
+    <div class="smart-query-table-page">
       <el-pagination
         background
-        v-model:currentPage='queryForm.pageNum'
-        v-model:page-size='queryForm.pageSize'
-        :page-sizes='PAGE_SIZE_OPTIONS'
-        layout='total, sizes, prev, pager, next, jumper'
-        :total='total'
-        @size-change='ajaxQuery'
-        @current-change='ajaxQuery'
+        v-model:currentPage="queryForm.pageNum"
+        v-model:page-size="queryForm.pageSize"
+        :page-sizes="PAGE_SIZE_OPTIONS"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="total"
+        @size-change="ajaxQuery"
+        @current-change="ajaxQuery"
       />
     </div>
   </el-card>
@@ -43,28 +48,6 @@
     businessId: Number,
     businessType: Number,
   });
-  const columns = reactive([
-    {
-      title: '操作时间',
-      dataIndex: 'createTime',
-      width: 150,
-    },
-    {
-      title: '操作人',
-      dataIndex: 'operatorName',
-      width: 80,
-    },
-    {
-      title: '操作类型',
-      dataIndex: 'operateTypeDesc',
-      width: 80,
-    },
-    {
-      title: '操作备注',
-      dataIndex: 'operateContent',
-    },
-  ]);
-
   const queryFormState = {
     pageNum: 1,
     pageSize: PAGE_SIZE,
@@ -105,7 +88,7 @@
         ajaxQuery();
       }
     },
-    { immediate: true },
+    { immediate: true }
   );
   onMounted(ajaxQuery);
 </script>

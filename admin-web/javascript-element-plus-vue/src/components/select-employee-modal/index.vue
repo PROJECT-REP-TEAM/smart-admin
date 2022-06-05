@@ -1,10 +1,10 @@
 <!--
  * @Author: LiHaiFan
  * @Date: 2021-08-30 14:38:05
- * @LastEditTime: 2021-11-23 20:10:35
+ * @LastEditTime: 2022-06-05 17:39:18
  * @LastEditors: LiHaiFan
  * @Description:
- * @FilePath: /employment-admin-web/src/components/select-employee-modal/index.vue
+ * @FilePath: \javascript-element-plus-vue\src\components\select-employee-modal\index.vue
 -->
 <template>
   <el-dialog v-model='visible' :width='900' title='选择人员' destroy-on-close>
@@ -172,7 +172,7 @@
       ElMessage.warning('请选择角色人员');
       return;
     }
-    emits('selectData', selectedRowKeys.value);
+    emits('selectData', selectionRows.value);
     closeModal();
   }
 
