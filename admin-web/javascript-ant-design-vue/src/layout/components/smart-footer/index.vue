@@ -2,7 +2,7 @@
  * @Description: 底部信息
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-09-01
+ * @LastEditTime: 2022-06-14
  * @LastEditors: zhuoda
 -->
 <template>
@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script  setup>
+<script setup>
 import { computed } from "vue";
 import { useProjectConfigStore } from "/@/store/modules/system/project-config";
 

@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-10
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/login/login.ts
@@ -14,7 +14,7 @@ export const loginApi = {
    * @param param
    */
   login: (param) => {
-    return postRequest('/admin/login', param);
+    return postRequest('/login', param);
   },
 
   /**
@@ -22,7 +22,7 @@ export const loginApi = {
    * @param param
    */
   getCaptcha: () => {
-    return getRequest('/admin/login/getCaptcha');
+    return getRequest('/login/getCaptcha');
   },
 
   /**
@@ -30,6 +30,6 @@ export const loginApi = {
    * @param param
    */
   getLoginInfo: () => {
-    return getRequest('/admin/login/getLoginResult');
+    return getRequest('/login/getLoginInfo');
   },
 };

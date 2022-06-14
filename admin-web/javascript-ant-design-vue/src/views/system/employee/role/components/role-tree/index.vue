@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-28 11:46:46
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-tree/index.vue
@@ -24,10 +24,8 @@ import _ from "lodash";
 import { roleMenuApi } from "/@/api/system/role-menu/role-menu-api";
 import { useRoleStore } from "/@/store/modules/system/role";
 import RoleTreeCheckbox from "./role-tree-checkbox.vue";
-import { Ref } from "vue";
 import { message } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
-import { RoleMenuDto } from "/@/api/system/role-menu/modal/role-menu-dto";
 // ----------------------- 以下是字段定义 emits props ---------------------
 let roleStore = useRoleStore();
 let tree = ref();

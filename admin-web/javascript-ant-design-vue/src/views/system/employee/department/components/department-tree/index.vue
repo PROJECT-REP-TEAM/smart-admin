@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-12 17:34:00
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/department/components/department-tree/index.vue
@@ -93,7 +93,7 @@ const props = defineProps({
     default: true,
   },
   // 树高度 超出出滚动条
-  height: number,
+  height: Number,
 });
 
 // ----------------------- 以下是计算属性 watch监听 ------------------------

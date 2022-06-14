@@ -158,7 +158,6 @@ import MenuOperateModal from "./components/menu-operate-modal.vue";
 import { message, Modal } from "ant-design-vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import _ from "lodash";
-import { ColumnProps } from "ant-design-vue/es/table/interface";
 import { SmartLoading } from "/@/components/smart-loading";
 import { columns } from "./menu-list-table-columns";
 

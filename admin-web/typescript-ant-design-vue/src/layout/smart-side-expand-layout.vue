@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 16:52:23
- * @LastEditTime: 2021-08-28
+ * @LastEditTime: 2022-06-10
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/smart-side-expand-layout.vue
@@ -15,7 +15,7 @@
       :collapsed="collapsed"
       :trigger="null"
     >
-      <expand-side-menu :collapsed="collapsed"/>
+      <expand-side-menu :collapsed="collapsed" />
     </a-layout-sider>
 
     <!--
@@ -33,12 +33,16 @@
       <a-layout-header class="smart-layout-header">
         <a-row justify="space-between" class="smart-layout-header-user">
           <a-col class="smart-layout-header-left">
-            <menu-unfold-outlined v-if="collapsed"
-                                  class="collapsed-button"
-                                  @click="() => (collapsed = !collapsed)" />
-            <menu-fold-outlined v-else
-                                class="collapsed-button"
-                                @click="() => (collapsed = !collapsed)" />
+            <menu-unfold-outlined
+              v-if="collapsed"
+              class="collapsed-button"
+              @click="() => (collapsed = !collapsed)"
+            />
+            <menu-fold-outlined
+              v-else
+              class="collapsed-button"
+              @click="() => (collapsed = !collapsed)"
+            />
             <span class="location-breadcrumb">
               <menu-location-breadcrumb />
             </span>

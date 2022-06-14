@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
- * @Date: 2021-08-25 16:52:23
- * @LastEditTime: 2021-08-28
+ * @Date: 2021-08-25 21:52:23
+ * @LastEditTime: 2022-06-14
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/layout/smart-side-expand-layout.vue
@@ -15,7 +15,8 @@
       :collapsed="collapsed"
       :trigger="null"
     >
-      <expand-side-menu />
+      <!-- 左侧菜单 -->
+      <side-expand-menu :collapsed="collapsed" />
     </a-layout-sider>
 
     <!--
@@ -33,16 +34,28 @@
       <a-layout-header class="smart-layout-header">
         <a-row justify="space-between" class="smart-layout-header-user">
           <a-col class="smart-layout-header-left">
+            <span class="collapsed-button">
+              <menu-unfold-outlined
+                v-if="collapsed"
+                class="trigger"
+                @click="() => (collapsed = !collapsed)"
+              />
+              <menu-fold-outlined
+                v-else
+                class="trigger"
+                @click="() => (collapsed = !collapsed)"
+              />
+            </span>
             <span class="location-breadcrumb">
               <menu-location-breadcrumb />
             </span>
           </a-col>
           <!---用戶操作区域-->
           <a-col class="smart-layout-header-right">
-            <smart-header-user-space />
+            <header-user-space />
           </a-col>
         </a-row>
-        <smart-page-tag />
+        <page-tag />
       </a-layout-header>
 
       <!--中间内容-->
@@ -51,21 +64,22 @@
       </a-layout-content>
 
       <!-- footer 版权公司信息 -->
-      <a-layout-footer class="smart-layout-footer"> <smart-footer /></a-layout-footer>
+      <a-layout-footer class="smart-layout-footer"> <SmartFooter /></a-layout-footer>
 
       <a-back-top :target="backTopTarget" :visibilityHeight="80" />
     </a-layout>
   </a-layout>
 </template>
-<script setup >
-import ExpandSideMenu from "/@/components/side-expand/side-menu/index.vue";
+<script setup>
+import SideExpandMenu from "./components/side-expand-menu/index.vue";
 import SmartFooter from "./components/smart-footer/index.vue";
-import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";
+import HeaderUserSpace from "./components/header-user-space/index.vue";
 import { ref, onMounted } from "vue";
-import MenuLocationBreadcrumb from "/@/components/menu-location-breadcrumb/index.vue";
-import SmartPageTag from "./components/smart-page-tag/index.vue";
+import MenuLocationBreadcrumb from "./components/menu-location-breadcrumb/index.vue";
+import PageTag from "./components/page-tag/index.vue";
 import watermark from "/@/lib/smart-wartermark";
 import { useUserStore } from "/@/store/modules/system/user";
+
 // ----------------------- 以下是字段定义 emits props ---------------------
 const windowHeight = window.innerHeight;
 const collapsed = ref(false);

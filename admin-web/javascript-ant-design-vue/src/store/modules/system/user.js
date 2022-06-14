@@ -5,15 +5,33 @@ import { localSave, localRead } from '/@/utils/local-util';
 import _ from 'lodash';
 import { appDefaultConfig } from '/@/config/app-config';
 import { localClear } from '/@/utils/local-util';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum';
+import menu from '/@/i18n/lang/en-US/menu';
+
 
 export const useUserStore = defineStore({
   id: 'userStore',
   state: () => ({
     token: '',
-    pointsList: [],
+    employeeId: '',
+    loginName: '',
+    actualName: '',
+    phone: '',
+    departmentId: '',
+    departmentName: '',
+    administratorFlag: false,
+    //左侧菜单树形结构
     menuTree: [],
+    //存在页面路由的菜单集合
+    menuRouterList: [],
+    //是否完成menuRouter初始化
+    menuRouterInitFlag: false,
+    //父类菜单集合
+    menuParentIdListMap: new Map(),
+    // 功能点集合
+    pointsList: [],
+    // 标签页
     tagNav: [],
-    userInfo: {},
   }),
   getters: {
     getToken (state) {
@@ -21,6 +39,9 @@ export const useUserStore = defineStore({
         return state.token;
       }
       return getTokenFromCookie();
+    },
+    getMenuRouterInitFlag (state) {
+      return state.menuRouterInitFlag;
     },
     getUserInfo (state) {
       if (_.isEmpty(state.userInfo)) {
@@ -30,11 +51,13 @@ export const useUserStore = defineStore({
       return state.userInfo;
     },
     getMenuTree (state) {
-      if (_.isEmpty(state.menuTree)) {
-        let localUserMenu = localRead(localKey.USER_MENU) || '';
-        state.menuTree = localUserMenu ? JSON.parse(localUserMenu) : [];
-      }
       return state.menuTree;
+    },
+    getMenuRouterList (state) {
+      return state.menuRouterList;
+    },
+    getMenuParentIdListMap (state) {
+      return state.menuParentIdListMap;
     },
     getPointList (state) {
       if (_.isEmpty(state.pointsList)) {
@@ -60,25 +83,37 @@ export const useUserStore = defineStore({
   actions: {
     logout () {
       this.token = '';
-      this.pointsList = [];
-      this.menuTree = [];
+      this.menuList = [];
       this.tagNav = [];
       this.userInfo = {};
       localClear();
     },
-    setUserSession (data) {
+    setUserLoginInfo (data) {
+      // 用户基本信息
       this.token = data.token;
-      this.pointsList = data.pointsList;
-      this.menuTree = data.menuTree;
-      this.userInfo = data;
-      this.setUserMenu(data);
-      localSave(localKey.USER_INFO, JSON.stringify(data));
-    },
-    setUserMenu (data) {
-      this.pointsList = [];
-      this.menuTree = [];
-      localSave(localKey.USER_MENU, JSON.stringify(data.menuTree));
-      localSave(localKey.USER_POINTS, JSON.stringify(data.pointsList));
+      this.employeeId = data.employeeId;
+      this.loginName = data.loginName;
+      this.actualName = data.actualName;
+      this.phone = data.phone;
+      this.departmentId = data.departmentId;
+      this.departmentName = data.departmentName;
+      this.administratorFlag = data.administratorFlag;
+
+      //菜单权限
+      this.menuTree = buildMenuTree(data.menuList);
+
+      //拥有路由的菜单
+      this.menuRouterList = data.menuList.filter(e => e.path);
+
+      //父级菜单集合
+      this.menuParentIdListMap = buildMenuParentIdListMap(this.menuTree);
+
+      //功能点
+      this.pointsList = data.menuList.filter(menu =>
+        menu.menuType === MENU_TYPE_ENUM.POINTS.value
+        && menu.visibleFlag
+        && !menu.disabledFlag
+      );
     },
     setToken (token) {
       this.token = token;
@@ -153,3 +188,66 @@ export const useUserStore = defineStore({
     },
   },
 });
+
+
+
+/**
+ * 构建菜单父级集合
+ */
+function buildMenuParentIdListMap (menuTree) {
+  let menuParentIdListMap = new Map();
+  recursiveBuildMenuParentIdListMap(menuTree, [], menuParentIdListMap);
+  return menuParentIdListMap;
+}
+
+function recursiveBuildMenuParentIdListMap (menuList, parentMenuList, menuParentIdListMap) {
+  for (const e of menuList) {
+    // 顶级parentMenuList清空
+    if (e.parentId == 0) {
+      parentMenuList = [];
+    }
+    let menuIdStr = e.menuId.toString();
+    let cloneParentMenuList = _.cloneDeep(parentMenuList);
+    if (!_.isEmpty(e.children) && e.menuName) {
+      // 递归
+      cloneParentMenuList.push({ name: menuIdStr, title: e.menuName });
+      recursiveBuildMenuParentIdListMap(e.children, cloneParentMenuList, menuParentIdListMap);
+    } else {
+      menuParentIdListMap.set(menuIdStr, cloneParentMenuList);
+    }
+  }
+}
+
+
+/**
+ * 构建菜单树
+ * 
+ * @param  menuList 
+ * @returns 
+ */
+function buildMenuTree (menuList) {
+  //1 获取所有 有效的 目录和菜单
+  let catalogAndMenuList = menuList.filter(menu =>
+    menu.menuType !== MENU_TYPE_ENUM.POINTS.value
+    && menu.visibleFlag
+    && !menu.disabledFlag
+  );
+
+  //2 获取顶级目录
+  let topCatalogList = catalogAndMenuList.filter(menu => menu.parentId === 0);
+  for (const topCatalog of topCatalogList) {
+    buildMenuChildren(topCatalog, catalogAndMenuList)
+  }
+  return topCatalogList;
+}
+
+function buildMenuChildren (menu, allMenuList) {
+  let children = allMenuList.filter(e => e.parentId === menu.menuId);
+  if (children.length === 0) {
+    return;
+  }
+  menu.children = children;
+  for (const item of children) {
+    buildMenuChildren(item, allMenuList);
+  }
+}

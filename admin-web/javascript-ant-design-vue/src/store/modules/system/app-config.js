@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  */
 import { defineStore } from 'pinia';
@@ -25,7 +25,7 @@ export const useAppConfigStore = defineStore({
      */
     getPageTagFixedFlag (state) {
       return state.headerFixedFlag;
-    },
+    }
   },
 
   actions: {

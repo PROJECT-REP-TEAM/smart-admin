@@ -2,6 +2,11 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { useUserStore } from '/@/store/modules/system/user';
 import { message } from 'ant-design-vue';
 import { clearAllCoolies } from '/@/utils/cookie-util';
+import { router } from '/@/router/index';
+import { getTokenFromCookie } from '/@/utils/cookie-util';
+import { PAGE_PATH_LOGIN } from '../constants/common';
+import { localClear } from '/@/utils/local-util';
+import { useAppConfigStore } from "/@/store/modules/system/app-config";
 
 const TOKEN_HEADER = 'x-access-token';
 
@@ -14,7 +19,7 @@ const smartAxios = axios.create({
 smartAxios.interceptors.request.use(
   (config) => {
     // 在发送请求之前消息头加入token token
-    const token = useUserStore().getToken;
+    const token = getTokenFromCookie();
     if (token) {
       config.headers[TOKEN_HEADER] = token;
     } else {
@@ -39,11 +44,12 @@ smartAxios.interceptors.response.use(
       // `token` 过期或者账号已在别处登录
       if (res.code === 30007 || res.code === 30008) {
         message.error('您没有登录，请重新登录');
-        //TODO 跳转到登录页面
+        clearAllCoolies();
+        localClear();
+        //跳转到登录页面，直接使用页面刷新的策略
         setTimeout(() => {
-          clearAllCoolies();
           location.href = '/';
-        });
+        }, 300);
         return Promise.reject(response);
       }
       message.error(res.msg);

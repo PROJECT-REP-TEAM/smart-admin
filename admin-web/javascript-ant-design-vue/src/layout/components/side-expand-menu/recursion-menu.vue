@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 17:52:43
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/recursion-menu.vue
@@ -38,16 +38,14 @@ import { useRoute } from "vue-router";
 import { router } from "/@/router";
 import SubMenu from "./sub-menu.vue";
 
-// ----------------------- 以下是字段定义 emits props ---------------------
-
 let props = defineProps({
   selectedMenu: Object,
 });
 
 defineEmits("update:value");
 
+//展开的菜单
 let currentRoute = useRoute();
-// ----------------------- 以下是计算属性 watch监听 ------------------------
 const selectedKeys = computed(() => {
   return [currentRoute.name];
 });
@@ -55,15 +53,10 @@ const selectedKeys = computed(() => {
 const openKeys = computed(() => {
   return (currentRoute.meta.parentMenuList || []).map((e) => e.name);
 });
-// ----------------------- 以下是生命周期 ---------------------------------
-
-// ----------------------- 以下是方法 ------------------------------------
 // 页面跳转
 function turnToPage(route) {
   router.push({ name: route.menuId.toString() });
 }
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style scoped lang="less">
 .resursion-container {

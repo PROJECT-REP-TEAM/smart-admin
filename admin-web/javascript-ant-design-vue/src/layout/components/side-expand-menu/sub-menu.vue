@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-14
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/sub-menu.vue
@@ -30,21 +30,13 @@
   </a-sub-menu>
 </template>
 <script setup>
-// ----------------------- 以下是字段定义 emits props ---------------------
 let props = defineProps({
   menuInfo: Array,
 });
 const emits = defineEmits(["turnToPage"]);
-// ----------------------- 以下是计算属性 watch监听 ------------------------
-
-// ----------------------- 以下是生命周期 ---------------------------------
-
-// ----------------------- 以下是方法 ------------------------------------
 const turnToPage = (route) => {
   emits("turnToPage", route);
 };
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style scoped lang="less">
 ::v-deep(.ant-menu-item-selected) {

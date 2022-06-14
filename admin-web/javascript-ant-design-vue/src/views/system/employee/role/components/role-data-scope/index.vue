@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-30 09:14:55
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-data-scope/index.vue
@@ -50,7 +50,7 @@
 </template>
 <script setup>
 import { message } from "ant-design-vue";
-import { inject, ref, Ref, watch } from "vue";
+import { inject, ref, watch } from "vue";
 import { roleApi } from "/@/api/system/role/role-api";
 
 // ----------------------- 以下是字段定义 emits props ---------------------

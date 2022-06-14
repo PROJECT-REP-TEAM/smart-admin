@@ -2,7 +2,7 @@
  * @Description: App
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
 -->
 <template>
@@ -21,15 +21,32 @@ import { loginApi } from "./api/system/login/login";
 import { useUserStore } from "./store/modules/system/user";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import { useSpinStore } from "/@/store/modules/system/spin";
+import { buildRoutes } from "/@/router/index";
+import { useRouter, useRoute } from "vue-router";
+const route = useRoute();
 
 let spinStore = useSpinStore();
 const spinning = computed(() => spinStore.loading);
 
 async function getLoginInfo() {
-  let token = useUserStore().getToken;
-  if (!token) return;
-  const res = await loginApi.getLogin();
-  useUserStore().setUserMenu(res.data);
+  spinStore.show();
+  try {
+    let token = useUserStore().getToken;
+    if (!token) return;
+    //构建系统的路由
+    buildRoutes();
+    //获取登录用户信息
+    const res = await loginApi.getLoginInfo();
+    //更新用户信息到pinia
+    useUserStore().setUserLoginInfo(res.data);
+    //构建系统的路由
+    // buildRoutes();
+
+    // useRouter().go(1);
+  } catch (e) {
+  } finally {
+    spinStore.hide();
+  }
 }
 
 // 更新屏幕宽度，以判断是否为isMobile模式，进行适配
@@ -39,7 +56,7 @@ function triggerReSize() {
 }
 onMounted(() => {
   //获取登录信息
-  getLoginInfo();
+  // getLoginInfo();
   //更新屏幕宽度
   triggerReSize();
 });

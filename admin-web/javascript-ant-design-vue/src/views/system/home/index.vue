@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/home/index.vue
@@ -156,7 +156,7 @@
 </template>
 <script setup>
 import { computed, reactive, ref } from "vue";
-import { LocationQueryRaw, useRouter } from "vue-router";
+import { useRouter } from "vue-router";
 import Gauge from "./components/gauge.vue";
 // ----------------------- 以下是字段定义 emits props ---------------------
 let router = useRouter();

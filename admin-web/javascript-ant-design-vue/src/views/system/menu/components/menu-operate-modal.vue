@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-11 14:11:28
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description: 菜单新增编辑抽屉
  * @FilePath: /smart-admin/src/views/system/menu/components/menu-operate-modal.vue
@@ -156,7 +156,7 @@
   </a-drawer>
 </template>
 <script setup>
-import { ref, reactive, watch, defineEmits } from "vue";
+import { ref, reactive, watch } from "vue";
 import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
 import { message } from "ant-design-vue";
 import { menuApi } from "/@/api/system/menu/menu-api";

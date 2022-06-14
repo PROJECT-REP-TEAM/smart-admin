@@ -10,6 +10,7 @@
         <a-tabs
           :tab-position="mode"
           v-model:activeKey="selectedKey"
+          size="small"
           @tabClick="selectTab"
         >
           <a-tab-pane v-for="item in tagNav" :key="item.menuName">
@@ -204,32 +205,58 @@ export default defineComponent({
 
   /**  覆盖 ant design vue的 tabs 样式，变小一点 **/
 
-  .ant-tabs-line {
-    ::v-deep(.ant-tabs-bar) {
-      margin-bottom: 0px;
-      border-bottom: 0;
-    }
+  :deep(.ant-tabs-nav) {
+    margin: 0;
+    padding: 0 0 2px 0;
+  }
 
-    ::v-deep(.ant-tabs-nav .ant-tabs-tab) {
-      padding: 5px 18px;
-      margin: 0px 5px;
-    }
+  :deep(.ant-tabs-nav::before) {
+    border-bottom: 1px solid #ffffff;
+  }
 
-    ::v-deep(.ant-tabs-nav .ant-tabs-tab:hover) {
-      background-color: #e8f4ff;
+  :deep(.ant-tabs-small > .ant-tabs-nav .ant-tabs-tab) {
+    padding: 5px 8px 3px 10px;
+  }
 
-      .smart-page-tag-close {
-        color: @primary-color;
-      }
-    }
-
-    ::v-deep(.ant-tabs-nav .ant-tabs-tab-active) {
-      background-color: #e8f4ff;
-
-      .smart-page-tag-close {
-        color: @primary-color;
-      }
+  :deep(.ant-tabs-tab-active) {
+    background-color: #e8f4ff;
+    .smart-page-tag-close {
+      color: @primary-color;
     }
   }
+  :deep(.ant-tabs-nav .ant-tabs-tab:hover) {
+    background-color: #e8f4ff;
+    .smart-page-tag-close {
+      color: @primary-color;
+    }
+  }
+
+  // .ant-tabs-line {
+  //   ::v-deep(.ant-tabs-bar) {
+  //     margin-bottom: 0px;
+  //     border-bottom: 0;
+  //   }
+
+  //   ::v-deep(.ant-tabs-nav .ant-tabs-tab) {
+  //     padding: 5px 18px;
+  //     margin: 0px 5px;
+  //   }
+
+  //   ::v-deep(.ant-tabs-nav .ant-tabs-tab:hover) {
+  //     background-color: #e8f4ff;
+
+  //     .smart-page-tag-close {
+  //       color: @primary-color;
+  //     }
+  //   }
+
+  //   ::v-deep(.ant-tabs-nav .ant-tabs-tab-active) {
+  //     background-color: #e8f4ff;
+
+  //     .smart-page-tag-close {
+  //       color: @primary-color;
+  //     }
+  //   }
+  // }
 }
 </style>

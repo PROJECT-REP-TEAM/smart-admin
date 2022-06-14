@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-24 16:35:45
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/home/components/gauge.vue
@@ -16,9 +16,10 @@ import { CanvasRenderer } from "echarts/renderers";
 import { onMounted, watch } from "@vue/runtime-core";
 import { reactive } from "vue";
 // ----------------------- 以下是字段定义 emits props ---------------------
-const props = withDefaults({
+
+const props = defineProps({
   percent: {
-    type: Numner,
+    type: Number,
   },
   percent: 0,
 });

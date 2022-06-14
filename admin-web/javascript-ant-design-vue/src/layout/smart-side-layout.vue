@@ -2,21 +2,12 @@
   <a-layout :class="['admin-layout', 'smart-scroll']" style="min-height: 100%">
     <!-- 侧边菜单 side-menu -->
     <a-layout-sider
-      :theme="theme"
+      theme="dark"
       :class="['side-menu', 'smart-scroll']"
-      width="256px"
       :collapsed="collapsed"
-      :trigger="null"
     >
-      <div :style="`height: ${windowHeight}px;overflow-y:scroll`" class="smart-scroll">
-        <!-- 左侧菜单 -->
-        <side-menu
-          :theme="theme"
-          :menuData="sideMenuData"
-          :collapsed="collapsed"
-          :collapsible="true"
-        />
-      </div>
+      <!-- 左侧菜单 -->
+      <side-menu :collapsed="collapsed" />
     </a-layout-sider>
 
     <!--
@@ -31,9 +22,9 @@
       id="smartAdminMain"
     >
       <!-- 顶部头部信息 -->
-      <a-layout-header class="smart-layout-header">
-        <a-row justify="space-between" class="smart-layout-header-user">
-          <a-col class="smart-layout-header-left">
+      <a-layout-header class="layout-header">
+        <a-row justify="space-between" class="layout-header-user">
+          <a-col class="layout-header-left">
             <span class="collapsed-button">
               <menu-unfold-outlined
                 v-if="collapsed"
@@ -51,11 +42,11 @@
             </span>
           </a-col>
           <!---用戶操作区域-->
-          <a-col class="smart-layout-header-right">
-            <smart-header-user-space />
+          <a-col class="layout-header-right">
+            <header-user-space />
           </a-col>
         </a-row>
-        <smart-page-tag />
+        <page-tag />
       </a-layout-header>
 
       <!--中间内容-->
@@ -64,7 +55,7 @@
       </a-layout-content>
 
       <!-- footer 版权公司信息 -->
-      <a-layout-footer class="smart-layout-footer"> <smart-footer /></a-layout-footer>
+      <a-layout-footer class="layout-footer"> <smart-footer /></a-layout-footer>
 
       <a-back-top :target="backTopTarget" :visibilityHeight="80" />
     </a-layout>
@@ -72,49 +63,46 @@
 </template>
 
 <script setup>
+import SideMenu from "./components/side-menu/index.vue";
 import SmartFooter from "./components/smart-footer/index.vue";
-import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";
-import SideMenu from "/@/components/side-menu/index.vue";
-import { computed, onMounted, ref } from "vue";
-import { useAppConfigStore } from "/@/store/modules/system/app-config";
-import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons-vue";
-import MenuLocationBreadcrumb from "/@/components/menu-location-breadcrumb/index.vue";
-import SmartPageTag from "./components/smart-page-tag/index.vue";
+import HeaderUserSpace from "./components/header-user-space/index.vue";
+import { ref, onMounted } from "vue";
+import MenuLocationBreadcrumb from "./components/menu-location-breadcrumb/index.vue";
+import PageTag from "./components/page-tag/index.vue";
 import watermark from "/@/lib/smart-wartermark";
 import { useUserStore } from "/@/store/modules/system/user";
 
+// ----------------------- 以下是字段定义 emits props ---------------------
 const windowHeight = window.innerHeight;
 const collapsed = ref(false);
 
-let appConfigStore = useAppConfigStore();
-
-const sideMenuData = new Array();
-
+// ----------------------- 以下是计算属性 watch监听 ------------------------
+// ----------------------- 以下是生命周期 ---------------------------------
+onMounted(() => {
+  watermark.set("smartAdminLayoutContent", useUserStore().actualName);
+});
+// ----------------------- 以下是方法 ------------------------------------
 const backTopTarget = () => {
   return document.getElementById("smartAdminMain");
 };
-
-const theme = computed(() => appConfigStore.theme);
-
-onMounted(() => {
-  watermark.set("smartAdminLayoutContent", useUserStore().userInfo.actualName);
-});
+// ----------------------- 以下是暴露的方法内容 ----------------------------
+defineExpose({});
 </script>
 
 <style lang="less" scoped>
-.smart-layout-header {
+.layout-header {
   background: #fff;
   padding: 0;
   height: @header-height;
   z-index: 999;
 }
 
-.smart-layout-header-user {
+.layout-header-user {
   height: @header-user-height;
   border-bottom: 1px solid #f6f6f6;
 }
 
-.smart-layout-header-left {
+.layout-header-left {
   display: flex;
   height: @header-user-height;
 
@@ -129,13 +117,21 @@ onMounted(() => {
   }
 }
 
-.smart-layout-header-right {
+.layout-header-right {
   display: flex;
   height: @header-user-height;
 }
 
+.layout-container {
+  height: calc(100vh - @header-height);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
 .admin-layout {
   .side-menu {
+    height: 100vh;
+    overflow: scroll;
     &.fixed-side {
       position: fixed;
       height: 100vh;
@@ -158,8 +154,7 @@ onMounted(() => {
   }
 
   .admin-layout-main {
-    overflow-x: hidden;
-    overflow-y: scroll;
+    overflow: hidden;
   }
 
   .admin-layout-content {
@@ -169,7 +164,7 @@ onMounted(() => {
   }
 }
 
-.smart-layout-footer {
+.layout-footer {
   position: relative;
 }
 </style>

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-14
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/components/menu-location-breadcrumb/index.vue
@@ -17,9 +17,14 @@
 <script setup>
 import { computed } from "@vue/reactivity";
 import { useRoute } from "vue-router";
+import { useUserStore } from "/@/store/modules/system/user";
 let currentRoute = useRoute();
 const parentMenuList = computed(() => {
-  return currentRoute.meta.parentMenuList || [];
+  let currentName = currentRoute.name;
+  if (!currentName || typeof currentName !== "string") {
+    return [];
+  }
+  let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
+  return menuParentIdListMap.get(currentName) || [];
 });
 </script>
-<style scoped lang="less"></style>

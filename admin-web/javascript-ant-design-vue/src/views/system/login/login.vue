@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-12-03 23:22:28
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-11
  * @LastEditors: zhuoda
  * @Description:
 
@@ -48,27 +48,14 @@
           <a-input v-model:value.trim="loginForm.loginName" placeholder="请输入用户名" />
         </a-form-item>
         <a-form-item name="password">
-          <a-input
+          <a-input-password
             v-model:value="loginForm.password"
+            autocomplete="on"
             :type="showPassword ? 'text' : 'password'"
             placeholder="请输入密码"
           />
-          <div class="eye-box">
-            <img
-              class="eye-icon"
-              v-show="!showPassword"
-              @click="onShowPassword"
-              :src="eyesClose"
-            />
-            <img
-              class="eye-icon"
-              v-show="showPassword"
-              @click="onShowPassword"
-              :src="eyesOpen"
-            />
-          </div>
         </a-form-item>
-        <a-form-item name="loginName">
+        <a-form-item name="captchaCode">
           <a-input
             class="captcha-input"
             v-model:value.trim="loginForm.captchaCode"
@@ -120,6 +107,8 @@ import weiboLogin from "/@/assets/images/login/weibo-icon.png";
 import googleLogin from "/@/assets/images/login/google-icon.png";
 import aliLogin from "/@/assets/images/login/ali-icon.png";
 
+import { buildRoutes } from "/@/router/index";
+
 //--------------------- 登录表单 ---------------------------------
 
 const loginForm = reactive({
@@ -158,12 +147,19 @@ async function handleFinish() {
     try {
       SmartLoading.show();
       const res = await loginApi.login(loginForm);
-      useUserStore().setUserSession(res.data);
       saveTokenToCookie(res.data.token ? res.data.token : "");
       message.success("登录成功");
-      await router.push("/home");
+      //更新用户信息到pinia
+      useUserStore().setUserLoginInfo(res.data);
+      //构建系统的路由
+      buildRoutes();
+      router.push("/home");
     } catch (e) {
-      getCaptcha();
+      if (e.data && e.data.code === 30001) {
+        loginForm.captchaCode = "";
+        getCaptcha();
+      }
+      console.log(e);
     } finally {
       SmartLoading.hide();
     }
