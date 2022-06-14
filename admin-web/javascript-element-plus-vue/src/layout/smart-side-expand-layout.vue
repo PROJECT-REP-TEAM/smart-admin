@@ -47,20 +47,19 @@
         <smart-footer />
       </el-footer>
 
-      <el-backtop :visibility-height="80" />
+      <el-backtop :visibility-height='80' />
     </el-container>
   </el-container>
 </template>
 <script setup>
-  import ExpandSideMenu from '/@/components/side-expand/side-menu/index.vue';
-  import SmartFooter from "./components/smart-footer/index.vue";
-  import SmartHeaderUserSpace from "./components/smart-header-user-space/index.vue";
-  import { onMounted, ref } from 'vue';
-  import MenuLocationBreadcrumb from "/@/components/menu-location-breadcrumb/index.vue";
-  import SmartPageTag from "./components/smart-page-tag/index.vue";
+  import ExpandSideMenu from './components/side-expand/index.vue';
+  import SmartFooter from './components/smart-footer/index.vue';
+  import SmartHeaderUserSpace from './components/header-user-space/index.vue';
+  import { onMounted, ref, computed } from 'vue';
+  import MenuLocationBreadcrumb from './components/menu-location-breadcrumb/index.vue';
+  import SmartPageTag from './components/smart-page-tag/index.vue';
   import watermark from '/@/lib/smart-wartermark';
   import { useUserStore } from '/@/store/modules/user';
-  import { computed } from '@vue/reactivity';
   // ----------------------- 以下是字段定义 emits props ---------------------
   const windowHeight = window.innerHeight;
   const collapsed = ref(false);
