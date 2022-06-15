@@ -15,7 +15,7 @@ export const roleApi = {
    * @return {*}
    */
   queryAll: ()=> {
-    return getRequest('/admin/role/getAll');
+    return getRequest('/role/getAll');
   },
   /**
    * @description:添加角色
@@ -23,7 +23,7 @@ export const roleApi = {
    * @return {*}
    */
   addRole: (data) => {
-    return postRequest('/admin/role/add', data);
+    return postRequest('/role/add', data);
   },
   /**
    * @description:更新角色
@@ -31,7 +31,7 @@ export const roleApi = {
    * @return {*}
    */
   updateRole: (data) => {
-    return postRequest('/admin/role/update', data);
+    return postRequest('/role/update', data);
   },
   /**
    * @description: 删除角色
@@ -39,7 +39,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteRole: (roleId) => {
-    return getRequest(`/admin/role/delete/${roleId}`);
+    return getRequest(`/role/delete/${roleId}`);
   },
   /**
    * @description: 批量设置某角色数据范围
@@ -47,7 +47,7 @@ export const roleApi = {
    * @return {*}
    */
   updateDataScope: (data) => {
-    return postRequest('/admin/role/dataScope/updateRoleDataScopeList', data);
+    return postRequest('/role/dataScope/updateRoleDataScopeList', data);
   },
   /**
    * @description: 获取当前系统所配置的所有数据范围
@@ -55,7 +55,7 @@ export const roleApi = {
    * @return {*}
    */
   getDataScopeList: () => {
-    return getRequest('/admin/dataScope/list');
+    return getRequest('/dataScope/list');
   },
   /**
    * @description: 获取某角色所设置的数据范围
@@ -63,7 +63,7 @@ export const roleApi = {
    * @return {*}
    */
   getDataScopeByRoleId: (roleId) => {
-    return getRequest(`/admin/role/dataScope/getRoleDataScopeList/${roleId}`);
+    return getRequest(`/role/dataScope/getRoleDataScopeList/${roleId}`);
   },
   /**
    * @description: 获取角色成员-员工列表
@@ -71,7 +71,7 @@ export const roleApi = {
    * @return {*}
    */
   queryRoleEmployee: (params) => {
-    return postRequest('/admin/role/employee/queryEmployee', params);
+    return postRequest('/role/employee/queryEmployee', params);
   },
   /**
    * @description: 从角色成员列表中移除员工
@@ -80,7 +80,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteEmployeeRole: (employeeId, roleId) => {
-    return getRequest('/admin/role/employee/removeEmployee?employeeId=' + employeeId + '&roleId=' + roleId);
+    return getRequest('/role/employee/removeEmployee?employeeId=' + employeeId + '&roleId=' + roleId);
   },
   /**
    * @description: 从角色成员列表中批量移除员工
@@ -88,7 +88,7 @@ export const roleApi = {
    * @return {*}
    */
   deleteEmployeeList: (data) => {
-    return postRequest('/admin/role/employee/batchRemoveRoleEmployee', data);
+    return postRequest('/role/employee/batchRemoveRoleEmployee', data);
   },
   /**
    * @description: 根据角色id获取角色员工列表(无分页)
@@ -96,7 +96,7 @@ export const roleApi = {
    * @return {*}
    */
   getRoleAllEmployee: (roleId) => {
-    return getRequest(`/admin/role/employee/getAllEmployeeByRoleId/${roleId}`);
+    return getRequest(`/role/employee/getAllEmployeeByRoleId/${roleId}`);
   },
   /**
    * @description: 角色成员列表中批量添加员工
@@ -104,6 +104,6 @@ export const roleApi = {
    * @return {*}
    */
   addRoleEmployeeList: (data) => {
-    return postRequest('/admin/role/employee/batchAddRoleEmployee', data);
+    return postRequest('/role/employee/batchAddRoleEmployee', data);
   },
 };

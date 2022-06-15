@@ -15,7 +15,7 @@ export const roleMenuApi = {
    * @return {*}
    */
   getRoleSelectedMenu: (roleId) => {
-    return getRequest(`/admin/role/menu/getRoleSelectedMenu/${roleId}`);
+    return getRequest(`/role/menu/getRoleSelectedMenu/${roleId}`);
   },
   /**
    * @description: 更新角色权限
@@ -23,6 +23,6 @@ export const roleMenuApi = {
    * @return {*}
    */
   updateRoleMenu: (data) => {
-    return postRequest('/admin/role/menu/updateRoleMenu', data);
+    return postRequest('/role/menu/updateRoleMenu', data);
   },
 };

@@ -51,9 +51,10 @@ function initVue() {
   app.mount('#app');
 }
 
-initVue();
 //不需要获取用户信息、用户菜单、用户菜单动态路由，直接初始化vue即可
 let token = getTokenFromCookie();
-if (token) {
+if (!token) {
+  initVue();
+} else {
   getLoginInfo();
 }
