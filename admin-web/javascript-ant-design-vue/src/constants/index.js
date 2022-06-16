@@ -4,19 +4,19 @@
  * @Author: zhuoda
  * @Date: 2021-08-11 18:14:13
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-16
  */
-import menu from './system/menu/menu-enum';
-import goods from './business/goods';
-import category from './business/category';
-import { LOGIN_DEVICE_ENUM } from './system/login-device';
-import { FLAG_NUMBER_ENUM, GenderEnum } from './common';
-import file from './business/file';
+import menu from './system/menu-const';
+import goods from './business/goods-const';
+import category from './business/category-const';
+import { LOGIN_DEVICE_ENUM } from './system/login-device-const';
+import { FLAG_NUMBER_ENUM, GENDER_ENUM } from './common-const';
+import file from './business/file-const';
 
 export default {
   FLAG_NUMBER_ENUM,
   LOGIN_DEVICE_ENUM,
-  GenderEnum,
+  GENDER_ENUM,
   ...menu,
   ...goods,
   ...category,

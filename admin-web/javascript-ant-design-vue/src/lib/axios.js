@@ -4,7 +4,7 @@ import { message } from 'ant-design-vue';
 import { clearAllCoolies } from '/@/utils/cookie-util';
 import { router } from '/@/router/index';
 import { getTokenFromCookie } from '/@/utils/cookie-util';
-import { PAGE_PATH_LOGIN } from '../constants/common';
+import { PAGE_PATH_LOGIN } from '/@/constants/common-const';
 import { localClear } from '/@/utils/local-util';
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 

@@ -2,7 +2,7 @@
  * @Description: 主方法
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-15
  * @LastEditors: zhuoda
  */
 import { createApp } from 'vue';
@@ -12,16 +12,15 @@ import Antd from 'ant-design-vue';
 import '/@/theme/index.less';
 import constantsInfo from '/@/constants/index';
 import * as antIcons from '@ant-design/icons-vue';
+import { privilegeDirective } from '/@/directives/privilege';
 import smartEnumPlugin from '/@/plugins/smart-enums-plugin';
+import privilegePlugin from '/@/plugins/privilege-plugin';
 import lodash from 'lodash';
 import moment from 'moment';
 import 'moment/dist/locale/zh-cn';
 import App from './App.vue';
-import { useSpinStore } from "/@/store/modules/system/spin";
 import { useUserStore } from "/@/store/modules/system/user";
-import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import { buildRoutes } from "/@/router/index";
-import { useRouter, useRoute } from "vue-router";
 import { loginApi } from "/@/api/system/login/login";
 import { getTokenFromCookie } from '/@/utils/cookie-util';
 
@@ -44,8 +43,13 @@ async function getLoginInfo () {
 
 function initVue () {
   let vueApp = createApp(App);
-  let app = vueApp.use(router).use(store).use(Antd).use(smartEnumPlugin, constantsInfo);
-
+  let app = vueApp.use(router).use(store).use(Antd).use(smartEnumPlugin, constantsInfo).use(privilegePlugin);;
+  //注入权限
+  app.directive('privilege', {
+    mounted (el, binding) {
+      privilegeDirective(el, binding);
+    },
+  });
   // 注册图标组件
   Object.keys(antIcons).forEach((key) => {
     app.component(key, antIcons[key]);

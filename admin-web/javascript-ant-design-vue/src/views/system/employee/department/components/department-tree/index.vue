@@ -1,80 +1,92 @@
 <!--
- * @Author: zhuoda
+ * @Author: LiHaiFan
  * @Date: 2021-08-12 17:34:00
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
- * @Description:
- * @FilePath: /smart-admin/src/views/system/employee/department/components/department-tree/index.vue
+ * @Description: 
+ * @FilePath: /xiaomifeng-crm-manage-web/src/views/system/employee/department/components/department-tree/index.vue
 -->
 <template>
   <a-card class="tree-container">
-    <a-input v-model:value="keywords" placeholder="请输入部门名称" />
+    <a-row>
+      <a-input v-model:value.trim="keywords" placeholder="请输入部门名称" />
+    </a-row>
+    <a-row class="sort-flag-row" v-if="props.showMenu">
+      显示排序字段
+      <template v-if="showSortFlag"> （值越大越靠前） </template>
+      ：<a-switch v-model:checked="showSortFlag" />
+    </a-row>
     <a-tree
-      v-if="!_.isEmpty(treeData)"
+      v-if="!_.isEmpty(departmentTreeData)"
       v-model:selectedKeys="selectedKeys"
       v-model:checkedKeys="checkedKeys"
       class="tree"
-      :treeData="treeData"
-      :replaceFields="{ title: 'name', key: 'id', value: 'id' }"
+      :treeData="departmentTreeData"
+      :fieldNames="{ title: 'name', key: 'departmentId', value: 'departmentId' }"
       style="width: 100%; overflow-x: auto"
       :style="[!height ? '' : { height: `${height}px`, overflowY: 'auto' }]"
       :showLine="!props.checkable"
       :checkable="props.checkable"
       :checkStrictly="props.checkStrictly"
       :selectable="!props.checkable"
-      defaultExpandAll
+      :defaultExpandAll="true"
       @select="treeSelectChange"
     >
       <template #title="item">
-        <a-popover placement="right">
+        <a-popover placement="right" v-if="props.showMenu">
           <template #content>
             <div style="display: flex; flex-direction: column">
-              <a-button type="text" @click="addDepartment(item.dataRef)"
+              <a-button
+                type="text"
+                @click="addDepartment(item.dataRef)"
+                v-privilege="'department:add'"
                 >添加下级</a-button
               >
-              <a-button type="text" @click="updateDepartment(item.dataRef)"
+              <a-button
+                type="text"
+                @click="updateDepartment(item.dataRef)"
+                v-privilege="'department:edit'"
                 >修改</a-button
               >
               <a-button
                 type="text"
-                v-if="item.id != topDeptId"
-                @click="deleteDepartment(item.id)"
+                v-if="item.departmentId != topDepartmentId"
+                @click="deleteDepartment(item.departmentId)"
+                v-privilege="'department:delete'"
                 >删除</a-button
               >
             </div>
           </template>
           {{ item.name }}
+          <!--显示排序字段-->
+          <template v-if="showSortFlag">
+            <span class="sort-span">({{ item.sort }})</span>
+          </template>
         </a-popover>
+        <div v-else>{{ item.name }}</div>
       </template>
     </a-tree>
+    <div class="no-data" v-else>暂无结果</div>
     <!-- 添加编辑部门弹窗 -->
-    <OperateDepartmentModal ref="operateDepartmentModal" @reload="reload" />
+    <DepartmentFormModal ref="departmentFormModal" @refresh="refresh" />
   </a-card>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref } from "@vue/reactivity";
 import { onUnmounted, watch } from "@vue/runtime-core";
 import _ from "lodash";
 import { departmentApi } from "/@/api/system/department/department-api";
-import emitter from "/@/views/system/employee/department/department-mitt";
-import OperateDepartmentModal from "../operate-department-modal/index.vue";
+import { DepartmentTreeVo } from "/@/api/system/department/model/department-tree-vo";
+import DepartmentFormModal from "../department-form-modal/index.vue";
+import departmentEmitter from "/@/views/system/employee/department/department-mitt";
 import { Modal } from "ant-design-vue";
 import { createVNode, onMounted } from "vue";
 import { ExclamationCircleOutlined } from "@ant-design/icons-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
-// ----------------------- 以下是字段定义 emits props ---------------------
-const operateDepartmentModal = ref();
-const keywords = ref("");
-const selectedKeys = ref([]);
-// const expandedKeys = ref<number[]>([]);
-const checkedKeys = ref([]);
-const departmentList = ref([]);
-const treeData = ref([]);
-const idInfoMap = ref(new Map());
-const topDeptId = ref();
-const selectDeptChild = ref([]);
-const breadcrumb = ref([]);
-const operateId = ref();
+
+const DEPARTMENT_PARENT_ID = 0;
+
+// ----------------------- 组件参数 ---------------------
 
 const props = defineProps({
   // 是否可以选中
@@ -87,79 +99,132 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
-  // 是否内部初始化数据
-  init: {
+  // 树高度 超出出滚动条
+  height: Number,
+  // 显示菜单
+  showMenu: {
     type: Boolean,
     default: true,
   },
-  // 树高度 超出出滚动条
-  height: Number,
 });
 
-// ----------------------- 以下是计算属性 watch监听 ------------------------
-emitter.on("selectTree", selectTree);
+// ----------------------- 部门树的展示 ---------------------
+const topDepartmentId = ref();
+// 所有部门列表
+const departmentList = ref([]);
+// 部门树形数据
+const departmentTreeData = ref([]);
+// 存放部门id和部门，用于查找
+const idInfoMap = ref(new Map());
+// 是否显示排序字段
+const showSortFlag = ref(false);
+
+onMounted(() => {
+  queryDepartmentTree();
+});
+
+// 刷新
+async function refresh() {
+  await queryDepartmentTree();
+  if (currentSelectedDpartmentId.value) {
+    selectTree(currentSelectedDpartmentId.value);
+  }
+}
+
+// 查询部门列表并构建 部门树
+async function queryDepartmentTree() {
+  let res = await departmentApi.queryAllDepartment();
+  let data = res.data;
+  departmentList.value = data;
+  departmentTreeData.value = buildDepartmentTree(data, DEPARTMENT_PARENT_ID);
+
+  data.forEach((e) => {
+    idInfoMap.value.set(e.departmentId, e);
+  });
+
+  // 默认显示 最顶级ID为列表中返回的第一条数据的ID
+  if (!_.isEmpty(departmentTreeData.value) && departmentTreeData.value.length > 0) {
+    topDepartmentId.value = departmentTreeData.value[0].departmentId;
+  }
+
+  selectTree(departmentTreeData.value[0].departmentId);
+}
+
+// 构建部门树
+function buildDepartmentTree(data, parentId) {
+  let children = data.filter((e) => e.parentId === parentId) || [];
+  children.forEach((e) => {
+    e.children = buildDepartmentTree(data, e.departmentId);
+  });
+  updateDepartmentPreIdAndNextId(children);
+  return children;
+}
+
+// 更新树的前置id和后置id
+function updateDepartmentPreIdAndNextId(data) {
+  for (let index = 0; index < data.length; index++) {
+    if (index === 0) {
+      data[index].nextId = data.length > 1 ? data[1].departmentId : undefined;
+      continue;
+    }
+
+    if (index === data.length - 1) {
+      data[index].preId = data[index - 1].departmentId;
+      data[index].nextId = undefined;
+      continue;
+    }
+
+    data[index].preId = data[index - 1].departmentId;
+    data[index].nextId = data[index + 1].departmentId;
+  }
+}
+
+// ----------------------- 树的选中 ---------------------
+const selectedKeys = ref([]);
+const checkedKeys = ref([]);
+const breadcrumb = ref([]);
+const currentSelectedDpartmentId = ref();
+const selectedDepartmentChildren = ref([]);
+
+departmentEmitter.on("selectTree", selectTree);
+
+function selectTree(id) {
+  selectedKeys.value = [id];
+  treeSelectChange(selectedKeys.value);
+}
+
+function treeSelectChange(idList) {
+  if (_.isEmpty(idList)) {
+    breadcrumb.value = [];
+    selectedDepartmentChildren.value = [];
+    return;
+  }
+  let id = idList[0];
+  selectedDepartmentChildren.value = departmentList.value.filter((e) => e.parentId == id);
+  let filterDepartmentList = [];
+  recursionFilterDepartment(filterDepartmentList, id, true);
+  breadcrumb.value = filterDepartmentList.map((e) => e.name);
+}
+
+// -----------------------  筛选 ---------------------
+const keywords = ref("");
 watch(
   () => keywords.value,
   () => {
     onSearch();
   }
 );
-// ----------------------- 以下是生命周期 ---------------------------------
-onMounted(() => {
-  if (props.init) {
-    queryDepartmentTree();
-  }
-});
-onUnmounted(() => {
-  emitter.all.clear();
-});
-// ----------------------- 以下是方法 ------------------------------------
-async function reload() {
-  await queryDepartmentTree();
-  if (operateId.value) {
-    selectTree(operateId.value);
-  }
-}
-async function queryDepartmentTree() {
-  let res = await departmentApi.queryAllDepartment();
-  let data = res.data;
-  departmentList.value = data;
-  // 构建树形结构
-  treeData.value = buildDepartmentTree(data, 0);
-  // 构建id-info集合
-  data.forEach((e) => {
-    idInfoMap.value.set(e.id, e);
-  });
-  if (!_.isEmpty(treeData.value)) {
-    let topData = treeData.value[0];
-    // 默认最顶级ID为列表中返回的第一条数据的ID
-    topDeptId.value = topData.id;
-    // selectedKeys.value = [topData.id];
-    // 默认选中的部门下级为列表中返回的第一条数据的children
-    // selectDeptChild.value = topData.children;
-    // 默认面包屑
-    // breadcrumb.value = [topData.name];
-    // if (_.isEmpty(expandedKeys.value)) {
-    //   expandedKeys.value = [topData.id];
-    // }
-  }
-}
-// 构建部门树
-function buildDepartmentTree(data, parentId) {
-  let treeData = data.filter((e) => e.parentId == parentId) || [];
-  treeData.forEach((e) => {
-    e.children = buildDepartmentTree(data, e.id);
-  });
-  return treeData;
-}
-// 树筛选
+
+// 筛选
 function onSearch() {
   if (!keywords.value) {
-    // 构建树形结构
-    treeData.value = buildDepartmentTree(departmentList.value, 0);
+    departmentTreeData.value = buildDepartmentTree(
+      departmentList.value,
+      DEPARTMENT_PARENT_ID
+    );
     return;
   }
-  let originData = departmentList.value?.concat();
+  let originData = departmentList.value.concat();
   if (!originData) {
     return;
   }
@@ -168,37 +233,19 @@ function onSearch() {
   let filterDepartmentList = [];
   // 循环筛选出的部门 构建部门树
   filterDepartmenet.forEach((e) => {
-    recursionFilterDepartment(filterDepartmentList, e.id, false);
+    recursionFilterDepartment(filterDepartmentList, e.departmentId, false);
   });
-  // 构建树形结构
-  treeData.value = buildDepartmentTree(filterDepartmentList, 0);
+
+  departmentTreeData.value = buildDepartmentTree(
+    filterDepartmentList,
+    DEPARTMENT_PARENT_ID
+  );
 }
-function selectTree(id) {
-  selectedKeys.value = [id];
-  treeSelectChange(selectedKeys.value);
-}
-// 树选中
-function treeSelectChange(idList) {
-  // 初始化
-  breadcrumb.value = [];
-  // 初始选中的部门下级
-  selectDeptChild.value = [];
-  if (_.isEmpty(idList)) {
-    return;
-  }
-  let id = idList[0];
-  // 寻找选择的下级
-  selectDeptChild.value = departmentList.value.filter((e) => e.parentId == id);
-  // 构建面包屑
-  let filterDepartmentList = [];
-  recursionFilterDepartment(filterDepartmentList, id, true);
-  breadcrumb.value = filterDepartmentList.map((e) => e.name);
-  // expandedKeys.value = filterDepartmentList.map((e) => e.id);
-}
+
 // 根据ID递归筛选部门
 function recursionFilterDepartment(resList, id, unshift) {
   let info = idInfoMap.value.get(id);
-  if (!info || resList.some((e) => e.id == id)) {
+  if (!info || resList.some((e) => e.departmentId == id)) {
     return;
   }
   if (unshift) {
@@ -210,20 +257,27 @@ function recursionFilterDepartment(resList, id, unshift) {
     recursionFilterDepartment(resList, info.parentId, unshift);
   }
 }
-// 添加编辑部门
+
+// ----------------------- 表单操作：添加部门/修改部门/删除部门/上下移动 ---------------------
+const departmentFormModal = ref();
+
+// 添加
 function addDepartment(e) {
   let data = {
-    id: 0,
+    departmentId: 0,
     name: "",
-    parentId: e.id,
+    parentId: e.departmentId,
   };
-  operateId.value = e.id;
-  operateDepartmentModal.value.showModal(data);
+  currentSelectedDpartmentId.value = e.departmentId;
+  departmentFormModal.value.showModal(data);
 }
+// 编辑
 function updateDepartment(e) {
-  operateId.value = e.id;
-  operateDepartmentModal.value.showModal(e);
+  currentSelectedDpartmentId.value = e.departmentId;
+  departmentFormModal.value.showModal(e);
 }
+
+// 删除
 function deleteDepartment(id) {
   Modal.confirm({
     title: "提醒",
@@ -239,7 +293,7 @@ function deleteDepartment(id) {
         if (!_.isEmpty(selectedKeys.value)) {
           selectedKey = selectedKeys.value[0];
           if (selectedKey == id) {
-            let selectInfo = departmentList.value.find((e) => e.id == id);
+            let selectInfo = departmentList.value.find((e) => e.departmentId == id);
             if (selectInfo && selectInfo.parentId) {
               selectedKey = selectInfo.parentId;
             }
@@ -261,20 +315,41 @@ function deleteDepartment(id) {
     onCancel() {},
   });
 }
+
+onUnmounted(() => {
+  departmentEmitter.all.clear();
+});
+
 // ----------------------- 以下是暴露的方法内容 ----------------------------
 defineExpose({
   queryDepartmentTree,
-  selectDeptChild,
+  selectedDepartmentChildren,
   breadcrumb,
   selectedKeys,
   checkedKeys,
+  keywords,
 });
 </script>
 <style scoped lang="less">
 .tree-container {
   height: 100%;
   .tree {
+    height: 618px;
     margin-top: 10px;
+    overflow-x: hidden;
+  }
+
+  .sort-flag-row {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .sort-span {
+    margin-left: 5px;
+    color: @success-color;
+  }
+  .no-data {
+    margin: 10px;
   }
 }
 </style>

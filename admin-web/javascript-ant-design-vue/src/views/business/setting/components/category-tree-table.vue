@@ -41,7 +41,7 @@ import { Modal, message } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
 import CategoryOperateModal from "./category-operate-modal.vue";
 import { categoryApi } from "/@/api/business/category/category-api";
-import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category";
+import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category-const";
 
 const columnNameList = [
   {

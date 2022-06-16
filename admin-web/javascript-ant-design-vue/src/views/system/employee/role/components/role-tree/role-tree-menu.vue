@@ -35,7 +35,7 @@
   </li>
 </template>
 <script setup>
-import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
+import { MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
 import { useRoleStore } from "/@/store/modules/system/role";
 import RoleTreePoint from "./role-tree-point.vue";
 // ----------------------- 以下是字段定义 emits props ---------------------

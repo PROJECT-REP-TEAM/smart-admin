@@ -1,52 +1,51 @@
 <!--
- * @Author: zhuoda
- * @Date: 2021-08-17 11:03:34
- * @LastEditTime: 2022-06-02
+ * @Author: LiHaiFan
+ * @Date: 2021-08-17 21:03:34
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
- * @Description:
- * @FilePath: /smart-admin/src/views/system/employee/department/components/update-employee-department-modal/index.vue
+ * @Description: 
 -->
 <template>
-  <a-modal v-model:visible="visible" title="调整部门" :footer="null">
-    <DepartmentTree ref="departmentTree" :init="false" :height="400" />
+  <a-modal v-model:visible="visible" title="调整部门" :footer="null" destroyOnClose>
+    <DepartmentTree ref="departmentTree" :height="400" :showMenu="false" />
     <div class="footer">
       <a-button style="margin-right: 8px" @click="closeModal">取消</a-button>
       <a-button type="primary" @click="handleOk">提交</a-button>
     </div>
   </a-modal>
 </template>
-<script setup>
+<script setup lang="ts">
 import { message } from "ant-design-vue";
 import _ from "lodash";
-import { nextTick, ref } from "vue";
+import { ref } from "vue";
 import DepartmentTree from "../department-tree/index.vue";
 import { employeeApi } from "/@/api/system/employee/employee-api";
 import { useSpinStore } from "/@/store/modules/system/spin";
+
 // ----------------------- 以下是字段定义 emits props ---------------------
-// 子组件
+
+const emit = defineEmits<{
+  (e: "refresh"): void;
+}>();
+
+// ----------------------- 显示/隐藏 ------------------------
+
 const departmentTree = ref();
-// emit
-const emit = defineEmits("reloadList");
-const employeeIdList = ref([]);
 const visible = ref(false);
-// ----------------------- 以下是计算属性 watch监听 ------------------------
+const employeeIdList = ref<number[]>([]);
 
-// ----------------------- 以下是生命周期 ---------------------------------
-
-// ----------------------- 以下是方法 ------------------------------------
-async function showModal(selectEmployeeId) {
+//显示
+async function showModal(selectEmployeeId: number[]) {
   employeeIdList.value = selectEmployeeId;
   visible.value = true;
-  nextTick(() => {
-    // 打开窗口时候初始化数据
-    departmentTree.value.selectedKeys = [];
-    departmentTree.value.queryDepartmentTree();
-  });
 }
+
+//隐藏
 function closeModal() {
-  departmentTree.value.selectedKeys = [];
   visible.value = false;
 }
+
+// ----------------------- form操作 ---------------------------------
 async function handleOk() {
   useSpinStore().show();
   try {
@@ -65,7 +64,7 @@ async function handleOk() {
     };
     await employeeApi.batchUpdateDepartmentEmployee(params);
     message.success("操作成功");
-    emit("reloadList");
+    emit("refresh");
     closeModal();
   } catch (error) {
     console.log(error);
@@ -73,6 +72,7 @@ async function handleOk() {
     useSpinStore().hide();
   }
 }
+
 // ----------------------- 以下是暴露的方法内容 ----------------------------
 defineExpose({
   showModal,

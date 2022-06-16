@@ -1,10 +1,9 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-09 08:58:11
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-15
  * @LastEditors: zhuoda
  * @Description:
- * @FilePath: /smart-admin/src/constants/system/local-storage-key.ts
  */
 /**
  * key前缀

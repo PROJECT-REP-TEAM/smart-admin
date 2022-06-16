@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-30 10:52:22
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-15
  * @LastEditors: zhuoda
  * @Description:
 -->
@@ -68,7 +68,7 @@
 import { message, Modal } from "ant-design-vue";
 import { computed, inject, reactive, ref, watch } from "vue";
 import { roleApi } from "/@/api/system/role/role-api";
-import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from "/@/constants/common";
+import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
 import { useSpinStore } from "/@/store/modules/system/spin";
 // import SelectEmployeeModal from "/@/components/select-employee-modal/index.vue";
 import _ from "lodash";

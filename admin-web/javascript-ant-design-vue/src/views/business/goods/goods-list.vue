@@ -59,7 +59,12 @@
           批量导出
         </a-button> -->
 
-        <a-button @click="confirmBatchDelete" type="danger" size="small" :disabled="selectedRowKeyList.length == 0">
+        <a-button
+          @click="confirmBatchDelete"
+          type="danger"
+          size="small"
+          :disabled="selectedRowKeyList.length == 0"
+        >
           <template #icon>
             <DeleteOutlined />
           </template>
@@ -78,7 +83,6 @@
       :pagination="false"
       :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
     >
-
       <template #goodsType="{ text }">
         <span>{{ $smartEnumPlugin.getDescByValue("GOODS_TYPE_ENUM", text) }}</span>
       </template>
@@ -110,16 +114,16 @@
     <GoodsOperateModal ref="operateModal" @reloadList="ajaxQuery" />
   </a-card>
 </template>
-<script  setup>
+<script setup>
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import GoodsOperateModal from "./components/goods-operate-modal.vue";
 import { reactive, ref, onMounted } from "vue";
 import { message, Modal } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
 import { goodsApi } from "/@/api/business/goods/goods-api";
-import { PAGE_SIZE_OPTIONS } from "/@/constants/common";
+import { PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
 import CategoryTree from "/@/components/category-tree-select/index.vue";
-import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category";
+import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category-const";
 
 const columns = reactive([
   {
@@ -164,12 +168,12 @@ const queryFormState = {
   searchWord: "",
   categoryId: undefined,
   shelvesFlag: undefined,
-  goodsType:undefined,
+  goodsType: undefined,
   pageNum: 1,
   pageSize: 10,
 };
 const queryForm = reactive({ ...queryFormState });
-const tableLoading = ref<Boolean>(false);
+const tableLoading = ref < Boolean > false;
 const selectedRowKeyList = ref([]);
 const tableData = ref([]);
 const total = ref(0);
@@ -183,10 +187,10 @@ function resetQuery() {
   Object.assign(queryForm, queryFormState);
   ajaxQuery();
 }
-async function ajaxQuery (){
+async function ajaxQuery() {
   try {
     tableLoading.value = true;
-    let responseModel  = await goodsApi.queryGoodsList(queryForm);
+    let responseModel = await goodsApi.queryGoodsList(queryForm);
     const list = responseModel.data.list;
     total.value = responseModel.data.total;
     tableData.value = list;
@@ -195,7 +199,7 @@ async function ajaxQuery (){
   } finally {
     tableLoading.value = false;
   }
-};
+}
 
 function confirmBatchDelete() {
   Modal.confirm({

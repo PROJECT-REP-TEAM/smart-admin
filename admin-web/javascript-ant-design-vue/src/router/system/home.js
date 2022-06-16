@@ -4,10 +4,10 @@
  * @Author: zhuoda
  * @Date: 2021-08-20 15:06:57
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-15
  */
 import SmartLayout from '/@/layout/smart-layout.vue';
-import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
 
 export const homeRouters = [
   {

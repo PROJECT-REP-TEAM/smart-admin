@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-12 18:23:56
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
 -->
 <template>
@@ -16,8 +16,13 @@
     @change="handleChange"
     @deselect="handleChange"
   >
-    <a-select-option v-for="item in employeeList" :key="item.id" :value="item.id">
-      {{ item.actualName }}（{{ item.departmentName }}）
+    <a-select-option
+      v-for="item in employeeList"
+      :key="item.employeeId"
+      :value="item.employeeId"
+    >
+      {{ item.actualName }}
+      <template v-if="item.departmentName"> （{{ item.departmentName }}） </template>
     </a-select-option>
   </a-select>
 </template>

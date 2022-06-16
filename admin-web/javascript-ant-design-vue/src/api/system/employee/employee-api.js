@@ -2,7 +2,7 @@
  * @Description: 员工api
  * @Author: zhuoda
  * @Date: 2021-08-12 18:00:56
- * @LastEditTime: 2021-08-25 11:24:51
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  */
 
@@ -55,15 +55,14 @@ export const employeeApi = {
    * @return {*}
    */
   batchDeleteEmployee: (employeeIdList) => {
-    return getRequest(`/employee/update/batch/delete?employeeIdList=${employeeIdList}`);
+    return postRequest('/employee/update/batch/delete', employeeIdList);
   },
   /**
    * @description: 批量调整员工部门
-   * @param {EmployeeDepartmentUpdateDto} updateDto
    * @return {*}
    */
-  batchUpdateDepartmentEmployee: (updateDto) => {
-    return postRequest('/employee/update/batch/department', updateDto);
+  batchUpdateDepartmentEmployee: (updateParam) => {
+    return postRequest('/employee/update/batch/department', updateParam);
   },
   /**
    * @description: 重置员工密码
@@ -71,7 +70,7 @@ export const employeeApi = {
    * @return {*}
    */
   resetPassword: (employeeId) => {
-    return getRequest(`employee/update/pwd/reset/${employeeId}`);
+    return getRequest(`employee/update/password/reset/${employeeId}`);
   },
   /**
    * @description: 更新员工禁用状态

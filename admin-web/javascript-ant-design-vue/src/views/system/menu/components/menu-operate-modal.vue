@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-11 14:11:28
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  * @Description: 菜单新增编辑抽屉
  * @FilePath: /smart-admin/src/views/system/menu/components/menu-operate-modal.vue
@@ -17,7 +17,7 @@
   >
     <a-form ref="formRef" :model="form" :rules="rules" layout="vertical">
       <a-form-item label="上级菜单">
-        <MenuTreeSelect :data="menuTreeData" v-model:value="form.parentId" />
+        <MenuTreeSelect v-model:value="form.parentId" />
       </a-form-item>
       <a-form-item label="菜单类型" name="menuType">
         <a-radio-group v-model:value="form.menuType">
@@ -41,7 +41,20 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="菜单图标" name="icon">
-              <a-input v-model:value="form.icon" placeholder="请输入菜单图标" />
+              <IconSelect @updateIcon="selectIcon">
+                <template #iconSelect>
+                  <a-input
+                    v-model:value="form.icon"
+                    placeholder="请输入菜单图标"
+                    style="width: 200px"
+                  />
+                  <component
+                    style="font-size: 20px"
+                    class="smart-margin-left15"
+                    :is="$antIcons[form.icon]"
+                  />
+                </template>
+              </IconSelect>
             </a-form-item>
           </a-col>
         </a-row>
@@ -113,29 +126,19 @@
         <a-row :gutter="16">
           <a-col :span="12">
             <a-form-item label="功能点名称" name="menuName">
-              <a-input v-model:value="form.menuName" placeholder="请输入菜单名称" />
+              <a-input v-model:value="form.menuName" placeholder="请输入功能点名称" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
             <a-form-item label="功能点关联菜单">
-              <MenuTreeSelect :data="menuTreeData" v-model:value="form.contextMenuId" />
+              <MenuTreeSelect v-model:value="form.contextMenuId" />
             </a-form-item>
           </a-col>
         </a-row>
         <a-row :gutter="16">
           <a-col :span="12">
-            <a-form-item label="接口权限" name="permsList">
-              <!-- <a-input v-model:value="form.perms" placeholder="请输入权限字符" /> -->
-              <a-select
-                v-model:value="form.permsList"
-                mode="multiple"
-                style="width: 100%"
-                placeholder="请选择接口权限"
-              >
-                <a-select-option v-for="item in allUrlData" :key="item.name">{{
-                  item.url
-                }}</a-select-option>
-              </a-select>
+            <a-form-item label="前端权限字符" name="webPerms">
+              <a-input v-model:value="form.webPerms" placeholder="请输入前端权限字符" />
             </a-form-item>
           </a-col>
           <a-col :span="12">
@@ -147,17 +150,40 @@
             </a-form-item>
           </a-col>
         </a-row>
+        <a-row :gutter="16">
+          <a-col :span="12">
+            <a-form-item label="接口权限(saAuth模式)" name="apiPermsList">
+              <a-select
+                v-model:value="form.apiPermsList"
+                mode="multiple"
+                style="width: 100%"
+                placeholder="请选择接口权限"
+              >
+                <a-select-option v-for="item in allUrlData" :key="item.name">{{
+                  item.url
+                }}</a-select-option>
+              </a-select>
+            </a-form-item>
+          </a-col>
+        </a-row>
       </template>
     </a-form>
     <div class="footer">
       <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
-      <a-button type="primary" @click="onSubmit">提交</a-button>
+      <a-button style="margin-right: 8px" type="primary" @click="onSubmit(false)"
+        >提交</a-button
+      >
+      <a-button v-if="!form.menuId" type="primary" @click="onSubmit(true)"
+        >提交并添加下一个</a-button
+      >
     </div>
   </a-drawer>
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, reactive, watch } from "vue";
-import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
+import { MENU_DEFAULT_PARENT_ID, MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
+import MenuTreeSelect from "./menu-tree-select.vue";
+import IconSelect from "/@/components/icon-select/index.vue";
 import { message } from "ant-design-vue";
 import { menuApi } from "/@/api/system/menu/menu-api";
 import { useSpinStore } from "/@/store/modules/system/spin";
@@ -165,13 +191,51 @@ import _ from "lodash";
 
 // ----------------------- 以下是字段定义 emits props ------------------------
 // emit
-const emit = defineEmits("reloadList");
+const emit = defineEmits(["reloadList"]);
 
-// 组件ref
-const formRef = ref();
-let menuTreeData = ref([]);
+// ----------------------- 展开、隐藏编辑窗口 ------------------------
+
+// 是否展示抽屉
+const visible = ref(false);
+
+watch(visible, (e) => {
+  if (e) {
+    getAuthUrl();
+  }
+});
+
+//展开编辑窗口
+async function showDrawer(rowData) {
+  Object.assign(form, formDefault);
+  if (rowData && !_.isEmpty(rowData)) {
+    Object.assign(form, rowData);
+    if (form.parentId === MENU_DEFAULT_PARENT_ID) {
+      form.parentId = null;
+    }
+  }
+  visible.value = true;
+}
+
+// 隐藏窗口
+function onClose() {
+  Object.assign(form, formDefault);
+  formRef.value.resetFields();
+  visible.value = false;
+}
+
+// ----------------------- 预加载数据 ------------------------
+
 let allUrlData = ref([]);
 
+// url数据
+async function getAuthUrl() {
+  let res = await menuApi.getAuthUrl();
+  allUrlData.value = res.data;
+}
+
+// ----------------------- form表单相关操作 ------------------------
+
+const formRef = ref();
 const formDefault = {
   menuId: undefined,
   menuName: undefined,
@@ -179,7 +243,8 @@ const formDefault = {
   icon: undefined,
   parentId: undefined,
   path: undefined,
-  permsList: undefined,
+  webPerms: undefined,
+  apiPermsList: undefined,
   sort: undefined,
   visibleFlag: true,
   cacheFlag: false,
@@ -189,6 +254,20 @@ const formDefault = {
   frameFlag: false,
 };
 let form = reactive({ ...formDefault });
+function continueResetForm() {
+  const menuType = form.menuType;
+  const parentId = form.parentId;
+  const webPerms = form.webPerms;
+  const apiPermsList = form.apiPermsList;
+  Object.assign(form, formDefault);
+  formRef.value.resetFields();
+  form.menuType = menuType;
+  form.parentId = parentId;
+  // 移除最后一个：后面的内容
+  if (webPerms && webPerms.lastIndexOf(":")) {
+    form.webPerms = webPerms.substring(0, webPerms.lastIndexOf(":") + 1);
+  }
+}
 const rules = {
   menuType: [{ required: true, message: "菜单类型不能为空" }],
   menuName: [
@@ -199,63 +278,23 @@ const rules = {
     { required: true, message: "路由地址不能为空" },
     { max: 100, message: "路由地址不能大于100个字符", trigger: "blur" },
   ],
-  permsList: [{ required: true, message: "权限字符不能为空" }],
+  webPerms: [{ required: true, message: "前端权限字符不能为空" }],
 };
-// 是否展示抽屉
-const visible = ref(false);
 
-// ----------------------- 以下是计算属性 watch监听 ------------------------
-watch(visible, (e) => {
-  if (e) {
-    queryMenuTree();
-    getAllUrl();
-  }
-});
-// ----------------------- 以下是生命周期 ------------------------
-
-// ----------------------- 以下是方法 ------------------------
-async function showDrawer(rowData) {
-  Object.assign(form, formDefault);
-  if (rowData && !_.isEmpty(rowData)) {
-    Object.assign(form, rowData);
-  }
-  visible.value = true;
+function validateForm(formRef: { validate: () => Promise<any> }) {
+  return new Promise<boolean>((resolve) => {
+    formRef
+      .validate()
+      .then(() => {
+        resolve(true);
+      })
+      .catch(() => {
+        resolve(false);
+      });
+  });
 }
 
-async function queryMenuTree() {
-  let res = await menuApi.queryMenuTree(true);
-  menuTreeData.value = res.data;
-}
-
-async function getAllUrl() {
-  let res = await menuApi.getAllUrl();
-  allUrlData.value = res.data;
-}
-
-function onClose() {
-  Object.assign(form, formDefault);
-  formRef.value.resetFields();
-  visible.value = false;
-}
-
-function validateForm(formRef) {
-  return (
-    new Promise() <
-    boolean >
-    ((resolve) => {
-      formRef
-        .validate()
-        .then(() => {
-          resolve(true);
-        })
-        .catch(() => {
-          resolve(false);
-        });
-    })
-  );
-}
-
-const onSubmit = async () => {
+const onSubmit = async (continueFlag) => {
   let validateFormRes = await validateForm(formRef.value);
   if (!validateFormRes) {
     message.error("参数验证错误，请仔细填写表单数据!");
@@ -274,6 +313,11 @@ const onSubmit = async () => {
       await menuApi.addMenu(params);
     }
     message.success(`${params.menuId ? "修改" : "添加"}成功`);
+    if (continueFlag) {
+      continueResetForm();
+    } else {
+      onClose();
+    }
     onClose();
     emit("reloadList");
   } catch (error) {
@@ -282,6 +326,10 @@ const onSubmit = async () => {
     useSpinStore().hide();
   }
 };
+
+function selectIcon(icon) {
+  form.icon = icon;
+}
 
 // ----------------------- 以下是暴露的方法内容 ------------------------
 defineExpose({

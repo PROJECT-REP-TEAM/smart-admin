@@ -1,10 +1,9 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-12 16:09:09
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  * @Description: 部门
- * @FilePath: /smart-admin/src/views/system/employee/department/index.vue
 -->
 <template>
   <div class="height100">
@@ -12,14 +11,19 @@
       <a-col :span="6">
         <DepartmentTree ref="departmentTree" />
       </a-col>
+
       <a-col :span="18" class="height100">
         <div class="employee-box height100">
-          <ChildDepartmentList
+          <DepartmentChildren
             style="flex-grow: 1"
             :breadcrumb="breadcrumb"
-            :selectDeptChild="selectDeptChild"
+            :selectedDepartmentChildren="selectedDepartmentChildren"
           />
-          <EmployeeList class="employee" :departmentId="selectDeptId" />
+          <EmployeeList
+            style="flex-grow: 2.5"
+            class="employee"
+            :departmentId="selectedDepartmentId"
+          />
         </div>
       </a-col>
     </a-row>
@@ -28,38 +32,36 @@
 <script setup>
 import { computed, ref } from "vue";
 import DepartmentTree from "./components/department-tree/index.vue";
-import ChildDepartmentList from "./components/child-department-list/index.vue";
+import DepartmentChildren from "./components/department-children/index.vue";
 import EmployeeList from "./components/employee-list/index.vue";
 import _ from "lodash";
-// ----------------------- 以下是字段定义 emits props ---------------------
-// 子组件
+
 const departmentTree = ref();
-// ----------------------- 以下是计算属性 watch监听 ------------------------
+
+// 部门 面包屑
 const breadcrumb = computed(() => {
   if (departmentTree.value) {
     return departmentTree.value.breadcrumb;
   }
   return [];
 });
-const selectDeptChild = computed(() => {
+
+// 当前选中部门的孩子
+const selectedDepartmentChildren = computed(() => {
   if (departmentTree.value) {
-    return departmentTree.value.selectDeptChild;
+    return departmentTree.value.selectedDepartmentChildren;
   }
   return [];
 });
-const selectDeptId = computed(() => {
+
+// 当前选中的部门id
+const selectedDepartmentId = computed(() => {
   if (departmentTree.value) {
     let selectedKeys = departmentTree.value.selectedKeys;
     return _.isEmpty(selectedKeys) ? null : selectedKeys[0];
   }
   return null;
 });
-// ----------------------- 以下是生命周期 ---------------------------------
-
-// ----------------------- 以下是方法 ------------------------------------
-
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style scoped lang="less">
 .height100 {

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 17:09:44
- * @LastEditTime: 2022-06-13
+ * @LastEditTime: 2022-06-15
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/top-menu.vue
@@ -32,7 +32,7 @@ import _ from "lodash";
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { appDefaultConfig } from "/@/config/app-config";
-import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
+import { MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
 import { router } from "/@/router";
 import { useUserStore } from "/@/store/modules/system/user";
 

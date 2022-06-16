@@ -6,7 +6,7 @@ import { clearAllCoolies, getTokenFromCookie } from '/@/utils/cookie-util';
 import { useUserStore } from '/@/store/modules/system/user';
 import _ from 'lodash';
 import SmartLayout from '/@/layout/smart-layout.vue';
-import { PAGE_PATH_404, PAGE_PATH_HOME, PAGE_PATH_LOGIN } from '/@/constants/common';
+import { PAGE_PATH_404, PAGE_PATH_HOME, PAGE_PATH_LOGIN } from '/@/constants/common-const';
 import { localClear } from '/@/utils/local-util';
 
 

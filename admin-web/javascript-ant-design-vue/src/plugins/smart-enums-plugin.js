@@ -2,11 +2,11 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-15
  * @LastEditors: zhuoda
  */
 import _ from 'lodash';
-import { FLAG_NUMBER_ENUM } from '../constants/common';
+import { FLAG_NUMBER_ENUM } from '/@/constants/common-const';
 
 export default {
   install: (app, smartEnumWrapper) => {

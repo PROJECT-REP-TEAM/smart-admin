@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-10
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  */
 
@@ -19,6 +19,10 @@ export const PAGE_PATH_HOME = '/home';
 //404页面名字
 export const PAGE_PATH_404 = '/404';
 
+export const showTableTotal = function (total) {
+  return `共${total}条`;
+};
+
 export const FLAG_NUMBER_ENUM = {
   TRUE: {
     value: 1,
@@ -30,7 +34,7 @@ export const FLAG_NUMBER_ENUM = {
   },
 };
 
-export const GenderEnum = {
+export const GENDER_ENUM = {
   UNKNOWN: {
     value: 0,
     desc: '未知',

@@ -76,8 +76,8 @@
 import { ref, nextTick, reactive, createVNode } from "vue";
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import CategoryTree from "/@/components/category-tree-select/index.vue";
-import { GOODS_TYPE_ENUM } from "/@/constants/business/goods";
-import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category";
+import { GOODS_TYPE_ENUM } from "/@/constants/business/goods-const";
+import { CATEGORY_TYPE_ENUM } from "/@/constants/business/category-const";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";

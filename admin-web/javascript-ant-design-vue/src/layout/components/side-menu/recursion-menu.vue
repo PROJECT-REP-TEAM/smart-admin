@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-17 19:09:40
- * @LastEditTime: 2022-06-14
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/components/recursion-menu/index.vue
@@ -13,7 +13,6 @@
     class="smart-menu"
     mode="inline"
     theme="dark"
-    @click="handleClick"
     :inlineCollapsed="inlineCollapsed"
   >
     <template v-for="item in menuTree" :key="item.menuId">
@@ -38,7 +37,7 @@ import { ref, computed, watch } from "vue";
 import SubMenu from "./sub-menu.vue";
 import _ from "lodash";
 import { router } from "/@/router/index";
-import { MENU_TYPE_ENUM } from "/@/constants/system/menu/menu-enum";
+import { MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
 import { useRoute } from "vue-router";
 import { useUserStore } from "/@/store/modules/system/user";
 import { dispose } from "echarts/core";
@@ -57,22 +56,10 @@ let currentRoute = useRoute();
 const selectedKeys = ref([]);
 const openKeys = ref([]);
 
-const handleClick = (e) => {
-  console.log("click", e);
-};
-
 // 页面跳转
 function turnToPage(route) {
   router.push({ name: route.menuId.toString() });
 }
-
-watch(openKeys, (val) => {
-  console.log("openKeys", val);
-});
-
-watch(selectedKeys, (val) => {
-  console.log("selectedKeys", val);
-});
 
 /**
  * SmartAdmin中 router的name 就是 后端存储menu的id

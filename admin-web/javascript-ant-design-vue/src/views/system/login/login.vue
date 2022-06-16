@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-12-03 23:22:28
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-15
  * @LastEditors: zhuoda
  * @Description:
 
@@ -94,7 +94,7 @@ import { message } from "ant-design-vue";
 import { useUserStore } from "/@/store/modules/system/user";
 import { SmartLoading } from "/@/components/smart-loading";
 import { saveTokenToCookie } from "/@/utils/cookie-util";
-import { LOGIN_DEVICE_ENUM } from "/@/constants/system/login-device";
+import { LOGIN_DEVICE_ENUM } from "/@/constants/system/login-device-const";
 
 import gongzhonghao from "/@/assets/images/1024lab/1024lab-gzh.jpg";
 import zhuoda from "/@/assets/images/1024lab/zhuoda-wechat.jpg";

@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-12 16:46:21
- * @LastEditTime: 2021-08-12 16:47:04
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  */
 import { postRequest } from '/@/lib/axios';
@@ -27,7 +27,6 @@ export const categoryApi = {
   },
   // 查询类目详情 by zhuoda
   getCategory: (categoryId) => {
-    // POST /admin/clue/user/track/add
     return getRequest(`/category/${categoryId}`);
   },
 };

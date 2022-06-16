@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2021-08-28 15:09:06
+ * @LastEditTime: 2022-06-16
  * @LastEditors: zhuoda
  */
 export const MENU_TYPE_ENUM = {
@@ -19,6 +19,11 @@ export const MENU_TYPE_ENUM = {
     desc: '功能点',
   },
 };
+
+/**
+ * 默认的顶级菜单id为0
+ */
+export const MENU_DEFAULT_PARENT_ID = 0;
 
 export default {
   MENU_TYPE_ENUM,

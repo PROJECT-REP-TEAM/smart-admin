@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import { getTokenFromCookie } from '/@/utils/cookie-util';
-import localKey from '/@/constants/system/local-storage-key';
+import localKey from '/@/constants/system/local-storage-key-const';
 import { localSave, localRead } from '/@/utils/local-util';
 import _ from 'lodash';
 import { appDefaultConfig } from '/@/config/app-config';
 import { localClear } from '/@/utils/local-util';
-import { MENU_TYPE_ENUM } from '/@/constants/system/menu/menu-enum';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
 import menu from '/@/i18n/lang/en-US/menu';
 
 
@@ -19,7 +19,7 @@ export const useUserStore = defineStore({
     phone: '',
     departmentId: '',
     departmentName: '',
-    administratorFlag: false,
+    administratorFlag: true,
     //左侧菜单树形结构
     menuTree: [],
     //存在页面路由的菜单集合
