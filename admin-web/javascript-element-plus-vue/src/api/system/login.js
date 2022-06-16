@@ -14,7 +14,7 @@ export const loginApi = {
    * @param param
    */
   login: (param) => {
-    return postRequest('/admin/login', param);
+    return postRequest('/login', param);
   },
 
   /**
@@ -22,7 +22,7 @@ export const loginApi = {
    * @param param
    */
   getCaptcha: () => {
-    return getRequest('/admin/login/getCaptcha');
+    return getRequest('/login/getCaptcha');
   },
 
   /**
@@ -30,6 +30,6 @@ export const loginApi = {
    * @param param
    */
   getLoginInfo: () => {
-    return getRequest('/admin/login/getLoginResult');
+    return getRequest('/login/getLoginInfo');
   },
 };

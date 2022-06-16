@@ -14,7 +14,7 @@ export const employeeApi = {
    * @return {*}
    */
   queryAll: () => {
-    return getRequest('/admin/employee/queryAll');
+    return getRequest('/employee/queryAll');
   },
   /**
    * @description: 员工管理查询
@@ -22,7 +22,7 @@ export const employeeApi = {
    * @return {*}
    */
   queryEmployee: (params) => {
-    return postRequest('/admin/employee/query', params);
+    return postRequest('/employee/query', params);
   },
   /**
    * @description: 添加员工
@@ -30,7 +30,7 @@ export const employeeApi = {
    * @return {*}
    */
   addEmployee: (params) => {
-    return postRequest('/admin/employee/add', params);
+    return postRequest('/employee/add', params);
   },
   /**
    * @description: 更新员工信息
@@ -38,7 +38,7 @@ export const employeeApi = {
    * @return {*}
    */
   updateEmployee: (params) => {
-    return postRequest('/admin/employee/update', params);
+    return postRequest('/employee/update', params);
   },
   /**
    * @description: 删除员工
@@ -46,7 +46,7 @@ export const employeeApi = {
    * @return {*}
    */
   deleteEmployee: (employeeId) => {
-    return getRequest(`/admin/employee/delete/${employeeId}`);
+    return getRequest(`/employee/delete/${employeeId}`);
   },
   /**
    * @description: 批量删除员工
@@ -54,7 +54,7 @@ export const employeeApi = {
    * @return {*}
    */
   batchDeleteEmployee: (employeeIdList) => {
-    return getRequest(`/admin/employee/update/batch/delete?employeeIdList=${employeeIdList}`);
+    return getRequest(`/employee/update/batch/delete?employeeIdList=${employeeIdList}`);
   },
   /**
    * @description: 批量调整员工部门
@@ -62,7 +62,7 @@ export const employeeApi = {
    * @return {*}
    */
   batchUpdateDepartmentEmployee: (updateDto) => {
-    return postRequest('/admin/employee/update/batch/department', updateDto);
+    return postRequest('/employee/update/batch/department', updateDto);
   },
   /**
    * @description: 重置员工密码
@@ -70,7 +70,7 @@ export const employeeApi = {
    * @return {*}
    */
   resetPassword: (employeeId) => {
-    return getRequest(`/admin/employee/update/password/reset/${employeeId}`);
+    return getRequest(`/employee/update/password/reset/${employeeId}`);
   },
   /**
    * @description: 更新员工禁用状态
@@ -78,7 +78,7 @@ export const employeeApi = {
    * @return {*}
    */
   updateDisabled: (employeeId) => {
-    return getRequest(`/admin/employee/update/disabled/${employeeId}`);
+    return getRequest(`/employee/update/disabled/${employeeId}`);
   },
   /**
    * @description: 查询员工-根据校区id
@@ -86,10 +86,10 @@ export const employeeApi = {
    * @return {*}
    */
   querySchoolEmployee: (deptId) => {
-    return getRequest(`/admin/employee/query/school/${deptId}`);
+    return getRequest(`/employee/query/school/${deptId}`);
   },
   // 查询员工-根据部门id
   queryEmployeeByDeptId: (deptId) => {
-    return getRequest(`/admin/employee/query/dept/${deptId}`);
+    return getRequest(`/employee/query/dept/${deptId}`);
   },
 };

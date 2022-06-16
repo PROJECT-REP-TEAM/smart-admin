@@ -15,7 +15,7 @@ export const departmentApi = {
    * @return {*}
    */
   queryAllDepartment: () => {
-    return getRequest('/admin/department/listAll');
+    return getRequest('/department/listAll');
   },
 
   /**
@@ -24,7 +24,7 @@ export const departmentApi = {
    * @return {*}
    */
   departmentTree: () => {
-    return getRequest('/admin/department/treeList');
+    return getRequest('/department/treeList');
   },
 
   /**
@@ -33,7 +33,7 @@ export const departmentApi = {
    * @return {*}
    */
   querySchoolDepartmentList: () => {
-    return getRequest('/admin/department/querySchoolList');
+    return getRequest('/department/querySchoolList');
   },
 
   /**
@@ -42,7 +42,7 @@ export const departmentApi = {
    * @return {*}
    */
   addDepartment: (param) => {
-    return postRequest('/admin/department/add', param);
+    return postRequest('/department/add', param);
   },
   /**
    * @description: 更新部门信息 by zhuoda
@@ -50,7 +50,7 @@ export const departmentApi = {
    * @return {*}
    */
   updateDepartment: (param) => {
-    return postRequest('/admin/department/update', param);
+    return postRequest('/department/update', param);
   },
   /**
    * @description: 获取校区列表 by zhuoda
@@ -58,6 +58,6 @@ export const departmentApi = {
    * @return {*}
    */
   deleteDepartment: (deptId) => {
-    return getRequest(`/admin/department/delete/${deptId}`);
+    return getRequest(`/department/delete/${deptId}`);
   },
 };

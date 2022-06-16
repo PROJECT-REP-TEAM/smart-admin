@@ -28,7 +28,7 @@ function triggerReSize() {
 }
 onMounted(() => {
   //获取登录信息
-  getLoginInfo();
+  // getLoginInfo();
   //更新屏幕宽度
   triggerReSize();
 });

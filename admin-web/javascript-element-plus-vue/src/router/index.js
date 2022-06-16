@@ -11,9 +11,6 @@ import { nextTick } from 'vue';
 // 顶部页面加载进度条不显示spinner
 nProgress.configure({ showSpinner: false });
 
-// 记录后端返回的路由已经完成初始化
-let buildServerRouterFlag = false;
-
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: routerArray,
@@ -37,15 +34,6 @@ router.beforeEach((to, from, next) => {
   if (!token) {
     useUserStore().logout();
     next({ name: PAGE_NAME_LOGIN });
-    return;
-  }
-
-  // 初始化后端返回的路由
-  if (!buildServerRouterFlag) {
-    let menuList = useUserStore().getMenuList || [];
-    buildRoutes(menuList);
-    buildServerRouterFlag = true;
-    next({ path: to.path, query: to.query });
     return;
   }
 
@@ -88,7 +76,7 @@ router.afterEach(() => {
 });
 
 // ----------------------- 构建router对象 -----------------------
-function buildRoutes(menuList) {
+export function buildRoutes(menuList) {
   /**
    * 1、构建整个路由信息
    * 2、添加到路由里
