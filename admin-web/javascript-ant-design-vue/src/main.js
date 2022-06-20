@@ -2,7 +2,7 @@
  * @Description: 主方法
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  */
 import { createApp } from 'vue';
@@ -16,15 +16,17 @@ import { privilegeDirective } from '/@/directives/privilege';
 import smartEnumPlugin from '/@/plugins/smart-enums-plugin';
 import privilegePlugin from '/@/plugins/privilege-plugin';
 import lodash from 'lodash';
-import moment from 'moment';
-import 'moment/dist/locale/zh-cn';
+import dayjs from 'dayjs';
+import 'dayjs/locale/zh-cn';
 import App from './App.vue';
 import { useUserStore } from "/@/store/modules/system/user";
 import { buildRoutes } from "/@/router/index";
-import { loginApi } from "/@/api/system/login/login";
+import { loginApi } from "/@/api/system/login/login-api";
 import { getTokenFromCookie } from '/@/utils/cookie-util';
+import JsonViewer from "vue3-json-viewer"
+import "vue3-json-viewer/dist/index.css";
 
-moment.locale('zh-cn');
+dayjs.locale('zh-cn');
 
 /**
  * 获取用户信息和用户权限对应的路由，构建动态路由
@@ -43,7 +45,7 @@ async function getLoginInfo () {
 
 function initVue () {
   let vueApp = createApp(App);
-  let app = vueApp.use(router).use(store).use(Antd).use(smartEnumPlugin, constantsInfo).use(privilegePlugin);;
+  let app = vueApp.use(router).use(store).use(Antd).use(smartEnumPlugin, constantsInfo).use(privilegePlugin).use(JsonViewer);
   //注入权限
   app.directive('privilege', {
     mounted (el, binding) {

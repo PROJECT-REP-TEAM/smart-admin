@@ -1,23 +1,38 @@
 <!--
  * @Author: zhuoda
- * @Date: 2021-08-26 10:36:54
- * @LastEditTime: 2022-06-02
+ * @Date: 2021-08-26 21:36:54
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
- * @Description:
- * @FilePath: /smart-admin/src/views/system/employee/role/components/role-list/index.vue
+ * @Description: 
 -->
 <template>
   <a-card title="角色列表" class="role-container" style="padding: 0">
     <template #extra>
-      <a-button type="primary" size="small" @click="showOperateRoleModal">添加</a-button>
+      <a-button
+        type="primary"
+        size="small"
+        @click="showRoleFormModal"
+        v-privilege="'role:add'"
+        >添加</a-button
+      >
     </template>
     <a-menu mode="vertical" v-model:selectedKeys="selectedKeys">
-      <a-menu-item v-for="item in roleList" :key="item.id">
+      <a-menu-item v-for="item in roleList" :key="item.roleId">
         <a-popover placement="right">
           <template #content>
             <div style="display: flex; flex-direction: column">
-              <a-button type="text" @click="deleteRole(item.id)">删除</a-button>
-              <a-button type="text" @click="showOperateRoleModal(item)">编辑</a-button>
+              <a-button
+                type="text"
+                @click="deleteRole(item.roleId)"
+                v-privilege="'role:delete'"
+                >删除</a-button
+              >
+              <a-button
+                type="text"
+                @click="showRoleFormModal(item)"
+                v-privilege="'role:edit'"
+                >编辑</a-button
+              >
             </div>
           </template>
           {{ item.roleName }}
@@ -25,40 +40,46 @@
       </a-menu-item>
     </a-menu>
   </a-card>
-  <OperateRoleModal ref="operateRoleModal" @reloadList="queryAllRole" />
+  <RoleFormModal ref="roleFormModal" @refresh="queryAllRole" />
 </template>
 <script setup>
-import { computed, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { roleApi } from "/@/api/system/role/role-api";
-import OperateRoleModal from "../operate-role-modal/index.vue";
+import RoleFormModal from "../role-form-modal/index.vue";
 import { message, Modal } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
 import _ from "lodash";
 
-// ----------------------- 以下是字段定义 emits props ---------------------
+// ----------------------- 角色列表显示 ---------------------
 const roleList = ref([]);
-const operateRoleModal = ref();
+
+onMounted(queryAllRole);
+
+// 查询列表
+async function queryAllRole() {
+  let res = await roleApi.queryAll();
+  roleList.value = res.data;
+  if (!_.isEmpty(res.data) && res.data[0].roleId) {
+    selectedKeys.value = [res.data[0].roleId];
+  }
+}
+
 let selectedKeys = ref([]);
-// ----------------------- 以下是计算属性 watch监听 ------------------------
 const selectRoleId = computed(() => {
   if (!selectedKeys.value && _.isEmpty(selectedKeys.value)) {
     return null;
   }
   return selectedKeys.value[0];
 });
-// ----------------------- 以下是生命周期 ---------------------------------
-queryAllRole();
-// ----------------------- 以下是方法 ------------------------------------
-async function queryAllRole() {
-  let res = await roleApi.queryAll();
-  roleList.value = res.data;
-  if (!_.isEmpty(res.data) && res.data[0].id) {
-    selectedKeys.value = [res.data[0].id];
-  }
+// ----------------------- 添加、修改、删除 ---------------------------------
+const roleFormModal = ref();
+
+// 显示表单框
+function showRoleFormModal(role) {
+  roleFormModal.value.showModal(role);
 }
-function showOperateRoleModal(role) {
-  operateRoleModal.value.showModal(role);
-}
+
+// 删除角色
 function deleteRole(roleId) {
   if (!roleId) {
     return;
@@ -84,6 +105,7 @@ function deleteRole(roleId) {
     onCancel() {},
   });
 }
+
 // ----------------------- 以下是暴露的方法内容 ----------------------------
 defineExpose({
   selectRoleId,

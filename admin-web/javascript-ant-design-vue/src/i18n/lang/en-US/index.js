@@ -1,5 +1,12 @@
+/*
+ * @Description: 
+ * @Author: zhuoda
+ * @Date: 2021-11-05
+ * @LastEditTime: 2022-06-20
+ * @LastEditors: zhuoda
+ */
 import antdEnUS from 'ant-design-vue/es/locale-provider/en_US'
-import momentEU from 'moment/locale/eu'
+import dayEu from 'dayjs/locale/eu'
 import global from './global'
 
 import menu from './menu'
@@ -13,8 +20,8 @@ import account from './account'
 
 const components = {
   antLocale: antdEnUS,
-  momentName: 'eu',
-  momentLocale: momentEU
+  dayName: 'eu',
+  dayLocale: dayEu
 }
 
 export default {

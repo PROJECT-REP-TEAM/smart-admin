@@ -1,5 +1,12 @@
+/*
+ * @Description: 
+ * @Author: zhuoda
+ * @Date: 2021-11-05
+ * @LastEditTime: 2022-06-20
+ * @LastEditors: zhuoda
+ */
 import antd from 'ant-design-vue/es/locale-provider/zh_CN'
-import momentCN from 'moment/locale/zh-cn'
+import dayjsCN from 'dayjs/locale/zh-cn'
 import global from './zh-CN/global'
 
 import menu from './zh-CN/menu'
@@ -12,8 +19,8 @@ import account from './zh-CN/account'
 
 const components = {
     antLocale: antd,
-    momentName: 'zh-cn',
-    momentLocale: momentCN
+    dayName: 'zh-cn',
+    dayLocale: dayjsCN
 }
 
 export default {

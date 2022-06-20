@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-10
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/login/login.ts
@@ -31,5 +31,13 @@ export const loginApi = {
    */
   getLoginInfo: () => {
     return getRequest('/login/getLoginInfo');
+  },
+
+  /**
+ * 刷新权限
+ * @param param
+ */
+  refresh: () => {
+    return getRequest('/login/refresh');
   },
 };

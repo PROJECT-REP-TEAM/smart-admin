@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-11 14:11:28
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  * @Description: 菜单新增编辑抽屉
  * @FilePath: /smart-admin/src/views/system/menu/components/menu-operate-modal.vue
@@ -17,7 +17,7 @@
   >
     <a-form ref="formRef" :model="form" :rules="rules" layout="vertical">
       <a-form-item label="上级菜单">
-        <MenuTreeSelect v-model:value="form.parentId" />
+        <MenuTreeSelect v-model:value="form.parentId" ref="parentMenuTreeSelect" />
       </a-form-item>
       <a-form-item label="菜单类型" name="menuType">
         <a-radio-group v-model:value="form.menuType">
@@ -59,7 +59,7 @@
           </a-col>
         </a-row>
         <a-row :gutter="16">
-          <a-col :span="12">
+          <a-col :span="12" v-if="form.menuType == MENU_TYPE_ENUM.MENU.value">
             <a-form-item label="路由地址" name="path">
               <a-input v-model:value="form.path" placeholder="请输入路由地址" />
             </a-form-item>
@@ -131,7 +131,10 @@
           </a-col>
           <a-col :span="12">
             <a-form-item label="功能点关联菜单">
-              <MenuTreeSelect v-model:value="form.contextMenuId" />
+              <MenuTreeSelect
+                v-model:value="form.contextMenuId"
+                ref="contextMenuTreeSelect"
+              />
             </a-form-item>
           </a-col>
         </a-row>
@@ -180,7 +183,7 @@
   </a-drawer>
 </template>
 <script setup lang="ts">
-import { ref, reactive, watch } from "vue";
+import { ref, reactive, watch, nextTick, onMounted } from "vue";
 import { MENU_DEFAULT_PARENT_ID, MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
 import MenuTreeSelect from "./menu-tree-select.vue";
 import IconSelect from "/@/components/icon-select/index.vue";
@@ -204,6 +207,8 @@ watch(visible, (e) => {
   }
 });
 
+const contextMenuTreeSelect = ref();
+const parentMenuTreeSelect = ref();
 //展开编辑窗口
 async function showDrawer(rowData) {
   Object.assign(form, formDefault);
@@ -214,6 +219,18 @@ async function showDrawer(rowData) {
     }
   }
   visible.value = true;
+  refreshParentAndContext();
+}
+
+function refreshParentAndContext() {
+  nextTick(() => {
+    if (contextMenuTreeSelect.value) {
+      contextMenuTreeSelect.value.queryMenuTree();
+    }
+    if (parentMenuTreeSelect.value) {
+      parentMenuTreeSelect.value.queryMenuTree();
+    }
+  });
 }
 
 // 隐藏窗口
@@ -255,6 +272,7 @@ const formDefault = {
 };
 let form = reactive({ ...formDefault });
 function continueResetForm() {
+  refreshParentAndContext();
   const menuType = form.menuType;
   const parentId = form.parentId;
   const webPerms = form.webPerms;
@@ -318,7 +336,6 @@ const onSubmit = async (continueFlag) => {
     } else {
       onClose();
     }
-    onClose();
     emit("reloadList");
   } catch (error) {
     console.log(error);

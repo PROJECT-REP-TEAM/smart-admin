@@ -2,13 +2,13 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  */
 
 export const PAGE_SIZE = 15;
 
-export const PAGE_SIZE_OPTIONS = ['10', '15', '25', '35', '45', '55', '100', '150', '200', '300', '500'];
+export const PAGE_SIZE_OPTIONS = ['10', '15', '20', '30', '40', '50', '75', '100', '150', '200', '300', '500'];
 
 //登录页面名字
 export const PAGE_PATH_LOGIN = '/login';

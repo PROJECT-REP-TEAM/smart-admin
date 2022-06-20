@@ -1,18 +1,24 @@
 <!--
- * @Author: zhuoda
+ * @Author: LiHaiFan
  * @Date: 2021-08-30 09:14:55
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
- * @Description:
- * @FilePath: /smart-admin/src/views/system/employee/role/components/role-data-scope/index.vue
+ * @Description: 
 -->
 <template>
   <div>
     <div class="btn-group">
-      <a-button class="button-style" type="primary" @click="updateDataScope">
+      <a-button
+        class="button-style"
+        type="primary"
+        @click="updateDataScope"
+        v-privilege="'role:updateDataScope'"
+      >
         保存
       </a-button>
-      <a-button class="button-style" @click="getDataScope"> 刷新 </a-button>
+      <a-button class="button-style" @click="getDataScope" v-privilege="'role:query'">
+        刷新
+      </a-button>
     </div>
     <a-row class="header">
       <a-col class="tab-margin" :span="4">业务单据</a-col>
@@ -24,14 +30,14 @@
         class="data"
         align="middle"
         justify="center"
-        v-for="item in dataScopeList"
+        v-for="(item, index) in dataScopeList"
         :key="item.dataScopeType"
       >
         <a-col class="tab-margin" :span="4">
           {{ item.dataScopeTypeName }}
         </a-col>
         <a-col class="tab-data" :span="8">
-          <a-radio-group v-model:value="item.viewType">
+          <a-radio-group v-model:value="selectedDataScopeList[index].viewType">
             <a-radio
               v-for="scope in item.viewTypeList"
               :key="`${item.dataScopeType}-${scope.viewType}`"
@@ -50,66 +56,77 @@
 </template>
 <script setup>
 import { message } from "ant-design-vue";
-import { inject, ref, watch } from "vue";
+import { inject, onMounted, ref, watch } from "vue";
 import { roleApi } from "/@/api/system/role/role-api";
+import _ from "lodash";
 
-// ----------------------- 以下是字段定义 emits props ---------------------
-defineProps({
-  value: Object,
+const props = defineProps({
+  value: Number,
 });
-defineEmits("update:value");
+
+defineEmits(["update:value"]);
+
+// ----------------------- 显示 ---------------------------------
+
 let selectRoleId = inject("selectRoleId");
 let dataScopeList = ref([]);
-// ----------------------- 以下是计算属性 watch监听 ------------------------
+let selectedDataScopeList = ref([]);
+
 watch(
   () => selectRoleId.value,
   () => getRoleDataScope()
 );
-// ----------------------- 以下是生命周期 ---------------------------------
-getDataScope();
-// ----------------------- 以下是方法 ------------------------------------
-// 获取数据
+
+onMounted(getDataScope);
+
+// 获取系统支持的所有种类的数据范围
 async function getDataScope() {
-  try {
-    let result = await roleApi.getDataScopeList();
-    dataScopeList.value = result.data;
-    getRoleDataScope();
-  } catch (e) {
-    console.error(e);
-  }
-}
-// 获取数据范围根据角色id
-async function getRoleDataScope() {
-  try {
-    let result = await roleApi.getDataScopeByRoleId(selectRoleId.value);
-    let data = result.data;
-    dataScopeList.value.forEach((item) => {
-      let find = data.find((e) => e.dataScopeType == item.dataScopeType);
-      item.viewType = undefined;
-      if (find) {
-        item.viewType = find.viewType;
-      }
+  let result = await roleApi.getDataScopeList();
+  dataScopeList.value = result.data;
+
+  selectedDataScopeList.value = [];
+
+  dataScopeList.value.forEach((item) => {
+    selectedDataScopeList.value.push({
+      viewType: undefined,
+      dataScopeType: item.dataScopeType,
     });
-  } catch (e) {
-    console.error(e);
-  }
+  });
+  getRoleDataScope();
 }
+
+// 获取数据范围根据角色id，并赋予选中状态
+async function getRoleDataScope() {
+  let result = await roleApi.getDataScopeByRoleId(selectRoleId.value);
+  let data = result.data;
+  selectedDataScopeList.value = [];
+
+  dataScopeList.value.forEach((item) => {
+    let find = data.find((e) => e.dataScopeType == item.dataScopeType);
+    selectedDataScopeList.value.push({
+      viewType: find ? find.viewType : undefined,
+      dataScopeType: item.dataScopeType,
+    });
+  });
+}
+
+// ----------------------- 数据范围更新 ---------------------------------
 // 更新
 async function updateDataScope() {
   try {
     let data = {
       roleId: selectRoleId.value,
-      batchSetList: dataScopeList.value,
+      dataScopeItemList: selectedDataScopeList.value.filter(
+        (e) => !_.isUndefined(e.viewType)
+      ),
     };
-    await roleApi.updateDataScope(data);
+    await roleApi.updateRoleDataScopeList(data);
     message.success("保存成功");
     getDataScope();
   } catch (e) {
-    console.error(e);
+    console.log(e);
   }
 }
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style scoped lang="less">
 .btn-group {

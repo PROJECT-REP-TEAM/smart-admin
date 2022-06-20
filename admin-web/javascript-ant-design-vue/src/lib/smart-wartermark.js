@@ -2,11 +2,11 @@
  * @Description:水印
  * @Author: zhuoda
  * @Date: 2021-08-28
- * @LastEditTime: 2021-08-31
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  */
 
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 /**
  *  水印DOM id
@@ -30,7 +30,7 @@ function setWatermark (id, str) {
     document.getElementById(WATER_MARK_DOM_ID)?.remove();
   }
 
-  str = str + ' ' + moment().format('YYYY-MM-DD HH:mm');
+  str = str + ' ' + dayjs().format('YYYY-MM-DD HH:mm');
 
   //创建一个画布
   const can = document.createElement('canvas');

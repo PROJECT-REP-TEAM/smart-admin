@@ -1,14 +1,14 @@
 <!--
- * @Author: zhuoda
+ * @Author: LiHaiFan
  * @Date: 2021-08-28 10:07:48
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
- * @Description:
- * @FilePath: /smart-admin/src/views/system/employee/role/components/operate-role-modal/index.vue
+ * @Description: 
+ * @FilePath: /xiaomifeng-crm-manage-web/src/views/system/employee/role/components/operate-role-modal/index.vue
 -->
 <template>
   <a-modal
-    :title="form.id ? '编辑角色' : '添加角色'"
+    :title="form.roleId ? '编辑角色' : '添加角色'"
     :width="600"
     :visible="modalVisible"
     @cancel="onClose"
@@ -33,33 +33,26 @@
 
     <div class="footer">
       <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
-      <a-button type="primary" @click="operateRule">提交</a-button>
+      <a-button type="primary" @click="submitForm">提交</a-button>
     </div>
   </a-modal>
 </template>
+
 <script setup>
 import { message } from "ant-design-vue";
 import { reactive, ref } from "vue";
 import { roleApi } from "/@/api/system/role/role-api";
 import { useSpinStore } from "/@/store/modules/system/spin";
 // ----------------------- 以下是字段定义 emits props ---------------------
-let emits = defineEmits("reloadList");
-const formRef = ref();
-const modalVisible = ref < boolean > false;
-const formDefault = {
-  id: undefined,
-  remark: undefined,
-  roleName: undefined,
-};
-let form = reactive({ ...formDefault });
-const rules = {
-  roleName: [{ required: true, message: "请输入角色名称" }],
-};
-// ----------------------- 以下是计算属性 watch监听 ------------------------
+let emits = defineEmits(["refresh"]);
 
-// ----------------------- 以下是生命周期 ---------------------------------
+defineExpose({
+  showModal,
+});
 
-// ----------------------- 以下是方法 ------------------------------------
+// ----------------------- modal 显示与隐藏 ---------------------
+const modalVisible = ref(false);
+
 function showModal(role) {
   Object.assign(form, formDefault);
   if (role) {
@@ -67,23 +60,43 @@ function showModal(role) {
   }
   modalVisible.value = true;
 }
+
 function onClose() {
   Object.assign(form, formDefault);
   modalVisible.value = false;
 }
-async function operateRule() {
+
+// ----------------------- 表单 ---------------------
+
+const formRef = ref();
+
+const formDefault = {
+  id: undefined,
+  remark: undefined,
+  roleName: undefined,
+};
+
+let form = reactive({ ...formDefault });
+
+// 表单规则
+const rules = {
+  roleName: [{ required: true, message: "请输入角色名称" }],
+};
+
+// 提交表单
+async function submitForm() {
   formRef.value
     .validate()
     .then(async () => {
       useSpinStore().show();
       try {
-        if (form.id) {
+        if (form.roleId) {
           await roleApi.updateRole(form);
         } else {
           await roleApi.addRole(form);
         }
-        message.info(`${form.id ? "编辑" : "添加"}成功`);
-        emits("reloadList");
+        message.info(`${form.roleId ? "编辑" : "添加"}成功`);
+        emits("refresh");
         onClose();
       } catch (e) {
         console.log(e);
@@ -96,11 +109,8 @@ async function operateRule() {
       message.error("参数验证错误，请仔细填写表单数据!");
     });
 }
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({
-  showModal,
-});
 </script>
+
 <style scoped lang="less">
 .footer {
   width: 100%;

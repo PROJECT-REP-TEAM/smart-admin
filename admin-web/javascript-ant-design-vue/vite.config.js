@@ -2,7 +2,7 @@
  * @Description: vite配置
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  */
 import { resolve } from 'path';
@@ -11,7 +11,6 @@ import vue from '@vitejs/plugin-vue';
 const pathResolve = (dir) => {
   return resolve(__dirname, '.', dir);
 };
-console.log(23);
 export default {
   base: process.env.NODE_ENV === 'production' ? '/manages/' : '/',
   root: process.cwd(),
@@ -40,7 +39,7 @@ export default {
   },
   plugins: [vue()],
   optimizeDeps: {
-    include: ['ant-design-vue/es/locale/zh_CN', 'moment/dist/locale/zh-cn', 'ant-design-vue/es/locale/en_US', 'moment/dist/locale/eu'],
+    include: ['ant-design-vue/es/locale/zh_CN', 'dayjs/locale/zh-cn', 'ant-design-vue/es/locale/en_US', 'dayjs/locale/eu'],
     exclude: ['vue-demi'],
   },
   build: {

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-28 11:46:46
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-tree/index.vue
@@ -26,17 +26,15 @@ import { useRoleStore } from "/@/store/modules/system/role";
 import RoleTreeCheckbox from "./role-tree-checkbox.vue";
 import { message } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
-// ----------------------- 以下是字段定义 emits props ---------------------
+
 let roleStore = useRoleStore();
 let tree = ref();
 let selectRoleId = inject("selectRoleId");
-// ----------------------- 以下是计算属性 watch监听 ------------------------
+
 watch(selectRoleId, () => getRoleSelectedMenu(), {
   immediate: true,
 });
-// ----------------------- 以下是生命周期 ---------------------------------
 
-// ----------------------- 以下是方法 ------------------------------------
 async function getRoleSelectedMenu() {
   if (!selectRoleId.value) {
     return;
@@ -69,8 +67,6 @@ async function saveChange() {
     useSpinStore().hide();
   }
 }
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style scoped lang="less">
 @import "./index.less";

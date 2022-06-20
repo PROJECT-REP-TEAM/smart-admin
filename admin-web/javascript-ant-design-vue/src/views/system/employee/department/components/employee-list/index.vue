@@ -1,7 +1,7 @@
 <!--
  * @Author: LiHaiFan
  * @Date: 2021-08-14 20:23:30
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description:
 -->
@@ -78,7 +78,9 @@
     >
       <template #bodyCell="{ text, record, index, column }">
         <template v-if="column.dataIndex === 'disabledFlag'">
-          <span>{{ text ? "禁用" : "启用" }}</span>
+          <a-tag :color="text ? 'error' : 'processing'">{{
+            text ? "禁用" : "启用"
+          }}</a-tag>
         </template>
         <template v-else-if="column.dataIndex === 'gender'">
           <span>{{ $smartEnumPlugin.getDescByValue("GENDER_ENUM", text) }}</span>
@@ -199,7 +201,7 @@ const columns = [
     title: "部门",
     dataIndex: "departmentName",
     ellipsis: true,
-    width: 100,
+    width: 200,
   },
   {
     title: "操作",

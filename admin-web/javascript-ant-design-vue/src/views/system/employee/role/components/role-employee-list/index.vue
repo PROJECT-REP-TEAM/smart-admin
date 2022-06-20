@@ -1,21 +1,45 @@
 <!--
  * @Author: zhuoda
- * @Date: 2021-08-30 10:52:22
- * @LastEditTime: 2022-06-15
+ * @Date: 2021-08-30 20:52:22
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description:
 -->
 <template>
   <div>
     <div class="header">
-      <p>管理拥有当前角色权限的人员列表</p>
+      <div>
+        关键字：
+        <a-input
+          style="width: 250px"
+          v-model:value="queryForm.keywords"
+          placeholder="姓名/手机号/登录账号"
+        />
+
+        <a-button
+          class="button-style"
+          v-if="selectRoleId"
+          type="primary"
+          @click="queryRoleEmployee"
+          >搜索</a-button
+        >
+        <a-button
+          class="button-style"
+          v-if="selectRoleId"
+          type="default"
+          @click="resetQueryRoleEmployee"
+          >重置</a-button
+        >
+      </div>
+
       <div>
         <a-button
           class="button-style"
           v-if="selectRoleId"
           type="primary"
           @click="addRoleEmployee"
-          >添加成员</a-button
+          v-privilege="'role:addEmployee'"
+          >添加员工</a-button
         >
         <a-button
           class="button-style"
@@ -23,6 +47,7 @@
           type="primary"
           danger
           @click="batchDelete"
+          v-privilege="'role:deleteEmployee'"
           >批量移除</a-button
         >
       </div>
@@ -33,17 +58,27 @@
       :columns="columns"
       :pagination="false"
       :scroll="{ y: 400 }"
-      rowKey="id"
+      rowKey="employeeId"
       :row-selection="{ selectedRowKeys: selectedRowKeyList, onChange: onSelectChange }"
+      size="small"
+      bordered
     >
-      <template #disabledFlag="{ text }">
-        <span>{{ text ? "禁用" : "启用" }}</span>
-      </template>
-      <template #gender="{ text }">
-        <span>{{ $smartEnumPlugin.getDescByValue("GENDER_ENUM", text) }}</span>
-      </template>
-      <template #operate="{ record }">
-        <a @click="deleteEmployeeRole(record.id)">移除</a>
+      <template #bodyCell="{ text, record, index, column }">
+        <template v-if="column.dataIndex === 'disabledFlag'">
+          <a-tag :color="text ? 'error' : 'processing'">{{
+            text ? "禁用" : "启用"
+          }}</a-tag>
+        </template>
+        <template v-else-if="column.dataIndex === 'gender'">
+          <span>{{ $smartEnumPlugin.getDescByValue("GENDER_ENUM", text) }}</span>
+        </template>
+        <template v-if="column.dataIndex === 'operate'">
+          <a
+            @click="deleteEmployeeRole(record.employeeId)"
+            v-privilege="'role:deleteEmployee'"
+            >移除</a
+          >
+        </template>
       </template>
     </a-table>
     <div class="smart-query-table-page">
@@ -58,72 +93,52 @@
         :total="total"
         @change="queryRoleEmployee"
         @showSizeChange="queryRoleEmployee"
-        :show-total="(total) => `共${total}条`"
+        :show-total="showTableTotal"
       />
     </div>
-    <!-- <SelectEmployeeModal ref="selectEmployeeModal" @selectData="selectData" /> -->
+    <EmployeeTableSelectModal ref="selectEmployeeModal" @selectData="selectData" />
   </div>
 </template>
 <script setup>
 import { message, Modal } from "ant-design-vue";
-import { computed, inject, reactive, ref, watch } from "vue";
-import { roleApi } from "/@/api/system/role/role-api";
-import { PAGE_SIZE, PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
+import { computed, inject, onMounted, reactive, ref, watch } from "vue";
+import { PAGE_SIZE, PAGE_SIZE_OPTIONS, showTableTotal } from "/@/constants/common-const";
 import { useSpinStore } from "/@/store/modules/system/spin";
-// import SelectEmployeeModal from "/@/components/select-employee-modal/index.vue";
+import EmployeeTableSelectModal from "/@/components/employee-table-select-modal/index.vue";
 import _ from "lodash";
+import { roleApi } from "/@/api/system/role/role-api";
+
 // ----------------------- 以下是字段定义 emits props ---------------------
-let selectEmployeeModal = ref();
 let selectRoleId = inject("selectRoleId");
-const columns = reactive([
-  {
-    title: "姓名",
-    dataIndex: "actualName",
-  },
-  {
-    title: "手机号",
-    dataIndex: "phone",
-  },
-  {
-    title: "性别",
-    dataIndex: "gender",
-    slots: { customRender: "gender" },
-  },
-  {
-    title: "登录账号",
-    dataIndex: "loginName",
-  },
-  {
-    title: "状态",
-    dataIndex: "disabledFlag",
-    slots: { customRender: "disabledFlag" },
-  },
-  {
-    title: "操作",
-    slots: { customRender: "operate" },
-    width: 150,
-  },
-]);
-const tableData = ref([]);
-const tableLoading = ref(false);
-const selectedRowKeyList = ref([]);
-const defaultQueryForm = {
-  pageNum: 1,
-  pageSize: PAGE_SIZE,
-  roleId: undefined,
-  roleName: undefined,
-};
-const queryForm = reactive({ ...defaultQueryForm });
-const total = ref < number > 0;
-// ----------------------- 以下是计算属性 watch监听 ------------------------
+
+// ----------------------- 员工列表：显示和搜索 ------------------------
 watch(
   () => selectRoleId.value,
   () => queryRoleEmployee()
 );
-const hasSelected = computed(() => selectedRowKeyList.value.length > 0);
-// ----------------------- 以下是生命周期 ---------------------------------
-queryRoleEmployee();
-// ----------------------- 以下是方法 ------------------------------------
+
+onMounted(queryRoleEmployee);
+
+const defaultQueryForm = {
+  pageNum: 1,
+  pageSize: PAGE_SIZE,
+  roleId: undefined,
+  keywords: undefined,
+};
+// 查询表单
+const queryForm = reactive({ ...defaultQueryForm });
+// 总数
+const total = ref(0);
+// 表格数据
+const tableData = ref([]);
+// 表格loading效果
+const tableLoading = ref(false);
+
+function resetQueryRoleEmployee() {
+  queryForm.keywords = "";
+  queryRoleEmployee();
+}
+
 async function queryRoleEmployee() {
   try {
     tableLoading.value = true;
@@ -137,6 +152,66 @@ async function queryRoleEmployee() {
     tableLoading.value = false;
   }
 }
+
+const columns = reactive([
+  {
+    title: "姓名",
+    dataIndex: "actualName",
+  },
+  {
+    title: "手机号",
+    dataIndex: "phone",
+  },
+  {
+    title: "登录账号",
+    dataIndex: "loginName",
+  },
+  {
+    title: "部门",
+    dataIndex: "departmentName",
+  },
+  {
+    title: "状态",
+    dataIndex: "disabledFlag",
+  },
+  {
+    title: "操作",
+    dataIndex: "operate",
+    width: 60,
+  },
+]);
+
+// ----------------------- 添加成员 ---------------------------------
+const selectEmployeeModal = ref();
+
+async function addRoleEmployee() {
+  let res = await roleApi.getRoleAllEmployee(selectRoleId.value);
+  let selectedIdList = res.data.map((e) => e.roleId) || [];
+  selectEmployeeModal.value.showModal(selectedIdList);
+}
+
+async function selectData(list) {
+  if (_.isEmpty(list)) {
+    message.warning("请选择角色人员");
+    return;
+  }
+  useSpinStore().show();
+  try {
+    let params = {
+      employeeIdList: list,
+      roleId: selectRoleId.value,
+    };
+    await roleApi.batchAddRoleEmployee(params);
+    message.success("添加成功");
+    await queryRoleEmployee();
+  } catch (e) {
+    console.error(e);
+  } finally {
+    useSpinStore().hide();
+  }
+}
+
+// ----------------------- 移除成员 ---------------------------------
 // 删除角色成员方法
 async function deleteEmployeeRole(employeeId) {
   Modal.confirm({
@@ -160,9 +235,17 @@ async function deleteEmployeeRole(employeeId) {
     onCancel() {},
   });
 }
+
+// ----------------------- 批量删除 ---------------------------------
+
+const selectedRowKeyList = ref([]);
+const hasSelected = computed(() => selectedRowKeyList.value.length > 0);
+
 function onSelectChange(selectedRowKeys) {
   selectedRowKeyList.value = selectedRowKeys;
 }
+
+// 批量移除
 function batchDelete() {
   if (!hasSelected.value) {
     message.warning("请选择要删除的角色成员");
@@ -180,7 +263,7 @@ function batchDelete() {
           employeeIdList: selectedRowKeyList.value,
           roleId: selectRoleId.value,
         };
-        await roleApi.deleteEmployeeList(params);
+        await roleApi.batchRemoveRoleEmployee(params);
         message.success("移除成功");
         selectedRowKeyList.value = [];
         await queryRoleEmployee();
@@ -194,34 +277,8 @@ function batchDelete() {
     onCancel() {},
   });
 }
-async function addRoleEmployee() {
-  let res = await roleApi.getRoleAllEmployee(selectRoleId.value);
-  let selectedIdList = res.data.map((e) => e.id) || [];
-  selectEmployeeModal.value.showModal(selectedIdList);
-}
-async function selectData(list) {
-  if (_.isEmpty(list)) {
-    message.warning("请选择角色人员");
-    return;
-  }
-  useSpinStore().show();
-  try {
-    let params = {
-      employeeIdList: list.map((e) => e.id),
-      roleId: selectRoleId.value,
-    };
-    await roleApi.addRoleEmployeeList(params);
-    message.success("添加成功");
-    await queryRoleEmployee();
-  } catch (e) {
-    console.error(e);
-  } finally {
-    useSpinStore().hide();
-  }
-}
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
+
 <style scoped lang="less">
 .header {
   display: flex;

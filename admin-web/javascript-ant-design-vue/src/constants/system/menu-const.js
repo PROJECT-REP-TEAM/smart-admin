@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  */
 export const MENU_TYPE_ENUM = {
@@ -16,7 +16,7 @@ export const MENU_TYPE_ENUM = {
   },
   POINTS: {
     value: 3,
-    desc: '功能点',
+    desc: '按钮',
   },
 };
 

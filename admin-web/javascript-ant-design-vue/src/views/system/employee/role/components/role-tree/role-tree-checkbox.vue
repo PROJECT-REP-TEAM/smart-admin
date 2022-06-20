@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-28 11:59:20
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-tree/role-tree-checkbox.vue
@@ -24,7 +24,6 @@ import { ref, watch } from "vue";
 import { useRoleStore } from "/@/store/modules/system/role";
 import RoleTreeMenu from "./role-tree-menu.vue";
 
-// ----------------------- 以下是字段定义 emits props ---------------------
 let props = defineProps({
   tree: {
     type: Array,
@@ -32,9 +31,9 @@ let props = defineProps({
   },
 });
 defineEmits("update:value");
+
 let roleStore = useRoleStore();
 let checkedData = ref();
-// ----------------------- 以下是计算属性 watch监听 ------------------------
 watch(
   () => roleStore.checkedData,
   (e) => (checkedData.value = e),
@@ -42,12 +41,6 @@ watch(
     deep: true,
   }
 );
-// ----------------------- 以下是生命周期 ---------------------------------
-
-// ----------------------- 以下是方法 ------------------------------------
-
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style scoped lang="less">
 @import "./index.less";

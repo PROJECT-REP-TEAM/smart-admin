@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-14
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/components/smart-header-user-space/header-avatar.vue
@@ -17,6 +17,9 @@
     </div>
     <template #overlay>
       <a-menu :class="['avatar-menu']">
+        <a-menu-item @click="refresh">
+          <span>刷新权限</span>
+        </a-menu-item>
         <a-menu-item @click="onLogout">
           <span>退出登录</span>
         </a-menu-item>
@@ -28,6 +31,7 @@
 import { computed, ref } from "@vue/reactivity";
 import { onMounted } from "@vue/runtime-core";
 import { useRouter } from "vue-router";
+import { loginApi } from "/@/api/system/login/login-api";
 import { useUserStore } from "/@/store/modules/system/user";
 import { clearAllCoolies } from "/@/utils/cookie-util";
 import { localClear } from "/@/utils/local-util";
@@ -41,12 +45,17 @@ const router = useRouter();
 const actualName = computed(() => useUserStore().actualName);
 
 // ----------------------- 以下是方法 ------------------------------------
-const onLogout = () => {
+function onLogout() {
   localClear();
   clearAllCoolies();
   useUserStore().logout();
   router.push({ name: "Login" });
-};
+}
+
+async function refresh() {
+  await loginApi.refresh();
+  location.reload();
+}
 
 function updateAvatar() {
   if (useUserStore().actualName) {

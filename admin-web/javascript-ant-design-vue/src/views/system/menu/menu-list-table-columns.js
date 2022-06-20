@@ -2,7 +2,7 @@
  * @Description:表格列
  * @Author: zhuoda
  * @Date: 2021-08-26
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  */
 
@@ -25,28 +25,42 @@ export const columns = reactive([
     width: 50,
   },
   {
+    title: '路径',
+    dataIndex: 'path',
+  },
+  {
+    title: '组件',
+    dataIndex: 'component',
+  },
+  {
     title: '后端权限',
     dataIndex: 'apiPerms',
+    ellipsis: true,
   },
   {
     title: '前端权限',
     dataIndex: 'webPerms',
+    ellipsis: true,
   },
   {
     title: '外链',
     dataIndex: 'frameFlag',
+    width: 45,
   },
   {
     title: '缓存',
     dataIndex: 'cacheFlag',
+    width: 45,
   },
   {
     title: '禁用',
     dataIndex: 'disabledFlag',
+    width: 45,
   },
   {
     title: '顺序',
     dataIndex: 'sort',
+    width: 45,
   },
   {
     title: '创建时间',

@@ -1,7 +1,7 @@
 <!--
  * @Author: LiHaiFan
  * @Date: 2021-08-16 22:06:33
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-20
  * @LastEditors: zhuoda
  * @Description:
 -->
@@ -47,15 +47,6 @@
           <a-select-option :value="1">禁用</a-select-option>
         </a-select>
       </a-form-item>
-      <a-form-item v-if="form.leaveFlag" label="离职时间" name="leaveTime">
-        <a-date-picker
-          style="width: 100%"
-          v-model:value="form.leaveTime"
-          @change="changeLeaveTime"
-          format="YYYY-MM-DD HH:mm:ss"
-          :show-time="{ defaultValue: moment('00:00:00', 'HH:mm:ss') }"
-        />
-      </a-form-item>
       <a-form-item label="角色" name="roleIdList">
         <a-select
           mode="multiple"
@@ -86,7 +77,6 @@
 <script setup lang="ts">
 import { message } from "ant-design-vue";
 import _ from "lodash";
-import moment from "moment";
 import { nextTick, reactive, ref } from "vue";
 import { employeeApi } from "/@/api/system/employee/employee-api";
 import { useSpinStore } from "/@/store/modules/system/spin";
@@ -135,7 +125,6 @@ const formDefault = {
   departmentId: undefined,
   disabledFlag: 0,
   leaveFlag: 0,
-  leaveTime: "",
   gender: GENDER_ENUM.MAN.value,
   loginName: undefined,
   phone: undefined,
@@ -229,18 +218,6 @@ async function updateEmployee(keepAdding) {
     console.log(error);
   } finally {
     useSpinStore().hide();
-  }
-}
-
-function changeLeaveTime(date: Date, datestr: string) {
-  form.leaveTime = datestr;
-}
-function changeLeaveFlag(value: any) {
-  if (!value) {
-    form.leaveTime = "";
-  }
-  if (value && !form.leaveTime) {
-    form.leaveTime = moment().format("YYYY-MM-DD HH:mm:ss");
   }
 }
 

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-12-03 23:22:28
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
  * @Description:
 
@@ -89,7 +89,7 @@
 <script setup>
 import { onMounted, onUnmounted, reactive, ref } from "vue";
 import { useRouter, useRoute } from "vue-router";
-import { loginApi } from "/@/api/system/login/login";
+import { loginApi } from "/@/api/system/login/login-api";
 import { message } from "ant-design-vue";
 import { useUserStore } from "/@/store/modules/system/user";
 import { SmartLoading } from "/@/components/smart-loading";

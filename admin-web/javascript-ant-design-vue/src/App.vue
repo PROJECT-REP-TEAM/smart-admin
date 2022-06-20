@@ -2,7 +2,7 @@
  * @Description: App
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-17
  * @LastEditors: zhuoda
 -->
 <template>
@@ -17,7 +17,7 @@
 <script setup>
 import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
 import { onMounted, computed } from "vue";
-import { loginApi } from "./api/system/login/login";
+import { loginApi } from "/@/api/system/login/login-api";
 import { useUserStore } from "./store/modules/system/user";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import { useSpinStore } from "/@/store/modules/system/spin";
