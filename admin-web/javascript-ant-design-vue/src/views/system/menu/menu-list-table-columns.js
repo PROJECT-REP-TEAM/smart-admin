@@ -63,11 +63,6 @@ export const columns = reactive([
     width: 45,
   },
   {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    width: 180,
-  },
-  {
     title: '操作',
     dataIndex: 'operate',
     width: 100,
