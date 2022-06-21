@@ -8,188 +8,146 @@
 -->
 <template>
   <a-drawer
-    :maskClosable="true"
-    :title="form.menuId ? '编辑' : '添加'"
-    :width="900"
-    :visible="visible"
-    :body-style="{ paddingBottom: '80px' }"
-    @close="onClose"
+      :body-style="{ paddingBottom: '80px' }"
+      :maskClosable="true"
+      :title="form.menuId ? '编辑' : '添加'"
+      :visible="visible"
+      :width="550"
+      @close="onClose"
   >
-    <a-form ref="formRef" :model="form" :rules="rules" layout="vertical">
-      <a-form-item label="上级菜单">
-        <MenuTreeSelect v-model:value="form.parentId" ref="parentMenuTreeSelect" />
-      </a-form-item>
+    <a-form ref="formRef" :labelCol="{ span: labelColSpan }" :labelWrap="true" :model="form" :rules="rules">
       <a-form-item label="菜单类型" name="menuType">
-        <a-radio-group v-model:value="form.menuType">
-          <a-radio v-for="item in MENU_TYPE_ENUM" :key="item.value" :value="item.value">{{
-            item.desc
-          }}</a-radio>
+        <a-radio-group v-model:value="form.menuType" button-style="solid">
+          <a-radio-button v-for="item in MENU_TYPE_ENUM" :key="item.value" :value="item.value">
+            {{ item.desc }}
+          </a-radio-button>
         </a-radio-group>
+      </a-form-item>
+      <a-form-item v-if="form.menuType != MENU_TYPE_ENUM.CATALOG.value" label="上级菜单">
+        <MenuTreeSelect ref="parentMenuTreeSelect" v-model:value="form.parentId"/>
       </a-form-item>
       <!--      目录 菜单 start   -->
       <template
-        v-if="
+          v-if="
           form.menuType == MENU_TYPE_ENUM.CATALOG.value ||
           form.menuType == MENU_TYPE_ENUM.MENU.value
         "
       >
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item label="菜单名称" name="menuName">
-              <a-input v-model:value="form.menuName" placeholder="请输入菜单名称" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="菜单图标" name="icon">
-              <IconSelect @updateIcon="selectIcon">
-                <template #iconSelect>
-                  <a-input
-                    v-model:value="form.icon"
-                    placeholder="请输入菜单图标"
-                    style="width: 200px"
-                  />
-                  <component
-                    style="font-size: 20px"
-                    class="smart-margin-left15"
-                    :is="$antIcons[form.icon]"
-                  />
-                </template>
-              </IconSelect>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="12" v-if="form.menuType == MENU_TYPE_ENUM.MENU.value">
-            <a-form-item label="路由地址" name="path">
-              <a-input v-model:value="form.path" placeholder="请输入路由地址" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="排序" name="sort">
-              <a-input-number
-                style="width: 100%"
-                placeholder="请输入排序"
-                v-model:value="form.sort"
-                :min="0"
-                :max="9999"
+        <a-form-item label="菜单名称" name="menuName">
+          <a-input v-model:value="form.menuName" placeholder="请输入菜单名称"/>
+        </a-form-item>
+        <a-form-item label="菜单图标" name="icon">
+          <IconSelect @updateIcon="selectIcon">
+            <template #iconSelect>
+              <a-input
+                  v-model:value="form.icon"
+                  placeholder="请输入菜单图标"
+                  style="width: 200px"
               />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-form-item
-          v-if="form.menuType == MENU_TYPE_ENUM.MENU.value"
-          label="组件地址"
-          name="component"
-        >
-          <a-input
-            v-model:value="form.component"
-            placeholder="请输入组件地址 默认带有开头/@/views"
+              <component
+                  :is="$antIcons[form.icon]"
+                  class="smart-margin-left15"
+                  style="font-size: 20px"
+              />
+            </template>
+          </IconSelect>
+        </a-form-item>
+        <a-form-item v-if="form.menuType == MENU_TYPE_ENUM.MENU.value" label="路由地址" name="path">
+          <a-input v-model:value="form.path" placeholder="请输入路由地址"/>
+        </a-form-item>
+        <a-form-item label="排序" name="sort">
+          <a-input-number
+              v-model:value="form.sort"
+              :max="9999"
+              :min="0"
+              placeholder="请输入排序"
+              style="width: 100%"
           />
         </a-form-item>
-        <a-row :gutter="16">
-          <a-col :span="12" v-if="form.menuType == MENU_TYPE_ENUM.MENU.value">
-            <a-form-item label="是否缓存" name="cacheFlag">
-              <a-radio-group v-model:value="form.cacheFlag">
-                <a-radio :value="true">是</a-radio>
-                <a-radio :value="false">否</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="是否外链" name="frameFlag">
-              <a-radio-group v-model:value="form.frameFlag">
-                <a-radio :value="true">是</a-radio>
-                <a-radio :value="false">否</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="显示状态" name="frameFlag">
-              <a-radio-group v-model:value="form.visibleFlag">
-                <a-radio :value="true">显示</a-radio>
-                <a-radio :value="false">隐藏</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="菜单状态" name="frameFlag">
-              <a-radio-group v-model:value="form.disabledFlag">
-                <a-radio :value="false">启用</a-radio>
-                <a-radio :value="true">禁用</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-        </a-row>
+        <template v-if="form.menuType == MENU_TYPE_ENUM.MENU.value">
+          <a-form-item v-if="form.frameFlag" label="外链地址" name="frameUrl">
+            <a-input v-model:value="form.frameUrl" placeholder="请输入外链地址"/>
+          </a-form-item>
+          <a-form-item
+              v-else
+              label="组件地址"
+              name="component"
+          >
+            <a-input
+                v-model:value="form.component"
+                placeholder="请输入组件地址 默认带有开头/@/views"
+            />
+          </a-form-item>
+        </template>
+
+        <a-form-item v-if="form.menuType == MENU_TYPE_ENUM.MENU.value" label="是否缓存" name="cacheFlag">
+          <a-switch v-model:checked="form.cacheFlag" checked-children="是" un-checked-children="否"/>
+        </a-form-item>
+        <a-form-item v-if="form.menuType == MENU_TYPE_ENUM.MENU.value" label="是否外链" name="frameFlag">
+          <a-switch v-model:checked="form.frameFlag" checked-children="是" un-checked-children="否"/>
+        </a-form-item>
+        <a-form-item label="显示状态" name="frameFlag">
+          <a-switch v-model:checked="form.visibleFlag" checked-children="显示" un-checked-children="隐藏"/>
+        </a-form-item>
+        <a-form-item label="菜单状态" name="frameFlag">
+          <a-switch v-model:checked="form.disabledFlag" checked-children="启用" un-checked-children="禁用"/>
+        </a-form-item>
       </template>
       <!--      目录 菜单 end   -->
+      <!--      按钮 start   -->
       <template v-if="form.menuType == MENU_TYPE_ENUM.POINTS.value">
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item label="功能点名称" name="menuName">
-              <a-input v-model:value="form.menuName" placeholder="请输入功能点名称" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="功能点关联菜单">
-              <MenuTreeSelect
-                v-model:value="form.contextMenuId"
-                ref="contextMenuTreeSelect"
-              />
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item label="前端权限字符" name="webPerms">
-              <a-input v-model:value="form.webPerms" placeholder="请输入前端权限字符" />
-            </a-form-item>
-          </a-col>
-          <a-col :span="12">
-            <a-form-item label="功能点状态" name="frameFlag">
-              <a-radio-group v-model:value="form.disabledFlag">
-                <a-radio :value="false">启用</a-radio>
-                <a-radio :value="true">禁用</a-radio>
-              </a-radio-group>
-            </a-form-item>
-          </a-col>
-        </a-row>
-        <a-row :gutter="16">
-          <a-col :span="12">
-            <a-form-item label="接口权限(saAuth模式)" name="apiPermsList">
-              <a-select
-                v-model:value="form.apiPermsList"
-                mode="multiple"
-                style="width: 100%"
-                placeholder="请选择接口权限"
-              >
-                <a-select-option v-for="item in allUrlData" :key="item.name">{{
-                  item.url
-                }}</a-select-option>
-              </a-select>
-            </a-form-item>
-          </a-col>
-        </a-row>
+        <a-form-item label="功能点名称" name="menuName">
+          <a-input v-model:value="form.menuName" placeholder="请输入功能点名称"/>
+        </a-form-item>
+        <a-form-item label="功能点关联菜单">
+          <MenuTreeSelect
+              ref="contextMenuTreeSelect"
+              v-model:value="form.contextMenuId"
+          />
+        </a-form-item>
+        <a-form-item label="前端权限字符" name="webPerms">
+          <a-input v-model:value="form.webPerms" placeholder="请输入前端权限字符"/>
+        </a-form-item>
+        <a-form-item label="功能点状态" name="frameFlag">
+          <a-switch v-model:checked="form.disabledFlag" checked-children="启用" un-checked-children="禁用"/>
+        </a-form-item>
+        <a-form-item label="接口权限(saAuth模式)" name="apiPermsList">
+          <a-select
+              v-model:value="form.apiPermsList"
+              mode="multiple"
+              placeholder="请选择接口权限"
+              style="width: 100%"
+          >
+            <a-select-option v-for="item in allUrlData" :key="item.name">{{
+                item.url
+              }}
+            </a-select-option>
+          </a-select>
+        </a-form-item>
       </template>
+      <!--      按钮 end   -->
     </a-form>
     <div class="footer">
       <a-button style="margin-right: 8px" @click="onClose">取消</a-button>
       <a-button style="margin-right: 8px" type="primary" @click="onSubmit(false)"
-        >提交</a-button
+      >提交
+      </a-button
       >
       <a-button v-if="!form.menuId" type="primary" @click="onSubmit(true)"
-        >提交并添加下一个</a-button
+      >提交并添加下一个
+      </a-button
       >
     </div>
   </a-drawer>
 </template>
-<script setup lang="ts">
-import { ref, reactive, watch, nextTick, onMounted } from "vue";
-import { MENU_DEFAULT_PARENT_ID, MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
+<script setup>
+import {computed, nextTick, reactive, ref, watch} from "vue";
+import {MENU_DEFAULT_PARENT_ID, MENU_TYPE_ENUM} from "/@/constants/system/menu-const";
 import MenuTreeSelect from "./menu-tree-select.vue";
 import IconSelect from "/@/components/icon-select/index.vue";
-import { message } from "ant-design-vue";
-import { menuApi } from "/@/api/system/menu/menu-api";
-import { useSpinStore } from "/@/store/modules/system/spin";
+import {message} from "ant-design-vue";
+import {menuApi} from "/@/api/system/menu/menu-api";
+import {useSpinStore} from "/@/store/modules/system/spin";
 import _ from "lodash";
 
 // ----------------------- 以下是字段定义 emits props ------------------------
@@ -201,6 +159,13 @@ const emit = defineEmits(["reloadList"]);
 // 是否展示抽屉
 const visible = ref(false);
 
+const labelColSpan = computed(() => {
+  if (form.menuType == MENU_TYPE_ENUM.POINTS.value) {
+    return 6;
+  }
+  return 4;
+})
+
 watch(visible, (e) => {
   if (e) {
     getAuthUrl();
@@ -209,6 +174,7 @@ watch(visible, (e) => {
 
 const contextMenuTreeSelect = ref();
 const parentMenuTreeSelect = ref();
+
 //展开编辑窗口
 async function showDrawer(rowData) {
   Object.assign(form, formDefault);
@@ -269,14 +235,15 @@ const formDefault = {
   contextMenuId: undefined,
   disabledFlag: false,
   frameFlag: false,
+  frameUrl: undefined,
 };
-let form = reactive({ ...formDefault });
+let form = reactive({...formDefault});
+
 function continueResetForm() {
   refreshParentAndContext();
   const menuType = form.menuType;
   const parentId = form.parentId;
   const webPerms = form.webPerms;
-  const apiPermsList = form.apiPermsList;
   Object.assign(form, formDefault);
   formRef.value.resetFields();
   form.menuType = menuType;
@@ -286,29 +253,34 @@ function continueResetForm() {
     form.webPerms = webPerms.substring(0, webPerms.lastIndexOf(":") + 1);
   }
 }
+
 const rules = {
-  menuType: [{ required: true, message: "菜单类型不能为空" }],
+  menuType: [{required: true, message: "菜单类型不能为空"}],
   menuName: [
-    { required: true, message: "菜单名称不能为空" },
-    { max: 20, message: "菜单名称不能大于20个字符", trigger: "blur" },
+    {required: true, message: "菜单名称不能为空"},
+    {max: 20, message: "菜单名称不能大于20个字符", trigger: "blur"},
+  ],
+  frameUrl: [
+    {required: true, message: "外链地址不能为空"},
+    {max: 500, message: "外链地址不能大于500个字符", trigger: "blur"},
   ],
   path: [
-    { required: true, message: "路由地址不能为空" },
-    { max: 100, message: "路由地址不能大于100个字符", trigger: "blur" },
+    {required: true, message: "路由地址不能为空"},
+    {max: 100, message: "路由地址不能大于100个字符", trigger: "blur"},
   ],
-  webPerms: [{ required: true, message: "前端权限字符不能为空" }],
+  webPerms: [{required: true, message: "前端权限字符不能为空"}],
 };
 
-function validateForm(formRef: { validate: () => Promise<any> }) {
-  return new Promise<boolean>((resolve) => {
+function validateForm(formRef) {
+  return new Promise((resolve) => {
     formRef
-      .validate()
-      .then(() => {
-        resolve(true);
-      })
-      .catch(() => {
-        resolve(false);
-      });
+        .validate()
+        .then(() => {
+          resolve(true);
+        })
+        .catch(() => {
+          resolve(false);
+        });
   });
 }
 

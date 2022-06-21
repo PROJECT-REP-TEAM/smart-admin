@@ -3,14 +3,14 @@
  * @Date: 2021-08-03 10:27:11
  * @LastEditTime: 2022-06-14
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/layout/smart-layout.vue
 -->
 <template>
   <!--左侧菜单 模式-->
   <smart-side-layout />
   <!--左侧展开菜单 模式-->
-  <!-- <smart-side-expand-layout /> -->
+<!--   <smart-side-expand-layout />-->
 </template>
 <script setup>
 import { computed } from "vue";

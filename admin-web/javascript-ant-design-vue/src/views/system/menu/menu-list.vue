@@ -123,6 +123,10 @@
           }}</a-tag>
         </template>
 
+        <template v-if="column.dataIndex === 'component'">
+          <span>{{ record.frameFlag ? record.frameUrl : record.component }}</span>
+        </template>
+
         <template v-if="column.dataIndex === 'frameFlag'">
           <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
         </template>

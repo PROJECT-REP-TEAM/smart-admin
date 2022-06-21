@@ -35,7 +35,7 @@ async function getLoginInfo () {
   //获取登录用户信息
   const res = await loginApi.getLoginInfo();
   //构建系统的路由
-  let menuRouterList = res.data.menuList.filter(e => e.path);
+  let menuRouterList = res.data.menuList.filter(e => e.path || e.frameUrl);
   buildRoutes(menuRouterList);
   initVue();
   //更新用户信息到pinia

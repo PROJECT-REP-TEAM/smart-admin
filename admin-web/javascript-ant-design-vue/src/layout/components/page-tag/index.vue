@@ -87,7 +87,7 @@ export default defineComponent({
         router.push({ name: appDefaultConfig.homePageName });
         return;
       }
-      router.push({ name, query: tag.menuQuery });
+      router.push({ name, query: tag.menuQuery, params: { keepAlive: 1 } });
     };
     const closeByMenu = (closeAll) => {
       let find = tagNav.value.find((e) => e.menuName == selectedKey.value);
@@ -118,7 +118,7 @@ export default defineComponent({
             goQuery = leftTagNav.menuQuery;
           }
         }
-        router.push({ name: goName, query: goQuery });
+        router.push({ name: goName, query: goQuery, params: { keepAlive: 1 } });
       } else if (!item && closeAll) {
         // 关闭所有tag
         router.push({ name: appDefaultConfig.homePageName });

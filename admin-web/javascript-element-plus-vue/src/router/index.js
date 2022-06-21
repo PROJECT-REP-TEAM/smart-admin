@@ -109,9 +109,7 @@ export function buildRoutes(menuList) {
         // 是否在菜单隐藏
         hideInMenu: !e.visibleFlag,
         // 页面是否keep-alive缓存
-        keepAlive: e.cacheFlag,
-        // 是否来自服务器 用于在beforeEach中判断router是否已经加载了来自服务器的路由 以此跳过重复addRoute
-        fromServer: true,
+        keepAlive: e.cacheFlag
       },
     };
     let componentPath = e.component && e.component.startsWith('/') ? e.component : '/' + e.component;

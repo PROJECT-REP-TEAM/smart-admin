@@ -3,7 +3,7 @@
  * @Date: 2021-08-25 21:52:23
  * @LastEditTime: 2022-06-14
  * @LastEditors: zhuoda
- * @Description: 
+ * @Description:
  * @FilePath: /smart-admin/src/layout/smart-side-expand-layout.vue
 -->
 <template>
@@ -60,7 +60,24 @@
 
       <!--中间内容-->
       <a-layout-content class="admin-layout-content" id="smartAdminLayoutContent">
-        <router-view />
+        <!--不keepAlive的iframe使用单个iframe组件-->
+        <iframeIndex v-show="iframeNotKeepAlivePageFlag"
+                     :key="route.name"
+                     :name="route.name"
+                     :url="route.meta.frameUrl"></iframeIndex>
+        <!--keepAlive的iframe 每个页面一个iframe组件-->
+        <iframeIndex v-for="item in keepAliveIframePages"
+                     v-show="route.name == item.name"
+                     :key="item.name"
+                     :name="item.name"
+                     :url="item.meta.frameUrl"></iframeIndex>
+        <!--非iframe使用router-view-->
+        <router-view v-show="!iframeNotKeepAlivePageFlag && keepAliveIframePages.every(e=>route.name != e.name)"
+                     v-slot="{ Component }">
+          <keep-alive :include="keepAliveIncludes">
+            <component :is="Component" />
+          </keep-alive>
+        </router-view>
       </a-layout-content>
 
       <!-- footer 版权公司信息 -->
@@ -79,6 +96,8 @@ import MenuLocationBreadcrumb from "./components/menu-location-breadcrumb/index.
 import PageTag from "./components/page-tag/index.vue";
 import watermark from "/@/lib/smart-wartermark";
 import { useUserStore } from "/@/store/modules/system/user";
+import IframeIndex from "/@/components/iframe/iframe-index.vue"
+import { smartKeepAlive } from "./smart-keep-alive"
 
 // ----------------------- 以下是字段定义 emits props ---------------------
 const windowHeight = window.innerHeight;
@@ -87,12 +106,14 @@ const collapsed = ref(false);
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 // ----------------------- 以下是生命周期 ---------------------------------
 onMounted(() => {
-  watermark.set("smartAdminLayoutContent", useUserStore().userInfo.actualName);
+  watermark.set("smartAdminLayoutContent", useUserStore().actualName);
 });
 // ----------------------- 以下是方法 ------------------------------------
 const backTopTarget = () => {
   return document.getElementById("smartAdminMain");
 };
+// ----------------------- keep-alive相关 -----------------------
+let { route,keepAliveIncludes,iframeNotKeepAlivePageFlag,keepAliveIframePages } = smartKeepAlive();
 // ----------------------- 以下是暴露的方法内容 ----------------------------
 defineExpose({});
 </script>
