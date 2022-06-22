@@ -4,7 +4,7 @@
  * @Author: zhuoda
  * @Date: 2021-08-17 23:32:36
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-22
  */
 import { postRequest, getRequest } from '/@/lib/axios';
 
@@ -22,7 +22,7 @@ export const configApi = {
     return postRequest('/support/config/update', param);
   },
   // 查询配置详情 by zhuoda
-  queryByKey: (param: string) => {
+  queryByKey: (param) => {
     return getRequest(`/support/config/queryByKey?configKey=${param}`);
   },
 };

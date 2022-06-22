@@ -4,7 +4,10 @@
     1、标签
     2、标签操作区
   -->
-  <a-row style="border-bottom: 1px solid #eeeeee; position: relative">
+  <a-row
+    style="border-bottom: 1px solid #eeeeee; position: relative"
+    v-show="pageTagFlag"
+  >
     <a-dropdown :trigger="['contextmenu']">
       <div class="smart-page-tag">
         <a-tabs
@@ -19,7 +22,7 @@
                 {{ item.menuTitle }}
                 <close-outlined
                   @click.stop="closeTag(item, false)"
-                  v-if="item.menuName != homePageName"
+                  v-if="item.menuName !== HOME_PAGE_NAME"
                   class="smart-page-tag-close"
                 />
               </span>
@@ -52,95 +55,71 @@
   </a-row>
 </template>
 
-<script>
+<script setup>
 import { computed, defineComponent, ref } from "vue";
 import { CloseOutlined, AppstoreOutlined } from "@ant-design/icons-vue";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import { useUserStore } from "/@/store/modules/system/user";
 import { useRoute, useRouter } from "vue-router";
-import { appDefaultConfig } from "/@/config/app-config";
+import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
 
-export default defineComponent({
-  name: "SmartPageTag",
-  components: {
-    CloseOutlined,
-    AppstoreOutlined,
-  },
-  setup() {
-    const router = useRouter();
-    const appConfigStore = useAppConfigStore();
-    const pageList = new Array();
-    const mode = ref("top");
-    const homePageName = appDefaultConfig.homePageName;
-    const callback = (val) => {
-      console.log(val);
-    };
-    const tagNav = computed(() => useUserStore().getTagNav || []);
-    const selectedKey = computed(() => {
-      let currentRoute = useRoute();
-      return currentRoute.name;
-    });
-    const selectTab = (name) => {
-      // 寻找tag
-      let tag = tagNav.value.find((e) => e.menuName == name);
-      if (!tag) {
-        router.push({ name: appDefaultConfig.homePageName });
-        return;
-      }
-      router.push({ name, query: tag.menuQuery, params: { keepAlive: 1 } });
-    };
-    const closeByMenu = (closeAll) => {
-      let find = tagNav.value.find((e) => e.menuName == selectedKey.value);
-      if (!find || closeAll) {
-        closeTag(null, true);
-      } else {
-        closeTag(find, true);
-      }
-    };
-    const closeTag = (item, closeAll) => {
-      // 关闭单个tag
-      if (item && !closeAll) {
-        let goName = appDefaultConfig.homePageName;
-        let goQuery = undefined;
-        if (
-          item.fromMenuName &&
-          tagNav.value.some((e) => e.menuName == item.fromMenuName)
-        ) {
-          goName = item.fromMenuName;
-          goQuery = item.fromMenuQuery;
-        } else {
-          // 查询左侧tag
-          let index = tagNav.value.findIndex((e) => e.menuName == item.menuName);
-          if (index > 0) {
-            // 查询左侧tag
-            let leftTagNav = tagNav.value[index - 1];
-            goName = leftTagNav.menuName;
-            goQuery = leftTagNav.menuQuery;
-          }
-        }
-        router.push({ name: goName, query: goQuery, params: { keepAlive: 1 } });
-      } else if (!item && closeAll) {
-        // 关闭所有tag
-        router.push({ name: appDefaultConfig.homePageName });
-      }
-      // 关闭其他tag不做处理 直接调用closeTagNav
-      useUserStore().closeTagNav(item ? item.menuName : null, closeAll);
-    };
-    return {
-      closeByMenu,
-      closeTag,
-      selectTab,
-      tagNav,
-      selectedKey,
-      mode,
-      callback,
-      pageList,
-      homePageName,
-      layout: computed(() => appConfigStore.layout),
-      multiPageTagFlag: computed(() => appConfigStore.multiPageTagFlag),
-    };
-  },
+const pageTagFlag = computed(() => useAppConfigStore().$state.pageTagFlag);
+
+const router = useRouter();
+const appConfigStore = useAppConfigStore();
+const pageList = new Array();
+const mode = ref("top");
+function callback(val) {
+  console.log(val);
+}
+const tagNav = computed(() => useUserStore().getTagNav || []);
+const selectedKey = computed(() => {
+  let currentRoute = useRoute();
+  return currentRoute.name;
 });
+function selectTab(name) {
+  // 寻找tag
+  let tag = tagNav.value.find((e) => e.menuName == name);
+  if (!tag) {
+    router.push({ name: HOME_PAGE_NAME });
+    return;
+  }
+  router.push({ name, query: tag.menuQuery, params: { keepAlive: 1 } });
+}
+function closeByMenu(closeAll) {
+  let find = tagNav.value.find((e) => e.menuName == selectedKey.value);
+  if (!find || closeAll) {
+    closeTag(null, true);
+  } else {
+    closeTag(find, true);
+  }
+}
+function closeTag(item, closeAll) {
+  // 关闭单个tag
+  if (item && !closeAll) {
+    let goName = HOME_PAGE_NAME;
+    let goQuery = undefined;
+    if (item.fromMenuName && tagNav.value.some((e) => e.menuName == item.fromMenuName)) {
+      goName = item.fromMenuName;
+      goQuery = item.fromMenuQuery;
+    } else {
+      // 查询左侧tag
+      let index = tagNav.value.findIndex((e) => e.menuName == item.menuName);
+      if (index > 0) {
+        // 查询左侧tag
+        let leftTagNav = tagNav.value[index - 1];
+        goName = leftTagNav.menuName;
+        goQuery = leftTagNav.menuQuery;
+      }
+    }
+    router.push({ name: goName, query: goQuery, params: { keepAlive: 1 } });
+  } else if (!item && closeAll) {
+    // 关闭所有tag
+    router.push({ name: HOME_PAGE_NAME });
+  }
+  // 关闭其他tag不做处理 直接调用closeTagNav
+  useUserStore().closeTagNav(item ? item.menuName : null, closeAll);
+}
 </script>
 
 <style scoped lang="less">

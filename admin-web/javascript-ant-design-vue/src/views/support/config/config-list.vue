@@ -70,7 +70,7 @@
 </template>
 <script setup>
 import { reactive, ref, onMounted } from "vue";
-import { configApi } from "/@/api/support/config/config-api";
+import { configApi } from "../../../api/support/config/config-api";
 import { PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
 import ConfigFormModal from "./config-form-modal.vue";
 

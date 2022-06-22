@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-17 19:09:40
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-22
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/components/recursion-menu/index.vue
@@ -12,7 +12,7 @@
     v-model:selectedKeys="selectedKeys"
     class="smart-menu"
     mode="inline"
-    theme="dark"
+    :theme="theme"
     :inlineCollapsed="inlineCollapsed"
   >
     <template v-for="item in menuTree" :key="item.menuId">
@@ -41,6 +41,9 @@ import { MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
 import { useRoute } from "vue-router";
 import { useUserStore } from "/@/store/modules/system/user";
 import { dispose } from "echarts/core";
+import { useAppConfigStore } from "/@/store/modules/system/app-config";
+
+const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
 
 const props = defineProps({
   inlineCollapsed: {

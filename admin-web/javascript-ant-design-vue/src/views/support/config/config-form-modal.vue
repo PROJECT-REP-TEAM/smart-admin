@@ -4,7 +4,7 @@
  * @Author: zhuoda
  * @Date: 2021-09-01 20:58:51
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-22
 -->
 <template>
   <a-modal
@@ -39,7 +39,7 @@ import { ref, reactive } from "vue";
 import { ValidateErrorEntity } from "ant-design-vue/lib/form/interface";
 import { message } from "ant-design-vue";
 import { useSpinStore } from "/@/store/modules/system/spin";
-import { configApi } from "/@/api/support/config/config-api";
+import { configApi } from "../../../api/support/config/config-api";
 
 // ----------------------- 以下是字段定义 emits props ------------------------
 // emit

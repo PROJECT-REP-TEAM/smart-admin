@@ -2,7 +2,7 @@
  * @Description:水印
  * @Author: zhuoda
  * @Date: 2021-08-28
- * @LastEditTime: 2022-06-20
+ * @LastEditTime: 2022-06-22
  * @LastEditors: zhuoda
  */
 
@@ -27,7 +27,7 @@ let smartAdminWaterMarkIntervalId = null;
 function setWatermark (id, str) {
   //删掉之前的水印
   if (document.getElementById(WATER_MARK_DOM_ID) !== null) {
-    document.getElementById(WATER_MARK_DOM_ID)?.remove();
+    document.getElementById(WATER_MARK_DOM_ID).remove();
   }
 
   str = str + ' ' + dayjs().format('YYYY-MM-DD HH:mm');
@@ -60,10 +60,16 @@ function setWatermark (id, str) {
   div.style.width = '100%';
   div.style.height = '100%';
   div.style.background = 'url(' + can.toDataURL('image/png') + ') left top repeat';
-  document.getElementById(id)?.appendChild(div);
+  document.getElementById(id).appendChild(div);
 }
 
 const watermark = {
+  show: function () {
+    document.getElementById(id).style.display = 'block';
+  },
+  hide: function () {
+    document.getElementById(id).style.display = 'hide';
+  },
   // 该方法只允许调用一次
   set: function (id, str) {
     // 如果存在水印，则不允许再调用了
@@ -73,6 +79,8 @@ const watermark = {
     }
 
     setWatermark(id, str);
+
+    //每隔1分钟检查一次水印
     smartAdminWaterMarkIntervalId = setInterval(() => {
       setWatermark(id, str);
     }, 60000);

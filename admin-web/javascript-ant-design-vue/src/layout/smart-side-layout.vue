@@ -2,12 +2,13 @@
   <a-layout :class="['admin-layout', 'smart-scroll']" style="min-height: 100%">
     <!-- 侧边菜单 side-menu -->
     <a-layout-sider
-        :class="['side-menu', 'smart-scroll']"
-        :collapsed="collapsed"
-        theme="dark"
+      :class="['side-menu', 'smart-scroll']"
+      :width="sideMenuWidth"
+      :collapsed="collapsed"
+      :theme="theme"
     >
       <!-- 左侧菜单 -->
-      <side-menu :collapsed="collapsed"/>
+      <side-menu :collapsed="collapsed" />
     </a-layout-sider>
 
     <!--
@@ -17,9 +18,9 @@
       3、底部（一般是公司版权信息）
      -->
     <a-layout
-        id="smartAdminMain"
-        :style="`height: ${windowHeight}px`"
-        class="admin-layout-main smart-scroll"
+      id="smartAdminMain"
+      :style="`height: ${windowHeight}px`"
+      class="admin-layout-main smart-scroll"
     >
       <!-- 顶部头部信息 -->
       <a-layout-header class="layout-header">
@@ -27,44 +28,53 @@
           <a-col class="layout-header-left">
             <span class="collapsed-button">
               <menu-unfold-outlined
-                  v-if="collapsed"
-                  class="trigger"
-                  @click="() => (collapsed = !collapsed)"
+                v-if="collapsed"
+                class="trigger"
+                @click="() => (collapsed = !collapsed)"
               />
               <menu-fold-outlined
-                  v-else
-                  class="trigger"
-                  @click="() => (collapsed = !collapsed)"
+                v-else
+                class="trigger"
+                @click="() => (collapsed = !collapsed)"
               />
             </span>
             <span class="location-breadcrumb">
-              <menu-location-breadcrumb/>
+              <menu-location-breadcrumb />
             </span>
           </a-col>
           <!---用戶操作区域-->
           <a-col class="layout-header-right">
-            <header-user-space/>
+            <header-user-space />
           </a-col>
         </a-row>
-        <page-tag/>
+        <page-tag />
       </a-layout-header>
 
       <!--中间内容-->
       <a-layout-content id="smartAdminLayoutContent" class="admin-layout-content">
         <!--不keepAlive的iframe使用单个iframe组件-->
-        <iframeIndex v-show="iframeNotKeepAlivePageFlag"
-                     :key="route.name"
-                     :name="route.name"
-                     :url="route.meta.frameUrl"></iframeIndex>
+        <iframeIndex
+          v-show="iframeNotKeepAlivePageFlag"
+          :key="route.name"
+          :name="route.name"
+          :url="route.meta.frameUrl"
+        ></iframeIndex>
         <!--keepAlive的iframe 每个页面一个iframe组件-->
-        <iframeIndex v-for="item in keepAliveIframePages"
-                     v-show="route.name == item.name"
-                     :key="item.name"
-                     :name="item.name"
-                     :url="item.meta.frameUrl"></iframeIndex>
+        <iframeIndex
+          v-for="item in keepAliveIframePages"
+          v-show="route.name == item.name"
+          :key="item.name"
+          :name="item.name"
+          :url="item.meta.frameUrl"
+        ></iframeIndex>
         <!--非iframe使用router-view-->
-        <router-view v-show="!iframeNotKeepAlivePageFlag && keepAliveIframePages.every(e=>route.name != e.name)"
-                     v-slot="{ Component }">
+        <router-view
+          v-show="
+            !iframeNotKeepAlivePageFlag &&
+            keepAliveIframePages.every((e) => route.name != e.name)
+          "
+          v-slot="{ Component }"
+        >
           <keep-alive :include="keepAliveIncludes">
             <component :is="Component" />
           </keep-alive>
@@ -73,10 +83,10 @@
 
       <!-- footer 版权公司信息 -->
       <a-layout-footer class="layout-footer">
-        <smart-footer/>
+        <smart-footer />
       </a-layout-footer>
 
-      <a-back-top :target="backTopTarget" :visibilityHeight="80"/>
+      <a-back-top :target="backTopTarget" :visibilityHeight="80" />
     </a-layout>
   </a-layout>
 </template>
@@ -85,30 +95,32 @@
 import SideMenu from "./components/side-menu/index.vue";
 import SmartFooter from "./components/smart-footer/index.vue";
 import HeaderUserSpace from "./components/header-user-space/index.vue";
-import { onMounted, ref} from "vue";
+import { computed, onMounted, ref } from "vue";
 import MenuLocationBreadcrumb from "./components/menu-location-breadcrumb/index.vue";
 import PageTag from "./components/page-tag/index.vue";
 import watermark from "/@/lib/smart-wartermark";
-import {useUserStore} from "/@/store/modules/system/user";
-import IframeIndex from "/@/components/iframe/iframe-index.vue"
-import { smartKeepAlive } from "./smart-keep-alive"
+import { useUserStore } from "/@/store/modules/system/user";
+import IframeIndex from "/@/components/iframe/iframe-index.vue";
+import { smartKeepAlive } from "./smart-keep-alive";
+import { useAppConfigStore } from "../store/modules/system/app-config";
 
-// ----------------------- 以下是字段定义 emits props ---------------------
+const sideMenuWidth = computed(() => useAppConfigStore().$state.sideMenuWidth);
+const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
 const windowHeight = window.innerHeight;
 const collapsed = ref(false);
-// ----------------------- 以下是计算属性 watch监听 ------------------------
-// ----------------------- 以下是生命周期 ---------------------------------
 onMounted(() => {
   watermark.set("smartAdminLayoutContent", useUserStore().actualName);
 });
-// ----------------------- 以下是方法 ------------------------------------
 const backTopTarget = () => {
   return document.getElementById("smartAdminMain");
 };
 // ----------------------- keep-alive相关 -----------------------
-let { route,keepAliveIncludes,iframeNotKeepAlivePageFlag,keepAliveIframePages } = smartKeepAlive();
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
+let {
+  route,
+  keepAliveIncludes,
+  iframeNotKeepAlivePageFlag,
+  keepAliveIframePages,
+} = smartKeepAlive();
 </script>
 
 <style lang="less" scoped>

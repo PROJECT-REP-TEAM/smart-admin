@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 17:09:44
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-22
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/top-menu.vue
@@ -13,7 +13,7 @@
       <h3 style="color: white">SmartAdmin</h3>
     </div>
     <!-- 一级菜单展示 -->
-    <a-menu :selectedKeys="selectedKeys" mode="inline" theme="dark">
+    <a-menu :selectedKeys="selectedKeys" mode="inline" :theme="theme">
       <template v-for="item in props.menuTree" :key="item.menuId">
         <template v-if="item.visibleFlag">
           <a-menu-item :key="item.menuId.toString()" @click="selectMenu(item)">
@@ -31,10 +31,13 @@
 import _ from "lodash";
 import { computed, ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { appDefaultConfig } from "/@/config/app-config";
 import { MENU_TYPE_ENUM } from "/@/constants/system/menu-const";
 import { router } from "/@/router";
 import { useUserStore } from "/@/store/modules/system/user";
+import { useAppConfigStore } from "/@/store/modules/system/app-config";
+import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
+
+const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
 
 const props = defineProps({
   menuTree: Array,
@@ -84,7 +87,7 @@ function selectMenu(route) {
   }
 }
 function goHome() {
-  router.push({ name: appDefaultConfig.homePageName });
+  router.push({ name: HOME_PAGE_NAME });
 }
 defineExpose({
   selectedMenu,
@@ -93,7 +96,6 @@ defineExpose({
 <style scoped lang="less">
 .top-menu-container {
   height: 100%;
-  background: #001529;
 }
 .logo {
   overflow: hidden;

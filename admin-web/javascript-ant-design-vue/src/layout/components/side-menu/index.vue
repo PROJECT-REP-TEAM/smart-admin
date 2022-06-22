@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhuoda
  * @Date: 2021-11-05
- * @LastEditTime: 2022-06-14
+ * @LastEditTime: 2022-06-22
  * @LastEditors: zhuoda
 -->
 
@@ -30,7 +30,6 @@ import RecursionMenu from "./recursion-menu.vue";
 import { computed, watch, ref } from "vue";
 import logoImg from "/@/assets/images/logo/smart-admin-logo.png";
 import logoMinImg from "/@/assets/images/logo/smart-admin-logo-min.png";
-import { useProjectConfigStore } from "/@/store/modules/system/project-config";
 
 const props = defineProps({
   collapsed: {
@@ -51,9 +50,6 @@ watch(
     }
   }
 );
-
-let projectConfigStore = useProjectConfigStore();
-const projectName = computed(() => projectConfigStore.projectName);
 </script>
 
 <style lang="less" scoped>

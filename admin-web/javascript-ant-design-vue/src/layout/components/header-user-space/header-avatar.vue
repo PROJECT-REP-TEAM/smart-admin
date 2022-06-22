@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-22
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/components/smart-header-user-space/header-avatar.vue
@@ -9,7 +9,7 @@
 
 <template>
   <a-dropdown class="header-trigger">
-    <div style="cursor: pointer">
+    <div class="wrapper">
       <span class="name">{{ actualName }}</span>
       <a-avatar style="margin: 0 10px" :size="24" id="smartAdminAvatar">
         {{ avatarName }}
@@ -38,13 +38,11 @@ import { localClear } from "/@/utils/local-util";
 // 头像背景颜色
 const AVATAR_BACKGROUND_COLOR_ARRAY = ["#87d068", "#00B853", "#f56a00", "#1890ff"];
 
-// ----------------------- 以下是字段定义 emits props ---------------------
 const avatarName = ref("");
 const router = useRouter();
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 const actualName = computed(() => useUserStore().actualName);
 
-// ----------------------- 以下是方法 ------------------------------------
 function onLogout() {
   localClear();
   clearAllCoolies();
@@ -82,11 +80,13 @@ function hashcode(str) {
 }
 
 onMounted(updateAvatar);
-
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
 </script>
 <style lang="less" scoped>
+.wrapper {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
 .header-trigger {
   height: @header-user-height;
   line-height: @header-user-height;
@@ -98,7 +98,6 @@ defineExpose({});
   .name {
     margin-left: 5px;
     font-weight: 500;
-    vertical-align: middle;
   }
 }
 </style>

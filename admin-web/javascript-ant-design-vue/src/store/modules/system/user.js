@@ -1,10 +1,10 @@
-import {defineStore} from 'pinia';
-import {getTokenFromCookie} from '/@/utils/cookie-util';
-import localKey from '/@/constants/system/local-storage-key-const';
-import {localClear, localRead, localSave} from '/@/utils/local-util';
+import { defineStore } from 'pinia';
+import { getTokenFromCookie } from '/@/utils/cookie-util';
+import localKey from '/@/constants/local-storage-key-const';
+import { localClear, localRead, localSave } from '/@/utils/local-util';
 import _ from 'lodash';
-import {appDefaultConfig} from '/@/config/app-config';
-import {MENU_TYPE_ENUM} from '/@/constants/system/menu-const';
+import { MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
+import { HOME_PAGE_NAME } from '/@/constants/system/home-const';
 
 
 export const useUserStore = defineStore({
@@ -34,46 +34,46 @@ export const useUserStore = defineStore({
         keepAliveIncludes: [],
     }),
     getters: {
-        getToken(state) {
+        getToken (state) {
             if (state.token) {
                 return state.token;
             }
             return getTokenFromCookie();
         },
-        getMenuRouterInitFlag(state) {
+        getMenuRouterInitFlag (state) {
             return state.menuRouterInitFlag;
         },
-        getUserInfo(state) {
+        getUserInfo (state) {
             if (_.isEmpty(state.userInfo)) {
                 let localUserInfo = localRead(localKey.USER_INFO) || '';
                 state.userInfo = localUserInfo ? JSON.parse(localUserInfo) : {};
             }
             return state.userInfo;
         },
-        getMenuTree(state) {
+        getMenuTree (state) {
             return state.menuTree;
         },
-        getMenuRouterList(state) {
+        getMenuRouterList (state) {
             return state.menuRouterList;
         },
-        getMenuParentIdListMap(state) {
+        getMenuParentIdListMap (state) {
             return state.menuParentIdListMap;
         },
-        getPointList(state) {
+        getPointList (state) {
             if (_.isEmpty(state.pointsList)) {
                 let localUserPoints = localRead(localKey.USER_POINTS) || '';
                 state.pointsList = localUserPoints ? JSON.parse(localUserPoints) : [];
             }
             return state.pointsList;
         },
-        getTagNav(state) {
+        getTagNav (state) {
             if (_.isEmpty(state.tagNav)) {
                 let localTagNav = localRead(localKey.USER_TAG_NAV) || '';
                 state.tagNav = localTagNav ? JSON.parse(localTagNav) : [];
             }
             let tagNavList = _.cloneDeep(state.tagNav) || [];
             tagNavList.unshift({
-                menuName: appDefaultConfig.homePageName,
+                menuName: HOME_PAGE_NAME,
                 menuTitle: '首页',
             });
             return tagNavList;
@@ -81,14 +81,14 @@ export const useUserStore = defineStore({
     },
 
     actions: {
-        logout() {
+        logout () {
             this.token = '';
             this.menuList = [];
             this.tagNav = [];
             this.userInfo = {};
             localClear();
         },
-        setUserLoginInfo(data) {
+        setUserLoginInfo (data) {
             // 用户基本信息
             this.token = data.token;
             this.employeeId = data.employeeId;
@@ -115,14 +115,14 @@ export const useUserStore = defineStore({
                 && !menu.disabledFlag
             );
         },
-        setToken(token) {
+        setToken (token) {
             this.token = token;
         },
-        setTagNav(route, from) {
+        setTagNav (route, from) {
             if (_.isEmpty(this.getTagNav)) this.tagNav = [];
             // name唯一标识
             let name = route.name;
-            if (!name || name == appDefaultConfig.homePageName) {
+            if (!name || name == HOME_PAGE_NAME) {
                 return;
             }
             let findTag = (this.tagNav || []).find((e) => e.menuName == name);
@@ -145,7 +145,7 @@ export const useUserStore = defineStore({
             }
             localSave(localKey.USER_TAG_NAV, JSON.stringify(this.tagNav));
         },
-        closeTagNav(menuName, closeAll) {
+        closeTagNav (menuName, closeAll) {
             if (_.isEmpty(this.getTagNav)) return;
             if (closeAll && !menuName) {
                 this.tagNav = [];
@@ -168,30 +168,30 @@ export const useUserStore = defineStore({
             }
             localSave(localKey.USER_TAG_NAV, JSON.stringify(this.tagNav));
         },
-        closePage(route, router, path) {
+        closePage (route, router, path) {
             if (!this.getTagNav || _.isEmpty(this.getTagNav)) return;
             if (path) {
-                router.push({path});
+                router.push({ path });
             } else {
                 // 寻找tagNav
                 let index = this.getTagNav.findIndex((e) => e.menuName == route.name);
                 if (index == -1) {
-                    router.push({name: appDefaultConfig.homePageName});
+                    router.push({ name: HOME_PAGE_NAME });
                 } else {
                     let tagNav = this.getTagNav[index];
                     if (tagNav.fromMenuName && this.getTagNav.some((e) => e.menuName == tagNav.fromMenuName)) {
-                        router.push({name: tagNav.fromMenuName, query: tagNav.fromMenuQuery});
+                        router.push({ name: tagNav.fromMenuName, query: tagNav.fromMenuQuery });
                     } else {
                         // 查询左侧tag
                         let leftTagNav = this.getTagNav[index - 1];
-                        router.push({name: leftTagNav.menuName, query: leftTagNav.menuQuery});
+                        router.push({ name: leftTagNav.menuName, query: leftTagNav.menuQuery });
                     }
                 }
             }
             this.closeTagNav(route.name, false);
         },
         // 加入缓存
-        pushKeepAliveIncludes(val) {
+        pushKeepAliveIncludes (val) {
             if (!val) {
                 return;
             }
@@ -206,7 +206,7 @@ export const useUserStore = defineStore({
             }
         },
         // 删除缓存
-        deleteKeepAliveIncludes(val) {
+        deleteKeepAliveIncludes (val) {
             if (!this.keepAliveIncludes || !val) {
                 return;
             }
@@ -216,7 +216,7 @@ export const useUserStore = defineStore({
             }
         },
         // 清空缓存
-        clearKeepAliveIncludes(val) {
+        clearKeepAliveIncludes (val) {
             if (!val || !this.keepAliveIncludes?.includes(val)) {
                 this.keepAliveIncludes = [];
                 return;
@@ -230,13 +230,13 @@ export const useUserStore = defineStore({
 /**
  * 构建菜单父级集合
  */
-function buildMenuParentIdListMap(menuTree) {
+function buildMenuParentIdListMap (menuTree) {
     let menuParentIdListMap = new Map();
     recursiveBuildMenuParentIdListMap(menuTree, [], menuParentIdListMap);
     return menuParentIdListMap;
 }
 
-function recursiveBuildMenuParentIdListMap(menuList, parentMenuList, menuParentIdListMap) {
+function recursiveBuildMenuParentIdListMap (menuList, parentMenuList, menuParentIdListMap) {
     for (const e of menuList) {
         // 顶级parentMenuList清空
         if (e.parentId == 0) {
@@ -246,7 +246,7 @@ function recursiveBuildMenuParentIdListMap(menuList, parentMenuList, menuParentI
         let cloneParentMenuList = _.cloneDeep(parentMenuList);
         if (!_.isEmpty(e.children) && e.menuName) {
             // 递归
-            cloneParentMenuList.push({name: menuIdStr, title: e.menuName});
+            cloneParentMenuList.push({ name: menuIdStr, title: e.menuName });
             recursiveBuildMenuParentIdListMap(e.children, cloneParentMenuList, menuParentIdListMap);
         } else {
             menuParentIdListMap.set(menuIdStr, cloneParentMenuList);
@@ -261,7 +261,7 @@ function recursiveBuildMenuParentIdListMap(menuList, parentMenuList, menuParentI
  * @param  menuList
  * @returns
  */
-function buildMenuTree(menuList) {
+function buildMenuTree (menuList) {
     //1 获取所有 有效的 目录和菜单
     let catalogAndMenuList = menuList.filter(menu =>
         menu.menuType !== MENU_TYPE_ENUM.POINTS.value
@@ -277,7 +277,7 @@ function buildMenuTree(menuList) {
     return topCatalogList;
 }
 
-function buildMenuChildren(menu, allMenuList) {
+function buildMenuChildren (menu, allMenuList) {
     let children = allMenuList.filter(e => e.parentId === menu.menuId);
     if (children.length === 0) {
         return;

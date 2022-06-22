@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-09 08:58:11
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-22
  * @LastEditors: zhuoda
  * @Description:
  */
@@ -19,4 +19,6 @@ export default {
   USER_POINTS: `${KEY_PREFIX}user_points`,
   // 用户的tag列表
   USER_TAG_NAV: `${KEY_PREFIX}user_tag_nav`,
+  // app config 配置信息
+  APP_CONFIG: `${KEY_PREFIX}app_config`,
 };
