@@ -61,16 +61,16 @@
       <!--中间内容-->
       <a-layout-content class="admin-layout-content" id="smartAdminLayoutContent">
         <!--不keepAlive的iframe使用单个iframe组件-->
-        <iframeIndex v-show="iframeNotKeepAlivePageFlag"
+        <IframeIndex v-if="iframeNotKeepAlivePageFlag"
                      :key="route.name"
                      :name="route.name"
-                     :url="route.meta.frameUrl"></iframeIndex>
+                     :url="route.meta.frameUrl"></IframeIndex>
         <!--keepAlive的iframe 每个页面一个iframe组件-->
-        <iframeIndex v-for="item in keepAliveIframePages"
+        <IframeIndex v-for="item in keepAliveIframePages"
                      v-show="route.name == item.name"
                      :key="item.name"
                      :name="item.name"
-                     :url="item.meta.frameUrl"></iframeIndex>
+                     :url="item.meta.frameUrl"></IframeIndex>
         <!--非iframe使用router-view-->
         <router-view v-show="!iframeNotKeepAlivePageFlag && keepAliveIframePages.every(e=>route.name != e.name)"
                      v-slot="{ Component }">
