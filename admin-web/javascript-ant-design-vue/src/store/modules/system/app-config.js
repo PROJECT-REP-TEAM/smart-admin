@@ -13,14 +13,22 @@ import { appDefaultConfig } from '/@/config/app-config';
 let state = { ...appDefaultConfig };
 
 let appConfigStr = localRead(localStorageKeyConst.APP_CONFIG);
+let language = appDefaultConfig.language;
 if (appConfigStr) {
   try {
     state = JSON.parse(appConfigStr);
+    language = state.language;
   } catch (e) {
 
   }
 }
 
+/**
+ * 获取初始化的语言
+ */
+export const getInitializedLanguage = function () {
+  return language;
+}
 
 export const useAppConfigStore = defineStore({
   id: 'appConfig',

@@ -14,11 +14,12 @@
    -->
 
   <!-- 顶部logo区域 -->
-  <div class="logo" v-if="!collapsed">
-    <img :src="logoImg" />
+  <div class="logo" :style="sideMenuWidth" v-if="!collapsed">
+    <img class="logo-img" :src="logoImg" />
+    <div class="title">SmartAdmin 2.X</div>
   </div>
   <div class="min-logo" v-if="collapsed">
-    <img :src="logoMinImg" />
+    <img class="logo-img" :src="logoImg" />
   </div>
 
   <!-- 下方菜单区域： 这里使用一个递归菜单解决 -->
@@ -29,7 +30,10 @@
 import RecursionMenu from "./recursion-menu.vue";
 import { computed, watch, ref } from "vue";
 import logoImg from "/@/assets/images/logo/smart-admin-logo.png";
-import logoMinImg from "/@/assets/images/logo/smart-admin-logo-min.png";
+import { useAppConfigStore } from "/@/store/modules/system/app-config";
+
+const sideMenuWidth = computed(() => "width:" + useAppConfigStore().sideMenuWidth + "px");
+const sideMenuTheme = computed(() => useAppConfigStore().sideMenuTheme);
 
 const props = defineProps({
   collapsed: {
@@ -63,46 +67,35 @@ watch(
 
   .min-logo {
     height: @header-user-height;
-    position: fixed;
     line-height: @header-user-height;
     padding: 0px 15px 0px 15px;
-    width: auto;
+    width: 100%;
     z-index: 9999;
-    background-color: #001529;
-
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    .logo-img {
+      width: 32px;
+      height: 32px;
+    }
   }
 
   .logo {
     height: @header-user-height;
-    position: fixed;
     line-height: @header-user-height;
     padding: 0px 15px 0px 15px;
-    width: 197px;
     z-index: 9999;
-    background-color: #001529;
+    display: flex;
+    justify-content: space-between;
 
-    -webkit-transition: all 0.3s;
-    transition: all 0.3s;
-    overflow: hidden;
-    &.light {
-      background-color: #fff;
-      h1 {
-        color: @primary-color;
-      }
+    .logo-img {
+      width: 40px;
+      height: 40px;
     }
-    h1 {
-      color: @menu-dark-highlight-color;
-      font-size: 20px;
-      margin: 0 0 0 12px;
-      display: inline-block;
-      vertical-align: middle;
-    }
-    img {
-      width: 100%;
-      vertical-align: middle;
+
+    .title {
+      font-size: 16px;
+      font-weight: 600;
+      color: v-bind('sideMenuTheme === "light" ? "#001529": "#ffffff"');
     }
   }
 }

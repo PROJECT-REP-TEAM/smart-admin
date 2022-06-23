@@ -124,10 +124,16 @@ let {
 </script>
 
 <style lang="less" scoped>
+:deep(.ant-layout-header) {
+  height: auto;
+}
+:deep(.layout-header) {
+  height: auto;
+}
+
 .layout-header {
   background: #fff;
   padding: 0;
-  height: @header-height;
   z-index: 999;
 }
 

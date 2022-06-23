@@ -128,10 +128,16 @@ let {
 } = smartKeepAlive();
 </script>
 <style scoped lang="less">
+:deep(.ant-layout-header) {
+  height: auto;
+}
+:deep(.layout-header) {
+  height: auto;
+}
+
 .smart-layout-header {
   background: #fff;
   padding: 0;
-  height: auto;
   z-index: 999;
 }
 

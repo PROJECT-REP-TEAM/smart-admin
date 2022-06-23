@@ -7,7 +7,12 @@
 -->
 
 <template>
-  <a-drawer title="网页设置" placement="right" :visible="visible" @close="close">
+  <a-drawer
+    :title="$t('setting.title')"
+    placement="right"
+    :visible="visible"
+    @close="close"
+  >
     <a-form layout="horizontal" :label-col="{ span: 8 }">
       <a-form-item label="语言/Language">
         <a-select
@@ -89,6 +94,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { i18nList } from "/@/i18n/index";
+import { useI18n } from "vue-i18n";
 import localStorageKeyConst from "/@/constants/local-storage-key-const";
 import { LAYOUT_ENUM } from "/@/constants/layout-const";
 import { localRead, localSave } from "/@/utils/local-util";
@@ -165,7 +171,9 @@ let formValue = {
 
 let formState = reactive({ ...formValue });
 
+const { locale } = useI18n();
 function changeLanguage(languageValue) {
+  locale.value = languageValue;
   appConfigStore.$patch({
     language: languageValue,
   });

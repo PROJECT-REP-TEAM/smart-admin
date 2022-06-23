@@ -101,6 +101,5 @@ defineExpose({
 <style lang="less" scoped>
 .smart-menu {
   position: relative;
-  top: @header-user-height;
 }
 </style>

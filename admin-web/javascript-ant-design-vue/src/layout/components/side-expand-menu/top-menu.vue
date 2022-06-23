@@ -10,7 +10,8 @@
   <div class="top-menu-container">
     <!-- 顶部logo区域 -->
     <div class="logo">
-      <h3 style="color: white">SmartAdmin</h3>
+      <img class="logo-img" :src="logoImg" />
+      <div class="title">SmartAdmin 2.X</div>
     </div>
     <!-- 一级菜单展示 -->
     <a-menu :selectedKeys="selectedKeys" mode="inline" :theme="theme">
@@ -36,6 +37,7 @@ import { router } from "/@/router";
 import { useUserStore } from "/@/store/modules/system/user";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
+import logoImg from "/@/assets/images/logo/smart-admin-logo.png";
 
 const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
 
@@ -98,14 +100,24 @@ defineExpose({
   height: 100%;
 }
 .logo {
-  overflow: hidden;
+  height: @header-user-height;
+  line-height: @header-user-height;
+  padding: 0px 15px 0px 15px;
+  width: 100%;
+  z-index: 9999;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 67px;
-  img {
-    width: 83px;
-    cursor: pointer;
+  justify-content: space-between;
+
+  .logo-img {
+    width: 40px;
+    height: 40px;
+  }
+
+  .title {
+    font-size: 16px;
+    font-weight: 600;
+    overflow: hidden;
+    color: v-bind('theme === "light" ? "#001529": "#ffffff"');
   }
 }
 </style>

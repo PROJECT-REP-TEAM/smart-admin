@@ -6,7 +6,7 @@
  * @LastEditors: zhuoda
 -->
 <template>
-  <a-config-provider :locale="zh_CN">
+  <a-config-provider :locale="antdLocale">
     <!---全局loading，常用于表单提交--->
     <a-spin :spinning="spinning" size="large">
       <RouterView />
@@ -15,12 +15,18 @@
 </template>
 
 <script setup>
-import zh_CN from "ant-design-vue/lib/locale-provider/zh_CN";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { useSpinStore } from "/@/store/modules/system/spin";
+import { useAppConfigStore } from "/@/store/modules/system/app-config";
+import { messages } from "/@/i18n/index";
+import dayjs from "dayjs";
 
 const route = useRoute();
+
+const antdLocale = computed(() => messages[useAppConfigStore().language].antdLocale);
+const dayjsLocale = computed(() => messages[useAppConfigStore().language].dayjsLocale);
+dayjs.locale(dayjsLocale);
 
 let spinStore = useSpinStore();
 const spinning = computed(() => spinStore.loading);
