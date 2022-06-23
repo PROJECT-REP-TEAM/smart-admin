@@ -7,7 +7,7 @@
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/sub-menu.vue
 -->
 <template>
-  <a-sub-menu :key="props.menuInfo?.menuId">
+  <a-sub-menu :key="props.menuInfo?.menuId.toString()">
     <template #icon>
       <component :is="$antIcons[props.menuInfo?.icon]" />
     </template>
@@ -15,7 +15,7 @@
     <template v-for="item in props.menuInfo?.children" :key="item.menuId">
       <template v-if="item.visibleFlag">
         <template v-if="!item.children">
-          <a-menu-item :key="item.menuId" @click="turnToPage(item)">
+          <a-menu-item :key="item.menuId.toString()" @click="turnToPage(item)">
             <template #icon>
               <component :is="$antIcons[item.icon]" />
             </template>

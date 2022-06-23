@@ -38,6 +38,8 @@ import { useRoute } from "vue-router";
 import { router } from "/@/router";
 import SubMenu from "./sub-menu.vue";
 import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
+import {useUserStore} from "/@/store/modules/system/user";
+import _ from "lodash";
 
 let props = defineProps({
   selectedMenu: Object,
@@ -51,8 +53,24 @@ const selectedKeys = computed(() => {
   return [currentRoute.name];
 });
 
+const parentMenuList = computed(() => {
+  let currentName = currentRoute.name;
+  if (!currentName || typeof currentName !== "string") {
+    return [];
+  }
+  let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
+  return menuParentIdListMap?.get(currentName) || [];
+});
+
 const openKeys = computed(() => {
-  return (currentRoute.meta.parentMenuList || []).map((e) => e.name);
+  // 仅展开当前页面
+  return parentMenuList.value.map((e) => e.name);
+  // 展开所有
+  // let children = props.selectedMenu?.children;
+  // if (!children || _.isEmpty(children)) {
+  //   return [];
+  // }
+  // return children.map((e) => e.menuId.toString());
 });
 // 页面跳转
 function turnToPage(route) {
