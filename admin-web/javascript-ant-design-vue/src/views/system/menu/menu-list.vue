@@ -1,171 +1,173 @@
 <template>
-  <a-form class="smart-query-form">
-    <a-row class="smart-query-form-row">
-      <a-form-item label="关键字" class="smart-query-form-item">
-        <a-input
-          style="width: 300px"
-          v-model:value="queryForm.keywords"
-          placeholder="菜单名称/路由地址/组件路径/权限字符串"
-        />
-      </a-form-item>
+  <div>
+    <a-form class="smart-query-form">
+      <a-row class="smart-query-form-row">
+        <a-form-item label="关键字" class="smart-query-form-item">
+          <a-input
+            style="width: 300px"
+            v-model:value="queryForm.keywords"
+            placeholder="菜单名称/路由地址/组件路径/权限字符串"
+          />
+        </a-form-item>
 
-      <a-form-item label="类型" class="smart-query-form-item">
-        <smart-enum-select
-          :width="120"
-          v-model:value="queryForm.menuType"
-          placeholder="请选择类型"
-          enum-name="MENU_TYPE_ENUM"
-        />
-      </a-form-item>
+        <a-form-item label="类型" class="smart-query-form-item">
+          <smart-enum-select
+            :width="120"
+            v-model:value="queryForm.menuType"
+            placeholder="请选择类型"
+            enum-name="MENU_TYPE_ENUM"
+          />
+        </a-form-item>
 
-      <a-form-item label="禁用" class="smart-query-form-item">
-        <smart-enum-select
-          :width="120"
-          enum-name="FLAG_NUMBER_ENUM"
-          v-model:value="queryForm.disabledFlag"
-        />
-      </a-form-item>
+        <a-form-item label="禁用" class="smart-query-form-item">
+          <smart-enum-select
+            :width="120"
+            enum-name="FLAG_NUMBER_ENUM"
+            v-model:value="queryForm.disabledFlag"
+          />
+        </a-form-item>
 
-      <a-form-item class="smart-query-form-item smart-margin-left10">
-        <a-button type="primary" @click="query">
-          <template #icon>
-            <ReloadOutlined />
+        <a-form-item class="smart-query-form-item smart-margin-left10">
+          <a-button type="primary" @click="query">
+            <template #icon>
+              <ReloadOutlined />
+            </template>
+            查询
+          </a-button>
+
+          <a-button @click="resetQuery">
+            <template #icon>
+              <SearchOutlined />
+            </template>
+            重置
+          </a-button>
+          <a-button
+            class="smart-margin-left20"
+            @click="moreQueryConditionFlag = !moreQueryConditionFlag"
+          >
+            <template #icon>
+              <MoreOutlined />
+            </template>
+            {{ moreQueryConditionFlag ? "收起" : "展开" }}
+          </a-button>
+        </a-form-item>
+      </a-row>
+
+      <a-row class="smart-query-form-row" v-show="moreQueryConditionFlag">
+        <a-form-item label="外链" class="smart-query-form-item">
+          <smart-enum-select
+            :width="120"
+            enum-name="FLAG_NUMBER_ENUM"
+            v-model:value="queryForm.frameFlag"
+          />
+        </a-form-item>
+
+        <a-form-item label="缓存" class="smart-query-form-item">
+          <smart-enum-select
+            :width="120"
+            enum-name="FLAG_NUMBER_ENUM"
+            v-model:value="queryForm.cacheFlag"
+          />
+        </a-form-item>
+
+        <a-form-item label="显示" class="smart-query-form-item">
+          <smart-enum-select
+            :width="120"
+            enum-name="FLAG_NUMBER_ENUM"
+            v-model:value="queryForm.visibleFlag"
+          />
+        </a-form-item>
+      </a-row>
+    </a-form>
+
+    <a-card size="small" :bordered="false" :hoverable="true">
+      <a-row class="smart-table-btn-block">
+        <div class="smart-table-operate-block">
+          <a-button type="primary" size="small" @click="showDrawer">
+            <template #icon>
+              <PlusOutlined />
+            </template>
+            添加菜单
+          </a-button>
+
+          <a-button
+            type="primary"
+            danger
+            size="small"
+            @click="batchDelete"
+            :disabled="!hasSelected"
+          >
+            <template #icon>
+              <DeleteOutlined />
+            </template>
+            批量删除
+          </a-button>
+        </div>
+        <div class="smart-table-setting-block"></div>
+      </a-row>
+
+      <a-table
+        :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
+        size="small"
+        :defaultExpandAllRows="true"
+        :dataSource="tableData"
+        bordered
+        :columns="columns"
+        :loading="tableLoading"
+        rowKey="menuId"
+        :pagination="false"
+      >
+        <template #bodyCell="{ text, record, index, column }">
+          <template v-if="column.dataIndex === 'menuType'">
+            <a-tag :color="menuTypeColorArray[text]">{{
+              $smartEnumPlugin.getDescByValue("MENU_TYPE_ENUM", text)
+            }}</a-tag>
           </template>
-          查询
-        </a-button>
 
-        <a-button @click="resetQuery">
-          <template #icon>
-            <SearchOutlined />
+          <template v-if="column.dataIndex === 'component'">
+            <span>{{ record.frameFlag ? record.frameUrl : record.component }}</span>
           </template>
-          重置
-        </a-button>
-        <a-button
-          class="smart-margin-left20"
-          @click="moreQueryConditionFlag = !moreQueryConditionFlag"
-        >
-          <template #icon>
-            <MoreOutlined />
+
+          <template v-if="column.dataIndex === 'frameFlag'">
+            <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
           </template>
-          {{ moreQueryConditionFlag ? "收起" : "展开" }}
-        </a-button>
-      </a-form-item>
-    </a-row>
 
-    <a-row class="smart-query-form-row" v-show="moreQueryConditionFlag">
-      <a-form-item label="外链" class="smart-query-form-item">
-        <smart-enum-select
-          :width="120"
-          enum-name="FLAG_NUMBER_ENUM"
-          v-model:value="queryForm.frameFlag"
-        />
-      </a-form-item>
-
-      <a-form-item label="缓存" class="smart-query-form-item">
-        <smart-enum-select
-          :width="120"
-          enum-name="FLAG_NUMBER_ENUM"
-          v-model:value="queryForm.cacheFlag"
-        />
-      </a-form-item>
-
-      <a-form-item label="显示" class="smart-query-form-item">
-        <smart-enum-select
-          :width="120"
-          enum-name="FLAG_NUMBER_ENUM"
-          v-model:value="queryForm.visibleFlag"
-        />
-      </a-form-item>
-    </a-row>
-  </a-form>
-
-  <a-card size="small" :bordered="false" :hoverable="true">
-    <a-row class="smart-table-btn-block">
-      <div class="smart-table-operate-block">
-        <a-button type="primary" size="small" @click="showDrawer">
-          <template #icon>
-            <PlusOutlined />
+          <template v-if="column.dataIndex === 'cacheFlag'">
+            <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
           </template>
-          添加菜单
-        </a-button>
 
-        <a-button
-          type="primary"
-          danger
-          size="small"
-          @click="batchDelete"
-          :disabled="!hasSelected"
-        >
-          <template #icon>
-            <DeleteOutlined />
+          <template v-if="column.dataIndex === 'disabledFlag'">
+            <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
           </template>
-          批量删除
-        </a-button>
-      </div>
-      <div class="smart-table-setting-block"></div>
-    </a-row>
 
-    <a-table
-      :row-selection="{ selectedRowKeys: selectedRowKeys, onChange: onSelectChange }"
-      size="small"
-      :defaultExpandAllRows="true"
-      :dataSource="tableData"
-      bordered
-      :columns="columns"
-      :loading="tableLoading"
-      rowKey="menuId"
-      :pagination="false"
-    >
-      <template #bodyCell="{ text, record, index, column }">
-        <template v-if="column.dataIndex === 'menuType'">
-          <a-tag :color="menuTypeColorArray[text]">{{
-            $smartEnumPlugin.getDescByValue("MENU_TYPE_ENUM", text)
-          }}</a-tag>
+          <template v-if="column.dataIndex === 'icon'">
+            <component :is="$antIcons[text]" />
+          </template>
+
+          <template v-if="column.dataIndex === 'operate'">
+            <div class="smart-table-operate">
+              <a-button
+                v-privilege="'system:menu:update'"
+                type="link"
+                size="small"
+                @click="showDrawer(record)"
+                >编辑</a-button
+              >
+              <a-button
+                v-privilege="'system:menu:delete'"
+                danger
+                type="link"
+                @click="singleDelete(record)"
+                >删除</a-button
+              >
+            </div>
+          </template>
         </template>
+      </a-table>
+    </a-card>
 
-        <template v-if="column.dataIndex === 'component'">
-          <span>{{ record.frameFlag ? record.frameUrl : record.component }}</span>
-        </template>
-
-        <template v-if="column.dataIndex === 'frameFlag'">
-          <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
-        </template>
-
-        <template v-if="column.dataIndex === 'cacheFlag'">
-          <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
-        </template>
-
-        <template v-if="column.dataIndex === 'disabledFlag'">
-          <span>{{ $smartEnumPlugin.getDescByValue("FLAG_NUMBER_ENUM", text) }}</span>
-        </template>
-
-        <template v-if="column.dataIndex === 'icon'">
-          <component :is="$antIcons[text]" />
-        </template>
-
-        <template v-if="column.dataIndex === 'operate'">
-          <div class="smart-table-operate">
-            <a-button
-              v-privilege="'system:menu:update'"
-              type="link"
-              size="small"
-              @click="showDrawer(record)"
-              >编辑</a-button
-            >
-            <a-button
-              v-privilege="'system:menu:delete'"
-              danger
-              type="link"
-              @click="singleDelete(record)"
-              >删除</a-button
-            >
-          </div>
-        </template>
-      </template>
-    </a-table>
-  </a-card>
-
-  <MenuOperateModal ref="menuOperateModal" @reloadList="query" />
+    <MenuOperateModal ref="menuOperateModal" @reloadList="query" />
+  </div>
 </template>
 <script setup>
 import { reactive, ref, onMounted, computed, createVNode } from "vue";

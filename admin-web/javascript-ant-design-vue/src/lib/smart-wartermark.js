@@ -2,7 +2,7 @@
  * @Description:水印
  * @Author: zhuoda
  * @Date: 2021-08-28
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  */
 
@@ -53,7 +53,7 @@ function setWatermark (id, str) {
   const div = document.createElement('div');
   div.id = WATER_MARK_DOM_ID;
   div.style.pointerEvents = 'none';
-  div.style.top = '80px';
+  div.style.top = '0px';
   div.style.left = '0px';
   div.style.position = 'absolute';
   div.style.zIndex = '999';

@@ -40,11 +40,10 @@
         </template>
       </template>
     </a-table>
+
+    <DoReloadForm @refresh="ajaxQuery" ref="doReloadForm" />
+    <ReloadResultList ref="reloadResultList" />
   </a-card>
-
-  <DoReloadForm @refresh="ajaxQuery" ref="doReloadForm" />
-
-  <ReloadResultList ref="reloadResultList" />
 </template>
 <script setup>
 import { reactive, ref, onMounted } from "vue";

@@ -2,7 +2,7 @@
  * @Description: App
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
 -->
 <template>
@@ -21,8 +21,6 @@ import { useSpinStore } from "/@/store/modules/system/spin";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
 import { messages } from "/@/i18n/index";
 import dayjs from "dayjs";
-
-const route = useRoute();
 
 const antdLocale = computed(() => messages[useAppConfigStore().language].antdLocale);
 const dayjsLocale = computed(() => messages[useAppConfigStore().language].dayjsLocale);

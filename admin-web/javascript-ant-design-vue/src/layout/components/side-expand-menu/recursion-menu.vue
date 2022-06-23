@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 17:52:43
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/recursion-menu.vue
@@ -37,6 +37,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { router } from "/@/router";
 import SubMenu from "./sub-menu.vue";
+import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
 
 let props = defineProps({
   selectedMenu: Object,
@@ -56,6 +57,10 @@ const openKeys = computed(() => {
 // 页面跳转
 function turnToPage(route) {
   router.push({ name: route.menuId.toString() });
+}
+
+function goHome() {
+  router.push({ name: HOME_PAGE_NAME });
 }
 </script>
 <style scoped lang="less">

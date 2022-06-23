@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
 -->
 <template>
@@ -14,12 +14,12 @@
         enter-button="搜索"
         size="small"
       />
-      <a-button type="text">
-        <template #icon><message-outlined /></template>
-        通知
+      <HeaderNotice ref="headerNotice" />
+      <a-button type="text" @click="showSetting" class="operate-icon">
+        <template #icon><switcher-outlined /></template>
+        i18n
       </a-button>
-      <a-button type="text" @click="showSetting">
-        设置
+      <a-button type="text" @click="showSetting" class="operate-icon">
         <template #icon><setting-outlined /></template>
       </a-button>
     </div>
@@ -34,11 +34,16 @@
 <script setup>
 import HeaderAvatar from "./header-avatar.vue";
 import HeaderSetting from "./header-setting.vue";
+import HeaderNotice from "./header-notice.vue";
 import { ref } from "vue";
 
 const headerSetting = ref();
 function showSetting() {
   headerSetting.value.show();
+}
+const headerNotice = ref();
+function showNotice() {
+  headerNotice.value.showNotice();
 }
 </script>
 
@@ -70,5 +75,8 @@ function showSetting() {
   vertical-align: middle;
   display: flex;
   align-items: center;
+}
+.operate-icon {
+  margin-left: 25px;
 }
 </style>

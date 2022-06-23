@@ -209,33 +209,5 @@ function closeTag(item, closeAll) {
       color: @primary-color;
     }
   }
-
-  // .ant-tabs-line {
-  //   ::v-deep(.ant-tabs-bar) {
-  //     margin-bottom: 0px;
-  //     border-bottom: 0;
-  //   }
-
-  //   ::v-deep(.ant-tabs-nav .ant-tabs-tab) {
-  //     padding: 5px 18px;
-  //     margin: 0px 5px;
-  //   }
-
-  //   ::v-deep(.ant-tabs-nav .ant-tabs-tab:hover) {
-  //     background-color: #e8f4ff;
-
-  //     .smart-page-tag-close {
-  //       color: @primary-color;
-  //     }
-  //   }
-
-  //   ::v-deep(.ant-tabs-nav .ant-tabs-tab-active) {
-  //     background-color: #e8f4ff;
-
-  //     .smart-page-tag-close {
-  //       color: @primary-color;
-  //     }
-  //   }
-  // }
 }
 </style>

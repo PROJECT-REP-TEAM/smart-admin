@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 17:09:44
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/top-menu.vue
@@ -9,7 +9,7 @@
 <template>
   <div class="top-menu-container">
     <!-- 顶部logo区域 -->
-    <div class="logo">
+    <div class="logo" @click="goHome">
       <img class="logo-img" :src="logoImg" />
       <div class="title">SmartAdmin 2.X</div>
     </div>
@@ -107,6 +107,7 @@ defineExpose({
   z-index: 9999;
   display: flex;
   justify-content: space-between;
+  cursor: pointer;
 
   .logo-img {
     width: 40px;

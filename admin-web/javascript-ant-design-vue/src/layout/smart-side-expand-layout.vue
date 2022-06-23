@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 21:52:23
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/smart-side-expand-layout.vue
@@ -87,10 +87,10 @@
             <component :is="Component" />
           </keep-alive>
         </router-view>
-      </a-layout-content>
 
-      <!-- footer 版权公司信息 -->
-      <a-layout-footer class="smart-layout-footer"> <SmartFooter /></a-layout-footer>
+        <!-- footer 版权公司信息 -->
+        <a-layout-footer class="smart-layout-footer"> <SmartFooter /></a-layout-footer>
+      </a-layout-content>
 
       <a-back-top :target="backTopTarget" :visibilityHeight="80" />
     </a-layout>
@@ -111,6 +111,7 @@ import { useAppConfigStore } from "/@/store/modules/system/app-config";
 
 const windowHeight = window.innerHeight;
 const theme = computed(() => useAppConfigStore().$state.sideMenuTheme);
+const pageTagFlag = computed(() => useAppConfigStore().$state.pageTagFlag);
 const collapsed = ref(false);
 
 onMounted(() => {
@@ -201,11 +202,17 @@ let {
   .admin-layout-content {
     min-height: auto;
     position: relative;
-    padding: 10px;
+    padding: 10px 10px 0px 10px;
+    height: v-bind('pageTagFlag ? "calc(100% - 80px)": "calc(100% - 40px)"');
+    overflow-y: scroll;
+    overflow-x: hidden;
   }
 }
 
 .smart-layout-footer {
   position: relative;
+  padding: 10px 0px;
+  display: flex;
+  justify-content: center;
 }
 </style>

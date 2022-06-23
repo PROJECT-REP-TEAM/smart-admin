@@ -1,20 +1,20 @@
-import {createRouter, createWebHashHistory} from 'vue-router';
-import {routerArray} from './routers';
+import { createRouter, createWebHashHistory } from 'vue-router';
+import { routerArray } from './routers';
 import nProgress from 'nprogress';
 import 'nprogress/nprogress.css';
-import {clearAllCoolies, getTokenFromCookie} from '/@/utils/cookie-util';
-import {useUserStore} from '/@/store/modules/system/user';
+import { clearAllCoolies, getTokenFromCookie } from '/@/utils/cookie-util';
+import { useUserStore } from '/@/store/modules/system/user';
 import SmartLayout from '/@/layout/smart-layout.vue';
-import {PAGE_PATH_404, PAGE_PATH_HOME, PAGE_PATH_LOGIN} from '/@/constants/common-const';
-import {localClear} from '/@/utils/local-util';
-import {nextTick} from "vue";
+import { PAGE_PATH_404, PAGE_PATH_HOME, PAGE_PATH_LOGIN } from '/@/constants/common-const';
+import { localClear } from '/@/utils/local-util';
+import { nextTick } from "vue";
 
 
 export const router = createRouter({
     history: createWebHashHistory(),
     routes: routerArray,
     strict: true,
-    scrollBehavior: () => ({left: 0, top: 0}),
+    scrollBehavior: () => ({ left: 0, top: 0 }),
 });
 
 // ----------------------- 路由加载前 -----------------------
@@ -33,7 +33,7 @@ router.beforeEach(async (to, from, next) => {
     if (!token) {
         clearAllCoolies();
         localClear();
-        next({path: PAGE_PATH_LOGIN});
+        next({ path: PAGE_PATH_LOGIN });
         return;
     }
 
@@ -69,7 +69,7 @@ router.afterEach(() => {
 });
 
 // ----------------------- 构建router对象 -----------------------
-export function buildRoutes(menuRouterList) {
+export function buildRoutes (menuRouterList) {
     let menuList = menuRouterList ? menuRouterList : useUserStore().getMenuRouterList || [];
     /**
      * 1、构建整个路由信息
@@ -110,7 +110,7 @@ export function buildRoutes(menuRouterList) {
             },
         };
         if (e.frameFlag) {
-            route.component = ()=>import('../components/iframe/route-default-component.vue');
+            route.component = () => import('../components/iframe/route-default-component.vue');
             resList.push(route);
             continue;
         }

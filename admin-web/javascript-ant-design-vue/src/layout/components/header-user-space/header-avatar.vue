@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/components/smart-header-user-space/header-avatar.vue
@@ -10,10 +10,10 @@
 <template>
   <a-dropdown class="header-trigger">
     <div class="wrapper">
-      <span class="name">{{ actualName }}</span>
-      <a-avatar style="margin: 0 10px" :size="24" id="smartAdminAvatar">
+      <a-avatar style="margin: 0 5px" :size="24" id="smartAdminAvatar">
         {{ avatarName }}
       </a-avatar>
+      <span class="name">{{ actualName }}</span>
     </div>
     <template #overlay>
       <a-menu :class="['avatar-menu']">

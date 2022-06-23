@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhuoda
  * @Date: 2021-11-05
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
 -->
 
@@ -14,11 +14,11 @@
    -->
 
   <!-- 顶部logo区域 -->
-  <div class="logo" :style="sideMenuWidth" v-if="!collapsed">
+  <div class="logo" @click="goHome" :style="sideMenuWidth" v-if="!collapsed">
     <img class="logo-img" :src="logoImg" />
     <div class="title">SmartAdmin 2.X</div>
   </div>
-  <div class="min-logo" v-if="collapsed">
+  <div class="min-logo" @click="goHome" v-if="collapsed">
     <img class="logo-img" :src="logoImg" />
   </div>
 
@@ -29,8 +29,10 @@
 <script setup>
 import RecursionMenu from "./recursion-menu.vue";
 import { computed, watch, ref } from "vue";
+import { useRouter } from "vue-router";
 import logoImg from "/@/assets/images/logo/smart-admin-logo.png";
 import { useAppConfigStore } from "/@/store/modules/system/app-config";
+import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
 
 const sideMenuWidth = computed(() => "width:" + useAppConfigStore().sideMenuWidth + "px");
 const sideMenuTheme = computed(() => useAppConfigStore().sideMenuTheme);
@@ -54,6 +56,11 @@ watch(
     }
   }
 );
+
+const router = useRouter();
+function goHome() {
+  router.push({ name: HOME_PAGE_NAME });
+}
 </script>
 
 <style lang="less" scoped>
@@ -85,6 +92,7 @@ watch(
     padding: 0px 15px 0px 15px;
     z-index: 9999;
     display: flex;
+    cursor: pointer;
     justify-content: space-between;
 
     .logo-img {

@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/smart-layout.vue
@@ -20,8 +20,5 @@ import { LAYOUT_ENUM } from "/@/constants/layout-const";
 import SmartSideExpandLayout from "./smart-side-expand-layout.vue";
 
 const appConfigStore = useAppConfigStore();
-const layout = computed(() => {
-  console.log(1);
-  return appConfigStore.$state.layout;
-});
+const layout = computed(() => appConfigStore.$state.layout);
 </script>
