@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-11
- * @LastEditTime: 2021-09-01 22:31:37
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  */
 
@@ -16,7 +16,7 @@ export const GOODS_TYPE_ENUM = {
     value: 2,
     desc: '课程',
   },
-};
+}
 export default {
   GOODS_TYPE_ENUM,
-};
+}

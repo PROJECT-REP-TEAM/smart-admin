@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-10 16:53:06
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description: 菜单树下拉选择
  * @FilePath: /smart-admin/src/views/system/menu/components/menu-tree-select.vue
@@ -21,29 +21,29 @@
   />
 </template>
 <script setup>
-import { onMounted, ref, watch } from "vue";
-import { menuApi } from "/@/api/system/menu/menu-api";
-import _ from "lodash";
+  import { onMounted, ref, watch } from 'vue';
+  import { menuApi } from '/@/api/system/menu/menu-api';
+  import _ from 'lodash';
 
-const props = defineProps({
-  value: Number,
-});
+  const props = defineProps({
+    value: Number,
+  });
 
-let treeData = ref([]);
-async function queryMenuTree() {
-  let res = await menuApi.queryMenuTree(true);
-  treeData.value = res.data;
-}
+  let treeData = ref([]);
+  async function queryMenuTree() {
+    let res = await menuApi.queryMenuTree(true);
+    treeData.value = res.data;
+  }
 
-onMounted(queryMenuTree);
+  onMounted(queryMenuTree);
 
-// --------------- 触发时间 ---------------
-const emit = defineEmits(["update:value"]);
-function treeSelectChange(e) {
-  emit("update:value", e);
-}
+  // --------------- 触发时间 ---------------
+  const emit = defineEmits(['update:value']);
+  function treeSelectChange(e) {
+    emit('update:value', e);
+  }
 
-defineExpose({
-  queryMenuTree,
-});
+  defineExpose({
+    queryMenuTree,
+  });
 </script>

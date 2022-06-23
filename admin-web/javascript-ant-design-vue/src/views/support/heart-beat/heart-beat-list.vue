@@ -21,20 +21,11 @@
     <a-form class="smart-query-form">
       <a-row class="smart-query-form-row">
         <a-form-item label="关键字" class="smart-query-form-item">
-          <a-input
-            style="width: 300px"
-            v-model:value="queryForm.keywords"
-            placeholder="关键字"
-          />
+          <a-input style="width: 300px" v-model:value="queryForm.keywords" placeholder="关键字" />
         </a-form-item>
 
         <a-form-item label="心跳时间" class="smart-query-form-item">
-          <a-range-picker
-            @change="changeCreateDate"
-            v-model:value="createDateRange"
-            :ranges="defaultChooseTimeRange"
-            style="width: 240px"
-          />
+          <a-range-picker @change="changeCreateDate" v-model:value="createDateRange" :ranges="defaultChooseTimeRange" style="width: 240px" />
         </a-form-item>
 
         <a-form-item class="smart-query-form-item smart-margin-left10">
@@ -84,77 +75,75 @@
   </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted } from "vue";
-import { message, Modal } from "ant-design-vue";
-import { useSpinStore } from "/@/store/modules/system/spin";
-import { heartBeatApi } from "/@/api/support/heart-beat/heart-beat-api";
-import { PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
-import { defaultTimeRanges } from "/@/lib/default-time-ranges";
+  import { onMounted, reactive, ref } from 'vue';
+  import { heartBeatApi } from '/@/api/support/heart-beat/heart-beat-api';
+  import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+  import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 
-//------------------------ 时间选择 ---------------------
-const defaultChooseTimeRange = defaultTimeRanges;
-const createDateRange = ref([]);
-// 时间变动
-function changeCreateDate(dates, dateStrings) {
-  queryForm.startDate = dateStrings[0];
-  queryForm.endDate = dateStrings[1];
-}
-
-//------------------------ 表格渲染 ---------------------
-
-const columns = reactive([
-  {
-    title: "项目路径",
-    dataIndex: "projectPath",
-  },
-  {
-    title: "服务器ip",
-    dataIndex: "serverIp",
-  },
-  {
-    title: "进程号",
-    dataIndex: "processNo",
-  },
-  {
-    title: "进程开启时间",
-    dataIndex: "processStartTime",
-  },
-  {
-    title: "心跳当前时间",
-    dataIndex: "heartBeatTime",
-  },
-]);
-
-const queryFormState = {
-  pageNum: 1,
-  pageSize: 10,
-  keywords: "",
-  startDate: undefined,
-  endDate: undefined,
-};
-const queryForm = reactive({ ...queryFormState });
-const tableLoading = ref(false);
-const tableData = ref([]);
-const total = ref(0);
-
-function resetQuery() {
-  Object.assign(queryForm, queryFormState);
-  createDateRange.value = [];
-  ajaxQuery();
-}
-async function ajaxQuery() {
-  try {
-    tableLoading.value = true;
-    let responseModel = await heartBeatApi.queryList(queryForm);
-    const list = responseModel.data.list;
-    total.value = responseModel.data.total;
-    tableData.value = list;
-  } catch (e) {
-    console.log(e);
-  } finally {
-    tableLoading.value = false;
+  //------------------------ 时间选择 ---------------------
+  const defaultChooseTimeRange = defaultTimeRanges;
+  const createDateRange = ref([]);
+  // 时间变动
+  function changeCreateDate(dates, dateStrings) {
+    queryForm.startDate = dateStrings[0];
+    queryForm.endDate = dateStrings[1];
   }
-}
 
-onMounted(ajaxQuery);
+  //------------------------ 表格渲染 ---------------------
+
+  const columns = reactive([
+    {
+      title: '项目路径',
+      dataIndex: 'projectPath',
+    },
+    {
+      title: '服务器ip',
+      dataIndex: 'serverIp',
+    },
+    {
+      title: '进程号',
+      dataIndex: 'processNo',
+    },
+    {
+      title: '进程开启时间',
+      dataIndex: 'processStartTime',
+    },
+    {
+      title: '心跳当前时间',
+      dataIndex: 'heartBeatTime',
+    },
+  ]);
+
+  const queryFormState = {
+    pageNum: 1,
+    pageSize: 10,
+    keywords: '',
+    startDate: undefined,
+    endDate: undefined,
+  };
+  const queryForm = reactive({ ...queryFormState });
+  const tableLoading = ref(false);
+  const tableData = ref([]);
+  const total = ref(0);
+
+  function resetQuery() {
+    Object.assign(queryForm, queryFormState);
+    createDateRange.value = [];
+    ajaxQuery();
+  }
+  async function ajaxQuery() {
+    try {
+      tableLoading.value = true;
+      let responseModel = await heartBeatApi.queryList(queryForm);
+      const list = responseModel.data.list;
+      total.value = responseModel.data.total;
+      tableData.value = list;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      tableLoading.value = false;
+    }
+  }
+
+  onMounted(ajaxQuery);
 </script>

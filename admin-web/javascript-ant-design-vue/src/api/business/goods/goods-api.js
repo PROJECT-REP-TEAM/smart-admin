@@ -1,3 +1,10 @@
+/*
+ * @Description:
+ * @Author: zhuoda
+ * @Date: 2021-11-05
+ * @LastEditTime: 2022-06-23
+ * @LastEditors: zhuoda
+ */
 import { postRequest } from '/@/lib/axios';
 
 export const goodsApi = {
@@ -19,5 +26,5 @@ export const goodsApi = {
   // 更新商品 by zhuoda
   updateGoods: (param) => {
     return postRequest('/goods/update', param);
-  }
+  },
 };

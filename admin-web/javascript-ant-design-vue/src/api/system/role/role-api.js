@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-16 15:53:46
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/role/role-api.ts
@@ -10,10 +10,10 @@ import { getRequest, postRequest } from '/@/lib/axios';
 
 export const roleApi = {
   /**
-  * @description: 获取所有角色
-  * @param {*}
-  * @return {*}
-  */
+   * @description: 获取所有角色
+   * @param {*}
+   * @return {*}
+   */
   queryAll: () => {
     return getRequest('/role/getAll');
   },

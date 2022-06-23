@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhuoda
  * @Date: 2021-11-05
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
 -->
 <template>
@@ -21,40 +21,40 @@
 </template>
 
 <script>
-import { SettingOutlined, ExportOutlined } from "@ant-design/icons-vue";
-import { defineComponent, reactive, UnwrapRef } from "vue";
-import _ from "lodash";
+  import { SettingOutlined, ExportOutlined } from '@ant-design/icons-vue';
+  import { defineComponent, reactive, UnwrapRef } from 'vue';
+  import _ from 'lodash';
 
-export default defineComponent({
-  name: "SmartTableOperator",
-  components: {
-    SettingOutlined,
-    ExportOutlined,
-  },
-  props: {
-    columnArray: Array,
-    obj: Object,
-    text: String,
-  },
-  methods: {
-    v2showColumnOperator() {
-      // this.obj.a = 1;
-      // this.text = '3';
-      // this.columnArray.splice(0,1);
-
-      console.log(2, this.columnArray);
+  export default defineComponent({
+    name: 'SmartTableOperator',
+    components: {
+      SettingOutlined,
+      ExportOutlined,
     },
-  },
-  setup(props) {
-    const showColumnOperator = () => {
-      // arr.splice(0);
-      // props.columnArray =  props.columnArray.splice(0,1);
-      console.log(props.columnArray);
-    };
+    props: {
+      columnArray: Array,
+      obj: Object,
+      text: String,
+    },
+    methods: {
+      v2showColumnOperator() {
+        // this.obj.a = 1;
+        // this.text = '3';
+        // this.columnArray.splice(0,1);
 
-    return {
-      showColumnOperator,
-    };
-  },
-});
+        console.log(2, this.columnArray);
+      },
+    },
+    setup(props) {
+      const showColumnOperator = () => {
+        // arr.splice(0);
+        // props.columnArray =  props.columnArray.splice(0,1);
+        console.log(props.columnArray);
+      };
+
+      return {
+        showColumnOperator,
+      };
+    },
+  });
 </script>

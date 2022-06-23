@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-14
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /smart-admin/src/components/recursion-menu/sub-menu.vue
@@ -30,15 +30,15 @@
   </a-sub-menu>
 </template>
 <script setup>
-const props = defineProps({
-  menuInfo: {
-    type: Object,
-    default: () => ({}),
-  },
-});
+  const props = defineProps({
+    menuInfo: {
+      type: Object,
+      default: () => ({}),
+    },
+  });
 
-const emits = defineEmits(["turnToPage"]);
-const turnToPage = (route) => {
-  emits("turnToPage", route);
-};
+  const emits = defineEmits(['turnToPage']);
+  const turnToPage = (route) => {
+    emits('turnToPage', route);
+  };
 </script>

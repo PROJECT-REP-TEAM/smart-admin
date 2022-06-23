@@ -46,82 +46,79 @@
   </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted } from "vue";
-import { message, Modal } from "ant-design-vue";
-import DoReloadForm from "./do-reload-form-modal.vue";
-import ReloadResultList from "./reload-result-list.vue";
-import { useSpinStore } from "/@/store/modules/system/spin";
-import { reloadApi } from "/@/api/support/reload/reload-api";
-import { PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
-import { defaultTimeRanges } from "/@/lib/default-time-ranges";
+  import { onMounted, reactive, ref } from 'vue';
+  import DoReloadForm from './do-reload-form-modal.vue';
+  import ReloadResultList from './reload-result-list.vue';
+  import { reloadApi } from '/@/api/support/reload/reload-api';
+  import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 
-//------------------------ 时间选择 ---------------------
-const defaultChooseTimeRange = defaultTimeRanges;
-const createDateRange = ref([]);
-// 时间变动
-function changeCreateDate(dates, dateStrings) {
-  queryForm.startDate = dateStrings[0];
-  queryForm.endDate = dateStrings[1];
-}
-
-//------------------------ 表格渲染 ---------------------
-
-const columns = reactive([
-  {
-    title: "标签",
-    dataIndex: "tag",
-  },
-  {
-    title: "运行标识",
-    dataIndex: "identification",
-  },
-  {
-    title: "参数",
-    dataIndex: "args",
-  },
-  {
-    title: "更新时间",
-    dataIndex: "updateTime",
-  },
-  {
-    title: "创建时间",
-    dataIndex: "createTime",
-  },
-  {
-    title: "操作",
-    dataIndex: "action",
-    fixed: "right",
-    width: 160,
-  },
-]);
-
-const tableLoading = ref(false);
-const tableData = ref([]);
-
-async function ajaxQuery() {
-  try {
-    tableLoading.value = true;
-    let res = await reloadApi.queryList();
-    tableData.value = res.data;
-  } catch (e) {
-    console.log(e);
-  } finally {
-    tableLoading.value = false;
+  //------------------------ 时间选择 ---------------------
+  const defaultChooseTimeRange = defaultTimeRanges;
+  const createDateRange = ref([]);
+  // 时间变动
+  function changeCreateDate(dates, dateStrings) {
+    queryForm.startDate = dateStrings[0];
+    queryForm.endDate = dateStrings[1];
   }
-}
 
-onMounted(ajaxQuery);
+  //------------------------ 表格渲染 ---------------------
 
-// ------------------------------ 表格操作列： 执行 reload ------------------------------
-const doReloadForm = ref();
-function doReload(tag) {
-  doReloadForm.value.showModal(tag);
-}
+  const columns = reactive([
+    {
+      title: '标签',
+      dataIndex: 'tag',
+    },
+    {
+      title: '运行标识',
+      dataIndex: 'identification',
+    },
+    {
+      title: '参数',
+      dataIndex: 'args',
+    },
+    {
+      title: '更新时间',
+      dataIndex: 'updateTime',
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+    },
+    {
+      title: '操作',
+      dataIndex: 'action',
+      fixed: 'right',
+      width: 160,
+    },
+  ]);
 
-// ------------------------------ 表格操作列： 查看执行结果 ------------------------------
+  const tableLoading = ref(false);
+  const tableData = ref([]);
 
-const reloadResultList = ref();
-function showResultList(tag) {
-  reloadResultList.value.showModal(tag);
-}
+  async function ajaxQuery() {
+    try {
+      tableLoading.value = true;
+      let res = await reloadApi.queryList();
+      tableData.value = res.data;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      tableLoading.value = false;
+    }
+  }
+
+  onMounted(ajaxQuery);
+
+  // ------------------------------ 表格操作列： 执行 reload ------------------------------
+  const doReloadForm = ref();
+  function doReload(tag) {
+    doReloadForm.value.showModal(tag);
+  }
+
+  // ------------------------------ 表格操作列： 查看执行结果 ------------------------------
+
+  const reloadResultList = ref();
+  function showResultList(tag) {
+    reloadResultList.value.showModal(tag);
+  }
 </script>

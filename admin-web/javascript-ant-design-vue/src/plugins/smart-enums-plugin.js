@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  */
 import _ from 'lodash';
@@ -14,9 +14,9 @@ export default {
     /**
      * 根据枚举值获取描述
      * @param {*} constantName 枚举名
-    * @param {*} value          枚举值
-    * @returns
-    */
+     * @param {*} value          枚举值
+     * @returns
+     */
     smartEnumPlugin.getDescByValue = function (constantName, value) {
       if (!smartEnumWrapper || !Object.prototype.hasOwnProperty.call(smartEnumWrapper, constantName)) {
         return '';
@@ -36,9 +36,9 @@ export default {
     };
     /**
      * 根据枚举名获取对应的描述键值对[{value:desc}]
-      * @param {*} constantName 枚举名
-      * @returns
-      */
+     * @param {*} constantName 枚举名
+     * @returns
+     */
     smartEnumPlugin.getValueDescList = function (constantName) {
       if (!Object.prototype.hasOwnProperty.call(smartEnumWrapper, constantName)) {
         return [];
@@ -53,9 +53,9 @@ export default {
 
     /**
      * 根据枚举名获取对应的value描述键值对{value:desc}
-          * @param {*} constantName 枚举名
-          * @returns
-          */
+     * @param {*} constantName 枚举名
+     * @returns
+     */
     smartEnumPlugin.getValueDesc = function (constantName) {
       if (!Object.prototype.hasOwnProperty.call(smartEnumWrapper, constantName)) {
         return {};

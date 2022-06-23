@@ -24,7 +24,7 @@ let smartAdminWaterMarkIntervalId = null;
  * @returns
  */
 
-function setWatermark (id, str) {
+function setWatermark(id, str) {
   //删掉之前的水印
   if (document.getElementById(WATER_MARK_DOM_ID) !== null) {
     document.getElementById(WATER_MARK_DOM_ID).remove();

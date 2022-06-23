@@ -1,38 +1,22 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-26 21:36:54
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description: 
 -->
 <template>
   <a-card title="角色列表" class="role-container" style="padding: 0">
     <template #extra>
-      <a-button
-        type="primary"
-        size="small"
-        @click="showRoleFormModal"
-        v-privilege="'role:add'"
-        >添加</a-button
-      >
+      <a-button type="primary" size="small" @click="showRoleFormModal" v-privilege="'role:add'">添加</a-button>
     </template>
     <a-menu mode="vertical" v-model:selectedKeys="selectedKeys">
       <a-menu-item v-for="item in roleList" :key="item.roleId">
         <a-popover placement="right">
           <template #content>
             <div style="display: flex; flex-direction: column">
-              <a-button
-                type="text"
-                @click="deleteRole(item.roleId)"
-                v-privilege="'role:delete'"
-                >删除</a-button
-              >
-              <a-button
-                type="text"
-                @click="showRoleFormModal(item)"
-                v-privilege="'role:edit'"
-                >编辑</a-button
-              >
+              <a-button type="text" @click="deleteRole(item.roleId)" v-privilege="'role:delete'">删除</a-button>
+              <a-button type="text" @click="showRoleFormModal(item)" v-privilege="'role:edit'">编辑</a-button>
             </div>
           </template>
           {{ item.roleName }}
@@ -43,86 +27,86 @@
   <RoleFormModal ref="roleFormModal" @refresh="queryAllRole" />
 </template>
 <script setup>
-import { computed, onMounted, ref } from "vue";
-import { roleApi } from "/@/api/system/role/role-api";
-import RoleFormModal from "../role-form-modal/index.vue";
-import { message, Modal } from "ant-design-vue";
-import { useSpinStore } from "/@/store/modules/system/spin";
-import _ from "lodash";
+  import { message, Modal } from 'ant-design-vue';
+  import _ from 'lodash';
+  import { computed, onMounted, ref } from 'vue';
+  import { roleApi } from '/@/api/system/role/role-api';
+  import { useSpinStore } from '/@/store/modules/system/spin';
+  import RoleFormModal from '../role-form-modal/index.vue';
 
-// ----------------------- 角色列表显示 ---------------------
-const roleList = ref([]);
+  // ----------------------- 角色列表显示 ---------------------
+  const roleList = ref([]);
 
-onMounted(queryAllRole);
+  onMounted(queryAllRole);
 
-// 查询列表
-async function queryAllRole() {
-  let res = await roleApi.queryAll();
-  roleList.value = res.data;
-  if (!_.isEmpty(res.data) && res.data[0].roleId) {
-    selectedKeys.value = [res.data[0].roleId];
+  // 查询列表
+  async function queryAllRole() {
+    let res = await roleApi.queryAll();
+    roleList.value = res.data;
+    if (!_.isEmpty(res.data) && res.data[0].roleId) {
+      selectedKeys.value = [res.data[0].roleId];
+    }
   }
-}
 
-let selectedKeys = ref([]);
-const selectRoleId = computed(() => {
-  if (!selectedKeys.value && _.isEmpty(selectedKeys.value)) {
-    return null;
-  }
-  return selectedKeys.value[0];
-});
-// ----------------------- 添加、修改、删除 ---------------------------------
-const roleFormModal = ref();
-
-// 显示表单框
-function showRoleFormModal(role) {
-  roleFormModal.value.showModal(role);
-}
-
-// 删除角色
-function deleteRole(roleId) {
-  if (!roleId) {
-    return;
-  }
-  Modal.confirm({
-    title: "提示",
-    content: "确定要删除该角色么？",
-    okText: "确定",
-    okType: "danger",
-    async onOk() {
-      useSpinStore().show();
-      try {
-        await roleApi.deleteRole(roleId);
-        message.info("删除成功");
-        queryAllRole();
-      } catch (e) {
-        console.log(e);
-      } finally {
-        useSpinStore().hide();
-      }
-    },
-    cancelText: "取消",
-    onCancel() {},
+  let selectedKeys = ref([]);
+  const selectRoleId = computed(() => {
+    if (!selectedKeys.value && _.isEmpty(selectedKeys.value)) {
+      return null;
+    }
+    return selectedKeys.value[0];
   });
-}
+  // ----------------------- 添加、修改、删除 ---------------------------------
+  const roleFormModal = ref();
 
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({
-  selectRoleId,
-});
+  // 显示表单框
+  function showRoleFormModal(role) {
+    roleFormModal.value.showModal(role);
+  }
+
+  // 删除角色
+  function deleteRole(roleId) {
+    if (!roleId) {
+      return;
+    }
+    Modal.confirm({
+      title: '提示',
+      content: '确定要删除该角色么？',
+      okText: '确定',
+      okType: 'danger',
+      async onOk() {
+        useSpinStore().show();
+        try {
+          await roleApi.deleteRole(roleId);
+          message.info('删除成功');
+          queryAllRole();
+        } catch (e) {
+          console.log(e);
+        } finally {
+          useSpinStore().hide();
+        }
+      },
+      cancelText: '取消',
+      onCancel() {},
+    });
+  }
+
+  // ----------------------- 以下是暴露的方法内容 ----------------------------
+  defineExpose({
+    selectRoleId,
+  });
 </script>
 <style scoped lang="less">
-.role-container {
-  height: 100%;
-  overflow-y: auto;
+  .role-container {
+    height: 100%;
+    overflow-y: auto;
 
-  :deep(.ant-card-body) {
-    padding: 5px;
+    :deep(.ant-card-body) {
+      padding: 5px;
+    }
   }
-}
-.ant-menu-inline,
-.ant-menu-vertical,
-.ant-menu-vertical-left {
-  border-right: none;
-}
+  .ant-menu-inline,
+  .ant-menu-vertical,
+  .ant-menu-vertical-left {
+    border-right: none;
+  }
 </style>

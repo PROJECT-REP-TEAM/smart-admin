@@ -33,68 +33,68 @@
   </div>
 </template>
 <script setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { router } from "/@/router";
-import SubMenu from "./sub-menu.vue";
-import { HOME_PAGE_NAME } from "/@/constants/system/home-const";
-import {useUserStore} from "/@/store/modules/system/user";
-import _ from "lodash";
+  import { computed } from 'vue';
+  import { useRoute } from 'vue-router';
+  import { router } from '/@/router';
+  import SubMenu from './sub-menu.vue';
+  import { HOME_PAGE_NAME } from '/@/constants/system/home-const';
+  import { useUserStore } from '/@/store/modules/system/user';
+  import _ from 'lodash';
 
-let props = defineProps({
-  selectedMenu: Object,
-});
+  let props = defineProps({
+    selectedMenu: Object,
+  });
 
-defineEmits("update:value");
+  defineEmits('update:value');
 
-//展开的菜单
-let currentRoute = useRoute();
-const selectedKeys = computed(() => {
-  return [currentRoute.name];
-});
+  //展开的菜单
+  let currentRoute = useRoute();
+  const selectedKeys = computed(() => {
+    return [currentRoute.name];
+  });
 
-const parentMenuList = computed(() => {
-  let currentName = currentRoute.name;
-  if (!currentName || typeof currentName !== "string") {
-    return [];
+  const parentMenuList = computed(() => {
+    let currentName = currentRoute.name;
+    if (!currentName || typeof currentName !== 'string') {
+      return [];
+    }
+    let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
+    return menuParentIdListMap?.get(currentName) || [];
+  });
+
+  const openKeys = computed(() => {
+    // // 仅展开当前页面
+    // return parentMenuList.value.map((e) => e.name);
+    // 展开所有
+    let children = props.selectedMenu?.children;
+    if (!children || _.isEmpty(children)) {
+      return [];
+    }
+    return children.map((e) => e.menuId.toString());
+  });
+  // 页面跳转
+  function turnToPage(route) {
+    router.push({ name: route.menuId.toString() });
   }
-  let menuParentIdListMap = useUserStore().getMenuParentIdListMap;
-  return menuParentIdListMap?.get(currentName) || [];
-});
 
-const openKeys = computed(() => {
-  // 仅展开当前页面
-  return parentMenuList.value.map((e) => e.name);
-  // 展开所有
-  // let children = props.selectedMenu?.children;
-  // if (!children || _.isEmpty(children)) {
-  //   return [];
-  // }
-  // return children.map((e) => e.menuId.toString());
-});
-// 页面跳转
-function turnToPage(route) {
-  router.push({ name: route.menuId.toString() });
-}
-
-function goHome() {
-  router.push({ name: HOME_PAGE_NAME });
-}
+  function goHome() {
+    router.push({ name: HOME_PAGE_NAME });
+  }
 </script>
 <style scoped lang="less">
-.resursion-container {
-  height: 100%;
-  background: #ffffff;
-}
-.top-menu {
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: @header-user-height;
-  font-size: 16px;
-  color: #515a6e;
-  border-bottom: 1px solid #f3f3f3;
-  border-right: 1px solid #f3f3f3;
-}
+  .resursion-container {
+    height: 100%;
+    background: #ffffff;
+  }
+  .top-menu {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: @header-user-height;
+    font-size: 16px;
+    color: #515a6e;
+    border-bottom: 1px solid #f3f3f3;
+    border-right: 1px solid #f3f3f3;
+  }
 </style>

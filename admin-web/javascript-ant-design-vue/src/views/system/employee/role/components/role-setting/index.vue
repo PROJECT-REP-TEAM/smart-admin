@@ -1,7 +1,7 @@
 <!--
  * @Author: LiHaiFan
  * @Date: 2021-08-26 10:36:54
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description: 
 -->
@@ -21,21 +21,21 @@
   </a-card>
 </template>
 <script setup>
-import { ref } from "vue";
-import RoleTree from "../role-tree/index.vue";
-import RoleDataScope from "../role-data-scope/index.vue";
-import RoleEmployeeList from "../role-employee-list/index.vue";
+  import { ref } from 'vue';
+  import RoleDataScope from '../role-data-scope/index.vue';
+  import RoleEmployeeList from '../role-employee-list/index.vue';
+  import RoleTree from '../role-tree/index.vue';
 
-defineProps({
-  value: Number,
-});
+  defineProps({
+    value: Number,
+  });
 
-defineEmits(["update:value"]);
+  defineEmits(['update:value']);
 
-let activeKey = ref();
+  let activeKey = ref();
 </script>
 <style scoped lang="less">
-.role-container {
-  height: 100%;
-}
+  .role-container {
+    height: 100%;
+  }
 </style>

@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-17
- * @LastEditTime: 2021-08-26
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  */
 export const regular = {
@@ -23,4 +23,4 @@ export const regular = {
   isElseFileReg: new RegExp(/\.(doc|docx|xls|xlsx|txt|ppt|pptx|pps|ppxs)/),
   isIdentityCard: /^[1-9]\d{5}[1-9]\d{3}((0\d)|(1[0-2]))(([0|1|2]\d)|3[0-1])\d{3}([0-9]|X|x)$/, // 验证身份证号
   isChinese: /^[\u4e00-\u9fa5]+$/gi, // 验证是否汉字
-};
+}

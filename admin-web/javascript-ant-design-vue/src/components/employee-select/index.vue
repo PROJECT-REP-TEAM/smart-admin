@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-12 18:23:56
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
 -->
 <template>
@@ -16,11 +16,7 @@
     @change="handleChange"
     @deselect="handleChange"
   >
-    <a-select-option
-      v-for="item in employeeList"
-      :key="item.employeeId"
-      :value="item.employeeId"
-    >
+    <a-select-option v-for="item in employeeList" :key="item.employeeId" :value="item.employeeId">
       {{ item.actualName }}
       <template v-if="item.departmentName"> （{{ item.departmentName }}） </template>
     </a-select-option>
@@ -28,56 +24,56 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
-import { employeeApi } from "/@/api/system/employee/employee-api";
+  import { onMounted, ref, watch } from 'vue';
+  import { employeeApi } from '/@/api/system/employee/employee-api';
 
-// =========== 属性定义 和 事件方法暴露 =============
+  // =========== 属性定义 和 事件方法暴露 =============
 
-const props = defineProps({
-  value: Number,
-  placeholder: {
-    type: String,
-    default: "请选择",
-  },
-  width: {
-    type: String,
-    default: "100%",
-  },
-  size: {
-    type: String,
-    default: "default",
-  },
-});
+  const props = defineProps({
+    value: Number,
+    placeholder: {
+      type: String,
+      default: '请选择',
+    },
+    width: {
+      type: String,
+      default: '100%',
+    },
+    size: {
+      type: String,
+      default: 'default',
+    },
+  });
 
-const emit = defineEmits(["update:value", "change"]);
+  const emit = defineEmits(['update:value', 'change']);
 
-// =========== 业务逻辑 =============
+  // =========== 业务逻辑 =============
 
-//员工列表数据
-const employeeList = ref([]);
-async function query() {
-  try {
-    let resp = await employeeApi.queryAll();
-    employeeList.value = resp.data;
-  } catch (e) {
-    console.log(e);
-  } finally {
-    console.log(1);
+  //员工列表数据
+  const employeeList = ref([]);
+  async function query() {
+    try {
+      let resp = await employeeApi.queryAll();
+      employeeList.value = resp.data;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log(1);
+    }
   }
-}
-onMounted(query);
+  onMounted(query);
 
-// 监听value变化
-const selectValue = ref(props.value);
-watch(
-  () => props.value,
-  (newValue) => {
-    selectValue.value = newValue;
+  // 监听value变化
+  const selectValue = ref(props.value);
+  watch(
+    () => props.value,
+    (newValue) => {
+      selectValue.value = newValue;
+    }
+  );
+
+  function handleChange(value) {
+    emit('update:value', value);
+    emit('change', value);
   }
-);
-
-function handleChange(value) {
-  emit("update:value", value);
-  emit("change", value);
-}
 </script>

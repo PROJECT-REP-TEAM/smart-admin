@@ -13,12 +13,12 @@
   <smart-side-expand-layout v-if="layout === LAYOUT_ENUM.SIDE_EXPAND.value" />
 </template>
 <script setup>
-import { computed } from "vue";
-import { useAppConfigStore } from "/@/store/modules/system/app-config";
-import SmartSideLayout from "/@/layout/smart-side-layout.vue";
-import { LAYOUT_ENUM } from "/@/constants/layout-const";
-import SmartSideExpandLayout from "./smart-side-expand-layout.vue";
+  import { computed } from 'vue';
+  import SmartSideExpandLayout from './smart-side-expand-layout.vue';
+  import { LAYOUT_ENUM } from '/@/constants/layout-const';
+  import SmartSideLayout from '/@/layout/smart-side-layout.vue';
+  import { useAppConfigStore } from '/@/store/modules/system/app-config';
 
-const appConfigStore = useAppConfigStore();
-const layout = computed(() => appConfigStore.$state.layout);
+  const appConfigStore = useAppConfigStore();
+  const layout = computed(() => appConfigStore.$state.layout);
 </script>

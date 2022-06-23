@@ -13,28 +13,20 @@
           <a-row class="detail-info">
             <a-col :span="12"> 用户id：{{ detail.operateUserId }}</a-col>
             <a-col :span="12"> 用户名称： {{ detail.operateUserName }}</a-col>
-            <a-col :span="12">
-              请求内容： {{ detail.module }} - {{ detail.content }}</a-col
-            >
+            <a-col :span="12"> 请求内容： {{ detail.module }} - {{ detail.content }}</a-col>
           </a-row>
         </a-col>
         <a-col :span="8">
           <p class="detail-right-title">请求状态</p>
           <p :class="['detail-right', detail.successFlag ? 'success' : 'error']">
-            {{ detail.successFlag ? "成功" : "失败" }}
+            {{ detail.successFlag ? '成功' : '失败' }}
           </p>
         </a-col>
       </a-row>
     </div>
     <div class="info-box">
       <h4>请求参数：</h4>
-      <JsonViewer
-        :value="detail.param ? JSON.parse(detail.param) : ''"
-        theme="jv-dark"
-        copyable
-        boxed
-        sort
-      />
+      <JsonViewer :value="detail.param ? JSON.parse(detail.param) : ''" theme="jv-dark" copyable boxed sort />
     </div>
     <div class="info-box">
       <h4>请求参数：</h4>
@@ -46,94 +38,92 @@
 </template>
 
 <script setup>
-import { useSpinStore } from "/@/store/modules/system/spin";
-import { operateLogApi } from "/@/api/support/operate-log/operate-log-api";
-import { useRoute } from "vue-router";
-import { onMounted, reactive } from "vue";
-import { JsonViewer } from "vue3-json-viewer";
-import { ref } from "vue";
+  import { reactive, ref } from 'vue';
+  import { JsonViewer } from 'vue3-json-viewer';
+  import { operateLogApi } from '/@/api/support/operate-log/operate-log-api';
+  import { useSpinStore } from '/@/store/modules/system/spin';
 
-defineExpose({
-  show,
-});
-
-const visible = ref(false);
-
-function show(operateLogId) {
-  visible.value = true;
-  clear(detail);
-  getDetail(operateLogId);
-}
-
-const clear = (info) => {
-  const keys = Object.keys(info);
-  let obj = {};
-  keys.forEach((item) => {
-    obj[item] = "";
+  defineExpose({
+    show,
   });
-  Object.assign(info, obj);
-};
 
-function close() {
-  visible.value = false;
-}
+  const visible = ref(false);
 
-let detail = reactive({
-  param: "",
-  url: "",
-});
-async function getDetail(operateLogId) {
-  try {
-    useSpinStore().show();
-    let res = await operateLogApi.detail(operateLogId);
-    detail = Object.assign(detail, res.data);
-  } catch (e) {
-    console.log(e);
-  } finally {
-    useSpinStore().hide();
+  function show(operateLogId) {
+    visible.value = true;
+    clear(detail);
+    getDetail(operateLogId);
   }
-}
+
+  const clear = (info) => {
+    const keys = Object.keys(info);
+    let obj = {};
+    keys.forEach((item) => {
+      obj[item] = '';
+    });
+    Object.assign(info, obj);
+  };
+
+  function close() {
+    visible.value = false;
+  }
+
+  let detail = reactive({
+    param: '',
+    url: '',
+  });
+  async function getDetail(operateLogId) {
+    try {
+      useSpinStore().show();
+      let res = await operateLogApi.detail(operateLogId);
+      detail = Object.assign(detail, res.data);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      useSpinStore().hide();
+    }
+  }
 </script>
 
 <style scoped lang="less">
-.detail-title {
-  display: flex;
-  align-items: center;
-  font-size: 20px;
-  font-weight: bold;
-}
-.info-box {
-  border-bottom: 1px solid #f0f0f0;
-  padding: 10px 8px;
-}
-.detail-info {
-  .ant-col {
-    line-height: 1.46;
-    margin-bottom: 12px;
-    padding-right: 5px;
+  .detail-title {
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+    font-weight: bold;
   }
-}
-.detail-right-title {
-  text-align: right;
-  color: grey;
-}
+  .info-box {
+    border-bottom: 1px solid #f0f0f0;
+    padding: 10px 8px;
+  }
+  .detail-info {
+    .ant-col {
+      line-height: 1.46;
+      margin-bottom: 12px;
+      padding-right: 5px;
+    }
+  }
+  .detail-right-title {
+    text-align: right;
+    color: grey;
+  }
 
-:deep(.ant-modal-body) {
-  padding: 10px !important;
-}
+  :deep(.ant-modal-body) {
+    padding: 10px !important;
+  }
 
-.detail-right {
-  padding-left: 5px;
-  font-size: 20px;
-  font-weight: bold;
-  text-align: right;
-}
+  .detail-right {
+    padding-left: 5px;
+    font-size: 20px;
+    font-weight: bold;
+    text-align: right;
+  }
 
-.success {
-  color: @success-color;
-}
+  .success {
+    color: @success-color;
+  }
 
-.error {
-  color: @error-color;
-}
+  .error {
+    color: @error-color;
+  }
 </style>

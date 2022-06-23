@@ -15,17 +15,16 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
-import { useRoute } from "vue-router";
-import { useSpinStore } from "/@/store/modules/system/spin";
-import { useAppConfigStore } from "/@/store/modules/system/app-config";
-import { messages } from "/@/i18n/index";
-import dayjs from "dayjs";
+  import dayjs from 'dayjs';
+  import { computed } from 'vue';
+  import { messages } from '/@/i18n/index';
+  import { useAppConfigStore } from '/@/store/modules/system/app-config';
+  import { useSpinStore } from '/@/store/modules/system/spin';
 
-const antdLocale = computed(() => messages[useAppConfigStore().language].antdLocale);
-const dayjsLocale = computed(() => messages[useAppConfigStore().language].dayjsLocale);
-dayjs.locale(dayjsLocale);
+  const antdLocale = computed(() => messages[useAppConfigStore().language].antdLocale);
+  const dayjsLocale = computed(() => messages[useAppConfigStore().language].dayjsLocale);
+  dayjs.locale(dayjsLocale);
 
-let spinStore = useSpinStore();
-const spinning = computed(() => spinStore.loading);
+  let spinStore = useSpinStore();
+  const spinning = computed(() => spinStore.loading);
 </script>

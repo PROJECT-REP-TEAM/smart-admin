@@ -1,12 +1,12 @@
 /*
  * @Author: LiHaiFan
  * @Date: 2021-4-16 21:38:28
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  */
 
-const privilege = value => {
+const privilege = (value) => {
   // 超级管理员
   if (useUserStore().administratorFlag) {
     return true;

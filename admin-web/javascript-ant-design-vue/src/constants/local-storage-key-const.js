@@ -1,14 +1,14 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-09 08:58:11
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  */
 /**
  * key前缀
  */
-const KEY_PREFIX = 'smart_admin_';
+const KEY_PREFIX = 'smart_admin_'
 /**
  * localStorageKey集合
  */
@@ -21,4 +21,4 @@ export default {
   USER_TAG_NAV: `${KEY_PREFIX}user_tag_nav`,
   // app config 配置信息
   APP_CONFIG: `${KEY_PREFIX}app_config`,
-};
+}

@@ -2,20 +2,11 @@
   <a-form class="smart-query-form">
     <a-row class="smart-query-form-row">
       <a-form-item label="用户名称" class="smart-query-form-item">
-        <a-input
-          style="width: 300px"
-          v-model:value="queryForm.userName"
-          placeholder="用户名称"
-        />
+        <a-input style="width: 300px" v-model:value="queryForm.userName" placeholder="用户名称" />
       </a-form-item>
 
       <a-form-item label="请求时间" class="smart-query-form-item">
-        <a-range-picker
-          @change="changeCreateDate"
-          v-model:value="createDateRange"
-          :ranges="defaultChooseTimeRange"
-          style="width: 240px"
-        />
+        <a-range-picker @change="changeCreateDate" v-model:value="createDateRange" :ranges="defaultChooseTimeRange" style="width: 240px" />
       </a-form-item>
 
       <a-form-item label="快速筛选" class="smart-query-form-item">
@@ -44,18 +35,10 @@
   </a-form>
 
   <a-card size="small" :bordered="false" :hoverable="true">
-    <a-table
-      :scroll="{ x: 1300 }"
-      size="small"
-      :dataSource="tableData"
-      :columns="columns"
-      bordered
-      rowKey="operateLogId"
-      :pagination="false"
-    >
+    <a-table :scroll="{ x: 1300 }" size="small" :dataSource="tableData" :columns="columns" bordered rowKey="operateLogId" :pagination="false">
       <template #bodyCell="{ text, record, index, column }">
         <template v-if="column.dataIndex === 'successFlag'">
-          <a-tag :color="text ? 'success' : 'error'">{{ text ? "成功" : "失败" }}</a-tag>
+          <a-tag :color="text ? 'success' : 'error'">{{ text ? '成功' : '失败' }}</a-tag>
         </template>
 
         <template v-else-if="column.dataIndex === 'action'">
@@ -84,101 +67,101 @@
   </a-card>
 </template>
 <script setup>
-import { reactive, ref, onMounted } from "vue";
-import { operateLogApi } from "/@/api/support/operate-log/operate-log-api";
-import { PAGE_SIZE_OPTIONS } from "/@/constants/common-const";
-import { defaultTimeRanges } from "/@/lib/default-time-ranges";
-import OperateLogDetailModal from "./operate-log-detail-modal.vue";
+  import { onMounted, reactive, ref } from 'vue';
+  import OperateLogDetailModal from './operate-log-detail-modal.vue';
+  import { operateLogApi } from '/@/api/support/operate-log/operate-log-api';
+  import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
+  import { defaultTimeRanges } from '/@/lib/default-time-ranges';
 
-const columns = reactive([
-  {
-    title: "用户",
-    dataIndex: "operateUserName",
-    width: 70,
-  },
-  {
-    title: "操作模块",
-    dataIndex: "module",
-    ellipsis: true,
-  },
-  {
-    title: "操作内容",
-    dataIndex: "content",
-    ellipsis: true,
-  },
-  {
-    title: "请求路径",
-    dataIndex: "url",
-    ellipsis: true,
-  },
-  {
-    title: "请求方法",
-    dataIndex: "method",
-    ellipsis: true,
-  },
-  {
-    title: "请求结果",
-    dataIndex: "successFlag",
-    width: 80,
-  },
-  {
-    title: "时间",
-    dataIndex: "createTime",
-    width: 180,
-  },
-  {
-    title: "操作",
-    dataIndex: "action",
-    fixed: "right",
-    width: 80,
-  },
-]);
+  const columns = reactive([
+    {
+      title: '用户',
+      dataIndex: 'operateUserName',
+      width: 70,
+    },
+    {
+      title: '操作模块',
+      dataIndex: 'module',
+      ellipsis: true,
+    },
+    {
+      title: '操作内容',
+      dataIndex: 'content',
+      ellipsis: true,
+    },
+    {
+      title: '请求路径',
+      dataIndex: 'url',
+      ellipsis: true,
+    },
+    {
+      title: '请求方法',
+      dataIndex: 'method',
+      ellipsis: true,
+    },
+    {
+      title: '请求结果',
+      dataIndex: 'successFlag',
+      width: 80,
+    },
+    {
+      title: '时间',
+      dataIndex: 'createTime',
+      width: 180,
+    },
+    {
+      title: '操作',
+      dataIndex: 'action',
+      fixed: 'right',
+      width: 80,
+    },
+  ]);
 
-const queryFormState = {
-  userName: "",
-  successFlag: undefined,
-  startDate: undefined,
-  endDate: undefined,
-  pageNum: 1,
-  pageSize: 10,
-};
-const queryForm = reactive({ ...queryFormState });
-const createDateRange = ref([]);
-const defaultChooseTimeRange = defaultTimeRanges;
-// 时间变动
-function changeCreateDate(dates, dateStrings) {
-  queryForm.startDate = dateStrings[0];
-  queryForm.endDate = dateStrings[1];
-}
-
-const tableLoading = ref(false);
-const tableData = ref([]);
-const total = ref(0);
-
-function resetQuery() {
-  Object.assign(queryForm, queryFormState);
-  createDateRange.value = [];
-  ajaxQuery();
-}
-async function ajaxQuery() {
-  try {
-    tableLoading.value = true;
-    let responseModel = await operateLogApi.queryList(queryForm);
-    const list = responseModel.data.list;
-    total.value = responseModel.data.total;
-    tableData.value = list;
-  } catch (e) {
-    console.log(e);
-  } finally {
-    tableLoading.value = false;
+  const queryFormState = {
+    userName: '',
+    successFlag: undefined,
+    startDate: undefined,
+    endDate: undefined,
+    pageNum: 1,
+    pageSize: 10,
+  };
+  const queryForm = reactive({ ...queryFormState });
+  const createDateRange = ref([]);
+  const defaultChooseTimeRange = defaultTimeRanges;
+  // 时间变动
+  function changeCreateDate(dates, dateStrings) {
+    queryForm.startDate = dateStrings[0];
+    queryForm.endDate = dateStrings[1];
   }
-}
 
-onMounted(ajaxQuery);
+  const tableLoading = ref(false);
+  const tableData = ref([]);
+  const total = ref(0);
 
-// ---------------------- 详情 ----------------------
-const detailModal = ref();
-function showDetail(operateLogId) {
-  detailModal.value.show(operateLogId);
-}
+  function resetQuery() {
+    Object.assign(queryForm, queryFormState);
+    createDateRange.value = [];
+    ajaxQuery();
+  }
+  async function ajaxQuery() {
+    try {
+      tableLoading.value = true;
+      let responseModel = await operateLogApi.queryList(queryForm);
+      const list = responseModel.data.list;
+      total.value = responseModel.data.total;
+      tableData.value = list;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      tableLoading.value = false;
+    }
+  }
+
+  onMounted(ajaxQuery);
+
+  // ---------------------- 详情 ----------------------
+  const detailModal = ref();
+  function showDetail(operateLogId) {
+    detailModal.value.show(operateLogId);
+  }
 </script>

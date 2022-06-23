@@ -28,76 +28,75 @@
   </a-dropdown>
 </template>
 <script setup>
-import { computed, ref } from "@vue/reactivity";
-import { onMounted } from "@vue/runtime-core";
-import { useRouter } from "vue-router";
-import { loginApi } from "/@/api/system/login/login-api";
-import { useUserStore } from "/@/store/modules/system/user";
-import { clearAllCoolies } from "/@/utils/cookie-util";
-import { localClear } from "/@/utils/local-util";
-// 头像背景颜色
-const AVATAR_BACKGROUND_COLOR_ARRAY = ["#87d068", "#00B853", "#f56a00", "#1890ff"];
+  import { computed, ref } from '@vue/reactivity';
+  import { onMounted } from '@vue/runtime-core';
+  import { useRouter } from 'vue-router';
+  import { loginApi } from '/@/api/system/login/login-api';
+  import { useUserStore } from '/@/store/modules/system/user';
+  import { clearAllCoolies } from '/@/utils/cookie-util';
+  import { localClear } from '/@/utils/local-util';
+  // 头像背景颜色
+  const AVATAR_BACKGROUND_COLOR_ARRAY = ['#87d068', '#00B853', '#f56a00', '#1890ff'];
 
-const avatarName = ref("");
-const router = useRouter();
-// ----------------------- 以下是计算属性 watch监听 ------------------------
-const actualName = computed(() => useUserStore().actualName);
+  const avatarName = ref('');
+  const router = useRouter();
+  // ----------------------- 以下是计算属性 watch监听 ------------------------
+  const actualName = computed(() => useUserStore().actualName);
 
-function onLogout() {
-  localClear();
-  clearAllCoolies();
-  useUserStore().logout();
-  router.push({ name: "Login" });
-}
+  function onLogout() {
+    localClear();
+    clearAllCoolies();
+    useUserStore().logout();
+    router.push({ name: 'Login' });
+  }
 
-async function refresh() {
-  await loginApi.refresh();
-  location.reload();
-}
+  async function refresh() {
+    await loginApi.refresh();
+    location.reload();
+  }
 
-function updateAvatar() {
-  if (useUserStore().actualName) {
-    avatarName.value = useUserStore().actualName.substr(0, 1);
-    const avatar = document.getElementById("smartAdminAvatar");
-    if (avatar) {
-      avatar.style.backgroundColor =
-        AVATAR_BACKGROUND_COLOR_ARRAY[hashcode(avatarName.value) % 4];
+  function updateAvatar() {
+    if (useUserStore().actualName) {
+      avatarName.value = useUserStore().actualName.substr(0, 1);
+      const avatar = document.getElementById('smartAdminAvatar');
+      if (avatar) {
+        avatar.style.backgroundColor = AVATAR_BACKGROUND_COLOR_ARRAY[hashcode(avatarName.value) % 4];
+      }
     }
   }
-}
 
-function hashcode(str) {
-  let hash = 1,
-    i,
-    chr;
-  if (str.length === 0) return hash;
-  for (i = 0; i < str.length; i++) {
-    chr = str.charCodeAt(i);
-    hash = (hash << 5) - hash + chr;
-    hash |= 0; // Convert to 32bit integer
+  function hashcode(str) {
+    let hash = 1,
+      i,
+      chr;
+    if (str.length === 0) return hash;
+    for (i = 0; i < str.length; i++) {
+      chr = str.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
+      hash |= 0; // Convert to 32bit integer
+    }
+    return hash;
   }
-  return hash;
-}
 
-onMounted(updateAvatar);
+  onMounted(updateAvatar);
 </script>
 <style lang="less" scoped>
-.wrapper {
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-.header-trigger {
-  height: @header-user-height;
-  line-height: @header-user-height;
-
-  .avatar {
-    vertical-align: middle;
+  .wrapper {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
   }
+  .header-trigger {
+    height: @header-user-height;
+    line-height: @header-user-height;
 
-  .name {
-    margin-left: 5px;
-    font-weight: 500;
+    .avatar {
+      vertical-align: middle;
+    }
+
+    .name {
+      margin-left: 5px;
+      font-weight: 500;
+    }
   }
-}
 </style>

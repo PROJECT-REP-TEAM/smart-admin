@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-14
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/components/side-expand/side-menu/sub-menu.vue
@@ -30,16 +30,16 @@
   </a-sub-menu>
 </template>
 <script setup>
-let props = defineProps({
-  menuInfo: Array,
-});
-const emits = defineEmits(["turnToPage"]);
-const turnToPage = (route) => {
-  emits("turnToPage", route);
-};
+  let props = defineProps({
+    menuInfo: Array,
+  });
+  const emits = defineEmits(['turnToPage']);
+  const turnToPage = (route) => {
+    emits('turnToPage', route);
+  };
 </script>
 <style scoped lang="less">
-::v-deep(.ant-menu-item-selected) {
-  border-right: 3px !important;
-}
+  ::v-deep(.ant-menu-item-selected) {
+    border-right: 3px !important;
+  }
 </style>

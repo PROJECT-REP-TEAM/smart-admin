@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-11 22:15:04
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/menu/menu-api.ts
@@ -44,10 +44,9 @@ export const menuApi = {
     return getRequest(`/menu/tree?onlyMenu=${onlyMenu}`);
   },
 
-
   /**
- * 获取所有请求路径
- */
+   * 获取所有请求路径
+   */
   getAuthUrl: () => {
     return getRequest('/menu/auth/url');
   },

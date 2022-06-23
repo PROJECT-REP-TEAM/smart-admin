@@ -9,7 +9,7 @@
   "homepage": "https://smartadmin.1024lab.net",
   "scripts": {
     "dev": "vite",
-    "test": "vite build --base=/manage/ --mode sit",
+    "test": "vite build --base=/manage/ --mode test",
     "localhost": "vite --mode localhost",
     "build": "vue-tsc --noEmit && vite build",
     "serve": "vite preview"

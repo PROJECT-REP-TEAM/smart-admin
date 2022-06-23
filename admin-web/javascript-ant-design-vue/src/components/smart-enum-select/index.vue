@@ -2,7 +2,7 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-02
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
 -->
 <template>
@@ -17,56 +17,49 @@
     @deselect="handleChange"
     :disabled="disabled"
   >
-    <a-select-option
-      v-for="item in $smartEnumPlugin.getValueDescList(props.enumName)"
-      :key="item.value"
-      :value="item.value"
-    >
+    <a-select-option v-for="item in $smartEnumPlugin.getValueDescList(props.enumName)" :key="item.value" :value="item.value">
       {{ item.desc }}
     </a-select-option>
   </a-select>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+  import { ref, watch } from 'vue';
 
-// ========================
-const props = defineProps({
-  enumName: String,
-  value: Number,
-  width: {
-    type: Number,
-    default: 100,
-  },
-  placeholder: {
-    type: String,
-    default: "请选择",
-  },
-  size: {
-    type: String,
-    default: "default",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-});
-const emit = defineEmits(["update:value", "change"]);
+  const props = defineProps({
+    enumName: String,
+    value: Number,
+    width: {
+      type: Number,
+      default: 100,
+    },
+    placeholder: {
+      type: String,
+      default: '请选择',
+    },
+    size: {
+      type: String,
+      default: 'default',
+    },
+    disabled: {
+      type: Boolean,
+      default: false,
+    },
+  });
+  const emit = defineEmits(['update:value', 'change']);
 
-// ======================== 逻辑
+  const selectValue = ref(props.value);
 
-const selectValue = ref(props.value);
+  // 箭头value变化
+  watch(
+    () => props.value,
+    (newValue) => {
+      selectValue.value = newValue;
+    }
+  );
 
-// 箭头value变化
-watch(
-  () => props.value,
-  (newValue) => {
-    selectValue.value = newValue;
+  function handleChange(value) {
+    emit('update:value', value);
+    emit('change', value);
   }
-);
-
-function handleChange(value) {
-  emit("update:value", value);
-  emit("change", value);
-}
 </script>

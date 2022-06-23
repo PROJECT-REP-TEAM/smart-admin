@@ -2,7 +2,7 @@
  * @Description: vite配置
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-22
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  */
 import { resolve } from 'path';
@@ -46,7 +46,7 @@ export default {
     OptimizationPersist()
   ],
   optimizeDeps: {
-    include: ['ant-design-vue/es/locale/zh_CN', 'dayjs/locale/zh-cn', 'ant-design-vue/es/locale/en_US', 'dayjs/locale/eu'],
+    include: ['ant-design-vue/es/locale/zh_CN', 'dayjs/locale/zh-cn', 'ant-design-vue/es/locale/en_US'],
     exclude: ['vue-demi'],
   },
   build: {

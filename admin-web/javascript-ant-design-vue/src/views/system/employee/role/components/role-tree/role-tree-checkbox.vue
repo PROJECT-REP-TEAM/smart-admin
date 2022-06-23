@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-28 11:59:20
- * @LastEditTime: 2022-06-17
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/employee/role/components/role-tree/role-tree-checkbox.vue
@@ -20,28 +20,28 @@
   </div>
 </template>
 <script setup>
-import { ref, watch } from "vue";
-import { useRoleStore } from "/@/store/modules/system/role";
-import RoleTreeMenu from "./role-tree-menu.vue";
+  import { ref, watch } from 'vue';
+  import { useRoleStore } from '/@/store/modules/system/role';
+  import RoleTreeMenu from '../role-tree/role-tree-menu.vue';
 
-let props = defineProps({
-  tree: {
-    type: Array,
-    default: [],
-  },
-});
-defineEmits("update:value");
+  let props = defineProps({
+    tree: {
+      type: Array,
+      default: [],
+    },
+  });
+  defineEmits('update:value');
 
-let roleStore = useRoleStore();
-let checkedData = ref();
-watch(
-  () => roleStore.checkedData,
-  (e) => (checkedData.value = e),
-  {
-    deep: true,
-  }
-);
+  let roleStore = useRoleStore();
+  let checkedData = ref();
+  watch(
+    () => roleStore.checkedData,
+    (e) => (checkedData.value = e),
+    {
+      deep: true,
+    }
+  );
 </script>
 <style scoped lang="less">
-@import "./index.less";
+  @import './index.less';
 </style>

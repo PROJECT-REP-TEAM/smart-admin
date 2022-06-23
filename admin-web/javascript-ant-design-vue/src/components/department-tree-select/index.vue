@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-10 16:53:06
- * @LastEditTime: 2022-06-16
+ * @LastEditTime: 2022-06-23
  * @LastEditors: zhuoda
  * @Description: 部门树下拉选择
  * @FilePath: /smart-admin/src/views/system/employee/department/components/department-tree-select/index.vue
@@ -22,36 +22,36 @@
   />
 </template>
 <script setup>
-import { onMounted, ref } from "vue";
-import _ from "lodash";
-import { departmentApi } from "/@/api/system/department/department-api";
+  import { onMounted, ref } from 'vue';
+  import _ from 'lodash';
+  import { departmentApi } from '/@/api/system/department/department-api';
 
-const props = defineProps({
-  // 绑定值
-  value: Number,
-  // 单选多选
-  multiple: {
-    type: Boolean,
-    default: false,
-  },
-});
+  const props = defineProps({
+    // 绑定值
+    value: Number,
+    // 单选多选
+    multiple: {
+      type: Boolean,
+      default: false,
+    },
+  });
 
-const emit = defineEmits(["update:value"]);
+  const emit = defineEmits(['update:value']);
 
-let treeData = ref([]);
-onMounted(queryDepartmentTree);
-// 外部调用初始化
-async function queryDepartmentTree() {
-  let res = await departmentApi.departmentTree();
-  treeData.value = res.data;
-}
+  let treeData = ref([]);
+  onMounted(queryDepartmentTree);
+  // 外部调用初始化
+  async function queryDepartmentTree() {
+    let res = await departmentApi.departmentTree();
+    treeData.value = res.data;
+  }
 
-function treeSelectChange(e) {
-  emit("update:value", e);
-}
+  function treeSelectChange(e) {
+    emit('update:value', e);
+  }
 
-// ----------------------- 以下是暴露的方法内容 ------------------------
-defineExpose({
-  queryDepartmentTree,
-});
+  // ----------------------- 以下是暴露的方法内容 ------------------------
+  defineExpose({
+    queryDepartmentTree,
+  });
 </script>

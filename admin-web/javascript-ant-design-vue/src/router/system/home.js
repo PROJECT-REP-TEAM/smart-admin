@@ -4,10 +4,11 @@
  * @Author: zhuoda
  * @Date: 2021-08-20 15:06:57
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-15
+ * @LastEditTime: 2022-06-23
  */
-import SmartLayout from '/@/layout/smart-layout.vue';
+import { HOME_PAGE_NAME } from '/@/constants/system/home-const';
 import { MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
+import SmartLayout from '/@/layout/smart-layout.vue';
 
 export const homeRouters = [
   {
@@ -23,7 +24,7 @@ export const homeRouters = [
     children: [
       {
         path: '/home',
-        name: 'Home',
+        name: HOME_PAGE_NAME,
         meta: {
           title: '首页',
           menuType: MENU_TYPE_ENUM.MENU.value,
