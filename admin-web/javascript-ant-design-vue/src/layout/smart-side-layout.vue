@@ -76,7 +76,9 @@
           v-slot="{ Component }"
         >
           <keep-alive :include="keepAliveIncludes">
-            <component :is="Component" />
+            <div :key="route.name">
+              <component :is="Component" />
+            </div>
           </keep-alive>
         </router-view>
 
