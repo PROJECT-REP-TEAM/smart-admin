@@ -2,11 +2,11 @@
  * @Description: 主方法
  * @Author: zhuoda
  * @Date: 2021-08-03
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-06-24
  * @LastEditors: zhuoda
  */
 import * as antIcons from '@ant-design/icons-vue';
-import Antd from 'ant-design-vue';
+import Antd, { message } from 'ant-design-vue';
 import lodash from 'lodash';
 import { createApp } from 'vue';
 import JsonViewer from 'vue3-json-viewer';
@@ -28,14 +28,18 @@ import { getTokenFromCookie } from '/@/utils/cookie-util';
  * 获取用户信息和用户权限对应的路由，构建动态路由
  */
 async function getLoginInfo() {
-  //获取登录用户信息
-  const res = await loginApi.getLoginInfo();
-  //构建系统的路由
-  let menuRouterList = res.data.menuList.filter((e) => e.path || e.frameUrl);
-  buildRoutes(menuRouterList);
-  initVue();
-  //更新用户信息到pinia
-  useUserStore().setUserLoginInfo(res.data);
+  try {
+    //获取登录用户信息
+    const res = await loginApi.getLoginInfo();
+    //构建系统的路由
+    let menuRouterList = res.data.menuList.filter((e) => e.path || e.frameUrl);
+    buildRoutes(menuRouterList);
+    initVue();
+    //更新用户信息到pinia
+    useUserStore().setUserLoginInfo(res.data);
+  } catch (e) {
+    message.error(e);
+  }
 }
 
 function initVue() {

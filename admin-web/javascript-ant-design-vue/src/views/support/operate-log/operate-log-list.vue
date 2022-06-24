@@ -41,6 +41,10 @@
           <a-tag :color="text ? 'success' : 'error'">{{ text ? '成功' : '失败' }}</a-tag>
         </template>
 
+        <template v-if="column.dataIndex === 'userAgent'">
+          <div>{{ record.browser }} / {{ record.os }} / {{ record.device }}</div>
+        </template>
+
         <template v-else-if="column.dataIndex === 'action'">
           <a-button @click="showDetail(record.operateLogId)" type="link">详情</a-button>
         </template>
@@ -72,6 +76,7 @@
   import { operateLogApi } from '/@/api/support/operate-log/operate-log-api';
   import { PAGE_SIZE_OPTIONS } from '/@/constants/common-const';
   import { defaultTimeRanges } from '/@/lib/default-time-ranges';
+  import uaparser from 'ua-parser-js';
 
   const columns = reactive([
     {
@@ -92,6 +97,16 @@
     {
       title: '请求路径',
       dataIndex: 'url',
+      ellipsis: true,
+    },
+    {
+      title: 'IP',
+      dataIndex: 'ip',
+      ellipsis: true,
+    },
+    {
+      title: '客户端',
+      dataIndex: 'userAgent',
       ellipsis: true,
     },
     {
@@ -147,6 +162,17 @@
     try {
       tableLoading.value = true;
       let responseModel = await operateLogApi.queryList(queryForm);
+
+      for (const e of responseModel.data.list) {
+        if (!e.userAgent) {
+          continue;
+        }
+        let ua = uaparser(e.userAgent);
+        e.browser = ua.browser.name;
+        e.os = ua.os.name;
+        e.device = ua.device.vendor ? ua.device.vendor + ua.device.model : '';
+      }
+
       const list = responseModel.data.list;
       total.value = responseModel.data.total;
       tableData.value = list;
