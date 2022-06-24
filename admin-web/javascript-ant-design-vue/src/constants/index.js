@@ -13,6 +13,7 @@ import { LOGIN_DEVICE_ENUM } from './system/login-device-const'
 import { FLAG_NUMBER_ENUM, GENDER_ENUM } from './common-const'
 import { LAYOUT_ENUM } from './layout-const'
 import file from './business/file-const'
+import notice from './business/notice-const'
 
 export default {
   FLAG_NUMBER_ENUM,
@@ -23,4 +24,5 @@ export default {
   ...goods,
   ...category,
   ...file,
+  ...notice
 }

@@ -31,7 +31,7 @@
     </a-modal>
   </div>
 </template>
-<script lang="ts" setup>
+<script setup>
   import { ref, computed } from 'vue';
   import { message } from 'ant-design-vue';
   import { fileApi } from '/@/api/business/file/file-api';
@@ -98,9 +98,9 @@
     return res;
   });
   // ======================== 逻辑
-  const previewVisible = ref<boolean>(false);
+  const previewVisible = ref(false);
   const fileList = ref(files.value);
-  const previewUrl = ref<string>('');
+  const previewUrl = ref('');
 
   const customRequest = async (options) => {
     useSpinStore().show();
@@ -121,7 +121,7 @@
   };
 
   function handleChange(info) {
-    let fileStatus: string = info.file.status;
+    let fileStatus = info.file.status;
     let file = info.file;
     if (fileStatus == 'removed') {
       let index = fileList.value.findIndex((e) => e.fileId == file.fileId);

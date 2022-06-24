@@ -218,10 +218,10 @@ function confirmBatchDelete() {
 const batchDelete = async () => {
   try {
     useSpinStore().show();
-    let deleteDto = {
+    let deleteForm = {
       goodsIdList: selectedRowKeyList.value,
     };
-    await goodsApi.deleteGoods(deleteDto);
+    await goodsApi.deleteGoods(deleteForm);
     message.success("删除成功");
     ajaxQuery();
   } catch (e) {
