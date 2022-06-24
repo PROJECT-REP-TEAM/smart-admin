@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-06-24
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/components/smart-header-user-space/header-avatar.vue
@@ -43,11 +43,16 @@
   // ----------------------- 以下是计算属性 watch监听 ------------------------
   const actualName = computed(() => useUserStore().actualName);
 
-  function onLogout() {
+  async function onLogout() {
     localClear();
     clearAllCoolies();
     useUserStore().logout();
-    router.push({ name: 'Login' });
+    try {
+      await loginApi.logout();
+    } catch (e) {
+    } finally {
+      location.reload();
+    }
   }
 
   async function refresh() {

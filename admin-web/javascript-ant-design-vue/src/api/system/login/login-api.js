@@ -1,7 +1,7 @@
 /*
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-06-24
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/api/system/login/login.ts
@@ -15,6 +15,14 @@ export const loginApi = {
    */
   login: (param) => {
     return postRequest('/login', param);
+  },
+
+  /**
+   * 退出登录
+   * @param param
+   */
+  logout: () => {
+    return getRequest('/login/logout');
   },
 
   /**
