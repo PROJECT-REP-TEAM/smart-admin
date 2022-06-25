@@ -37,7 +37,11 @@
           label="上传封面"
           name="coverFileKey"
       >
-        <Upload accept=".jpg,.jpeg,.png,.gif" buttonText="点击上传封面"></Upload>
+        <Upload accept=".jpg,.jpeg,.png,.gif"
+                :maxUploadSize="1"
+                buttonText="点击上传封面"
+                :default-file-list="form.coverFileKey"
+                @change="coverFileChange"></Upload>
       </a-form-item>
       <a-form-item label="禁用状态" name="disabledFlag">
         <a-switch v-model:checked="form.disabledFlag" checked-children="禁用" un-checked-children="启用"/>
@@ -47,7 +51,11 @@
           :name="form.noticeType === NOTICE_TYPE_ENUM.DOCUMENT.value ? 'accessoryFileKeys' : ''"
           label="上传附件"
       >
-        <Upload :maxUploadSize="5" :multiple="true" accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.jar,.7z"></Upload>
+        <Upload :maxUploadSize="5"
+                :default-file-list="form.accessoryFileKeys"
+                list-type="picture"
+                accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.zip,.jar,.7z,.jpg,.jpeg,.png,.gif"
+                @change="accessoryFileChange"></Upload>
       </a-form-item>
       <a-form-item
           v-show="form.noticeType === NOTICE_TYPE_ENUM.ARTICLE.value"
@@ -76,7 +84,7 @@ import {noticeApi} from "/@/api/business/notice/notice-api"
 import Upload from "/@/components/upload/index.vue"
 import dayjs from "dayjs";
 import {message} from "ant-design-vue";
-// ----------------------- 以下是业务内容 ----------------------------
+// ----------------------- 新建编辑通知公告 ----------------------------
 const formRef = ref();
 
 const formDefault = {
@@ -140,6 +148,19 @@ async function save() {
       message.warning('请完善文章内容');
       return;
     }
+    // 移除多余字段值
+    if(params.noticeType === NOTICE_TYPE_ENUM.ARTICLE.value){
+      params.linkAddress = "";
+      params.accessoryFileKeys = "";
+    }
+    if(params.noticeType === NOTICE_TYPE_ENUM.DOCUMENT.value){
+      params.noticeContent = "";
+      params.linkAddress = "";
+    }
+    if(params.noticeType === NOTICE_TYPE_ENUM.LINK.value){
+      params.noticeContent = "";
+      params.accessoryFileKeys = "";
+    }
     if (params.noticeId) {
       await noticeApi.updateNotice(params);
       message.success('修改成功');
@@ -167,6 +188,15 @@ async function getDetail() {
   } finally {
     useSpinStore().hide();
   }
+}
+
+// ----------------------- 文件上传 ----------------------------
+function coverFileChange(fileList){
+  form.coverFileKey = fileList;
+}
+
+function accessoryFileChange(fileList){
+  form.accessoryFileKeys = fileList;
 }
 </script>
 <style lang='less' scoped>
