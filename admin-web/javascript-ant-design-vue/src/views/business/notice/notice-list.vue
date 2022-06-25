@@ -97,7 +97,9 @@
       </template>
 
       <template #coverFileKey="{ text }">
-        <img :src="text[0].fileUrl" class="cover-img" />
+        <template v-if="!$lodash.isEmpty(text)">
+          <img :src="text[0].fileUrl" class="cover-img" />
+        </template>
       </template>
 
       <template #topFlag="{ text }">
@@ -131,7 +133,7 @@
   </a-card>
 </template>
 <script setup>
-import {reactive, ref} from "vue";
+import {reactive, ref,onMounted} from "vue";
 import {PAGE_SIZE, PAGE_SIZE_OPTIONS} from "/@/constants/common-const";
 import {defaultTimeRanges} from "/@/lib/default-time-ranges"
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
@@ -143,7 +145,7 @@ import {useRouter} from "vue-router";
 const columns = reactive([
   {
     title: "公告标题",
-    dataIndex: "categoryName",
+    dataIndex: "noticeTitle",
   },
   {
     title: "通知类型",
@@ -172,6 +174,7 @@ const columns = reactive([
   {
     title: "发布时间",
     dataIndex: "publishTime",
+    width:200
   },
   {
     title: "禁用状态",
@@ -233,7 +236,9 @@ async function ajaxQuery() {
     tableLoading.value = false;
   }
 }
-
+onMounted(()=>{
+  ajaxQuery();
+})
 // ----------------------- 数据删除 ----------------------------
 function confirmBatchDelete() {
   Modal.confirm({

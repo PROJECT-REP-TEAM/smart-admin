@@ -10,8 +10,8 @@ import { postRequest } from '/@/lib/axios';
 
 export const fileApi = {
   // 文件上传 by zhuoda
-  uploadUrl: '/file/upload',
+  uploadUrl: '/support/file/upload',
   uploadFile: (param, folder) => {
-    return postRequest(`/file/upload?folder=${folder}`, param);
+    return postRequest(`/support/file/upload?folder=${folder}`, param);
   },
 };
