@@ -17,6 +17,9 @@ export const useUserStore = defineStore({
     departmentId: '',
     departmentName: '',
     administratorFlag: true,
+    lastLoginIp: '',
+    lastLoginUserAgent: '',
+    lastLoginTime: '',
     //左侧菜单树形结构
     menuTree: [],
     //存在页面路由的菜单集合
@@ -41,13 +44,6 @@ export const useUserStore = defineStore({
     },
     getMenuRouterInitFlag(state) {
       return state.menuRouterInitFlag;
-    },
-    getUserInfo(state) {
-      if (_.isEmpty(state.userInfo)) {
-        let localUserInfo = localRead(localKey.USER_INFO) || '';
-        state.userInfo = localUserInfo ? JSON.parse(localUserInfo) : {};
-      }
-      return state.userInfo;
     },
     getMenuTree(state) {
       return state.menuTree;
@@ -97,6 +93,9 @@ export const useUserStore = defineStore({
       this.departmentId = data.departmentId;
       this.departmentName = data.departmentName;
       this.administratorFlag = data.administratorFlag;
+      this.lastLoginIp = data.lastLoginIp;
+      this.lastLoginUserAgent = data.lastLoginUserAgent;
+      this.lastLoginTime = data.lastLoginTime;
 
       //菜单权限
       this.menuTree = buildMenuTree(data.menuList);

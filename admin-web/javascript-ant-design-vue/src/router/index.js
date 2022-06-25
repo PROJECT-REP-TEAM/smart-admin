@@ -87,6 +87,9 @@ export function buildRoutes(menuRouterList) {
     if (!e.path) {
       continue;
     }
+    if (e.deletedFlag && e.deletedFlag === 1) {
+      continue;
+    }
     let menuIdStr = e.menuId.toString();
     let route = {
       path: e.path.startsWith('/') ? e.path : `/${e.path}`,
@@ -107,11 +110,13 @@ export function buildRoutes(menuRouterList) {
         frameUrl: e.frameUrl,
       },
     };
+
     if (e.frameFlag) {
       route.component = () => import('../components/iframe/route-default-component.vue');
       resList.push(route);
       continue;
     }
+
     let componentPath = e.component && e.component.startsWith('/') ? e.component : '/' + e.component;
     let relativePath = `../views${componentPath}`;
     // eslint-disable-next-line no-prototype-builtins
@@ -128,7 +133,7 @@ export function buildRoutes(menuRouterList) {
 
   //2、添加到路由里
   router.addRoute({
-    path: '',
+    path: '/',
     meta: {},
     component: SmartLayout,
     children: resList,

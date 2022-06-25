@@ -4,7 +4,7 @@
  * @Author: zhuoda
  * @Date: 2021-08-20 15:06:57
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-06-25
  */
 import { HOME_PAGE_NAME } from '/@/constants/system/home-const';
 import { MENU_TYPE_ENUM } from '/@/constants/system/menu-const';
@@ -14,7 +14,7 @@ export const homeRouters = [
   {
     path: '/',
     name: '_home',
-    redirect: '/home',
+    redirect: { name: HOME_PAGE_NAME },
     component: SmartLayout,
     meta: {
       title: '首页',

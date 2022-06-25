@@ -1,7 +1,7 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-25 21:52:23
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-06-25
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/layout/smart-side-expand-layout.vue
@@ -61,10 +61,9 @@
             </div>
           </keep-alive>
         </router-view>
-
-        <!-- footer 版权公司信息 -->
-        <a-layout-footer class="smart-layout-footer"> <SmartFooter /></a-layout-footer>
       </a-layout-content>
+      <!-- footer 版权公司信息 -->
+      <a-layout-footer class="smart-layout-footer"> <SmartFooter /></a-layout-footer>
 
       <a-back-top :target="backTopTarget" :visibilityHeight="80" />
     </a-layout>

@@ -1,12 +1,29 @@
 <!--
  * @Author: zhuoda
  * @Date: 2021-08-03 10:27:11
- * @LastEditTime: 2022-06-11
+ * @LastEditTime: 2022-06-25
  * @LastEditors: zhuoda
  * @Description:
  * @FilePath: /smart-admin/src/views/system/home/index.vue
 -->
 <template>
+  <a-row>
+    <HomeHeader />
+  </a-row>
+  <a-row :gutter="24">
+    <a-col :span="16">
+      <a-row :gutter="24">
+        <a-col :span="12">
+          <HomeNotice3 />
+        </a-col>
+        <a-col :span="12">
+          <HomeNotice2 />
+        </a-col>
+      </a-row>
+    </a-col>
+
+    <a-col :span="8"> </a-col>
+  </a-row>
   <a-row :gutter="24">
     <a-col :span="8">
       <a-card title="本月业绩" class="no-footer">
@@ -38,6 +55,7 @@
         </div>
       </a-card>
     </a-col>
+
     <a-col :span="12">
       <a-card title="业绩完成情况">
         <div class="content large gauge">
@@ -88,14 +106,7 @@
       <a-card title="缺陷排行榜">
         <template #extra><a>查看更多</a></template>
         <div class="content large">
-          <a-table
-            size="small"
-            :scroll="{ y: 300 }"
-            :dataSource="bugList"
-            :columns="bugColumns"
-            :pagination="false"
-            bordered
-          >
+          <a-table size="small" :scroll="{ y: 300 }" :dataSource="bugList" :columns="bugColumns" :pagination="false" bordered>
             <template #index="{ index }">
               <span>{{ index + 1 }}</span>
             </template>
@@ -122,14 +133,7 @@
       <a-card title="技术排行榜">
         <template #extra><a>查看更多</a></template>
         <div class="content large">
-          <a-table
-            size="small"
-            :scroll="{ y: 300 }"
-            :dataSource="bugList"
-            :columns="bugColumns"
-            :pagination="false"
-            bordered
-          >
+          <a-table size="small" :scroll="{ y: 300 }" :dataSource="bugList" :columns="bugColumns" :pagination="false" bordered>
             <template #index="{ index }">
               <span>{{ index + 1 }}</span>
             </template>
@@ -155,82 +159,86 @@
   </a-row>
 </template>
 <script setup>
-import { computed, reactive, ref } from "vue";
-import { useRouter } from "vue-router";
-import Gauge from "./components/gauge.vue";
-// ----------------------- 以下是字段定义 emits props ---------------------
-let router = useRouter();
-const bugColumns = reactive([
-  {
-    title: "",
-    slots: { customRender: "index" },
-    width: 80,
-  },
-  {
-    title: "姓名",
-    slots: { customRender: "name" },
-  },
-  {
-    title: "数量",
-    dataIndex: "count",
-    slots: { customRender: "count" },
-  },
-  {
-    title: "周期",
-    dataIndex: "week",
-    slots: { customRender: "week" },
-  },
-  {
-    title: "评价",
-    dataIndex: "comment",
-    slots: { customRender: "comment" },
-  },
-]);
-// ----------------------- 以下是计算属性 watch监听 ------------------------
-// 业绩完成百分比
-const saleTargetPercent = computed(() => {
-  return 75;
-});
-// ----------------------- 以下是方法 ------------------------------------
-const nameList = [
-  "初晓",
-  "胡克",
-  "开云",
-  "罗伊",
-  "佩弦",
-  "清野",
-  "琴酒",
-  "善逸",
-  "玄朋",
-  "卓大",
-  "初晓",
-  "胡克",
-  "开云",
-  "罗伊",
-  "佩弦",
-  "清野",
-  "琴酒",
-  "善逸",
-  "玄朋",
-  "卓大",
-];
-const commentList = ["好棒", "oh yeah", "nice", "good job", "漂亮"];
-const bugList = [];
-
-for (let index = 0; index < nameList.length; index++) {
-  bugList.push({
-    name: nameList[index],
-    count: index,
-    week: index + 3,
-    comment: commentList[index % commentList.length],
+  import { computed, reactive, ref } from 'vue';
+  import { useRouter } from 'vue-router';
+  import HomeHeader from './home-header.vue';
+  import HomeNotice from './home-notice.vue';
+  import HomeNotice2 from './home-notice2.vue';
+  import HomeNotice3 from './home-notice3.vue';
+  import Gauge from './components/gauge.vue';
+  // ----------------------- 以下是字段定义 emits props ---------------------
+  let router = useRouter();
+  const bugColumns = reactive([
+    {
+      title: '',
+      slots: { customRender: 'index' },
+      width: 80,
+    },
+    {
+      title: '姓名',
+      slots: { customRender: 'name' },
+    },
+    {
+      title: '数量',
+      dataIndex: 'count',
+      slots: { customRender: 'count' },
+    },
+    {
+      title: '周期',
+      dataIndex: 'week',
+      slots: { customRender: 'week' },
+    },
+    {
+      title: '评价',
+      dataIndex: 'comment',
+      slots: { customRender: 'comment' },
+    },
+  ]);
+  // ----------------------- 以下是计算属性 watch监听 ------------------------
+  // 业绩完成百分比
+  const saleTargetPercent = computed(() => {
+    return 75;
   });
-}
-function enterDetail(path, query) {
-  router.push({ path, query });
-}
-// ----------------------- 以下是暴露的方法内容 ----------------------------
-defineExpose({});
+  // ----------------------- 以下是方法 ------------------------------------
+  const nameList = [
+    '初晓',
+    '胡克',
+    '开云',
+    '罗伊',
+    '佩弦',
+    '清野',
+    '琴酒',
+    '善逸',
+    '玄朋',
+    '卓大',
+    '初晓',
+    '胡克',
+    '开云',
+    '罗伊',
+    '佩弦',
+    '清野',
+    '琴酒',
+    '善逸',
+    '玄朋',
+    '卓大',
+  ];
+  const commentList = ['好棒', 'oh yeah', 'nice', 'good job', '漂亮'];
+  const bugList = [];
+
+  for (let index = 0; index < nameList.length; index++) {
+    bugList.push({
+      name: nameList[index],
+      count: index,
+      week: index + 3,
+      comment: commentList[index % commentList.length],
+    });
+  }
+  function enterDetail(path, query) {
+    router.push({ path, query });
+  }
+  // ----------------------- 以下是暴露的方法内容 ----------------------------
+  defineExpose({});
 </script>
 <style scoped lang="less">
-@import "./index.less";
+  @import './index.less';
 </style>

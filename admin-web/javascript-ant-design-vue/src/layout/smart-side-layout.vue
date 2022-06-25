@@ -53,12 +53,12 @@
             </div>
           </keep-alive>
         </router-view>
-
-        <!-- footer 版权公司信息 -->
-        <a-layout-footer class="layout-footer">
-          <smart-footer />
-        </a-layout-footer>
       </a-layout-content>
+
+      <!-- footer 版权公司信息 -->
+      <a-layout-footer class="layout-footer">
+        <smart-footer />
+      </a-layout-footer>
 
       <a-back-top :target="backTopTarget" :visibilityHeight="80" />
     </a-layout>
