@@ -21,4 +21,8 @@ export const noticeApi = {
     deleteNotice: (param) => {
         return postRequest('/notice/delete', param);
     },
+    // 更新观看量 by 善逸
+    watchNotice: (noticeId) => {
+        return getRequest(`/notice/watch/${noticeId}`);
+    },
 };

@@ -88,6 +88,10 @@
         rowKey="noticeId"
         size="small"
     >
+      <template #noticeTitle="{ record }">
+        <a @click="goDetail(record.noticeId)">{{ record.noticeTitle }}</a>
+      </template>
+
       <template #noticeType="{ text }">
         <span>{{ $smartEnumPlugin.getDescByValue("NOTICE_TYPE_ENUM", text) }}</span>
       </template>
@@ -97,7 +101,9 @@
       </template>
 
       <template #coverFileKey="{ text }">
-        <img :src="text[0].fileUrl" class="cover-img" />
+        <template v-if="!$lodash.isEmpty(text)">
+          <img :src="text[0].fileUrl" class="cover-img"/>
+        </template>
       </template>
 
       <template #topFlag="{ text }">
@@ -131,7 +137,7 @@
   </a-card>
 </template>
 <script setup>
-import {reactive, ref} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {PAGE_SIZE, PAGE_SIZE_OPTIONS} from "/@/constants/common-const";
 import {defaultTimeRanges} from "/@/lib/default-time-ranges"
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
@@ -143,7 +149,8 @@ import {useRouter} from "vue-router";
 const columns = reactive([
   {
     title: "公告标题",
-    dataIndex: "categoryName",
+    dataIndex: "noticeTitle",
+    slots: {customRender: "noticeTitle"},
   },
   {
     title: "通知类型",
@@ -172,6 +179,7 @@ const columns = reactive([
   {
     title: "发布时间",
     dataIndex: "publishTime",
+    width: 200
   },
   {
     title: "禁用状态",
@@ -234,6 +242,10 @@ async function ajaxQuery() {
   }
 }
 
+onMounted(() => {
+  ajaxQuery();
+})
+
 // ----------------------- 数据删除 ----------------------------
 function confirmBatchDelete() {
   Modal.confirm({
@@ -259,21 +271,27 @@ const batchDelete = async () => {
     await noticeApi.deleteNotice(deleteForm);
     message.success("删除成功");
     ajaxQuery();
+    selectedRowKeyList.value = [];
   } catch (e) {
     console.log(e);
   } finally {
     useSpinStore().hide();
   }
 };
+let router = useRouter();
 
 // ----------------------- 数据添加编辑 ----------------------------
-let router = useRouter();
 function addNotice() {
-  router.push({ path: '/notice/operate' });
+  router.push({path: '/business/notice/operate'});
 }
 
 function updateNotice(noticeId) {
-  router.push({ path: '/notice/operate', query: { noticeId: noticeId } });
+  router.push({path: '/business/notice/operate', query: {noticeId: noticeId}});
+}
+
+//----------------------- 详情 ----------------------------
+function goDetail(noticeId) {
+  router.push({path: '/business/notice/detail', query: {noticeId: noticeId}});
 }
 </script>
 <style lang='less' scoped>
