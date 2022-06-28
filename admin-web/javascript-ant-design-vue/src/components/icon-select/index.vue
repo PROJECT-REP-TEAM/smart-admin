@@ -1,5 +1,5 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: zhuoda
  * @Date: 2022-06-15
  * @LastEditTime: 2022-06-23
@@ -13,6 +13,7 @@
           <a-radio-group @change="updateSelectIconArray" v-model:value="iconStyle" style="margin: 8px">
             <a-radio-button value="outlined">线框风格</a-radio-button>
             <a-radio-button value="filled">实底风格</a-radio-button>
+            <a-radio-button value="twoTone">双色风格</a-radio-button>
           </a-radio-group>
         </a-form-item-rest>
         <a-form-item-rest>
@@ -37,13 +38,15 @@
 
 <script setup>
   import * as VueIcon from '@ant-design/icons-vue';
-  import { computed, onMounted, reactive, ref, watch } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import _ from 'lodash';
 
   //线框风格图标数组
   const outlinedIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'outlined'));
   //实底风格图标数组
   const filledIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'filled'));
+  //双色风格图标数组
+  const twoToneIconArray = Object.keys(VueIcon).filter((e) => _.endsWith(e.toLowerCase(), 'twotone'));
 
   // ------------ 显示/隐藏 ------------
   const visible = ref(false);
@@ -70,11 +73,14 @@
 
   let searchValue = ref('');
   function updateSelectIconArray() {
+    debugger
     let tempArray = null;
     if (iconStyle.value === 'outlined') {
       tempArray = outlinedIconArray;
-    } else {
+    } else if(iconStyle.value === 'filled') {
       tempArray = filledIconArray;
+    } else {
+      tempArray = twoToneIconArray;
     }
     if (!searchValue.value) {
       selectIconArray.value = tempArray;

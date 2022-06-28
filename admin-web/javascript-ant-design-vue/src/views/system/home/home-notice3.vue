@@ -1,122 +1,141 @@
 <!--
- * @Description: 
+ * @Description:
  * @Author: zhuoda
  * @Date: 2022-06-25
  * @LastEditTime: 2022-06-25
  * @LastEditors: zhuoda
 -->
 <template>
-  <div class="notice-div">
+  <div class="card-container">
     <a-card size="small">
       <template #title>
         <div class="title">
-          <profile-two-tone :style="{ fontSize: '18px' }" />
-          <a-tabs size="small" style="margin-top: -10px">
-            <a-tab-pane key="1" tab="运营政策" />
-            <a-tab-pane key="2" tab="优惠活动" />
-            <a-tab-pane key="3" tab="业务资料" />
+          <profile-two-tone :style="{ fontSize: '18px' }"/>
+          <a-tabs class="title-tabs" size="small">
+            <a-tab-pane key="1" tab="运营政策"/>
+            <a-tab-pane key="2" tab="优惠活动"/>
+            <a-tab-pane key="3" tab="业务资料"/>
           </a-tabs>
         </div>
       </template>
       <template #extra><a href="#">更多</a></template>
       <ul>
-        <li class="un-read">
-          <a>
-            <a-tag class="tag" color="#f5222d">NEW</a-tag>
-            们可以将同样的函数定义为一个方法，而不是</a
-          >
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a>
-            <a-tag class="tag" color="#f5222d">NEW</a-tag>
-            我们为什么需要缓存？假设我们有一个性能开销比较大的计</a
-          >
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a>
-            <a-tag class="tag" color="#f5222d">NEW</a-tag>
-            我们为什么需要缓存？假设我们有一个性能开销比较大的计</a
-          >
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a>
-            <a-tag class="tag" color="#f5222d">NEW</a-tag>
-            我们为什么需要缓存？假设我们有一个性能开销比较大的计</a
-          >
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a> 我们为什么需要缓存？假设我们有一个性能开销比较大的计</a>
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a> 我们为什么需要缓存？假设我们有一个性能开销比较大的计</a>
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a> 我们为什么需要缓存？假设我们有一个性能开销比较大的计</a>
-          <span class="time">2021-12-12</span>
-        </li>
-        <li class="un-read">
-          <a> 我们为什么需要缓存？假设我们有一个性能开销比较大的计</a>
-          <span class="time">2021-12-12</span>
+        <li v-for="(item,index) in data" :key="index" :class="[item.readFlag ? 'read' : 'un-read']">
+          <a-tooltip placement="top">
+            <template #title>
+              <span>{{ item.title }}</span>
+            </template>
+            <a class="content">
+              <a-tag v-if="item.newFlag" class="tag" color="#f5222d">NEW</a-tag>
+              {{ item.title }}
+            </a>
+          </a-tooltip>
+          <span class="time">{{ item.time }}</span>
         </li>
       </ul>
     </a-card>
   </div>
 </template>
-<script>
-  import { defineComponent } from 'vue';
-  const data = [
-    'Racing car sprays burning fuel into crowd.',
-    'Japanese princess to wed commoner.',
-    'Australian walks 100km after outback crash.',
-    'Man charged over missing wedding girl.',
-    'Los Angeles battles huge wildfires.',
-  ];
-  export default defineComponent({
-    setup() {
-      return {
-        data,
-      };
-    },
-  });
+<script setup>
+import {ref} from "vue";
+
+let data = ref([
+  {
+    title:'忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
+    newFlag:true,
+    readFlag:false,
+    time:'2022-06-28'
+  },
+  {
+    title:'忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
+    newFlag:true,
+    readFlag:false,
+    time:'2022-06-28'
+  },
+  {
+    title:'忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
+    newFlag:false,
+    readFlag:true,
+    time:'2022-06-28'
+  },
+  {
+    title:'忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
+    newFlag:false,
+    readFlag:true,
+    time:'2022-06-28'
+  },
+  {
+    title:'忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
+    newFlag:false,
+    readFlag:false,
+    time:'2022-06-28'
+  }
+])
 </script>
-<style scoped lang="less">
-  .notice-div {
-    background-color: #fff;
-
-    ul li {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 8px;
-      width: calc(100%-75px);
-      .time {
-        color: @text-color-secondary;
-        min-width: 75px;
-      }
-      .tag {
-        line-height: 14px;
-      }
+<style lang="less" scoped>
+.card-container {
+  background-color: #fff;
+  .title {
+    display: flex;
+    align-items: center;
+    ::v-deep(.ant-tabs-nav) {
+      margin: 0 0 8px 10px;
     }
-    ul li :hover {
-      color: @primary-color;
+    ::v-deep(.ant-tabs-tab) {
+      padding: 0 0 8px 0;
     }
-    .un-read a {
-      color: @text-color;
-      .tag {
-        color: #fff;
-      }
-    }
-
-    .read a {
-      color: @text-color-secondary;
-      .tag {
-        color: #fff;
-      }
+    &::before {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 0;
+      width: 3px;
+      height: 30px;
+      background-color: @primary-color;
     }
   }
+
+  ul li {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+
+    .content {
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      word-break: break-all;
+    }
+
+    .time {
+      flex-shrink: 0;
+      color: @text-color-secondary;
+      min-width: 75px;
+    }
+
+    .tag {
+      line-height: 14px;
+    }
+  }
+
+  ul li :hover {
+    color: @primary-color;
+  }
+
+  .un-read a {
+    color: @text-color;
+
+    .tag {
+      color: #fff;
+    }
+  }
+
+  .read a {
+    color: @text-color-secondary;
+
+    .tag {
+      color: #fff;
+    }
+  }
+}
 </style>

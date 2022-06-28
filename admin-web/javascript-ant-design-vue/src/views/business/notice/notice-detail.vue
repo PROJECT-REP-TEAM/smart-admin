@@ -6,27 +6,24 @@
         发布时间：{{ detail.publishTime }}
       </div>
       <div class="info-right">
-        <div class="info_editer">
-            <img src="/@/assets/images/notice/edit_icon.png" />
-            <span>{{ detail.createUserName }}</span>
-       </div>
-        <div class="info_views">浏览：{{ detail.watchAmount || 0 }}次</div>
+        <div class="info-editer">
+          <img src="/@/assets/images/notice/edit_icon.png"/>
+          <span>{{ detail.createUserName }}</span>
+        </div>
+        <div class="info-views">浏览：{{ detail.watchAmount || 0 }}次</div>
       </div>
     </div>
     <div class="html-content" v-html="detail.noticeContent"></div>
-    <div v-if="detail.accessoryFileKeys" class="file_list">
+    <div v-if="detail.accessoryFileKeys">
       <div
           v-for="(item, index) in detail.accessoryFileKeys"
           :key="index"
-          class="file_list_item"
+          class="file-list-item"
       >
-        <img src="/@/assets/images/notice/file_icon.png" style="width: 24px"/>
-        <span>附件：
-          <a
-              :href="item.fileUrl"
-              style="color: #0a5aa8; border-bottom: 1px solid #0a5aa8"
-              target="_blank"
-          >{{ item.fileName }}</a>
+        <img src="/@/assets/images/notice/file_icon.png"/>
+        <span>
+          附件：
+          <a :href="item.fileUrl" target="_blank">{{ item.fileName }}</a>
         </span>
       </div>
     </div>
@@ -46,6 +43,7 @@ onMounted(() => {
 });
 // 获取详情
 let detail = reactive({});
+
 async function getDetail() {
   try {
     useSpinStore().show();
@@ -84,16 +82,17 @@ async function getDetail() {
     display: flex;
     align-items: center;
 
-    .info_editer {
+    .info-editer {
       display: flex;
       align-items: center;
-      >img {
+
+      > img {
         width: 15px;
         margin-right: 5px;
       }
     }
 
-    .info_views {
+    .info-views {
       margin-left: 20px;
     }
   }
@@ -104,7 +103,16 @@ async function getDetail() {
   min-height: 450px;
 }
 
-.file_list_item {
+.file-list-item {
   font-size: 16px;
+
+  > img {
+    width: 24px;
+  }
+
+  > a {
+    color: #0a5aa8;
+    border-bottom: 1px solid #0a5aa8
+  }
 }
 </style>
