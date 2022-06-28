@@ -2,7 +2,7 @@
  * @Description: 
  * @Author: zhuoda
  * @Date: 2022-06-24
- * @LastEditTime: 2022-06-24
+ * @LastEditTime: 2022-06-28
  * @LastEditors: zhuoda
 -->
 <template>
@@ -27,8 +27,8 @@ Caffeine ：
       <template #bodyCell="{ text, record, index, column }">
         <template v-if="column.dataIndex === 'action'">
           <div class="smart-table-operate">
-            <a-button @click="remove(text)" type="link">清除</a-button>
-            <a-button @click="getAllKeys(text)" type="link">获取所有key</a-button>
+            <a-button @click="remove(record.key)" type="link">清除</a-button>
+            <a-button @click="getAllKeys(record.key)" type="link">获取所有key</a-button>
           </div>
         </template>
       </template>
@@ -37,9 +37,11 @@ Caffeine ：
 </template>
 <script setup>
   import { message } from 'ant-design-vue';
-  import { onMounted, reactive, ref } from 'vue';
+  import { onMounted, reactive, ref, h } from 'vue';
   import { cacheApi } from '/@/api/support/cache/cache-api';
   import { SmartLoading } from '/@/components/smart-loading';
+  import { Modal } from 'ant-design-vue';
+  import _ from 'lodash';
 
   //------------------------ 删除 ---------------------
 
@@ -57,12 +59,14 @@ Caffeine ：
   async function getAllKeys(cacheName) {
     SmartLoading.show();
     try {
-      let res = await cacheApi.getAllCacheNames(cacheName);
+      let res = await cacheApi.getKeys(cacheName);
       SmartLoading.hide();
       Modal.info({
         title: '所有Key:' + cacheName,
         content: h('div', {}, [h('p', _.join(res.data, ' , '))]),
-        onOk() {},
+        onOk() {
+          ajaxQuery();
+        },
       });
     } catch (e) {
       message.error(e);
@@ -93,9 +97,7 @@ Caffeine ：
     try {
       tableLoading.value = true;
       let res = await cacheApi.getAllCacheNames();
-      tableData.value = res.data.map((e) => {
-        key: e;
-      });
+      tableData.value = res.data.map((e) => Object.assign({}, { key: e }));
     } catch (e) {
       console.log(e);
     } finally {
