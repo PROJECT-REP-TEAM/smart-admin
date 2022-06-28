@@ -106,7 +106,7 @@
     let next = lunar.getNextJieQi();
     let nextJieqi = next.getName() + ' ' + next.getSolar().toYmd();
 
-    return `${day} 星期${week}，农历${lunarMonth}${lunarDay}（${jieqi}阶段 ）,下个节气：${nextJieqi}`;
+    return `${day} 星期${week}，农历${lunarMonth}${lunarDay}（当前${jieqi}，${nextJieqi} ）`;
   });
 
   // 毒鸡汤
