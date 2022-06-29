@@ -102,7 +102,7 @@ let toDoList = computed(() => {
 })
 
 let doneList = computed(() => {
-  return taskList.value.filter(e => e.doneFlag).sort((a, b) => b.starTime - a.starTime);
+  return taskList.value.filter(e => e.doneFlag);
 })
 
 function itemStar(item) {

@@ -138,13 +138,14 @@
 </template>
 <script setup>
 import {onMounted, reactive, ref} from "vue";
-import {PAGE_SIZE, PAGE_SIZE_OPTIONS} from "/@/constants/common-const";
+import {PAGE_SIZE_OPTIONS} from "/@/constants/common-const";
 import {defaultTimeRanges} from "/@/lib/default-time-ranges"
 import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import {noticeApi} from "/@/api/business/notice/notice-api";
 import {message, Modal} from "ant-design-vue";
 import {useSpinStore} from "/@/store/modules/system/spin";
 import {useRouter} from "vue-router";
+import {noticeSetup} from './notice-setup'
 // ----------------------- 数据查询 ----------------------------
 const columns = reactive([
   {
@@ -198,21 +199,9 @@ const columns = reactive([
   },
 ]);
 
-const queryFormState = {
-  keywords: "",
-  noticeType: undefined,
-  noticeBelongType: undefined,
-  startTime: undefined,
-  endTime: undefined,
-  disabledFlag: undefined,
-  pageNum: 1,
-  pageSize: PAGE_SIZE,
-};
-const queryForm = reactive({...queryFormState});
-const tableLoading = ref(false);
+let {queryFormState, queryForm,tableLoading, tableData, total, ajaxQuery} = noticeSetup();
+
 const selectedRowKeyList = ref([]);
-const tableData = ref([]);
-const total = ref(0);
 
 function changeDate(dates, dateStrings) {
   queryForm.startTime = dateStrings[0];
@@ -226,20 +215,6 @@ function onSelectChange(selectedRowKeys) {
 function resetQuery() {
   Object.assign(queryForm, queryFormState);
   ajaxQuery();
-}
-
-async function ajaxQuery() {
-  try {
-    tableLoading.value = true;
-    let responseModel = await noticeApi.queryNotice(queryForm);
-    const list = responseModel.data.list;
-    total.value = responseModel.data.total;
-    tableData.value = list;
-  } catch (e) {
-    console.log(e);
-  } finally {
-    tableLoading.value = false;
-  }
 }
 
 onMounted(() => {

@@ -29,36 +29,22 @@
   </default-home-card>
 </template>
 <script setup>
-import {ref} from "vue";
+import {computed, onMounted} from "vue";
 import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
+import {noticeSetup} from "/@/views/business/notice/notice-setup";
+import {NOTICE_BELONG_TYPE_ENUM} from "/@/constants/business/notice-const";
 
-let data = ref([
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    readFlag: false,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    readFlag: false,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    readFlag: true,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    readFlag: true,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    readFlag: false,
-    time: '2022-06-28'
-  }
-])
+let data = computed(() => {
+  return tableData.value;
+})
+let {queryForm, tableData, ajaxQuery} = noticeSetup();
+
+onMounted(() => {
+  queryForm.noticeBelongType = NOTICE_BELONG_TYPE_ENUM.ANNOUNCEMENT.value;
+  queryForm.pageSize = 5;
+  ajaxQuery();
+})
+
 </script>
 <style lang="less" scoped>
 ul li {

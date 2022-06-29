@@ -8,10 +8,8 @@
 <template>
   <default-home-card extra="更多" icon="ProfileTwoTone">
     <template #title>
-      <a-tabs class="title-tabs" size="small">
-        <a-tab-pane key="1" tab="运营政策"/>
-        <a-tab-pane key="2" tab="优惠活动"/>
-        <a-tab-pane key="3" tab="业务资料"/>
+      <a-tabs class="title-tabs" size="small" v-model:activeKey="activeKey" @change="tabsChange">
+        <a-tab-pane v-for="item in noticeBelongType" :key="item.value" :tab="item.desc"/>
       </a-tabs>
     </template>
     <a-empty v-if="$lodash.isEmpty(data)"/>
@@ -32,50 +30,46 @@
   </default-home-card>
 </template>
 <script setup>
-import {ref} from "vue";
 import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
+import {ref,computed, inject, onMounted} from "vue";
+import {noticeSetup} from "/@/views/business/notice/notice-setup";
+import {NOTICE_BELONG_TYPE_ENUM} from "/@/constants/business/notice-const";
 
-let data = ref([
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    newFlag: true,
-    readFlag: false,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    newFlag: true,
-    readFlag: false,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    newFlag: false,
-    readFlag: true,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    newFlag: false,
-    readFlag: true,
-    time: '2022-06-28'
-  },
-  {
-    title: '忙完六一，忙毕业季，累到不行的毕业典礼真的是孩子们想要的吗？',
-    newFlag: false,
-    readFlag: false,
-    time: '2022-06-28'
-  }
-])
+let smartEnumPlugin = inject("smartEnumPlugin");
+
+let noticeBelongType = computed(() => {
+  let noticeBelongTypeList = smartEnumPlugin.getValueDescList('NOTICE_BELONG_TYPE_ENUM');
+  return noticeBelongTypeList.filter(e => e.value != NOTICE_BELONG_TYPE_ENUM.ANNOUNCEMENT.value);
+  l
+})
+
+let activeKey = ref(NOTICE_BELONG_TYPE_ENUM.SOLICIT_OPINIONS.value);
+
+let data = computed(() => {
+  return tableData.value;
+})
+let {queryForm, tableData, ajaxQuery} = noticeSetup();
+
+function tabsChange(key){
+  queryForm.noticeBelongType = key;
+  queryForm.pageSize = 5;
+  ajaxQuery();
+}
+
+onMounted(() => {
+  tabsChange(activeKey.value);
+})
 </script>
 <style lang="less" scoped>
 .title-tabs {
   ::v-deep(.ant-tabs-nav) {
     margin: 0 0 9px 10px;
+
     &::before {
       border-bottom-width: 0 !important;
     }
   }
+
   ::v-deep(.ant-tabs-tab) {
     padding: 0 0 6px 0 !important;
   }
