@@ -1,57 +1,57 @@
 <template>
-  <div class="card-container">
-    <a-card style="height: 100%" size="small">
-      <template #title>
-        <div class="title">
-          <thunderbolt-two-tone :style="{ fontSize: '18px' }"/>
-          快捷入口
-        </div>
-      </template>
-      <template #extra><a href="#" @click="editFlag = !editFlag">{{ editFlag ? '完成' : '编辑' }}</a></template>
-      <div class="quick-entry-list">
-        <a-row>
-          <a-col v-for="(item,index) in quickEntry" :key="index" span="4">
-            <div class="quick-entry" @click="turnToPage(item.path)">
+  <default-home-card
+      :extra="`${editFlag ? '完成' : '编辑'}`"
+      icon="ThunderboltTwoTone"
+      title="快捷入口"
+      @extraClick="editFlag = !editFlag"
+  >
+    <div class="quick-entry-list">
+      <a-row>
+        <a-col v-for="(item,index) in quickEntry" :key="index" span="4">
+          <div class="quick-entry" @click="turnToPage(item.path)">
+            <div class="icon">
               <component :is='$antIcons[item.icon]' :style="{ fontSize:'30px'}"/>
-              <span class="entry-title">{{ item.title }}</span>
               <close-circle-outlined v-if="editFlag" class="delete-icon" @click="deleteQuickEntry(index)"/>
             </div>
-          </a-col>
-          <a-col span="4" v-if="editFlag && quickEntry.length < maxCount">
-            <div class="add-quick-entry" @click="addHomeQuickEntry" >
-              <div class="add-icon">
-                <plus-outlined :style="{ fontSize:'30px'}"/>
-              </div>
+            <span class="entry-title">{{ item.title }}</span>
+          </div>
+        </a-col>
+        <a-col v-if="editFlag && quickEntry.length < maxCount" span="4">
+          <div class="add-quick-entry" @click="addHomeQuickEntry">
+            <div class="add-icon">
+              <plus-outlined :style="{ fontSize:'30px'}"/>
             </div>
-          </a-col>
-        </a-row>
-      </div>
-    </a-card>
-    <HomeQuickEntryModal  ref="homeQuickEntryModal" @addQuickEntry="addQuickEntry"/>
-  </div>
+          </div>
+        </a-col>
+      </a-row>
+    </div>
+  </default-home-card>
+  <HomeQuickEntryModal ref="homeQuickEntryModal" @addQuickEntry="addQuickEntry"/>
 </template>
 <script setup>
 import {onMounted, ref} from "vue";
 import {router} from "/@/router";
 import HomeQuickEntryModal from './home-quick-entry-modal.vue'
 import localKey from '/@/constants/local-storage-key-const';
-import { localRead, localSave } from '/@/utils/local-util';
+import {localRead, localSave} from '/@/utils/local-util';
 import _ from "lodash";
 import InitQuickEntryList from './init-quick-entry-list';
+import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
 
 //---------------- 初始化展示 --------------------
-onMounted(()=>{
+onMounted(() => {
   initQuickEntry();
 })
 let quickEntry = ref([])
-function initQuickEntry(){
+
+function initQuickEntry() {
   let quickEntryJson = localRead(localKey.HOME_QUICK_ENTRY);
-  if(!quickEntryJson){
+  if (!quickEntryJson) {
     quickEntry.value = _.cloneDeep(InitQuickEntryList);
     return;
   }
   let quickEntryList = JSON.parse(quickEntryJson);
-  if(_.isEmpty(quickEntryList)){
+  if (_.isEmpty(quickEntryList)) {
     quickEntry.value = _.cloneDeep(InitQuickEntryList);
     return;
   }
@@ -60,94 +60,88 @@ function initQuickEntry(){
 
 // 页面跳转
 function turnToPage(path) {
-  if(editFlag.value){
+  if (editFlag.value) {
     return;
   }
   router.push({path});
 }
+
 //----------------  编辑快捷入口 --------------------
 let editFlag = ref(false);
-let maxCount = ref(12);
+let maxCount = ref(6);
+
 // 快捷入口删除
-function deleteQuickEntry(index){
-  quickEntry.value.splice(index,1)
-  localSave(localKey.HOME_QUICK_ENTRY,JSON.stringify(quickEntry.value));
+function deleteQuickEntry(index) {
+  quickEntry.value.splice(index, 1)
+  localSave(localKey.HOME_QUICK_ENTRY, JSON.stringify(quickEntry.value));
 }
+
 // 添加快捷入口
 let homeQuickEntryModal = ref();
-function addHomeQuickEntry(){
+
+function addHomeQuickEntry() {
   homeQuickEntryModal.value.showModal();
 }
-function addQuickEntry(row){
+
+function addQuickEntry(row) {
   quickEntry.value.push(row);
-  localSave(localKey.HOME_QUICK_ENTRY,JSON.stringify(quickEntry.value));
+  localSave(localKey.HOME_QUICK_ENTRY, JSON.stringify(quickEntry.value));
 }
 </script>
 <style lang='less' scoped>
-.card-container {
-  background-color: #fff;
+.quick-entry-list {
   height: 100%;
-  .title {
-    &::before {
-      content: '';
+
+  .quick-entry {
+    padding: 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
+
+    .entry-title {
+      margin-top: 5px;
+    }
+
+    .icon {
+      position: relative;
+    }
+
+    &:hover {
+      background-color: #F0FFFF;
+    }
+
+    .delete-icon {
       position: absolute;
-      top: 3px;
-      left: 0;
-      width: 3px;
-      height: 30px;
-      background-color: @primary-color;
+      color: #F08080;
+      top: -5px;
+      right: -5px;
     }
   }
 
-  .quick-entry-list {
-    height: 100%;
-    .quick-entry {
-      padding: 10px 0;
+  .add-quick-entry {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .add-icon {
+      width: 70px;
+      height: 70px;
+      background-color: #fafafa;
+      border: 1px dashed #d9d9d9;
+      border-radius: 2px;
+      cursor: pointer;
+      transition: border-color .3s;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      cursor: pointer;
-      border-radius: 4px;
-      position: relative;
-
-      .entry-title {
-        margin-top: 5px;
-      }
+      color: #A9A9A9;
 
       &:hover {
-        background-color: #F0FFFF;
-      }
-
-      .delete-icon {
-        position: absolute;
-        color: #F08080;
-        top: 5px;
-        right: 25px;
-      }
-    }
-
-    .add-quick-entry {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      .add-icon {
-        width: 70px;
-        height: 70px;
-        background-color: #fafafa;
-        border: 1px dashed #d9d9d9;
-        border-radius: 2px;
-        cursor: pointer;
-        transition: border-color .3s;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #A9A9A9;
-
-        &:hover {
-          border-color: @primary-color;
-          color: @primary-color;
-        }
+        border-color: @primary-color;
+        color: @primary-color;
       }
     }
   }

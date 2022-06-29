@@ -7,36 +7,39 @@
  * @FilePath: /smart-admin/src/views/system/home/components/gauge.vue
 -->
 <template>
-  <div class="gauge-main" id="main"></div>
+  <default-home-card icon="RocketTwoTone" title="业绩完成度">
+    <div class="echarts-box">
+      <div id="gauge-main" class="gauge-main"></div>
+    </div>
+  </default-home-card>
 </template>
 <script setup>
-import * as echarts from "echarts/core";
-import { GaugeChart } from "echarts/charts";
-import { CanvasRenderer } from "echarts/renderers";
-import { onMounted, watch } from "@vue/runtime-core";
-import { reactive } from "vue";
+import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
+import * as echarts from "echarts";
+import {onMounted, watch} from "@vue/runtime-core";
+import {reactive} from "vue";
 // ----------------------- 以下是字段定义 emits props ---------------------
 
 const props = defineProps({
   percent: {
     type: Number,
+    default: 0
   },
-  percent: 0,
 });
 
 let option = reactive({});
 // ----------------------- 以下是计算属性 watch监听 ------------------------
 watch(
-  () => props.percent,
-  () => {
-    init();
-  }
+    () => props.percent,
+    () => {
+      init();
+    }
 );
 // ----------------------- 以下是生命周期 ---------------------------------
-echarts.use([GaugeChart, CanvasRenderer]);
 onMounted(() => {
   init();
 });
+
 // ----------------------- 以下是方法 ------------------------------------
 function init() {
   option = {
@@ -98,20 +101,25 @@ function init() {
       },
     ],
   };
-  var chartDom = document.getElementById("main");
+  let chartDom = document.getElementById("gauge-main");
   if (chartDom) {
     let myChart = echarts.init(chartDom);
     option && myChart.setOption(option);
   }
 }
+
 // ----------------------- 以下是暴露的方法内容 ----------------------------
 defineExpose({});
 </script>
-<style scoped lang="less">
-.gauge-main {
-  width: 360px;
-  height: 360px;
-  padding: 28px;
-  background: #fff;
+<style lang="less" scoped>
+.echarts-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .gauge-main {
+    width: 260px;
+    height: 260px;
+    background: #fff;
+  }
 }
 </style>
