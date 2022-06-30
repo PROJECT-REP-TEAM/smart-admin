@@ -10,7 +10,7 @@
       </template>
       <template v-if="props.extra" #extra>
         <slot name="extra"></slot>
-        <a v-if="!$slots.extra" href="#" @click="extraClick">{{ props.extra }}</a>
+        <a v-if="!$slots.extra" @click="extraClick">{{ props.extra }}</a>
       </template>
       <slot></slot>
     </a-card>

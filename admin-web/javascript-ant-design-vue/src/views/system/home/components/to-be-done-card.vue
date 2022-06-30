@@ -5,6 +5,13 @@
         <div class="center column">
           <a-typography-title :level="3">待办</a-typography-title>
           <a-space direction="vertical" style="width: 100%">
+            <div class="add-to-do">
+              <a-input-search
+                  v-model:value="taskTitle"
+                  placeholder="添加任务"
+                  enter-button="添加"
+                  @search="addTask" />
+            </div>
             <div v-for="(item,index) in toDoList" :key="index" :class="['to-do',{'done':item.doneFlag}]">
               <a-checkbox v-model:checked="item.doneFlag">
                 <span class="task">{{ item.title }}</span>
@@ -24,7 +31,7 @@
       </a-col>
       <a-col span="11">
         <div class="center column">
-          <a-typography-title :level="3">已办</a-typography-title>
+          <a-typography-title :level="4">已办</a-typography-title>
           <a-space direction="vertical" style="width: 100%">
             <div v-for="(item,index) in doneList" :key="index" :class="['to-do',{'done':item.doneFlag}]">
               <a-checkbox v-model:checked="item.doneFlag">
@@ -45,6 +52,7 @@
 import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
 import {computed, ref} from "vue";
 import dayjs from "dayjs";
+import {message} from "ant-design-vue";
 
 let taskList = ref([
   {
@@ -110,6 +118,23 @@ function itemStar(item) {
   if (item.starFlag) {
     item.starTime = dayjs().unix();
   }
+}
+
+//-------------------------任务新建-----------------------
+let taskTitle = ref("");
+function addTask(){
+  if(!taskTitle.value){
+    message.warn("请输入任务标题")
+    return;
+  }
+  let data = {
+    title: taskTitle.value,
+    doneFlag: false,
+    starFlag: false,
+    starTime: 0
+  }
+  taskList.value.unshift(data);
+  taskTitle.value = "";
 }
 </script>
 <style lang='less' scoped>

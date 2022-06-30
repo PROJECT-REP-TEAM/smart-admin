@@ -16,6 +16,14 @@ export const
             POLICIES_AND_REGULATIONS: {
                 value: 4,
                 desc: '政策法规'
+            },
+            CHANGELOG: {
+                value: 5,
+                desc: '更新日志'
+            },
+            COMMON_PROBLEM: {
+                value: 6,
+                desc: '常见问题'
             }
         }
 

@@ -23,4 +23,6 @@ export default {
   APP_CONFIG: `${KEY_PREFIX}app_config`,
   // 首页快捷入口
   HOME_QUICK_ENTRY: `${KEY_PREFIX}home_quick_entry`,
+  // 通知信息已读
+  NOTICE_READ: `${KEY_PREFIX}notice_read`,
 }

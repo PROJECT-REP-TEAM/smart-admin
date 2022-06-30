@@ -89,7 +89,7 @@
         size="small"
     >
       <template #noticeTitle="{ record }">
-        <a @click="goDetail(record.noticeId)">{{ record.noticeTitle }}</a>
+        <a @click="goDetail(record)">{{ record.noticeTitle }}</a>
       </template>
 
       <template #noticeType="{ text }">
@@ -144,13 +144,15 @@ import SmartEnumSelect from "/@/components/smart-enum-select/index.vue";
 import {noticeApi} from "/@/api/business/notice/notice-api";
 import {message, Modal} from "ant-design-vue";
 import {useSpinStore} from "/@/store/modules/system/spin";
-import {useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {noticeSetup} from './notice-setup'
+import {NOTICE_TYPE_ENUM} from "/@/constants/business/notice-const";
 // ----------------------- 数据查询 ----------------------------
 const columns = reactive([
   {
     title: "公告标题",
     dataIndex: "noticeTitle",
+    ellipsis: true,
     slots: {customRender: "noticeTitle"},
   },
   {
@@ -198,8 +200,8 @@ const columns = reactive([
     slots: {customRender: "action"},
   },
 ]);
-
-let {queryFormState, queryForm,tableLoading, tableData, total, ajaxQuery} = noticeSetup();
+let route = useRoute();
+let {queryFormState, queryForm, tableLoading, tableData, total, ajaxQuery, goDetail} = noticeSetup();
 
 const selectedRowKeyList = ref([]);
 
@@ -218,6 +220,10 @@ function resetQuery() {
 }
 
 onMounted(() => {
+  let noticeBelongType = route.query.noticeBelongType;
+  if(noticeBelongType){
+    queryForm.noticeBelongType = Number(noticeBelongType);
+  }
   ajaxQuery();
 })
 
@@ -262,11 +268,6 @@ function addNotice() {
 
 function updateNotice(noticeId) {
   router.push({path: '/business/notice/operate', query: {noticeId: noticeId}});
-}
-
-//----------------------- 详情 ----------------------------
-function goDetail(noticeId) {
-  router.push({path: '/business/notice/detail', query: {noticeId: noticeId}});
 }
 </script>
 <style lang='less' scoped>

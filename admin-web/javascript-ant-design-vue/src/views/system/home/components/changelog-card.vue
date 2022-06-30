@@ -1,50 +1,44 @@
 <template>
-  <default-home-card extra="更多" icon="FireTwoTone" title="更新日志">
+  <default-home-card extra="更多" icon="FireTwoTone" title="更新日志" @extraClick="more">
     <a-empty v-if="$lodash.isEmpty(data)"/>
     <ul v-else>
       <template v-for="(item,index) in data" :key="index">
         <li :class="[item.readFlag ? 'read' : 'un-read']">
-          <a class="content">
+          <a class="content" @click="goDetail(item,true)">
             <a-badge :status="item.readFlag ? 'default' : 'geekblue'"/>
-            {{ item.title }}
+            {{ item.noticeTitle }}
           </a>
-          <span class="time"> {{ item.time }}</span>
+          <span class="time"> {{ item.publishTime }}</span>
         </li>
       </template>
     </ul>
   </default-home-card>
 </template>
 <script setup>
-import {ref} from "vue";
 import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
+import {noticeSetup} from "/@/views/business/notice/notice-setup";
+import {NOTICE_BELONG_TYPE_ENUM} from "/@/constants/business/notice-const";
+import {useRouter} from "vue-router";
+import {computed, onMounted} from "vue";
 
-let data = ref([
-  {
-    title: '【v1.2.0】新增View UI Plus JS版本',
-    readFlag: false,
-    time: '2022-06-28'
-  },
-  {
-    title: '【v1.1.9】新增Element Plus JS版本',
-    readFlag: false,
-    time: '2022-06-14'
-  },
-  {
-    title: '【v1.1.8】新增Element Plus TS版本',
-    readFlag: true,
-    time: '2022-05-22'
-  },
-  {
-    title: '【v1.1.7】新增Ant Design Vue JS版本',
-    readFlag: true,
-    time: '2022-04-04'
-  },
-  {
-    title: '【v1.1.6】新增Ant Design Vue TS版本',
-    readFlag: true,
-    time: '2022-06-28'
-  }
-])
+const router = useRouter();
+let data = computed(() => {
+  return tableData.value;
+})
+let {queryForm, tableData, ajaxQuery, goDetail} = noticeSetup();
+
+onMounted(() => {
+  queryForm.noticeBelongType = NOTICE_BELONG_TYPE_ENUM.CHANGELOG.value;
+  queryForm.pageSize = 5;
+  ajaxQuery();
+})
+
+function more() {
+  router.push({
+    path: '/business/notice/notice-list',
+    query: {noticeBelongType: NOTICE_BELONG_TYPE_ENUM.CHANGELOG.value}
+  })
+}
 </script>
 <style lang='less' scoped>
 ul li {

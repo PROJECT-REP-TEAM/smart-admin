@@ -6,24 +6,20 @@
  * @LastEditors: zhuoda
 -->
 <template>
-  <default-home-card
-      extra="更多"
-      icon="SoundTwoTone"
-      title="通知公告"
-  >
+  <default-home-card extra="更多" icon="SoundTwoTone" title="通知公告" @extraClick="more">
     <a-empty v-if="$lodash.isEmpty(data)"/>
     <ul v-else>
       <li v-for="(item,index) in data" :key="index" :class="[item.readFlag ? 'read' : 'un-read']">
         <a-tooltip placement="top">
           <template #title>
-            <span>{{ item.title }}</span>
+            <span>{{ item.noticeTitle }}</span>
           </template>
-          <a class="content">
+          <a class="content" @click="goDetail(item,true)">
             <a-badge :status="item.readFlag ? 'default' : 'error'"/>
-            {{ item.title }}
+            {{ item.noticeTitle }}
           </a>
         </a-tooltip>
-        <span class="time"> {{ item.time }}</span>
+        <span class="time"> {{ item.publishTime }}</span>
       </li>
     </ul>
   </default-home-card>
@@ -33,17 +29,26 @@ import {computed, onMounted} from "vue";
 import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
 import {noticeSetup} from "/@/views/business/notice/notice-setup";
 import {NOTICE_BELONG_TYPE_ENUM} from "/@/constants/business/notice-const";
+import {useRouter} from "vue-router";
 
+const router = useRouter();
 let data = computed(() => {
   return tableData.value;
 })
-let {queryForm, tableData, ajaxQuery} = noticeSetup();
+let {queryForm, tableData, ajaxQuery, goDetail} = noticeSetup();
 
 onMounted(() => {
   queryForm.noticeBelongType = NOTICE_BELONG_TYPE_ENUM.ANNOUNCEMENT.value;
   queryForm.pageSize = 5;
   ajaxQuery();
 })
+
+function more() {
+  router.push({
+    path: '/business/notice/notice-list',
+    query: {noticeBelongType: NOTICE_BELONG_TYPE_ENUM.ANNOUNCEMENT.value}
+  })
+}
 
 </script>
 <style lang="less" scoped>

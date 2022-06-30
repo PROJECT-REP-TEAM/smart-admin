@@ -48,7 +48,6 @@ async function getDetail() {
   try {
     useSpinStore().show();
     let result = await noticeApi.getNoticeDetail(route.query.noticeId);
-    await noticeApi.watchNotice(route.query.noticeId);
     Object.assign(detail, result.data)
   } catch (e) {
     console.log(e);

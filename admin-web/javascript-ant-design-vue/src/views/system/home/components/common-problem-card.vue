@@ -1,15 +1,15 @@
 <template>
-  <default-home-card extra="更多" icon="AlertTwoTone" title="常见问题">
+  <default-home-card extra="更多" icon="AlertTwoTone" title="常见问题" @extraClick="more">
     <a-empty v-if="$lodash.isEmpty(data)"/>
     <ul v-else>
       <template v-for="(item,index) in data" :key="index">
         <li>
-          <a class="content">
+          <a class="content" @click="goDetail(item,true)">
             <a-badge status="gold"/>
-            <span class="title">{{ item.title }}</span>
+            <span class="title">{{ item.noticeTitle }}</span>
           </a>
           <span class="desc">
-            发布于{{ item.createTime }} 　 更新于{{ item.updateTime }}
+            发布于{{ item.publishTime }} 　 更新于{{ item.updateTime }}
           </span>
         </li>
       </template>
@@ -17,66 +17,30 @@
   </default-home-card>
 </template>
 <script setup>
-import {ref} from "vue";
 import DefaultHomeCard from "/@/views/system/home/components/default-home-card.vue";
+import {noticeSetup} from "/@/views/business/notice/notice-setup";
+import {NOTICE_BELONG_TYPE_ENUM} from "/@/constants/business/notice-const";
+import {useRouter} from "vue-router";
+import {computed, onMounted} from "vue";
 
-let data = ref([
-  {
-    title: '如何设置菜单权限？如何设置菜单权限？如何设置菜单权限？',
-    createTime: '2022-06-28',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '如何进行页面缓存？如何进行页面缓存？如何进行页面缓存？',
-    createTime: '2022-06-14',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: 'v1版本能平滑升级到v2么？v1版本能平滑升级到v2么？v1版本能平滑升级到v2么？',
-    createTime: '2022-05-22',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '代码生成器？代码生成器？代码生成器？',
-    createTime: '2022-04-04',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '心跳机制？心跳机制？心跳机制？',
-    createTime: '2022-06-28',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '如何设置菜单权限？如何设置菜单权限？如何设置菜单权限？',
-    createTime: '2022-06-28',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '如何进行页面缓存？如何进行页面缓存？如何进行页面缓存？',
-    createTime: '2022-06-14',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: 'v1版本能平滑升级到v2么？v1版本能平滑升级到v2么？v1版本能平滑升级到v2么？',
-    createTime: '2022-05-22',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '代码生成器？代码生成器？代码生成器？',
-    createTime: '2022-04-04',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '心跳机制？心跳机制？心跳机制？',
-    createTime: '2022-06-28',
-    updateTime: '2022-06-28'
-  },
-  {
-    title: '如何设置菜单权限？如何设置菜单权限？如何设置菜单权限？',
-    createTime: '2022-06-28',
-    updateTime: '2022-06-28'
-  },
-])
+const router = useRouter();
+let data = computed(() => {
+  return tableData.value;
+})
+let {queryForm, tableData, ajaxQuery, goDetail} = noticeSetup();
+
+onMounted(() => {
+  queryForm.noticeBelongType = NOTICE_BELONG_TYPE_ENUM.COMMON_PROBLEM.value;
+  queryForm.pageSize = 15;
+  ajaxQuery();
+})
+
+function more() {
+  router.push({
+    path: '/business/notice/notice-list',
+    query: {noticeBelongType: NOTICE_BELONG_TYPE_ENUM.COMMON_PROBLEM.value}
+  })
+}
 </script>
 <style lang='less' scoped>
 ul li {
