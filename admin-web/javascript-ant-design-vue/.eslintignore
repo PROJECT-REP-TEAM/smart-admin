@@ -12,6 +12,7 @@ public
 /docs
 .husky
 .local
+.localhost
 /bin
 Dockerfile
 src/assets

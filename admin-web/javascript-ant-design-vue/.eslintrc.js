@@ -1,15 +1,21 @@
+/*
+ * @Description:
+ * @Author: zhuoda
+ * @Date: 2021-11-05
+ * @LastEditTime: 2022-07-05
+ * @LastEditors: zhuoda
+ */
 module.exports = {
-  root: true,
+  root: true, //此项是用来告诉eslint找当前配置文件不能往父级查找
   env: {
     browser: true,
     es2021: true,
     node: true,
   },
-  parser: 'vue-eslint-parser',
+  parser: 'vue-eslint-parser', //使用vue-eslint-parser 来解析vue文件中的 template和script
   parserOptions: {
-    ecmaVersion: 12,
-    parser: '@typescript-eslint/parser',
-    sourceType: 'module',
+    ecmaVersion: 12, // 默认情况下，ESLint使用的是ECMAScript5语法，此处我们设置的选项是 es12
+    sourceType: 'module', // 指定js导入的方式
   },
   extends: ['plugin:vue/vue3-essential', 'eslint:recommended', 'plugin:vue/base'],
   globals: {
@@ -18,26 +24,8 @@ module.exports = {
     defineExpose: 'readonly',
     withDefaults: 'readonly',
   },
-  plugins: ['vue', '@typescript-eslint'],
+  plugins: ['vue'],
   rules: {
-    '@typescript-eslint/ban-ts-ignore': 'off',
-    '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-explicit-any': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
-    'vue/custom-event-name-casing': 'off',
-    'no-use-before-define': 'off',
-    '@typescript-eslint/no-use-before-define': 'off',
-    '@typescript-eslint/ban-ts-comment': 'off',
-    '@typescript-eslint/ban-types': 'off',
-    '@typescript-eslint/no-non-null-assertion': 'off',
-    '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-unused-vars': [
-      'error',
-      // we are only using this rule to check for unused arguments since TS
-      // catches unused variables but not args.
-      { varsIgnorePattern: '.*', args: 'none' },
-    ],
     'no-unused-vars': [
       'error',
       // we are only using this rule to check for unused arguments since TS

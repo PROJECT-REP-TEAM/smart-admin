@@ -1,7 +1,7 @@
 <!--
  * @Author: LiHaiFan
  * @Date: 2021-08-16 22:06:33
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-07-05
  * @LastEditors: zhuoda
  * @Description:
 -->
@@ -50,7 +50,7 @@
     </div>
   </a-drawer>
 </template>
-<script setup lang="ts">
+<script setup>
   import { message } from 'ant-design-vue';
   import _ from 'lodash';
   import { nextTick, reactive, ref } from 'vue';
@@ -136,16 +136,20 @@
 
   // 校验表单
   function validateForm(formRef) {
-    return new Promise<boolean>((resolve) => {
-      formRef
-        .validate()
-        .then(() => {
-          resolve(true);
-        })
-        .catch(() => {
-          resolve(false);
-        });
-    });
+    return (
+      new Promise() <
+      boolean >
+      ((resolve) => {
+        formRef
+          .validate()
+          .then(() => {
+            resolve(true);
+          })
+          .catch(() => {
+            resolve(false);
+          });
+      })
+    );
   }
 
   // 提交数据

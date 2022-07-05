@@ -2,11 +2,11 @@
  * @Description:
  * @Author: zhuoda
  * @Date: 2021-11-05
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-07-05
  * @LastEditors: zhuoda
  */
 module.exports = {
-  printWidth: 150, // 每行字符长度
+  printWidth: 150, // 每行代码长度（默认80）
   tabWidth: 2, // 缩进空格数
   useTabs: false, //不用tab缩进
   semi: true, //// 在语句末尾打印分号
@@ -24,5 +24,5 @@ module.exports = {
   insertPragma: false, // 不需要自动在文件开头插入 @prettier
   proseWrap: 'preserve', // 使用默认的折行标准 always\never\preserve
   htmlWhitespaceSensitivity: 'css', // 指定HTML文件的全局空格敏感度 css\strict\ignore
-  endOfLine: 'lf', // 换行符使用 lf 结尾是 可选值"<auto|lf|crlf|cr>"
+  endOfLine: 'auto', // 因为prettier的规范和eslint的换行规则不同，所以这个必须配置。要不然每次打开文件都会有一堆的警告;换行符使用 lf 结尾是 可选值"<auto|lf|crlf|cr
 };

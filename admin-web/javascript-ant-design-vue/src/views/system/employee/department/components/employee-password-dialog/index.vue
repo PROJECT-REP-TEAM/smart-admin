@@ -4,7 +4,7 @@
  * @Author: zhuoda
  * @Date: 2022-04-27 21:29:03
  * @LastEditors: zhuoda
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-07-05
 -->
 <template>
   <a-modal v-model:visible="visible" :zIndex="9999" :width="500" title="提示" :closable="false" :maskClosable="false">
@@ -26,7 +26,7 @@
     </template>
   </a-modal>
 </template>
-<script setup lang="ts">
+<script setup>
   import { message } from 'ant-design-vue';
   import Clipboard from 'clipboard';
   import { ref } from 'vue';

@@ -1,7 +1,7 @@
 <!--
  * @Author: LiHaiFan
  * @Date: 2021-08-12 17:34:00
- * @LastEditTime: 2022-06-23
+ * @LastEditTime: 2022-07-05
  * @LastEditors: zhuoda
  * @Description: 
  * @FilePath: /xiaomifeng-crm-manage-web/src/views/system/employee/department/components/department-tree/index.vue
@@ -61,7 +61,7 @@
     <DepartmentFormModal ref="departmentFormModal" @refresh="refresh" />
   </a-card>
 </template>
-<script setup lang="ts">
+<script setup>
   import { ExclamationCircleOutlined } from '@ant-design/icons-vue';
   import { ref } from '@vue/reactivity';
   import { onUnmounted, watch } from '@vue/runtime-core';
